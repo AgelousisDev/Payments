@@ -17,4 +17,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="key_settings_label">Settings</string>
     <string name="key_empty_field_label">N/A</string>
+    <string name="key_logout_label">Logout</string>
+    <string name="key_logout_message">Do you want to logout?</string>
 </resources>

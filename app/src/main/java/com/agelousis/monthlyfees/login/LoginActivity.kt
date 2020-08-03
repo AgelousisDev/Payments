@@ -6,6 +6,8 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.biometrics.BiometricsHelper
@@ -93,8 +95,12 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener {
     }
 
     override fun onBiometricsSucceed() {
-        showMainActivity(
-            userModel = sharedPreferences.userModel ?: return
+        Handler(Looper.getMainLooper()).postDelayed({
+            showMainActivity(
+                userModel = sharedPreferences.userModel ?: return@postDelayed
+            )
+            },
+            500
         )
     }
 
@@ -140,10 +146,12 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener {
             )
     }
 
-    private fun showMainActivity(userModel: UserModel) =
+    private fun showMainActivity(userModel: UserModel) {
         startActivity(Intent(this, MainActivity::class.java).also {
             it.putExtra(MainActivity.USER_MODEL_EXTRA, userModel)
         })
+        finish()
+    }
 
     private fun configureLoginState() {
         uiScope.launch {
