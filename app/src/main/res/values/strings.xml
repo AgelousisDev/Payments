@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Monthly Fees</string>
+    <string name="key_sign_up_label">Sign Up</string>
+    <string name="key_login_label">Login</string>
+    <string name="key_username_label">Username</string>
+    <string name="key_password_label">Password</string>
+    <string name="key_keep_sign_in_label">Keep me Signed in</string>
+    <string name="key_ok_label">OK</string>
+    <string name="key_cancel_label">Cancel</string>
+    <string name="key_biometrics_label">Biometrics</string>
+    <string name="key_enable_biometrics_label">Do you want to enable biometrics?</string>
+    <string name="key_biometric_authentication_title">Biometric Authentication</string>
+    <string name="key_biometric_authentication_message">Use your Biometrics</string>
+    <string name="key_wrong_credentials_message">Login credentials are wrong\nPlease try again</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="key_settings_label">Settings</string>
+    <string name="key_empty_field_label">N/A</string>
+</resources>

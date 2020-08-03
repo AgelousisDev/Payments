@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextViewTitle">
+        <item name="android:fontFamily">@font/ubuntu_regular</item>
+        <item name="android:textColor">@color/dayNightTextOnBackground</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="TextViewTitleLabel">
+        <item name="android:fontFamily">@font/ubuntu_regular</item>
+        <item name="android:textColor">@color/dayNightTextOnBackground</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextViewLabel">
+        <item name="android:fontFamily">@font/ubuntu_light</item>
+        <item name="android:textColor">@color/dayNightTextOnBackground</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="BasicMaterialButton">
+        <item name="android:fontFamily">@font/ubuntu_regular</item>
+    </style>
+
+</resources>
