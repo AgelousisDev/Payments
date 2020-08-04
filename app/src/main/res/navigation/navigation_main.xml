@@ -8,7 +8,26 @@
     <fragment
         android:id="@+id/paymentListFragment"
         android:name="com.agelousis.monthlyfees.main.ui.payments.PaymentListFragment"
-        android:label="paymentListFragment"
+        android:label="PaymentListFragment"
         tools:layout="@layout/fragment_payment_list_layout" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.agelousis.monthlyfees.main.ui.settings.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_settings_layout"/>
+    <action
+        android:id="@+id/action_global_settingsFragment"
+        app:destination="@id/settingsFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    <action
+        android:id="@+id/action_global_paymentListFragment"
+        app:destination="@id/paymentListFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
 </navigation>

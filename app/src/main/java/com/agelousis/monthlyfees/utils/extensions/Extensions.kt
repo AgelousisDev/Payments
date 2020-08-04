@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.biometric.BiometricManager
 import androidx.databinding.BindingAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.custom.picasso.CircleTransformation
 import com.agelousis.monthlyfees.database.SQLiteHelper
@@ -144,6 +146,10 @@ fun Context.showSimpleDialog(title: String, message: String, isCancellable: Bool
 val Context.hasBiometrics: Boolean
     get() = BiometricManager.from(this).canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
 
+val FragmentManager.currentNavigationFragment: Fragment?
+    get() = primaryNavigationFragment?.childFragmentManager?.fragments?.firstOrNull()
+
+@BindingAdapter("picassoImageUri")
 fun AppCompatImageView.loadImageUri(imageUri: Uri?) {
     imageUri?.let {
         Picasso.get().load(it).placeholder(R.drawable.ic_person).resize(width, height)
@@ -151,6 +157,7 @@ fun AppCompatImageView.loadImageUri(imageUri: Uri?) {
     }
 }
 
+@BindingAdapter("picassoImagePath")
 fun AppCompatImageView.loadImagePath(path: String?) {
     path?.let {
         Picasso.get().load(File(context.filesDir, it)).placeholder(R.drawable.ic_person)

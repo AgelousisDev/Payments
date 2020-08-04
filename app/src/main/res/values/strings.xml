@@ -19,4 +19,7 @@
     <string name="key_empty_field_label">N/A</string>
     <string name="key_logout_label">Logout</string>
     <string name="key_logout_message">Do you want to logout?</string>
+    <string name="key_home_label">Home</string>
+    <string name="key_view_edit_profile_label">View and edit profile</string>
+    <string name="key_change_profile_picture_label">Profile Picture</string>
 </resources>
