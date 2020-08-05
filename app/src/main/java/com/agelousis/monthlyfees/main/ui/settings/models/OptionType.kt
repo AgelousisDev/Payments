@@ -2,6 +2,7 @@ package com.agelousis.monthlyfees.main.ui.settings.models
 
 import android.content.Context
 import com.agelousis.monthlyfees.R
+import com.agelousis.monthlyfees.login.models.UserModel
 
 enum class OptionType {
     CHANGE_USERNAME,
@@ -17,6 +18,6 @@ enum class OptionType {
             CHANGE_BIOMETRICS_STATE -> context.resources.getString(R.string.key_biometrics_label)
         }
 
-    var biometricsIsAvailable: Boolean = false
+    var userModel: UserModel? = null
 
 }

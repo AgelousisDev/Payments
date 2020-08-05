@@ -11,6 +11,8 @@ import kotlinx.coroutines.withContext
 
 typealias UserBlock = (UserModel?) -> Unit
 typealias UsersBlock = (List<UserModel>) -> Unit
+typealias UpdateBlock = () -> Unit
+
 class DBManager(context: Context) {
 
     private var sqLiteHelper: SQLiteHelper? = null
@@ -62,6 +64,7 @@ class DBManager(context: Context) {
             cursor?.moveToFirst()
             val savedUserModel = if ((cursor?.count ?: 0) > 0) {
                 UserModel(
+                    id = cursor?.getIntOrNull(index = cursor.getColumnIndex(SQLiteHelper.ID)),
                     username = cursor?.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.USERNAME)),
                     password = cursor?.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.PASSWORD)),
                     biometrics = cursor?.getIntOrNull(cursor.getColumnIndex(SQLiteHelper.BIOMETRICS)) ?: 0 > 0,
@@ -94,6 +97,25 @@ class DBManager(context: Context) {
             cursor?.close()
             withContext(Dispatchers.Main) {
                 usersBlock(usersList)
+            }
+        }
+    }
+
+    suspend fun updateUser(userModel: UserModel, updateBlock: UpdateBlock) {
+        withContext(Dispatchers.Default) {
+            database?.update(
+                SQLiteHelper.USERS_TABLE_NAME,
+                ContentValues().also {
+                    it.put(SQLiteHelper.USERNAME, userModel.username)
+                    it.put(SQLiteHelper.PASSWORD, userModel.password)
+                    it.put(SQLiteHelper.PROFILE_IMAGE, userModel.profileImage)
+                    it.put(SQLiteHelper.BIOMETRICS, userModel.biometrics)
+                },
+                "id=${userModel.id}",
+                null
+            )
+            withContext(Dispatchers.Main) {
+                updateBlock()
             }
         }
     }

@@ -62,9 +62,16 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener {
                     if (keepMeSignedInCheckBox.isChecked)
                         sharedPreferences.userModel = userModel
                     else sharedPreferences.userModel = null
-                    showMainActivity(
-                        userModel = userModel
-                    )
+                    uiScope.launch {
+                        dbManager?.searchUser(
+                            userModel = userModel
+                        ) { userModel ->
+                            this@LoginActivity.userModel.id = userModel?.id
+                            showMainActivity(
+                                userModel = this@LoginActivity.userModel
+                            )
+                        }
+                    }
                 }
             SignInState.LOGIN ->
                 uiScope.launch {
@@ -82,9 +89,9 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener {
                             ).show()
                         else {
                             if (keepMeSignedInCheckBox.isChecked)
-                                sharedPreferences.userModel.whenNull {
-                                    sharedPreferences.userModel = userModel
-                                }
+                                sharedPreferences.userModel = userModel
+                            else
+                                sharedPreferences.userModel = null
                             showMainActivity(
                                 userModel = userModel
                             )

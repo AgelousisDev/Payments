@@ -8,32 +8,63 @@
         <variable
             name="optionType"
             type="com.agelousis.monthlyfees.main.ui.settings.models.OptionType" />
+        <variable
+            name="presenter"
+            type="com.agelousis.monthlyfees.main.ui.settings.OptionPresenter" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/activity_horizontal_margin"
-    android:clickable="true"
+    android:onClick="@{() -> presenter.onChangeProfilePicture()}"
+    android:clickable="@{optionType == OptionType.CHANGE_PROFILE_IMAGE ? true : false}"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackgroundBorderless">
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/materialTextView"
         style="@style/TextViewTitleLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Get help"
         android:text="@{optionType.getLocalizedTitle(context)}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Get help" />
 
 
     <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchMaterial"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:enabled="@{optionType.biometricsIsAvailable}"
-        android:checked="@{optionType.biometricsIsAvailable}"
+        android:checked="@{optionType.userModel.biometrics}"
+        android:enabled="@{optionType.userModel.biometrics}"
         android:visibility="@{optionType == OptionType.CHANGE_BIOMETRICS_STATE ? View.VISIBLE : View.GONE}"
+        switchStateChanged="@{presenter}"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        style="@style/TextViewLabel"
+        android:id="@+id/optionField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:background="@null"
+        android:visibility="@{optionType == OptionType.CHANGE_USERNAME || optionType == OptionType.CHANGE_PASSWORD ? View.VISIBLE : View.GONE}"
+        android:inputType="@{optionType == OptionType.CHANGE_PASSWORD ? 0x00000081 : 0x00000001}"
+        android:text="@{optionType == OptionType.CHANGE_USERNAME ? optionType.userModel.username : optionType.userModel.password}"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/materialTextView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:visibility="@{optionType == OptionType.CHANGE_PROFILE_IMAGE ? View.VISIBLE : View.GONE}"
+        picassoImagePath="@{optionType.userModel.profileImage}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

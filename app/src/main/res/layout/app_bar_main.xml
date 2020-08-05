@@ -32,7 +32,7 @@
         android:layout_marginBottom="?attr/actionBarSize"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addGroupButton"
+        android:id="@+id/floatingButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_anchor="@+id/bottomAppBar"

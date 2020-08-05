@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.annotation.DrawableRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -24,8 +25,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener, View.OnClickListener {
 
     companion object {
         const val USER_MODEL_EXTRA = "MainActivity=userModelExtra"
@@ -50,15 +54,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when(destination.label ?: "") {
             in SettingsFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_settings_label)
-                floatingButtonState = false
+                floatingButtonImage = R.drawable.ic_check
             }
             in PaymentListFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.app_name)
-                floatingButtonState = true
+                floatingButtonImage = R.drawable.ic_add
             }
         }
     }
 
+    override fun onClick(p0: View?) {
+        when(navHostFragmentContainerView.findNavController().currentDestination?.id) {
+            R.id.settingsFragment ->
+                uiScope.launch {
+                    (supportFragmentManager.currentNavigationFragment as? SettingsFragment)?.updateUser {
+                        startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                        finish()
+                    }
+                }
+            R.id.paymentListFragment -> {}
+        }
+    }
+
+    private val uiScope = CoroutineScope(Dispatchers.Main)
     val userModel by lazy { intent?.extras?.getParcelable<UserModel>(USER_MODEL_EXTRA) }
     private var appBarTitle: String? = null
         set(value) {
@@ -67,12 +85,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 bottomAppBarTitle.text = it
             }
         }
+    @DrawableRes private var floatingButtonImage: Int = R.drawable.ic_add
+        set(value) {
+            field = value
+            floatingButton.setImageResource(value)
+        }
     private var floatingButtonState: Boolean = true
         set(value) {
             field = value
             if (value)
-                addGroupButton.show()
-            else addGroupButton.hide()
+                floatingButton.show()
+            else floatingButton.hide()
         }
 
     override fun onBackPressed() {
@@ -93,6 +116,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         setupToolbar()
         setupNavigationView()
+        setupUI()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -118,6 +142,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             path = userModel?.profileImage
         )
         navigationView.getHeaderView(0).navigationViewProfileUsername.text = userModel?.username ?: resources.getString(R.string.key_empty_field_label)
+    }
+
+    private fun setupUI() {
+        floatingButton.setOnClickListener(this)
     }
 
 }

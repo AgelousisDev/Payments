@@ -7,8 +7,10 @@ import android.content.res.Resources
 import android.net.Uri
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.biometric.BiometricManager
+import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -16,8 +18,10 @@ import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.custom.picasso.CircleTransformation
 import com.agelousis.monthlyfees.database.SQLiteHelper
 import com.agelousis.monthlyfees.login.models.UserModel
+import com.agelousis.monthlyfees.main.ui.settings.OptionPresenter
 import com.agelousis.monthlyfees.utils.constants.Constants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.squareup.picasso.Picasso
 import java.io.File
 import java.io.FileOutputStream
@@ -65,6 +69,13 @@ inline fun <K, T: Any> ifLet(vararg elements: T?, closure: (List<T>) -> K): K? {
 }
 
 fun AppCompatActivity.openGallery(requestCode: Int) =
+    startActivityForResult(Intent(
+        Intent.ACTION_PICK
+    ).also {
+        it.type = Constants.IMAGE_MIME_TYPE
+    }, requestCode)
+
+fun Fragment.openGallery(requestCode: Int) =
     startActivityForResult(Intent(
         Intent.ACTION_PICK
     ).also {
@@ -169,5 +180,14 @@ fun AppCompatImageView.loadImagePath(path: String?) {
 fun setPicassoImageFromInternalFiles(appCompatImageView: AppCompatImageView, fileName: String?) {
     fileName?.let {
         Picasso.get().load(File(appCompatImageView.context.filesDir, it)).transform(CircleTransformation()).into(appCompatImageView)
+    }
+}
+
+@BindingAdapter("switchStateChanged")
+fun switchStateChanged(switchMaterial: SwitchMaterial, optionPresenter: OptionPresenter) {
+    switchMaterial.setOnCheckedChangeListener { _, isChecked ->
+        optionPresenter.onBiometricsState(
+            state = isChecked
+        )
     }
 }
