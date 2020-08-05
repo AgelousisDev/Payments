@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 navHostFragmentContainerView.findNavController().popBackStack()
                 navHostFragmentContainerView.findNavController().navigate(R.id.action_global_paymentListFragment)
             }
-            R.id.navigationSettings -> {
+            R.id.navigationProfile -> {
                 navHostFragmentContainerView.findNavController().popBackStack(R.id.settingsFragment, true)
                 navHostFragmentContainerView.findNavController().navigate(R.id.action_global_settingsFragment)
             }
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
         when(destination.label ?: "") {
             in SettingsFragment::class.java.name -> {
-                appBarTitle = resources.getString(R.string.key_settings_label)
+                appBarTitle = resources.getString(R.string.key_profile_label)
                 floatingButtonImage = R.drawable.ic_check
             }
             in PaymentListFragment::class.java.name -> {

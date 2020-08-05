@@ -30,4 +30,6 @@ class OptionTypesAdapter(private val optionTypes: List<OptionType>, private val 
         )
     }
 
+    fun reloadData() = notifyDataSetChanged()
+
 }

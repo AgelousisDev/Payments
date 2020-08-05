@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.net.Uri
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
@@ -87,7 +88,7 @@ val Int.px: Int
 
 fun Context.saveProfileImage(byteArray: ByteArray?) =
     byteArray?.let { bytes ->
-        val newFile = File(filesDir, Constants.PROFILE_IMAGE_NAME)
+        val newFile = File(filesDir, "${Constants.PROFILE_IMAGE_NAME}_${System.currentTimeMillis()}")
         if (!newFile.exists())
             newFile.createNewFile()
         FileOutputStream(newFile).use {
@@ -159,6 +160,10 @@ val Context.hasBiometrics: Boolean
 
 val FragmentManager.currentNavigationFragment: Fragment?
     get() = primaryNavigationFragment?.childFragmentManager?.fragments?.firstOrNull()
+
+fun Context.toast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+}
 
 @BindingAdapter("picassoImageUri")
 fun AppCompatImageView.loadImageUri(imageUri: Uri?) {

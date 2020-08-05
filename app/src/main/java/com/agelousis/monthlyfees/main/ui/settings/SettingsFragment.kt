@@ -7,17 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.navigation.fragment.findNavController
+import com.agelousis.monthlyfees.R
+import com.agelousis.monthlyfees.custom.itemDecoration.DividerItemRecyclerViewDecorator
 import com.agelousis.monthlyfees.database.DBManager
 import com.agelousis.monthlyfees.databinding.FragmentSettingsLayoutBinding
 import com.agelousis.monthlyfees.login.LoginActivity
 import com.agelousis.monthlyfees.main.MainActivity
 import com.agelousis.monthlyfees.main.ui.settings.adapters.OptionTypesAdapter
 import com.agelousis.monthlyfees.main.ui.settings.models.OptionType
-import com.agelousis.monthlyfees.utils.extensions.loadImageUri
 import com.agelousis.monthlyfees.utils.extensions.openGallery
 import com.agelousis.monthlyfees.utils.extensions.saveProfileImage
-import kotlinx.android.synthetic.main.activity_login.*
+import com.agelousis.monthlyfees.utils.extensions.toast
 import kotlinx.android.synthetic.main.fragment_settings_layout.*
 
 class SettingsFragment: Fragment(), OptionPresenter {
@@ -41,7 +42,7 @@ class SettingsFragment: Fragment(), OptionPresenter {
     }
 
     private val dbManager by lazy { context?.let { DBManager(context = it) } }
-    private val newUserModel by lazy { (activity as? MainActivity)?.userModel }
+    private val newUserModel by lazy { (activity as? MainActivity)?.userModel?.copy() }
     private val optionTypes by lazy {
         arrayListOf(
             OptionType.CHANGE_USERNAME.also {
@@ -78,17 +79,24 @@ class SettingsFragment: Fragment(), OptionPresenter {
             optionTypes = optionTypes,
             optionPresenter = this
         )
-        optionRecyclerView.addItemDecoration(DividerItemDecoration(
-            context,
-            DividerItemDecoration.VERTICAL
+        optionRecyclerView.addItemDecoration(DividerItemRecyclerViewDecorator(
+            context = context ?: return,
+            margin = resources.getDimension(R.dimen.activity_horizontal_margin).toInt()
         ))
     }
 
     suspend fun updateUser(successBlock: () -> Unit) {
-        dbManager?.updateUser(
-            userModel = newUserModel ?: return,
-            updateBlock = successBlock
-        )
+        if ((activity as? MainActivity)?.userModel != newUserModel)
+            dbManager?.updateUser(
+                userModel = newUserModel ?: return,
+                updateBlock = successBlock
+            )
+        else {
+            context?.toast(
+                message = resources.getString(R.string.key_no_changes_message)
+            )
+            findNavController().popBackStack()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -101,10 +109,9 @@ class SettingsFragment: Fragment(), OptionPresenter {
                     newUserModel?.profileImage = context?.saveProfileImage(
                         byteArray = context?.contentResolver?.openInputStream(imageUri)?.readBytes()
                     )
-                    profileImageView.setBackgroundResource(0)
-                    profileImageView.loadImageUri(
-                        imageUri = imageUri
-                    )
+                    optionTypes.firstOrNull { it == OptionType.CHANGE_PROFILE_IMAGE }?.userModel?.profileImage = newUserModel?.profileImage
+                    optionRecyclerView.scheduleLayoutAnimation()
+                    (optionRecyclerView.adapter as? OptionTypesAdapter)?.reloadData()
                 }
         }
     }
