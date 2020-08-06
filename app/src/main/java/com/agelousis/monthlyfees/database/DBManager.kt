@@ -6,12 +6,13 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getStringOrNull
 import com.agelousis.monthlyfees.login.models.UserModel
+import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 typealias UserBlock = (UserModel?) -> Unit
 typealias UsersBlock = (List<UserModel>) -> Unit
-typealias UpdateBlock = () -> Unit
+typealias GroupInsertionSuccessBlock = () -> Unit
 
 class DBManager(context: Context) {
 
@@ -101,7 +102,7 @@ class DBManager(context: Context) {
         }
     }
 
-    suspend fun updateUser(userModel: UserModel, updateBlock: UpdateBlock) {
+    suspend fun updateUser(userModel: UserModel, userBlock: UserBlock) {
         withContext(Dispatchers.Default) {
             database?.update(
                 SQLiteHelper.USERS_TABLE_NAME,
@@ -115,44 +116,33 @@ class DBManager(context: Context) {
                 null
             )
             withContext(Dispatchers.Main) {
-                updateBlock()
+                userBlock(userModel)
             }
         }
+    }
+
+    suspend fun insertGroup(userId: Int?, groupModel: GroupModel, groupInsertionSuccessBlock: GroupInsertionSuccessBlock) {
+        withContext(Dispatchers.Default) {
+            database?.insert(
+                SQLiteHelper.GROUPS_TABLE_NAME,
+                null,
+                ContentValues().also {
+                    it.put(SQLiteHelper.USER_ID, userId)
+                    it.put(SQLiteHelper.GROUP_NAME, groupModel.groupName)
+                }
+            )
+            withContext(Dispatchers.Main) {
+                groupInsertionSuccessBlock()
+            }
+        }
+    }
+
+    fun delete(id: Long) {
+        database?.delete(SQLiteHelper.USERS_TABLE_NAME,  "${SQLiteHelper.ID}=$id", null)
     }
 
     fun close() {
         sqLiteHelper?.close()
     }
 
-    /*fun insert(savedMessageModel: SavedMessageModel) {
-        val contentValue = ContentValues()
-        contentValue.put(SQLiteHelper.CHANNEL, savedMessageModel.channel)
-        contentValue.put(SQLiteHelper.TEXT, savedMessageModel.text)
-        contentValue.put(SQLiteHelper.DATE, savedMessageModel.date)
-        database?.insert(SQLiteHelper.TABLE_NAME, null, contentValue)
-    }
-
-    fun insert(channel: String, text: String, date: String) {
-        val contentValue = ContentValues()
-        contentValue.put(SQLiteHelper.CHANNEL, channel)
-        contentValue.put(SQLiteHelper.TEXT, text)
-        contentValue.put(SQLiteHelper.DATE, date)
-        database?.insert(SQLiteHelper.TABLE_NAME, null, contentValue)
-    }
-
-    fun fetch(): ArrayList<SavedMessageModel> {
-        val listOfSavedMessageModel = arrayListOf<SavedMessageModel>()
-        val cursor: Cursor? = database?.query(SQLiteHelper.TABLE_NAME, arrayOf(SQLiteHelper.ID, SQLiteHelper.CHANNEL, SQLiteHelper.TEXT, SQLiteHelper.DATE), null, null, null, null, null)
-        if (cursor?.moveToFirst() == true)
-            do {
-                listOfSavedMessageModel.add(SavedMessageModel(ID = cursor.getLong(cursor.getColumnIndex(SQLiteHelper.ID)), channel = cursor.getString(cursor.getColumnIndex(SQLiteHelper.CHANNEL)),
-                    text = cursor.getString(cursor.getColumnIndex(SQLiteHelper.TEXT)), date = cursor.getString(cursor.getColumnIndex(SQLiteHelper.DATE))))
-            } while (cursor.moveToNext())
-        cursor?.close()
-        return listOfSavedMessageModel
-    }*/
-
-    fun delete(id: Long) {
-        database?.delete(SQLiteHelper.USERS_TABLE_NAME,  "${SQLiteHelper.ID}=$id", null)
-    }
 }

@@ -1,5 +1,6 @@
 package com.agelousis.monthlyfees.main
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
@@ -13,13 +14,14 @@ import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.agelousis.monthlyfees.R
+import com.agelousis.monthlyfees.database.DBManager
 import com.agelousis.monthlyfees.login.LoginActivity
 import com.agelousis.monthlyfees.login.models.UserModel
 import com.agelousis.monthlyfees.main.ui.payments.PaymentListFragment
+import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
 import com.agelousis.monthlyfees.main.ui.settings.SettingsFragment
-import com.agelousis.monthlyfees.utils.extensions.currentNavigationFragment
-import com.agelousis.monthlyfees.utils.extensions.loadImagePath
-import com.agelousis.monthlyfees.utils.extensions.showSimpleDialog
+import com.agelousis.monthlyfees.utils.constants.Constants
+import com.agelousis.monthlyfees.utils.extensions.*
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -67,16 +69,30 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when(navHostFragmentContainerView.findNavController().currentDestination?.id) {
             R.id.settingsFragment ->
                 uiScope.launch {
-                    (supportFragmentManager.currentNavigationFragment as? SettingsFragment)?.updateUser {
+                    (supportFragmentManager.currentNavigationFragment as? SettingsFragment)?.updateUser { newUserModel ->
+                        sharedPreferences.userModel = sharedPreferences.userModel?.also {
+                            it.biometrics = newUserModel?.biometrics
+                        }
                         startActivity(Intent(this@MainActivity, LoginActivity::class.java))
                         finish()
                     }
                 }
-            R.id.paymentListFragment -> {}
+            R.id.paymentListFragment ->
+                showGroupInputDialog(
+                    inputHint = resources.getString(R.string.key_group_name_label),
+                    positiveButtonText = resources.getString(R.string.key_add_label),
+                    inputGroupDialogBlock = {
+                        insertGroup(
+                            groupModel = it
+                        )
+                    }
+                )
         }
     }
 
     private val uiScope = CoroutineScope(Dispatchers.Main)
+    private val dbManager by lazy { DBManager(context = this) }
+    private val sharedPreferences by lazy { getSharedPreferences(Constants.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE) }
     val userModel by lazy { intent?.extras?.getParcelable<UserModel>(USER_MODEL_EXTRA) }
     private var appBarTitle: String? = null
         set(value) {
@@ -146,6 +162,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setupUI() {
         floatingButton.setOnClickListener(this)
+    }
+
+    private fun insertGroup(groupModel: GroupModel) {
+        uiScope.launch {
+            dbManager.insertGroup(
+                userId = userModel?.id,
+                groupModel = groupModel
+            ) {
+                //update recycler view
+            }
+        }
     }
 
 }

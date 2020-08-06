@@ -23,4 +23,7 @@
     <string name="key_view_edit_profile_label">View and edit profile</string>
     <string name="key_change_profile_picture_label">Profile Picture</string>
     <string name="key_no_changes_message">You have not made any changes…</string>
+    <string name="key_add_label">Add</string>
+    <string name="key_add_group_label">Add Group</string>
+    <string name="key_group_name_label">Group name</string>
 </resources>

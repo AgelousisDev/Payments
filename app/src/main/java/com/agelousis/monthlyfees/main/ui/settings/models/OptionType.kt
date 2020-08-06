@@ -19,5 +19,6 @@ enum class OptionType {
         }
 
     var userModel: UserModel? = null
+    var biometricAvailability = false
 
 }

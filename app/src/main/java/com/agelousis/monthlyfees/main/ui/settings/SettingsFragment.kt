@@ -1,6 +1,7 @@
 package com.agelousis.monthlyfees.main.ui.settings
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,12 +14,12 @@ import com.agelousis.monthlyfees.custom.itemDecoration.DividerItemRecyclerViewDe
 import com.agelousis.monthlyfees.database.DBManager
 import com.agelousis.monthlyfees.databinding.FragmentSettingsLayoutBinding
 import com.agelousis.monthlyfees.login.LoginActivity
+import com.agelousis.monthlyfees.login.models.UserModel
 import com.agelousis.monthlyfees.main.MainActivity
 import com.agelousis.monthlyfees.main.ui.settings.adapters.OptionTypesAdapter
 import com.agelousis.monthlyfees.main.ui.settings.models.OptionType
-import com.agelousis.monthlyfees.utils.extensions.openGallery
-import com.agelousis.monthlyfees.utils.extensions.saveProfileImage
-import com.agelousis.monthlyfees.utils.extensions.toast
+import com.agelousis.monthlyfees.utils.constants.Constants
+import com.agelousis.monthlyfees.utils.extensions.*
 import kotlinx.android.synthetic.main.fragment_settings_layout.*
 
 class SettingsFragment: Fragment(), OptionPresenter {
@@ -41,6 +42,7 @@ class SettingsFragment: Fragment(), OptionPresenter {
         newUserModel?.biometrics = state
     }
 
+    private val sharedPreferences by lazy { context?.getSharedPreferences(Constants.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE) }
     private val dbManager by lazy { context?.let { DBManager(context = it) } }
     private val newUserModel by lazy { (activity as? MainActivity)?.userModel?.copy() }
     private val optionTypes by lazy {
@@ -56,6 +58,7 @@ class SettingsFragment: Fragment(), OptionPresenter {
             },
             OptionType.CHANGE_BIOMETRICS_STATE.also {
                 it.userModel = newUserModel
+                it.biometricAvailability = context?.hasBiometrics == true && sharedPreferences?.userModel != null
             }
         )
     }
@@ -85,11 +88,11 @@ class SettingsFragment: Fragment(), OptionPresenter {
         ))
     }
 
-    suspend fun updateUser(successBlock: () -> Unit) {
+    suspend fun updateUser(successBlock: (UserModel?) -> Unit) {
         if ((activity as? MainActivity)?.userModel != newUserModel)
             dbManager?.updateUser(
                 userModel = newUserModel ?: return,
-                updateBlock = successBlock
+                userBlock = successBlock
             )
         else {
             context?.toast(

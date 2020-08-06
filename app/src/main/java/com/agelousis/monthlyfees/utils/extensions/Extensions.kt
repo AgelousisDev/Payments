@@ -5,12 +5,15 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.net.Uri
+import android.view.LayoutInflater
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.biometric.BiometricManager
+import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
@@ -18,16 +21,20 @@ import androidx.fragment.app.FragmentManager
 import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.custom.picasso.CircleTransformation
 import com.agelousis.monthlyfees.database.SQLiteHelper
+import com.agelousis.monthlyfees.databinding.GroupInputDialogViewBinding
 import com.agelousis.monthlyfees.login.models.UserModel
+import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
 import com.agelousis.monthlyfees.main.ui.settings.OptionPresenter
 import com.agelousis.monthlyfees.utils.constants.Constants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.group_input_dialog_view.view.*
 import java.io.File
 import java.io.FileOutputStream
 
 typealias PositiveButtonBlock = () -> Unit
+typealias InputGroupDialogBlock = (GroupModel) -> Unit
 
 fun <T> T?.whenNull(receiver: () -> Unit): T? {
     return if (this == null) {
@@ -123,7 +130,7 @@ var SharedPreferences.userModel: UserModel?
         }
 
 fun Context.showTwoButtonsDialog(title: String, message: String, isCancellable: Boolean? = null, negativeButtonBlock: PositiveButtonBlock? = null,
-                                 positiveButtonBlock: PositiveButtonBlock) {
+                                 positiveButtonText: String? = null, positiveButtonBlock: PositiveButtonBlock) {
     val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog)
         .setTitle(title)
         .setMessage(message)
@@ -132,7 +139,7 @@ fun Context.showTwoButtonsDialog(title: String, message: String, isCancellable: 
             dialogInterface.dismiss()
             negativeButtonBlock?.invoke()
         }
-        .setPositiveButton(resources.getString(R.string.key_ok_label)) { _, _ ->
+        .setPositiveButton(positiveButtonText ?: resources.getString(R.string.key_ok_label)) { _, _ ->
             positiveButtonBlock()
         }
     val materialDialog = materialAlertDialogBuilder.create()
@@ -153,6 +160,43 @@ fun Context.showSimpleDialog(title: String, message: String, isCancellable: Bool
     val materialDialog = materialAlertDialogBuilder.create()
     materialDialog.show()
     materialDialog.getButton(AlertDialog.BUTTON_POSITIVE).isAllCaps = false
+}
+
+fun Context.showGroupInputDialog(inputHint: String, isCancellable: Boolean? = null, negativeButtonBlock: PositiveButtonBlock? = null,
+                                 positiveButtonText: String? = null, inputGroupDialogBlock: InputGroupDialogBlock) {
+    val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog)
+    val binding = GroupInputDialogViewBinding.inflate(
+        LayoutInflater.from(this),
+        null,
+        false
+    )
+    binding.map = mapOf(
+        "inputHint" to inputHint
+    )
+    materialAlertDialogBuilder.setView(binding.root)
+    materialAlertDialogBuilder.apply {
+        setCancelable(isCancellable ?: true)
+        setNegativeButton(resources.getString(R.string.key_cancel_label)) { dialogInterface, _ ->
+            dialogInterface.dismiss()
+            negativeButtonBlock?.invoke()
+        }
+        setPositiveButton(positiveButtonText ?: resources.getString(R.string.key_ok_label)) { _, _ ->
+            inputGroupDialogBlock(
+                GroupModel(
+                groupName = binding.groupField.text?.toString()
+            ))
+        }
+    }
+    val materialDialog = materialAlertDialogBuilder.create()
+    materialDialog.show()
+    materialDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+    materialDialog.getButton(AlertDialog.BUTTON_POSITIVE).alpha = 0.5f
+    materialDialog.getButton(AlertDialog.BUTTON_NEGATIVE).isAllCaps = false
+    materialDialog.getButton(AlertDialog.BUTTON_POSITIVE).isAllCaps = false
+    binding.groupField.doAfterTextChanged {
+        materialDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = it?.isNotEmpty() == true && it.isNotBlank()
+        materialDialog.getButton(AlertDialog.BUTTON_POSITIVE).alpha = if (it?.isNotEmpty() == true && it.isNotBlank()) 1.0f else 0.5f
+    }
 }
 
 val Context.hasBiometrics: Boolean
