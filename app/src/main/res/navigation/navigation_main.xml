@@ -11,13 +11,13 @@
         android:label="PaymentListFragment"
         tools:layout="@layout/fragment_payment_list_layout" />
     <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.agelousis.monthlyfees.main.ui.settings.SettingsFragment"
-        android:label="SettingsFragment"
-        tools:layout="@layout/fragment_settings_layout"/>
+        android:id="@+id/personalInformationFragment"
+        android:name="com.agelousis.monthlyfees.main.ui.personalInformation.PersonalInformationFragment"
+        android:label="PersonalInformationFragment"
+        tools:layout="@layout/fragment_personal_information_layout"/>
     <action
-        android:id="@+id/action_global_settingsFragment"
-        app:destination="@id/settingsFragment"
+        android:id="@+id/action_global_personalInformation"
+        app:destination="@id/personalInformationFragment"
         app:enterAnim="@anim/nav_default_enter_anim"
         app:exitAnim="@anim/nav_default_exit_anim"
         app:popEnterAnim="@anim/nav_default_pop_enter_anim"

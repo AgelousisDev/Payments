@@ -3,16 +3,20 @@ package com.agelousis.monthlyfees.database
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import androidx.core.database.getDoubleOrNull
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getStringOrNull
 import com.agelousis.monthlyfees.login.models.UserModel
 import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
+import com.agelousis.monthlyfees.main.ui.payments.models.PaymentAmountModel
+import com.agelousis.monthlyfees.main.ui.payments.models.PaymentModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 typealias UserBlock = (UserModel?) -> Unit
 typealias UsersBlock = (List<UserModel>) -> Unit
 typealias GroupInsertionSuccessBlock = () -> Unit
+typealias PaymentsClosure = (List<PaymentModel>) -> Unit
 
 class DBManager(context: Context) {
 
@@ -133,6 +137,58 @@ class DBManager(context: Context) {
             )
             withContext(Dispatchers.Main) {
                 groupInsertionSuccessBlock()
+            }
+        }
+    }
+
+    suspend fun initializePayments(userId: Int?, paymentsClosure: PaymentsClosure) {
+        withContext(Dispatchers.Default) {
+            val payments = arrayListOf<PaymentModel>()
+            val paymentsCursor = database?.query(
+                SQLiteHelper.PERSONS_TABLE_NAME,
+                null,
+                "${SQLiteHelper.USER_ID}=?",
+                arrayOf(userId?.toString()),
+                null,
+                null,
+                null)
+            if (paymentsCursor?.moveToFirst() == true)
+                do {
+                    val groupsCursor = database?.query(
+                        SQLiteHelper.GROUPS_TABLE_NAME,
+                        arrayOf(SQLiteHelper.GROUP_NAME),
+                        "${SQLiteHelper.ID}=? AND ${SQLiteHelper.USER_ID}=?",
+                        arrayOf(userId?.toString(), paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.GROUP_ID))?.toString()),
+                        null,
+                        null,
+                        null
+                    )
+                    groupsCursor?.moveToFirst() ?: continue
+                    payments.add(
+                        PaymentModel(
+                            groupId = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)),
+                            groupName = groupsCursor.getStringOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_NAME)),
+                            firstName = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.FIRST_NAME)),
+                            phone = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PHONE)),
+                            parentName = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PARENT_NAME)),
+                            parentPhone = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PARENT_PHONE)),
+                            email = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.EMAIL)),
+                            active = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.ACTIVE)) ?: 0 > 0,
+                            free = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.FREE)) ?: 0 > 0,
+                            paymentAmountModel = PaymentAmountModel(
+                                paymentAmount = paymentsCursor.getDoubleOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PAYMENT_AMOUNT)),
+                                paymentDate = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PAYMENT_DATE)),
+                                skipPayment = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.SKIP_PAYMENT)) ?: 0 > 0,
+                                paymentNote = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PAYMENT_NOTE))
+                            )
+                        )
+                    )
+                    groupsCursor.close()
+                }
+                while (paymentsCursor.moveToNext())
+            paymentsCursor?.close()
+            withContext(Dispatchers.Main) {
+                paymentsClosure(payments)
             }
         }
     }

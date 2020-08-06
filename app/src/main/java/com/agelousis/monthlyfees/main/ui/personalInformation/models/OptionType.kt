@@ -1,4 +1,4 @@
-package com.agelousis.monthlyfees.main.ui.settings.models
+package com.agelousis.monthlyfees.main.ui.personalInformation.models
 
 import android.content.Context
 import com.agelousis.monthlyfees.R

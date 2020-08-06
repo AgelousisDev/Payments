@@ -19,7 +19,7 @@ import com.agelousis.monthlyfees.login.LoginActivity
 import com.agelousis.monthlyfees.login.models.UserModel
 import com.agelousis.monthlyfees.main.ui.payments.PaymentListFragment
 import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
-import com.agelousis.monthlyfees.main.ui.settings.SettingsFragment
+import com.agelousis.monthlyfees.main.ui.personalInformation.PersonalInformationFragment
 import com.agelousis.monthlyfees.utils.constants.Constants
 import com.agelousis.monthlyfees.utils.extensions.*
 import com.google.android.material.navigation.NavigationView
@@ -44,8 +44,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 navHostFragmentContainerView.findNavController().navigate(R.id.action_global_paymentListFragment)
             }
             R.id.navigationProfile -> {
-                navHostFragmentContainerView.findNavController().popBackStack(R.id.settingsFragment, true)
-                navHostFragmentContainerView.findNavController().navigate(R.id.action_global_settingsFragment)
+                navHostFragmentContainerView.findNavController().popBackStack(R.id.personalInformationFragment, true)
+                navHostFragmentContainerView.findNavController().navigate(R.id.action_global_personalInformation)
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
         when(destination.label ?: "") {
-            in SettingsFragment::class.java.name -> {
+            in PersonalInformationFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_profile_label)
                 floatingButtonImage = R.drawable.ic_check
             }
@@ -67,9 +67,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onClick(p0: View?) {
         when(navHostFragmentContainerView.findNavController().currentDestination?.id) {
-            R.id.settingsFragment ->
+            R.id.personalInformationFragment ->
                 uiScope.launch {
-                    (supportFragmentManager.currentNavigationFragment as? SettingsFragment)?.updateUser { newUserModel ->
+                    (supportFragmentManager.currentNavigationFragment as? PersonalInformationFragment)?.updateUser { newUserModel ->
                         sharedPreferences.userModel = sharedPreferences.userModel?.also {
                             it.biometrics = newUserModel?.biometrics
                         }

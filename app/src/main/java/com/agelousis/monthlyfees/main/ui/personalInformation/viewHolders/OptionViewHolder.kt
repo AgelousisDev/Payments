@@ -1,10 +1,10 @@
-package com.agelousis.monthlyfees.main.ui.settings.viewHolders
+package com.agelousis.monthlyfees.main.ui.personalInformation.viewHolders
 
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.monthlyfees.databinding.OptionTypeRowLayoutBinding
-import com.agelousis.monthlyfees.main.ui.settings.OptionPresenter
-import com.agelousis.monthlyfees.main.ui.settings.models.OptionType
+import com.agelousis.monthlyfees.main.ui.personalInformation.OptionPresenter
+import com.agelousis.monthlyfees.main.ui.personalInformation.models.OptionType
 
 class OptionViewHolder(private val binding: OptionTypeRowLayoutBinding): RecyclerView.ViewHolder(binding.root) {
 

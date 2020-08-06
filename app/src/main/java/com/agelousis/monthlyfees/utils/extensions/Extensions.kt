@@ -6,14 +6,11 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import android.net.Uri
 import android.view.LayoutInflater
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.biometric.BiometricManager
-import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
@@ -24,14 +21,17 @@ import com.agelousis.monthlyfees.database.SQLiteHelper
 import com.agelousis.monthlyfees.databinding.GroupInputDialogViewBinding
 import com.agelousis.monthlyfees.login.models.UserModel
 import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
-import com.agelousis.monthlyfees.main.ui.settings.OptionPresenter
+import com.agelousis.monthlyfees.main.ui.personalInformation.OptionPresenter
 import com.agelousis.monthlyfees.utils.constants.Constants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.group_input_dialog_view.view.*
 import java.io.File
 import java.io.FileOutputStream
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.*
+import kotlin.NoSuchElementException
 
 typealias PositiveButtonBlock = () -> Unit
 typealias InputGroupDialogBlock = (GroupModel) -> Unit
@@ -208,6 +208,17 @@ val FragmentManager.currentNavigationFragment: Fragment?
 fun Context.toast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
+
+val Double?.euroFormattedString: String?
+    get() {
+        val unwrappedAmount = this ?: return null
+        val pattern = "€ #,##0"
+        val locale = Locale.getDefault()
+        val numberFormatter = NumberFormat.getNumberInstance(locale)
+        val decimalFormatter = numberFormatter as DecimalFormat
+        decimalFormatter.applyPattern(pattern)
+        return decimalFormatter.format(unwrappedAmount)
+    }
 
 @BindingAdapter("picassoImageUri")
 fun AppCompatImageView.loadImageUri(imageUri: Uri?) {

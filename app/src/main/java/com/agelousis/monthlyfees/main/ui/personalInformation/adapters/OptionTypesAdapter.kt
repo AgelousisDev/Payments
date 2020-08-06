@@ -1,12 +1,12 @@
-package com.agelousis.monthlyfees.main.ui.settings.adapters
+package com.agelousis.monthlyfees.main.ui.personalInformation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.monthlyfees.databinding.OptionTypeRowLayoutBinding
-import com.agelousis.monthlyfees.main.ui.settings.OptionPresenter
-import com.agelousis.monthlyfees.main.ui.settings.models.OptionType
-import com.agelousis.monthlyfees.main.ui.settings.viewHolders.OptionViewHolder
+import com.agelousis.monthlyfees.main.ui.personalInformation.OptionPresenter
+import com.agelousis.monthlyfees.main.ui.personalInformation.models.OptionType
+import com.agelousis.monthlyfees.main.ui.personalInformation.viewHolders.OptionViewHolder
 
 class OptionTypesAdapter(private val optionTypes: List<OptionType>, private val optionPresenter: OptionPresenter): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

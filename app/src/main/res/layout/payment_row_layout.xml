@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View" />
+        <import type="com.agelousis.monthlyfees.utils.extensions.ExtensionsKt" />
+        <variable
+            name="paymentModel"
+            type="com.agelousis.monthlyfees.main.ui.payments.models.PaymentModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        tools:targetApi="M">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/entryPdfImageView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:layout_marginStart="@dimen/nav_header_vertical_spacing"
+            app:tint="@color/colorAccent"
+            app:srcCompat="@drawable/ic_payment"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/entryCustomerNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:fontFamily="@font/ubuntu"
+            android:gravity="start"
+            android:textSize="14sp"
+            android:text="@{paymentModel.firstName}"
+            app:layout_constraintStart_toEndOf="@+id/entryPdfImageView"
+            app:layout_constraintTop_toTopOf="@+id/entryPdfImageView"
+            tools:text="Vagelis Agelousis" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/entryTotalAmountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/nav_header_vertical_spacing"
+            android:fontFamily="@font/ubuntu"
+            android:gravity="end"
+            android:text="@{ExtensionsKt.getEuroFormattedString(paymentModel.paymentAmountModel.paymentAmount)}"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="40$" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/entryDateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
+            android:fontFamily="@font/ubuntu_monospace"
+            android:gravity="center"
+            android:text="@{paymentModel.paymentAmountModel.paymentDate}"
+            android:textSize="12sp"
+            android:textColor="@color/grey"
+            app:layout_constraintStart_toEndOf="@+id/entryPdfImageView"
+            app:layout_constraintTop_toBottomOf="@+id/entryCustomerNameTextView"
+            tools:text="10-11-2019" />
+
+        <View
+            android:id="@+id/savedRowSeparator"
+            android:layout_width="0dp"
+            android:layout_height="0.25dp"
+            android:background="@color/grey"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:visibility="@{paymentModel.showLine ? View.VISIBLE : View.INVISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/entryDateTextView"
+            app:layout_constraintTop_toBottomOf="@+id/entryDateTextView"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
