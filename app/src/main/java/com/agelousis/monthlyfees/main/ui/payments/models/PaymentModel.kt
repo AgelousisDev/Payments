@@ -1,6 +1,7 @@
 package com.agelousis.monthlyfees.main.ui.payments.models
 
-data class PaymentModel(val groupId: Int?,
+data class PaymentModel(val paymentId: Int?,
+                        val groupId: Int?,
                         val groupName: String?,
                         val firstName: String?,
                         val phone: String?,

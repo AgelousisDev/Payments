@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 typealias UserBlock = (UserModel?) -> Unit
 typealias UsersBlock = (List<UserModel>) -> Unit
 typealias GroupInsertionSuccessBlock = () -> Unit
-typealias PaymentsClosure = (List<PaymentModel>) -> Unit
+typealias PaymentsClosure = (List<Any>) -> Unit
 
 class DBManager(context: Context) {
 
@@ -143,7 +143,7 @@ class DBManager(context: Context) {
 
     suspend fun initializePayments(userId: Int?, paymentsClosure: PaymentsClosure) {
         withContext(Dispatchers.Default) {
-            val payments = arrayListOf<PaymentModel>()
+            val payments = arrayListOf<Any>()
             val paymentsCursor = database?.query(
                 SQLiteHelper.PERSONS_TABLE_NAME,
                 null,
@@ -152,7 +152,7 @@ class DBManager(context: Context) {
                 null,
                 null,
                 null)
-            if (paymentsCursor?.moveToFirst() == true)
+            if (paymentsCursor?.moveToFirst() == true && paymentsCursor.count > 0)
                 do {
                     val groupsCursor = database?.query(
                         SQLiteHelper.GROUPS_TABLE_NAME,
@@ -166,6 +166,7 @@ class DBManager(context: Context) {
                     groupsCursor?.moveToFirst() ?: continue
                     payments.add(
                         PaymentModel(
+                            paymentId = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.ID)),
                             groupId = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)),
                             groupName = groupsCursor.getStringOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_NAME)),
                             firstName = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.FIRST_NAME)),
@@ -186,6 +187,28 @@ class DBManager(context: Context) {
                     groupsCursor.close()
                 }
                 while (paymentsCursor.moveToNext())
+            else {
+                val groupsCursor = database?.query(
+                    SQLiteHelper.GROUPS_TABLE_NAME,
+                    null,
+                    "${SQLiteHelper.USER_ID}=?",
+                    arrayOf(userId?.toString()),
+                    null,
+                    null,
+                    null
+                )
+                if (groupsCursor?.moveToFirst() == true && groupsCursor.count > 0)
+                    do {
+                        payments.add(
+                            GroupModel(
+                                groupId = groupsCursor.getIntOrNull(groupsCursor.getColumnIndex(SQLiteHelper.ID)),
+                                groupName = groupsCursor.getStringOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_NAME))
+                            )
+                        )
+                    }
+                    while (groupsCursor.moveToNext())
+                groupsCursor?.close()
+            }
             paymentsCursor?.close()
             withContext(Dispatchers.Main) {
                 paymentsClosure(payments)

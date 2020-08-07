@@ -251,3 +251,10 @@ fun switchStateChanged(switchMaterial: SwitchMaterial, optionPresenter: OptionPr
         )
     }
 }
+
+@BindingAdapter("srcCompat")
+fun setSrcCompat(appCompatImageView: AppCompatImageView, resourceId: Int?) {
+    resourceId?.let {
+        appCompatImageView.setImageResource(it)
+    }
+}

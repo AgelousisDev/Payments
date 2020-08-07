@@ -9,7 +9,7 @@ import com.agelousis.monthlyfees.main.ui.payments.models.PaymentModel
 
 class PaymentListViewModel: ViewModel() {
 
-    val paymentsLiveData by lazy { MutableLiveData<List<PaymentModel>>() }
+    val paymentsLiveData by lazy { MutableLiveData<List<Any>>() }
 
     suspend fun initializePayments(context: Context, userModel: UserModel) {
         val dbManager = DBManager(
@@ -22,5 +22,6 @@ class PaymentListViewModel: ViewModel() {
         }
         dbManager.close()
     }
+    
 
 }
