@@ -133,6 +133,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setupToolbar()
         setupNavigationView()
         setupUI()
+        /*uiScope.launch {
+            dbManager.insertPayment(
+                userId = userModel?.id,
+                paymentModel = PaymentModel(
+                    1, 1, "FirstGroup", "Vagelis", "76565657", "Agelousis", "65327653276", "agelousakos@gmail.com", true, false, PaymentAmountModel(12.0, "12-12-2000", true, "uwgdjwudwegugywe")
+                )
+            ) {
+
+            }
+        }*/
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

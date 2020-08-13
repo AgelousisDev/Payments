@@ -17,6 +17,7 @@ typealias UserBlock = (UserModel?) -> Unit
 typealias UsersBlock = (List<UserModel>) -> Unit
 typealias GroupInsertionSuccessBlock = () -> Unit
 typealias PaymentsClosure = (List<Any>) -> Unit
+typealias PaymentInsertionSuccessBlock = () -> Unit
 
 class DBManager(context: Context) {
 
@@ -141,6 +142,33 @@ class DBManager(context: Context) {
         }
     }
 
+    suspend fun insertPayment(userId: Int?, paymentModel: PaymentModel, paymentInsertionSuccessBlock: PaymentInsertionSuccessBlock) {
+        withContext(Dispatchers.Default) {
+            database?.insert(
+                SQLiteHelper.PERSONS_TABLE_NAME,
+                null,
+                ContentValues().also {
+                    it.put(SQLiteHelper.USER_ID, userId)
+                    it.put(SQLiteHelper.GROUP_ID, paymentModel.groupId)
+                    it.put(SQLiteHelper.FIRST_NAME, paymentModel.firstName)
+                    it.put(SQLiteHelper.PHONE, paymentModel.phone)
+                    it.put(SQLiteHelper.PARENT_NAME, paymentModel.parentName)
+                    it.put(SQLiteHelper.PARENT_PHONE, paymentModel.parentPhone)
+                    it.put(SQLiteHelper.EMAIL, paymentModel.email)
+                    it.put(SQLiteHelper.ACTIVE, paymentModel.active)
+                    it.put(SQLiteHelper.FREE, paymentModel.free)
+                    it.put(SQLiteHelper.PAYMENT_AMOUNT, paymentModel.paymentAmountModel?.paymentAmount)
+                    it.put(SQLiteHelper.PAYMENT_DATE, paymentModel.paymentAmountModel?.paymentDate)
+                    it.put(SQLiteHelper.SKIP_PAYMENT, paymentModel.paymentAmountModel?.skipPayment)
+                    it.put(SQLiteHelper.PAYMENT_NOTE, paymentModel.paymentAmountModel?.paymentNote)
+                }
+            )
+            withContext(Dispatchers.Main) {
+                paymentInsertionSuccessBlock()
+            }
+        }
+    }
+
     suspend fun initializePayments(userId: Int?, paymentsClosure: PaymentsClosure) {
         withContext(Dispatchers.Default) {
             val payments = arrayListOf<Any>()
@@ -158,7 +186,7 @@ class DBManager(context: Context) {
                         SQLiteHelper.GROUPS_TABLE_NAME,
                         arrayOf(SQLiteHelper.GROUP_NAME),
                         "${SQLiteHelper.ID}=? AND ${SQLiteHelper.USER_ID}=?",
-                        arrayOf(userId?.toString(), paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.GROUP_ID))?.toString()),
+                        arrayOf(paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.GROUP_ID))?.toString(), userId?.toString()),
                         null,
                         null,
                         null

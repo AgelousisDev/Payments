@@ -27,4 +27,6 @@
     <string name="key_add_group_label">Add Group</string>
     <string name="key_group_name_label">Group name</string>
     <string name="key_no_entries_message">There are no entries yet</string>
+    <string name="key_no_results_found_value">No results found with \'%s\'</string>
+    <string name="key_search">Search</string>
 </resources>

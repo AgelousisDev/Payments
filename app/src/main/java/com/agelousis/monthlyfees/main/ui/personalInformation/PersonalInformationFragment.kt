@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.custom.itemDecoration.DividerItemRecyclerViewDecorator
 import com.agelousis.monthlyfees.database.DBManager
-import com.agelousis.monthlyfees.databinding.FragmentSettingsLayoutBinding
+import com.agelousis.monthlyfees.databinding.FragmentPersonalInformationLayoutBinding
 import com.agelousis.monthlyfees.login.LoginActivity
 import com.agelousis.monthlyfees.login.models.UserModel
 import com.agelousis.monthlyfees.main.MainActivity
@@ -20,7 +20,7 @@ import com.agelousis.monthlyfees.main.ui.personalInformation.adapters.OptionType
 import com.agelousis.monthlyfees.main.ui.personalInformation.models.OptionType
 import com.agelousis.monthlyfees.utils.constants.Constants
 import com.agelousis.monthlyfees.utils.extensions.*
-import kotlinx.android.synthetic.main.fragment_settings_layout.*
+import kotlinx.android.synthetic.main.fragment_personal_information_layout.*
 
 class PersonalInformationFragment: Fragment(), OptionPresenter {
 
@@ -64,7 +64,7 @@ class PersonalInformationFragment: Fragment(), OptionPresenter {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-        FragmentSettingsLayoutBinding.inflate(
+        FragmentPersonalInformationLayoutBinding.inflate(
             inflater,
             container,
             false
