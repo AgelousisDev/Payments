@@ -9,15 +9,24 @@ import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.main.MainActivity
 import com.agelousis.monthlyfees.main.ui.payments.adapters.PaymentsAdapter
 import com.agelousis.monthlyfees.main.ui.payments.models.EmptyModel
+import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
 import com.agelousis.monthlyfees.main.ui.payments.models.PaymentModel
+import com.agelousis.monthlyfees.main.ui.payments.presenters.GroupPresenter
 import com.agelousis.monthlyfees.main.ui.payments.viewModels.PaymentListViewModel
 import com.agelousis.monthlyfees.utils.extensions.whenNull
 import kotlinx.android.synthetic.main.fragment_payment_list_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
-class PaymentListFragment : Fragment(R.layout.fragment_payment_list_layout) {
+class PaymentListFragment : Fragment(R.layout.fragment_payment_list_layout), GroupPresenter {
+
+    override fun onGroupSelected(groupModel: GroupModel) {
+        PaymentListFragmentDirections.actionPaymentListFragmentToNewPaymentFragment(
+            groupDataModel = groupModel
+        )
+    }
 
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(PaymentListViewModel::class.java) }
@@ -33,7 +42,8 @@ class PaymentListFragment : Fragment(R.layout.fragment_payment_list_layout) {
     
     private fun configureRecyclerView() {
         paymentListRecyclerView.adapter = PaymentsAdapter(
-            list = filteredList
+            list = filteredList,
+            groupPresenter = this
         )
     }
 
@@ -46,7 +56,7 @@ class PaymentListFragment : Fragment(R.layout.fragment_payment_list_layout) {
             )
         })
 
-    private fun initializePayments() {
+    fun initializePayments() {
         uiScope.launch {
             viewModel.initializePayments(
                 context = context ?: return@launch,
@@ -58,9 +68,20 @@ class PaymentListFragment : Fragment(R.layout.fragment_payment_list_layout) {
     private fun configurePayments(list: List<Any>, query: String? = null) {
         filteredList.clear()
         list.filterIsInstance<PaymentModel>().takeIf { it.isNotEmpty() }?.let { payments ->
-            filteredList.addAll(
-                payments.filter { it.firstName == query }
-            )
+            payments.groupBy { it.groupName ?: "" }.toSortedMap().forEach { map ->
+                map.value.filter { it.firstName?.toLowerCase(Locale.getDefault())?.contains(query?.toLowerCase(Locale.getDefault()) ?: "") == true }
+                    .takeIf { it.isNotEmpty() }?.let { filteredByQueryPayments ->
+                        filteredList.add(
+                            GroupModel(
+                                groupId = filteredByQueryPayments.firstOrNull()?.groupId,
+                                groupName = map.key
+                            )
+                        )
+                        filteredList.addAll(
+                            filteredByQueryPayments
+                        )
+                    }
+            }
         } ?: filteredList.addAll(list)
 
         if (filteredList.isEmpty())

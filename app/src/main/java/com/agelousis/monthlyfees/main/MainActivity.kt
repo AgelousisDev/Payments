@@ -180,7 +180,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 userId = userModel?.id,
                 groupModel = groupModel
             ) {
-                //update recycler view
+                (supportFragmentManager.currentNavigationFragment as? PaymentListFragment)?.initializePayments()
             }
         }
     }

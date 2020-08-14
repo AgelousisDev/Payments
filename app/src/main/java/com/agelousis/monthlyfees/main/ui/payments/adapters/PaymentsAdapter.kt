@@ -10,11 +10,12 @@ import com.agelousis.monthlyfees.main.ui.payments.enumerations.PaymentsAdapterVi
 import com.agelousis.monthlyfees.main.ui.payments.models.EmptyModel
 import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
 import com.agelousis.monthlyfees.main.ui.payments.models.PaymentModel
+import com.agelousis.monthlyfees.main.ui.payments.presenters.GroupPresenter
 import com.agelousis.monthlyfees.main.ui.payments.viewHolders.EmptyViewHolder
 import com.agelousis.monthlyfees.main.ui.payments.viewHolders.GroupViewHolder
 import com.agelousis.monthlyfees.main.ui.payments.viewHolders.PaymentViewHolder
 
-class PaymentsAdapter(private val list: List<Any>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PaymentsAdapter(private val list: List<Any>, private val groupPresenter: GroupPresenter): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -65,7 +66,8 @@ class PaymentsAdapter(private val list: List<Any>): RecyclerView.Adapter<Recycle
         (holder as? GroupViewHolder)?.bind(
             groupModel = list.getOrNull(
                 index = position
-            ) as? GroupModel ?: return
+            ) as? GroupModel ?: return,
+            presenter = groupPresenter
         )
         (holder as? PaymentViewHolder)?.bind(
             paymentModel = list.getOrNull(

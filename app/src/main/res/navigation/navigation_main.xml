@@ -9,12 +9,30 @@
         android:id="@+id/paymentListFragment"
         android:name="com.agelousis.monthlyfees.main.ui.payments.PaymentListFragment"
         android:label="PaymentListFragment"
-        tools:layout="@layout/fragment_payment_list_layout" />
+        tools:layout="@layout/fragment_payment_list_layout" >
+        <action
+            android:id="@+id/action_paymentListFragment_to_newPaymentFragment"
+            app:destination="@id/newPaymentFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    </fragment>
     <fragment
         android:id="@+id/personalInformationFragment"
         android:name="com.agelousis.monthlyfees.main.ui.personalInformation.PersonalInformationFragment"
         android:label="PersonalInformationFragment"
         tools:layout="@layout/fragment_personal_information_layout"/>
+    <fragment
+        android:id="@+id/newPaymentFragment"
+        android:name="com.agelousis.monthlyfees.main.ui.newPayment.NewPaymentFragment"
+        android:label="NewPaymentFragment"
+        tools:layout="@layout/fragment_new_payment_layout">
+        <argument
+            android:name="groupDataModel"
+            app:argType="com.agelousis.monthlyfees.main.ui.payments.models.GroupModel" />
+    </fragment>
+
     <action
         android:id="@+id/action_global_personalInformation"
         app:destination="@id/personalInformationFragment"
