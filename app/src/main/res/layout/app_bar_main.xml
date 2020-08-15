@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         app:fabAnimationMode="scale"
-        app:fabAlignmentMode="center"
+        app:fabAlignmentMode="end"
         app:fabCradleRoundedCornerRadius="16dp">
 
         <com.google.android.material.textview.MaterialTextView

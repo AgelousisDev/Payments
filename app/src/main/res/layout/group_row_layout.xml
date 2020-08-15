@@ -17,7 +17,7 @@
         android:orientation="vertical"
         android:clickable="true"
         android:focusable="true"
-        android:background="?attr/selectableItemBackgroundBorderless"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:onClick="@{() -> presenter.onGroupSelected(groupModel)}"
         android:paddingStart="@dimen/nav_header_vertical_spacing"
         android:paddingTop="@dimen/nav_header_vertical_spacing"

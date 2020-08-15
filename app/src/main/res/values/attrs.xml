@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PersonDetailsLayout">
+        <attr name="label" format="string|reference" />
+        <attr name="showLine" format="boolean" />
+        <attr name="imeOptionType" format="enum">
+            <enum name="actionNext" value="0" />
+            <enum name="actionDone" value="1" />
+        </attr>
+        <attr name="fieldType" format="enum">
+            <enum name="TEXT_ALL_CAPS" value="0" />
+            <enum name="TEXT" value="1" />
+            <enum name="NUMBER" value="2" />
+            <enum name="EMAIL" value="3" />
+        </attr>
+    </declare-styleable>
+</resources>

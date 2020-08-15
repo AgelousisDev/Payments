@@ -9,7 +9,7 @@ import androidx.core.database.getStringOrNull
 import com.agelousis.monthlyfees.login.models.UserModel
 import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
 import com.agelousis.monthlyfees.main.ui.payments.models.PaymentAmountModel
-import com.agelousis.monthlyfees.main.ui.payments.models.PaymentModel
+import com.agelousis.monthlyfees.main.ui.payments.models.PersonModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -142,27 +142,36 @@ class DBManager(context: Context) {
         }
     }
 
-    suspend fun insertPayment(userId: Int?, paymentModel: PaymentModel, paymentInsertionSuccessBlock: PaymentInsertionSuccessBlock) {
+    suspend fun insertPayment(userId: Int?, personModel: PersonModel, paymentInsertionSuccessBlock: PaymentInsertionSuccessBlock) {
         withContext(Dispatchers.Default) {
-            database?.insert(
+            val personId = database?.insert(
                 SQLiteHelper.PERSONS_TABLE_NAME,
                 null,
                 ContentValues().also {
                     it.put(SQLiteHelper.USER_ID, userId)
-                    it.put(SQLiteHelper.GROUP_ID, paymentModel.groupId)
-                    it.put(SQLiteHelper.FIRST_NAME, paymentModel.firstName)
-                    it.put(SQLiteHelper.PHONE, paymentModel.phone)
-                    it.put(SQLiteHelper.PARENT_NAME, paymentModel.parentName)
-                    it.put(SQLiteHelper.PARENT_PHONE, paymentModel.parentPhone)
-                    it.put(SQLiteHelper.EMAIL, paymentModel.email)
-                    it.put(SQLiteHelper.ACTIVE, paymentModel.active)
-                    it.put(SQLiteHelper.FREE, paymentModel.free)
-                    it.put(SQLiteHelper.PAYMENT_AMOUNT, paymentModel.paymentAmountModel?.paymentAmount)
-                    it.put(SQLiteHelper.PAYMENT_DATE, paymentModel.paymentAmountModel?.paymentDate)
-                    it.put(SQLiteHelper.SKIP_PAYMENT, paymentModel.paymentAmountModel?.skipPayment)
-                    it.put(SQLiteHelper.PAYMENT_NOTE, paymentModel.paymentAmountModel?.paymentNote)
+                    it.put(SQLiteHelper.GROUP_ID, personModel.groupId)
+                    it.put(SQLiteHelper.FIRST_NAME, personModel.firstName)
+                    it.put(SQLiteHelper.PHONE, personModel.phone)
+                    it.put(SQLiteHelper.PARENT_NAME, personModel.parentName)
+                    it.put(SQLiteHelper.PARENT_PHONE, personModel.parentPhone)
+                    it.put(SQLiteHelper.EMAIL, personModel.email)
+                    it.put(SQLiteHelper.ACTIVE, personModel.active)
+                    it.put(SQLiteHelper.FREE, personModel.free)
                 }
             )
+            personModel.payments?.forEach { paymentAmountModel ->
+                database?.insert(
+                    SQLiteHelper.PAYMENTS_TABLE_NAME,
+                    null,
+                    ContentValues().also {
+                        it.put(SQLiteHelper.PERSON_ID, personId?.toInt())
+                        it.put(SQLiteHelper.PAYMENT_AMOUNT, paymentAmountModel.paymentAmount)
+                        it.put(SQLiteHelper.PAYMENT_DATE, paymentAmountModel.paymentDate)
+                        it.put(SQLiteHelper.SKIP_PAYMENT, paymentAmountModel.skipPayment)
+                        it.put(SQLiteHelper.PAYMENT_NOTE, paymentAmountModel.paymentNote)
+                    }
+                )
+            }
             withContext(Dispatchers.Main) {
                 paymentInsertionSuccessBlock()
             }
@@ -171,8 +180,8 @@ class DBManager(context: Context) {
 
     suspend fun initializePayments(userId: Int?, paymentsClosure: PaymentsClosure) {
         withContext(Dispatchers.Default) {
-            val payments = arrayListOf<Any>()
-            val paymentsCursor = database?.query(
+            val genericList = arrayListOf<Any>()
+            val personsCursor = database?.query(
                 SQLiteHelper.PERSONS_TABLE_NAME,
                 null,
                 "${SQLiteHelper.USER_ID}=?",
@@ -180,41 +189,61 @@ class DBManager(context: Context) {
                 null,
                 null,
                 null)
-            if (paymentsCursor?.moveToFirst() == true && paymentsCursor.count > 0)
+            if (personsCursor?.moveToFirst() == true && personsCursor.count > 0)
                 do {
+                    val paymentsCursor = database?.query(
+                        SQLiteHelper.PAYMENTS_TABLE_NAME,
+                        null,
+                        "${SQLiteHelper.PERSON_ID}=?",
+                        arrayOf(personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.ID))?.toString()),
+                        null,
+                        null,
+                        null
+                    )
+                    val payments = arrayListOf<PaymentAmountModel>()
+                    if (paymentsCursor?.moveToFirst() == true && paymentsCursor.count > 0) {
+                        do {
+                            payments.add(
+                                PaymentAmountModel(
+                                    paymentId = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.ID)),
+                                    paymentAmount = paymentsCursor.getDoubleOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PAYMENT_AMOUNT)),
+                                    paymentNote = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PAYMENT_NOTE)),
+                                    paymentDate = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PAYMENT_DATE)),
+                                    skipPayment = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.SKIP_PAYMENT)) ?: 0 > 0
+                                )
+                            )
+                        }
+                        while(paymentsCursor.moveToNext())
+                    }
+                    paymentsCursor?.close()
                     val groupsCursor = database?.query(
                         SQLiteHelper.GROUPS_TABLE_NAME,
                         arrayOf(SQLiteHelper.GROUP_NAME),
                         "${SQLiteHelper.ID}=? AND ${SQLiteHelper.USER_ID}=?",
-                        arrayOf(paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.GROUP_ID))?.toString(), userId?.toString()),
+                        arrayOf(personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID))?.toString(), userId?.toString()),
                         null,
                         null,
                         null
                     )
                     groupsCursor?.moveToFirst() ?: continue
-                    payments.add(
-                        PaymentModel(
-                            paymentId = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.ID)),
-                            groupId = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)),
+                    genericList.add(
+                        PersonModel(
+                            paymentId = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.ID)),
+                            groupId = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)),
                             groupName = groupsCursor.getStringOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_NAME)),
-                            firstName = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.FIRST_NAME)),
-                            phone = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PHONE)),
-                            parentName = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PARENT_NAME)),
-                            parentPhone = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PARENT_PHONE)),
-                            email = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.EMAIL)),
-                            active = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.ACTIVE)) ?: 0 > 0,
-                            free = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.FREE)) ?: 0 > 0,
-                            paymentAmountModel = PaymentAmountModel(
-                                paymentAmount = paymentsCursor.getDoubleOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PAYMENT_AMOUNT)),
-                                paymentDate = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PAYMENT_DATE)),
-                                skipPayment = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.SKIP_PAYMENT)) ?: 0 > 0,
-                                paymentNote = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PAYMENT_NOTE))
-                            )
+                            firstName = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.FIRST_NAME)),
+                            phone = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.PHONE)),
+                            parentName = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.PARENT_NAME)),
+                            parentPhone = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.PARENT_PHONE)),
+                            email = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.EMAIL)),
+                            active = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.ACTIVE)) ?: 0 > 0,
+                            free = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.FREE)) ?: 0 > 0,
+                            payments = payments
                         )
                     )
                     groupsCursor.close()
                 }
-                while (paymentsCursor.moveToNext())
+                while (personsCursor.moveToNext())
             else {
                 val groupsCursor = database?.query(
                     SQLiteHelper.GROUPS_TABLE_NAME,
@@ -227,7 +256,7 @@ class DBManager(context: Context) {
                 )
                 if (groupsCursor?.moveToFirst() == true && groupsCursor.count > 0)
                     do {
-                        payments.add(
+                        genericList.add(
                             GroupModel(
                                 groupId = groupsCursor.getIntOrNull(groupsCursor.getColumnIndex(SQLiteHelper.ID)),
                                 groupName = groupsCursor.getStringOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_NAME))
@@ -237,9 +266,9 @@ class DBManager(context: Context) {
                     while (groupsCursor.moveToNext())
                 groupsCursor?.close()
             }
-            paymentsCursor?.close()
+            personsCursor?.close()
             withContext(Dispatchers.Main) {
-                paymentsClosure(payments)
+                paymentsClosure(genericList)
             }
         }
     }

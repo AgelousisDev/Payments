@@ -1,6 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<layout>
+    <data>
+        <variable
+            name="personModel"
+            type="com.agelousis.monthlyfees.main.ui.payments.models.PersonModel" />
+        <variable
+            name="groupModel"
+            type="com.agelousis.monthlyfees.main.ui.payments.models.GroupModel" />
+    </data>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
+            android:id="@+id/firstNameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:label="@string/key_first_name_label"
+            personDetails="@{personModel.firstName}"
+            app:showLine="true"
+            app:imeOptionType="actionNext"
+            app:fieldType="TEXT" />
+
+        <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
+            android:id="@+id/phoneLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:label="@string/key_phone_label"
+            personDetails="@{personModel.phone}"
+            app:showLine="true"
+            app:imeOptionType="actionNext"
+            app:fieldType="NUMBER" />
+
+        <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
+            android:id="@+id/parentNameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:label="@string/key_parent_name_label"
+            personDetails="@{personModel.parentName}"
+            app:showLine="true"
+            app:imeOptionType="actionNext"
+            app:fieldType="TEXT" />
+
+        <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
+            android:id="@+id/parentPhoneLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:label="@string/key_parent_phone_label"
+            personDetails="@{personModel.parentPhone}"
+            app:showLine="true"
+            app:imeOptionType="actionNext"
+            app:fieldType="NUMBER" />
+
+        <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
+            android:id="@+id/emailLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:label="@string/key_email_label"
+            personDetails="@{personModel.email}"
+            app:showLine="true"
+            app:imeOptionType="actionNext"
+            app:fieldType="EMAIL" />
+
+        <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
+            android:id="@+id/groupLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:label="@string/key_group_label"
+            personDetails="@{groupModel.groupName != null ? groupModel.groupName : personModel.groupName != null ? personModel.groupName : @string/key_empty_field_label}"
+            app:showLine="true"
+            app:imeOptionType="actionNext"
+            app:fieldType="TEXT" />
+
+    </LinearLayout>
+
+</ScrollView>
+</layout>

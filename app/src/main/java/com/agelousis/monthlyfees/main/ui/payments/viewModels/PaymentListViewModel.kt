@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.agelousis.monthlyfees.database.DBManager
 import com.agelousis.monthlyfees.login.models.UserModel
-import com.agelousis.monthlyfees.main.ui.payments.models.PaymentModel
 
 class PaymentListViewModel: ViewModel() {
 

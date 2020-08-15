@@ -29,4 +29,15 @@
     <string name="key_no_entries_message">There are no entries yet</string>
     <string name="key_no_results_found_value">No results found with \'%s\'</string>
     <string name="key_search">Search</string>
+    <string name="key_person_info_label">Person Info</string>
+    <string name="key_first_name_label">First Name</string>
+    <string name="key_phone_label">Phone</string>
+    <string name="key_parent_name_label">Parent Name</string>
+    <string name="key_parent_phone_label">Parent Phone</string>
+    <string name="key_email_label">Email</string>
+    <string name="key_group_label">Group</string>
+    <string name="key_is_active_label">Is Active</string>
+    <string name="key_is_free_label">Is Free</string>
+    <string name="key_send_message_label">Send Message</string>
+    <string name="key_payments_label">Payments</string>
 </resources>

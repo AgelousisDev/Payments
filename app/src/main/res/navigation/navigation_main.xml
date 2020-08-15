@@ -30,7 +30,14 @@
         tools:layout="@layout/fragment_new_payment_layout">
         <argument
             android:name="groupDataModel"
-            app:argType="com.agelousis.monthlyfees.main.ui.payments.models.GroupModel" />
+            app:argType="com.agelousis.monthlyfees.main.ui.payments.models.GroupModel"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="personDataModel"
+            app:argType="com.agelousis.monthlyfees.main.ui.payments.models.PersonModel"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 
     <action

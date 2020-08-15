@@ -9,7 +9,7 @@ import com.agelousis.monthlyfees.databinding.PaymentRowLayoutBinding
 import com.agelousis.monthlyfees.main.ui.payments.enumerations.PaymentsAdapterViewType
 import com.agelousis.monthlyfees.main.ui.payments.models.EmptyModel
 import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
-import com.agelousis.monthlyfees.main.ui.payments.models.PaymentModel
+import com.agelousis.monthlyfees.main.ui.payments.models.PersonModel
 import com.agelousis.monthlyfees.main.ui.payments.presenters.GroupPresenter
 import com.agelousis.monthlyfees.main.ui.payments.viewHolders.EmptyViewHolder
 import com.agelousis.monthlyfees.main.ui.payments.viewHolders.GroupViewHolder
@@ -70,16 +70,16 @@ class PaymentsAdapter(private val list: List<Any>, private val groupPresenter: G
             presenter = groupPresenter
         )
         (holder as? PaymentViewHolder)?.bind(
-            paymentModel = list.getOrNull(
+            personModel = list.getOrNull(
                 index = position
-            ) as? PaymentModel ?: return
+            ) as? PersonModel ?: return
         )
     }
 
     override fun getItemViewType(position: Int): Int {
         (list.getOrNull(index = position) as? EmptyModel)?.let { return PaymentsAdapterViewType.EMPTY_VIEW.type }
         (list.getOrNull(index = position) as? GroupModel)?.let { return PaymentsAdapterViewType.GROUP_VIEW.type }
-        (list.getOrNull(index = position) as? PaymentModel)?.let { return PaymentsAdapterViewType.PAYMENT_VIEW.type }
+        (list.getOrNull(index = position) as? PersonModel)?.let { return PaymentsAdapterViewType.PAYMENT_VIEW.type }
         return super.getItemViewType(position)
     }
 

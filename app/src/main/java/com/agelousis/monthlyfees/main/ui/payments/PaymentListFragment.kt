@@ -5,12 +5,13 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.main.MainActivity
 import com.agelousis.monthlyfees.main.ui.payments.adapters.PaymentsAdapter
 import com.agelousis.monthlyfees.main.ui.payments.models.EmptyModel
 import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
-import com.agelousis.monthlyfees.main.ui.payments.models.PaymentModel
+import com.agelousis.monthlyfees.main.ui.payments.models.PersonModel
 import com.agelousis.monthlyfees.main.ui.payments.presenters.GroupPresenter
 import com.agelousis.monthlyfees.main.ui.payments.viewModels.PaymentListViewModel
 import com.agelousis.monthlyfees.utils.extensions.whenNull
@@ -23,8 +24,10 @@ import java.util.*
 class PaymentListFragment : Fragment(R.layout.fragment_payment_list_layout), GroupPresenter {
 
     override fun onGroupSelected(groupModel: GroupModel) {
-        PaymentListFragmentDirections.actionPaymentListFragmentToNewPaymentFragment(
-            groupDataModel = groupModel
+        findNavController().navigate(
+            PaymentListFragmentDirections.actionPaymentListFragmentToNewPaymentFragment(
+                groupDataModel = groupModel
+            )
         )
     }
 
@@ -67,7 +70,7 @@ class PaymentListFragment : Fragment(R.layout.fragment_payment_list_layout), Gro
 
     private fun configurePayments(list: List<Any>, query: String? = null) {
         filteredList.clear()
-        list.filterIsInstance<PaymentModel>().takeIf { it.isNotEmpty() }?.let { payments ->
+        list.filterIsInstance<PersonModel>().takeIf { it.isNotEmpty() }?.let { payments ->
             payments.groupBy { it.groupName ?: "" }.toSortedMap().forEach { map ->
                 map.value.filter { it.firstName?.toLowerCase(Locale.getDefault())?.contains(query?.toLowerCase(Locale.getDefault()) ?: "") == true }
                     .takeIf { it.isNotEmpty() }?.let { filteredByQueryPayments ->
@@ -78,7 +81,9 @@ class PaymentListFragment : Fragment(R.layout.fragment_payment_list_layout), Gro
                             )
                         )
                         filteredList.addAll(
-                            filteredByQueryPayments
+                            filteredByQueryPayments.also {
+                                it.lastOrNull()?.showLine = false
+                            }
                         )
                     }
             }
