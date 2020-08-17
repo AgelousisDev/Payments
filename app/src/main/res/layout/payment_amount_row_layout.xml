@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="com.agelousis.monthlyfees.utils.extensions.ExtensionsKt" />
+        <variable
+            name="paymentAmountModel"
+            type="com.agelousis.monthlyfees.main.ui.payments.models.PaymentAmountModel" />
+    </data>
+ <com.google.android.material.card.MaterialCardView
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     app:elevation="16dp"
+     app:cardBackgroundColor="@color/whiteTwo"
+     app:cardCornerRadius="8dp"
+     app:cardUseCompatPadding="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_horizontal_margin">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/materialTextView2"
+            style="@style/TextViewTitleLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{ExtensionsKt.getEuroFormattedString(paymentAmountModel.paymentAmount)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="$100,00" />
+
+        <View
+            android:id="@+id/lineSeparator"
+            android:layout_width="100dp"
+            android:layout_height="0.5dp"
+            android:background="@color/grey"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialTextView2" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextViewLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:text="@{paymentAmountModel.paymentDate}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lineSeparator"
+            tools:text="24/05/2020" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
+</layout>

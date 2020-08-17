@@ -70,9 +70,8 @@ fun <T> List<T>.third(): T {
 }
 
 inline fun <K, T> ifLet(vararg elements: T?, closure: (List<T>) -> K): K? {
-    return if (elements.all { it != null }) {
+    return if (elements.all { it != null })
         closure(elements.filterNotNull())
-    }
     else null
 }
 
@@ -122,10 +121,10 @@ var SharedPreferences.userModel: UserModel?
             getString(SQLiteHelper.PROFILE_IMAGE, null)
         ) {
             UserModel(
-                username = it.first() as String,
-                password = it.second() as String,
-                biometrics = it.third() as Boolean,
-                profileImage = it.last() as String
+                username = it.first().toString(),
+                password = it.second().toString(),
+                biometrics = it.third().toString().toBoolean(),
+                profileImage = it.last().toString()
             )
         }
 

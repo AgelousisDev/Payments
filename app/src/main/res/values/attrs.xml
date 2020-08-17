@@ -16,7 +16,6 @@
     </declare-styleable>
     <declare-styleable name="DetailsAppSwitch">
         <attr name="appSwitchLabel" format="string|reference" />
-        <attr name="isChecked" format="boolean" />
         <attr name="appSwitchShowLine" format="boolean" />
     </declare-styleable>
 </resources>

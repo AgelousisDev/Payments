@@ -79,6 +79,31 @@
             app:imeOptionType="actionNext"
             app:fieldType="TEXT" />
 
+        <com.agelousis.monthlyfees.views.detailsSwitch.DetailsAppSwitch
+            android:id="@+id/activeAppSwitchLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:appSwitchLabel="@string/key_is_active_label"
+            app:appSwitchShowLine="true"
+            appSwitchIsChecked="@{personModel.active == true}"/>
+
+        <com.agelousis.monthlyfees.views.detailsSwitch.DetailsAppSwitch
+            android:id="@+id/freeAppSwitchLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:appSwitchLabel="@string/key_is_active_label"
+            app:appSwitchShowLine="true"
+            appSwitchIsChecked="@{personModel.free == true}"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/paymentAmountRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:orientation="horizontal"
+            android:layoutAnimation="@anim/layout_animation_fall_down"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
     </LinearLayout>
 
 </ScrollView>
