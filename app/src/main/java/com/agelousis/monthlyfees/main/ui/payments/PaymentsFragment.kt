@@ -15,17 +15,17 @@ import com.agelousis.monthlyfees.main.ui.payments.models.PersonModel
 import com.agelousis.monthlyfees.main.ui.payments.presenters.GroupPresenter
 import com.agelousis.monthlyfees.main.ui.payments.viewModels.PaymentListViewModel
 import com.agelousis.monthlyfees.utils.extensions.whenNull
-import kotlinx.android.synthetic.main.fragment_payment_list_layout.*
+import kotlinx.android.synthetic.main.fragment_payments_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
-class PaymentListFragment : Fragment(R.layout.fragment_payment_list_layout), GroupPresenter {
+class PaymentsFragment : Fragment(R.layout.fragment_payments_layout), GroupPresenter {
 
     override fun onGroupSelected(groupModel: GroupModel) {
         findNavController().navigate(
-            PaymentListFragmentDirections.actionPaymentListFragmentToNewPaymentFragment(
+            PaymentsFragmentDirections.actionPaymentListFragmentToNewPaymentFragment(
                 groupDataModel = groupModel
             )
         )

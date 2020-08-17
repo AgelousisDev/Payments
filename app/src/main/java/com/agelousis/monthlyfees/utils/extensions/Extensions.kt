@@ -69,7 +69,7 @@ fun <T> List<T>.third(): T {
     return this[2]
 }
 
-inline fun <K, T: Any> ifLet(vararg elements: T?, closure: (List<T>) -> K): K? {
+inline fun <K, T> ifLet(vararg elements: T?, closure: (List<T>) -> K): K? {
     return if (elements.all { it != null }) {
         closure(elements.filterNotNull())
     }

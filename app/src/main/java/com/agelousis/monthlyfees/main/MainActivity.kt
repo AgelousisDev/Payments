@@ -18,7 +18,7 @@ import com.agelousis.monthlyfees.database.DBManager
 import com.agelousis.monthlyfees.login.LoginActivity
 import com.agelousis.monthlyfees.login.models.UserModel
 import com.agelousis.monthlyfees.main.ui.newPayment.NewPaymentFragment
-import com.agelousis.monthlyfees.main.ui.payments.PaymentListFragment
+import com.agelousis.monthlyfees.main.ui.payments.PaymentsFragment
 import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
 import com.agelousis.monthlyfees.main.ui.personalInformation.PersonalInformationFragment
 import com.agelousis.monthlyfees.utils.constants.Constants
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
             }
-            in PaymentListFragment::class.java.name -> {
+            in PaymentsFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.app_name)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_add
@@ -123,7 +123,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
     override fun onBackPressed() {
-        if (supportFragmentManager.currentNavigationFragment is PaymentListFragment)
+        if (supportFragmentManager.currentNavigationFragment is PaymentsFragment)
             showSimpleDialog(
                 title = resources.getString(R.string.key_logout_label),
                 message = resources.getString(R.string.key_logout_message)
@@ -188,7 +188,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 userId = userModel?.id,
                 groupModel = groupModel
             ) {
-                (supportFragmentManager.currentNavigationFragment as? PaymentListFragment)?.initializePayments()
+                (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
             }
         }
     }
