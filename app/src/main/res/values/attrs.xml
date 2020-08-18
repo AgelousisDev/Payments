@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="PersonDetailsLayout">
         <attr name="label" format="string|reference" />
+        <attr name="value" format="string|reference" />
         <attr name="showLine" format="boolean" />
         <attr name="imeOptionType" format="enum">
             <enum name="actionNext" value="0" />
@@ -13,6 +14,7 @@
             <enum name="NUMBER" value="2" />
             <enum name="EMAIL" value="3" />
         </attr>
+        <attr name="isEnabled" format="boolean" />
     </declare-styleable>
     <declare-styleable name="DetailsAppSwitch">
         <attr name="appSwitchLabel" format="string|reference" />

@@ -7,20 +7,19 @@ import android.view.View
 import android.widget.FrameLayout
 import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.databinding.DetailsAppSwitchLayoutBinding
-import com.agelousis.monthlyfees.views.detailsSwitch.`interface`.AppSwitchListener
+import com.agelousis.monthlyfees.views.detailsSwitch.interfaces.AppSwitchListener
 import com.agelousis.monthlyfees.views.detailsSwitch.models.DetailsAppSwitchDataModel
 import kotlinx.android.synthetic.main.details_app_switch_layout.view.*
 
 class DetailsAppSwitch(context: Context, attributeSet: AttributeSet?): FrameLayout(context, attributeSet) {
 
     private var appSwitchListener: AppSwitchListener? = null
-    var isChecked: Boolean? = null
+    var isChecked: Boolean = false
         set(value) {
             field = value
-            value?.let {
-                detailsAppSwitch.isChecked = value
-            }
+            detailsAppSwitch.isChecked = value
         }
+        get() = detailsAppSwitch.isChecked
 
     init {
         initAttributesAndView(attributeSet = attributeSet)

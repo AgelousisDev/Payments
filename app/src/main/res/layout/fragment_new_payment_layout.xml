@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools">
+<layout>
     <data>
+        <import type="com.agelousis.monthlyfees.main.ui.payments.models.PaymentAmountModel" />
         <variable
             name="personModel"
             type="com.agelousis.monthlyfees.main.ui.payments.models.PersonModel" />
@@ -86,6 +87,9 @@
             android:id="@+id/activeAppSwitchLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             app:appSwitchLabel="@string/key_is_active_label"
             app:appSwitchShowLine="true"
             appSwitchIsChecked="@{personModel.active == true}"/>
@@ -94,6 +98,9 @@
             android:id="@+id/freeAppSwitchLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             app:appSwitchLabel="@string/key_is_active_label"
             app:appSwitchShowLine="true"
             appSwitchIsChecked="@{personModel.free == true}"/>
@@ -105,12 +112,11 @@
             android:layout_gravity="end"
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:text="@string/key_add_payment_label"
-            tools:text="@string/key_sign_up_label"
-            android:onClick="@{() -> presenter.onPaymentViewOrAdd(null)}"
-            app:backgroundTint="@color/colorAccent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:onClick="@{() -> presenter.onPaymentAmount((PaymentAmountModel) null)}"
+            android:textAllCaps="false"
+            app:icon="@drawable/ic_add"
+            app:cornerRadius="8dp"
+            app:backgroundTint="@color/colorAccent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/paymentAmountRecyclerView"

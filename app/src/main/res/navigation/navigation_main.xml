@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/paymentListFragment"
         android:name="com.agelousis.monthlyfees.main.ui.payments.PaymentsFragment"
-        android:label="PaymentListFragment"
+        android:label="PaymentsFragment"
         tools:layout="@layout/fragment_payments_layout" >
         <action
             android:id="@+id/action_paymentListFragment_to_newPaymentFragment"

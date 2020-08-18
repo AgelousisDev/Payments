@@ -1,4 +1,4 @@
-package com.agelousis.monthlyfees.views.detailsSwitch.`interface`
+package com.agelousis.monthlyfees.views.detailsSwitch.interfaces
 
 interface AppSwitchListener {
     fun onAppSwitchValueChanged(isChecked: Boolean)

@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_new_payment_layout.*
 
 class NewPaymentFragment: Fragment(), NewPaymentPresenter {
 
-    override fun onPaymentViewOrAdd(paymentAmountModel: PaymentAmountModel?) {
+    override fun onPaymentAmount(paymentAmountModel: PaymentAmountModel?) {
         findNavController().navigate(
             NewPaymentFragmentDirections.actionNewPaymentFragmentToNewPaymentAmountFragment(
                 paymentAmountDataModel = paymentAmountModel
@@ -25,7 +25,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
 
     private val args: NewPaymentFragmentArgs by navArgs()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         FragmentNewPaymentLayoutBinding.inflate(
             inflater,
             container,
@@ -38,7 +38,17 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupUI()
         configureRecyclerView()
+    }
+
+    private fun setupUI() {
+        activeAppSwitchLayout.setOnClickListener {
+            activeAppSwitchLayout.isChecked = !activeAppSwitchLayout.isChecked
+        }
+        freeAppSwitchLayout.setOnClickListener {
+            freeAppSwitchLayout.isChecked = !freeAppSwitchLayout.isChecked
+        }
     }
 
     private fun configureRecyclerView() {

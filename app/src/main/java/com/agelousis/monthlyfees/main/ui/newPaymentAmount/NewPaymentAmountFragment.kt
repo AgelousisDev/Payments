@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.agelousis.monthlyfees.databinding.FragmentNewPaymentAmountLayoutBinding
+import kotlinx.android.synthetic.main.fragment_new_payment_amount_layout.*
 
 class NewPaymentAmountFragment: Fragment() {
 
@@ -27,7 +28,12 @@ class NewPaymentAmountFragment: Fragment() {
     }
 
     private fun setupUI() {
+        dateDetailsLayout.setOnClickListener {
 
+        }
+        skipPaymentAppSwitchLayout.setOnClickListener {
+            skipPaymentAppSwitchLayout.isChecked = !skipPaymentAppSwitchLayout.isChecked
+        }
     }
 
 }

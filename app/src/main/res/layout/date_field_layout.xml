@@ -4,15 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <import type="android.view.View" />
-        <import type="com.agelousis.monthlyfees.views.personDetailsLayout.enumerations.PersonDetailFieldType" />
-        <import type="com.agelousis.monthlyfees.views.personDetailsLayout.enumerations.ImeOptionsType" />
         <variable
             name="dataModel"
             type="com.agelousis.monthlyfees.views.personDetailsLayout.models.PersonDetailsViewDataModel" />
+        <variable
+            name="presenter"
+            type="com.agelousis.monthlyfees.views.dateLayout.interfaces.DatePickerPresenter" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
+    android:onClick="@{() -> presenter.onDatePickerShow()}">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/label"
@@ -21,25 +26,34 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:text="@{dataModel.label}"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Full Name" />
+        tools:text="Date" />
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/personDetailField"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/dateView"
         style="@style/TextViewLabel"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:gravity="end"
-        android:background="@null"
-        android:imeOptions="@{dataModel.imeOptionsType == ImeOptionsType.ACTION_NEXT ? 0x00000005 : 0x00000006}"
-        android:inputType="@{dataModel.type == PersonDetailFieldType.NUMBER_INPUT_TYPE ? 0x00002002 : dataModel.type == PersonDetailFieldType.TEXT_ALL_CAPS_INPUT_TYPE ? 0x00001001 : dataModel.type == PersonDetailFieldType.EMAIL ? 0x00000021 : 0x00000001}"
-        android:enabled="@{dataModel.isEnabled()}"
+        android:hint="@{dataModel.value}"
+        app:layout_constraintBottom_toBottomOf="@+id/dateIcon"
+        app:layout_constraintEnd_toStartOf="@+id/dateIcon"
+        app:layout_constraintTop_toTopOf="@+id/dateIcon"
+        tools:text="12/23/2020" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/dateIcon"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:onClick="@{() -> presenter.onDatePickerShow()}"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/label"
-        tools:hint="Vagelis Agelousis" />
+        app:srcCompat="@drawable/ic_date" />
 
     <View
         android:layout_width="match_parent"
@@ -50,7 +64,8 @@
         android:visibility="@{dataModel.showLine ? View.VISIBLE : View.INVISIBLE}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/label" />
+        app:layout_constraintTop_toBottomOf="@+id/dateIcon" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
