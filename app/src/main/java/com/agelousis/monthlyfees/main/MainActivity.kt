@@ -18,6 +18,7 @@ import com.agelousis.monthlyfees.database.DBManager
 import com.agelousis.monthlyfees.login.LoginActivity
 import com.agelousis.monthlyfees.login.models.UserModel
 import com.agelousis.monthlyfees.main.ui.newPayment.NewPaymentFragment
+import com.agelousis.monthlyfees.main.ui.newPaymentAmount.NewPaymentAmountFragment
 import com.agelousis.monthlyfees.main.ui.payments.PaymentsFragment
 import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
 import com.agelousis.monthlyfees.main.ui.personalInformation.PersonalInformationFragment
@@ -67,6 +68,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             in NewPaymentFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_person_info_label)
+                floatingButtonState = true
+                floatingButtonImage = R.drawable.ic_check
+            }
+            in NewPaymentAmountFragment::class.java.name -> {
+                appBarTitle = resources.getString(R.string.key_add_payment_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
             }

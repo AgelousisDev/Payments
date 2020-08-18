@@ -40,4 +40,10 @@
     <string name="key_is_free_label">Is Free</string>
     <string name="key_send_message_label">Send Message</string>
     <string name="key_payments_label">Payments</string>
+    <string name="key_amount_label">Amount</string>
+    <string name="key_date_label">Date</string>
+    <string name="key_skip_payment_label">Skip Payment</string>
+    <string name="key_note_label">Note</string>
+    <string name="key_add_payment_label">Add Payment</string>
+
 </resources>
