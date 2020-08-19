@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/paymentListFragment">
+    app:startDestination="@+id/paymentsFragment">
 
     <fragment
-        android:id="@+id/paymentListFragment"
+        android:id="@+id/paymentsFragment"
         android:name="com.agelousis.monthlyfees.main.ui.payments.PaymentsFragment"
         android:label="PaymentsFragment"
         tools:layout="@layout/fragment_payments_layout" >
@@ -66,8 +66,8 @@
         app:popEnterAnim="@anim/nav_default_pop_enter_anim"
         app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     <action
-        android:id="@+id/action_global_paymentListFragment"
-        app:destination="@id/paymentListFragment"
+        android:id="@+id/action_global_paymentsFragment"
+        app:destination="@id/paymentsFragment"
         app:enterAnim="@anim/nav_default_enter_anim"
         app:exitAnim="@anim/nav_default_exit_anim"
         app:popEnterAnim="@anim/nav_default_pop_enter_anim"

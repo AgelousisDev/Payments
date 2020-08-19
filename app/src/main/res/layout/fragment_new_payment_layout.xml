@@ -18,116 +18,127 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
+        app:cardUseCompatPadding="true">
 
-        <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
-            android:id="@+id/firstNameLayout"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:label="@string/key_first_name_label"
-            personDetails="@{personModel.firstName}"
-            app:showLine="true"
-            app:imeOptionType="actionNext"
-            app:fieldType="TEXT" />
+            android:orientation="vertical"
+            android:animateLayoutChanges="true">
 
-        <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
-            android:id="@+id/phoneLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:label="@string/key_phone_label"
-            personDetails="@{personModel.phone}"
-            app:showLine="true"
-            app:imeOptionType="actionNext"
-            app:fieldType="NUMBER" />
+            <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
+                android:id="@+id/firstNameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:label="@string/key_first_name_label"
+                personDetails="@{personModel.firstName}"
+                app:showLine="true"
+                app:imeOptionType="actionNext"
+                app:fieldType="TEXT" />
 
-        <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
-            android:id="@+id/parentNameLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:label="@string/key_parent_name_label"
-            personDetails="@{personModel.parentName}"
-            app:showLine="true"
-            app:imeOptionType="actionNext"
-            app:fieldType="TEXT" />
+            <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
+                android:id="@+id/phoneLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:label="@string/key_phone_label"
+                personDetails="@{personModel.phone}"
+                app:showLine="true"
+                app:imeOptionType="actionNext"
+                app:fieldType="NUMBER" />
 
-        <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
-            android:id="@+id/parentPhoneLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:label="@string/key_parent_phone_label"
-            personDetails="@{personModel.parentPhone}"
-            app:showLine="true"
-            app:imeOptionType="actionNext"
-            app:fieldType="NUMBER" />
+            <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
+                android:id="@+id/parentNameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:label="@string/key_parent_name_label"
+                personDetails="@{personModel.parentName}"
+                app:showLine="true"
+                app:imeOptionType="actionNext"
+                app:fieldType="TEXT" />
 
-        <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
-            android:id="@+id/emailLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:label="@string/key_email_label"
-            personDetails="@{personModel.email}"
-            app:showLine="true"
-            app:imeOptionType="actionNext"
-            app:fieldType="EMAIL" />
+            <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
+                android:id="@+id/parentPhoneLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:label="@string/key_parent_phone_label"
+                personDetails="@{personModel.parentPhone}"
+                app:showLine="true"
+                app:imeOptionType="actionNext"
+                app:fieldType="NUMBER" />
 
-        <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
-            android:id="@+id/groupLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:label="@string/key_group_label"
-            personDetails="@{groupModel.groupName != null ? groupModel.groupName : personModel.groupName != null ? personModel.groupName : @string/key_empty_field_label}"
-            app:showLine="true"
-            app:imeOptionType="actionNext"
-            app:fieldType="TEXT" />
+            <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
+                android:id="@+id/emailLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:label="@string/key_email_label"
+                personDetails="@{personModel.email}"
+                app:showLine="true"
+                app:imeOptionType="actionDone"
+                app:fieldType="EMAIL" />
 
-        <com.agelousis.monthlyfees.views.detailsSwitch.DetailsAppSwitch
-            android:id="@+id/activeAppSwitchLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:clickable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            app:appSwitchLabel="@string/key_is_active_label"
-            app:appSwitchShowLine="true"
-            appSwitchIsChecked="@{personModel.active == true}"/>
+            <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsPickerLayout
+                android:id="@+id/groupDetailsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:label="@string/key_group_label"
+                personDetailsPicker="@{groupModel.groupName != null ? groupModel.groupName : personModel.groupName != null ? personModel.groupName : @string/key_empty_field_label}"
+                app:showLine="true"
+                app:imeOptionType="actionDone"
+                app:fieldType="TEXT" />
 
-        <com.agelousis.monthlyfees.views.detailsSwitch.DetailsAppSwitch
-            android:id="@+id/freeAppSwitchLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:clickable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            app:appSwitchLabel="@string/key_is_active_label"
-            app:appSwitchShowLine="true"
-            appSwitchIsChecked="@{personModel.free == true}"/>
+            <com.agelousis.monthlyfees.views.detailsSwitch.DetailsAppSwitch
+                android:id="@+id/activeAppSwitchLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                app:appSwitchLabel="@string/key_is_active_label"
+                app:appSwitchShowLine="true"
+                appSwitchIsChecked="@{personModel.active == true}"/>
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/BasicMaterialButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_margin="@dimen/activity_horizontal_margin"
-            android:text="@string/key_add_payment_label"
-            android:onClick="@{() -> presenter.onPaymentAmount((PaymentAmountModel) null)}"
-            android:textAllCaps="false"
-            app:icon="@drawable/ic_add"
-            app:cornerRadius="8dp"
-            app:backgroundTint="@color/colorAccent" />
+            <com.agelousis.monthlyfees.views.detailsSwitch.DetailsAppSwitch
+                android:id="@+id/freeAppSwitchLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                app:appSwitchLabel="@string/key_is_active_label"
+                app:appSwitchShowLine="true"
+                appSwitchIsChecked="@{personModel.free == true}"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/paymentAmountRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
-            android:orientation="horizontal"
-            android:layoutAnimation="@anim/layout_animation_fall_down"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            <com.google.android.material.button.MaterialButton
+                style="@style/BasicMaterialButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="@string/key_add_payment_label"
+                android:onClick="@{() -> presenter.onPaymentAmount((PaymentAmountModel) null)}"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_add"
+                app:cornerRadius="8dp"
+                app:backgroundTint="@color/colorAccent" />
 
-    </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/paymentAmountRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/nav_header_vertical_spacing"
+                android:orientation="horizontal"
+                android:layoutAnimation="@anim/layout_animation_fall_down"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
 </ScrollView>
 </layout>

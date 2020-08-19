@@ -11,8 +11,12 @@
             type="com.agelousis.monthlyfees.views.personDetailsLayout.models.PersonDetailsViewDataModel" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/personDetailsLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackgroundBorderless">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/label"
@@ -35,7 +39,6 @@
         android:background="@null"
         android:imeOptions="@{dataModel.imeOptionsType == ImeOptionsType.ACTION_NEXT ? 0x00000005 : 0x00000006}"
         android:inputType="@{dataModel.type == PersonDetailFieldType.NUMBER_INPUT_TYPE ? 0x00002002 : dataModel.type == PersonDetailFieldType.TEXT_ALL_CAPS_INPUT_TYPE ? 0x00001001 : dataModel.type == PersonDetailFieldType.EMAIL ? 0x00000021 : 0x00000001}"
-        android:enabled="@{dataModel.isEnabled()}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/label"

@@ -21,6 +21,7 @@ import com.agelousis.monthlyfees.main.ui.newPayment.NewPaymentFragment
 import com.agelousis.monthlyfees.main.ui.newPaymentAmount.NewPaymentAmountFragment
 import com.agelousis.monthlyfees.main.ui.payments.PaymentsFragment
 import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
+import com.agelousis.monthlyfees.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.monthlyfees.main.ui.personalInformation.PersonalInformationFragment
 import com.agelousis.monthlyfees.utils.constants.Constants
 import com.agelousis.monthlyfees.utils.extensions.*
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when(item.itemId) {
             R.id.navigationHome -> {
                 navHostFragmentContainerView.findNavController().popBackStack()
-                navHostFragmentContainerView.findNavController().navigate(R.id.action_global_paymentListFragment)
+                navHostFragmentContainerView.findNavController().navigate(R.id.action_global_paymentsFragment)
             }
             R.id.navigationProfile -> {
                 navHostFragmentContainerView.findNavController().popBackStack(R.id.personalInformationFragment, true)
@@ -91,7 +92,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         finish()
                     }
                 }
-            R.id.paymentListFragment ->
+            R.id.paymentsFragment ->
                 showGroupInputDialog(
                     inputHint = resources.getString(R.string.key_group_name_label),
                     positiveButtonText = resources.getString(R.string.key_add_label),
@@ -101,6 +102,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         )
                     }
                 )
+            R.id.newPaymentFragment ->
+                (supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.checkInputFields()
+            R.id.newPaymentAmountFragment ->
+                (supportFragmentManager.currentNavigationFragment as? NewPaymentAmountFragment)?.checkInputFields()
         }
     }
 
@@ -120,7 +125,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             field = value
             floatingButton.setImageResource(value)
         }
-    private var floatingButtonState: Boolean = true
+    var floatingButtonState: Boolean = true
         set(value) {
             field = value
             if (value)
@@ -137,8 +142,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
             }
-        else
+        else {
+            navHostFragmentContainerView.findNavController().previousBackStackEntry?.savedStateHandle?.remove<PaymentAmountModel>(NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA)
             super.onBackPressed()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -147,16 +154,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setupToolbar()
         setupNavigationView()
         setupUI()
-        /*uiScope.launch {
-            dbManager.insertPayment(
-                userId = userModel?.id,
-                paymentModel = PaymentModel(
-                    1, 1, "FirstGroup", "Vagelis", "76565657", "Agelousis", "65327653276", "agelousakos@gmail.com", true, false, PaymentAmountModel(12.0, "12-12-2000", true, "uwgdjwudwegugywe")
-                )
-            ) {
-
-            }
-        }*/
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

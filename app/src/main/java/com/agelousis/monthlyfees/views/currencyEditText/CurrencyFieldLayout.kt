@@ -45,7 +45,6 @@ class CurrencyFieldLayout(context: Context, attrs: AttributeSet?): FrameLayout(c
             binding.dataModel = PersonDetailsViewDataModel(
                 label = attributes.getString(R.styleable.PersonDetailsLayout_label),
                 showLine = attributes.getBoolean(R.styleable.PersonDetailsLayout_showLine, true),
-                isEnabled = attributes.getBoolean(R.styleable.PersonDetailsLayout_isEnabled, true),
                 imeOptionsType = ImeOptionsType.values()[attributes.getInt(R.styleable.PersonDetailsLayout_imeOptionType, 0)],
                 type = PersonDetailFieldType.values()[attributes.getInt(R.styleable.PersonDetailsLayout_fieldType, 0)]
             )

@@ -5,12 +5,20 @@ import com.agelousis.monthlyfees.views.currencyEditText.CurrencyFieldLayout
 import com.agelousis.monthlyfees.views.dateLayout.DateFieldLayout
 import com.agelousis.monthlyfees.views.detailsSwitch.DetailsAppSwitch
 import com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
+import com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsPickerLayout
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 @BindingAdapter("personDetails")
 fun setPersonDetails(personDetailsLayout: PersonDetailsLayout, details: String?) {
     details?.let {
         personDetailsLayout.value = it
+    }
+}
+
+@BindingAdapter("personDetailsPicker")
+fun setPersonPickerDetails(personDetailsPickerLayout: PersonDetailsPickerLayout, details: String?) {
+    details?.let {
+        personDetailsPickerLayout.value = it
     }
 }
 

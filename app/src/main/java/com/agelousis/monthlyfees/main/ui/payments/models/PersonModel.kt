@@ -23,7 +23,7 @@ data class PersonModel(val paymentId: Int?,
 }
 
 @Parcelize
-data class PaymentAmountModel(val paymentId: Int?,
+data class PaymentAmountModel(val paymentId: Int? = null,
                               val paymentAmount: Double?,
                               val paymentDate: String?,
                               val skipPayment: Boolean?,

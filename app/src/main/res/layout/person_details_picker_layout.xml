@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View" />
+        <import type="com.agelousis.monthlyfees.views.personDetailsLayout.enumerations.PersonDetailFieldType" />
+        <import type="com.agelousis.monthlyfees.views.personDetailsLayout.enumerations.ImeOptionsType" />
+        <variable
+            name="dataModel"
+            type="com.agelousis.monthlyfees.views.personDetailsLayout.models.PersonDetailsViewDataModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/personDetailsPickerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/label"
+            style="@style/TextViewTitleLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:text="@{dataModel.label}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="List" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/personDetailsPickerValueView"
+            style="@style/TextViewLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:background="@null"
+            android:gravity="end"
+            android:imeOptions="@{dataModel.imeOptionsType == ImeOptionsType.ACTION_NEXT ? 0x00000005 : 0x00000006}"
+            android:inputType="@{dataModel.type == PersonDetailFieldType.NUMBER_INPUT_TYPE ? 0x00002002 : dataModel.type == PersonDetailFieldType.TEXT_ALL_CAPS_INPUT_TYPE ? 0x00001001 : dataModel.type == PersonDetailFieldType.EMAIL ? 0x00000021 : 0x00000001}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/arrow"
+            app:layout_constraintStart_toEndOf="@id/label"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:hint="Vagelis Agelousis" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/arrow"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/grey"
+            app:srcCompat="@drawable/ic_arrow" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:background="@color/grey"
+            android:visibility="@{dataModel.showLine ? View.VISIBLE : View.INVISIBLE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/label" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

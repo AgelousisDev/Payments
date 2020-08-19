@@ -45,5 +45,6 @@
     <string name="key_skip_payment_label">Skip Payment</string>
     <string name="key_note_label">Note</string>
     <string name="key_add_payment_label">Add Payment</string>
+    <string name="key_select_group_label">Select Group</string>
 
 </resources>

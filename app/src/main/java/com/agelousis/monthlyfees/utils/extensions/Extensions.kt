@@ -35,6 +35,7 @@ import kotlin.NoSuchElementException
 
 typealias PositiveButtonBlock = () -> Unit
 typealias InputGroupDialogBlock = (GroupModel) -> Unit
+typealias ItemPositionDialogBlock = (Int) -> Unit
 
 fun <T> T?.whenNull(receiver: () -> Unit): T? {
     return if (this == null) {
@@ -196,6 +197,18 @@ fun Context.showGroupInputDialog(inputHint: String, isCancellable: Boolean? = nu
         materialDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = it?.isNotEmpty() == true && it.isNotBlank()
         materialDialog.getButton(AlertDialog.BUTTON_POSITIVE).alpha = if (it?.isNotEmpty() == true && it.isNotBlank()) 1.0f else 0.5f
     }
+}
+
+fun Context.showListDialog(title: String, items: List<String>, isCancellable: Boolean = true, itemPositionDialogBlock: ItemPositionDialogBlock) {
+    val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog)
+        .setTitle(title)
+        .setCancelable(isCancellable)
+        .setItems(items.toTypedArray()) { p0, p1 ->
+            p0.dismiss()
+            itemPositionDialogBlock(p1)
+        }
+    val materialDialog = materialAlertDialogBuilder.create()
+    materialDialog.show()
 }
 
 val Context.hasBiometrics: Boolean

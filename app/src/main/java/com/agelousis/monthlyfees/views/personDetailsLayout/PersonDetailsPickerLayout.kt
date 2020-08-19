@@ -1,34 +1,36 @@
 package com.agelousis.monthlyfees.views.personDetailsLayout
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.FrameLayout
 import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.databinding.PersonDetailsFieldLayoutBinding
+import com.agelousis.monthlyfees.databinding.PersonDetailsPickerLayoutBinding
 import com.agelousis.monthlyfees.views.personDetailsLayout.enumerations.ImeOptionsType
 import com.agelousis.monthlyfees.views.personDetailsLayout.enumerations.PersonDetailFieldType
 import com.agelousis.monthlyfees.views.personDetailsLayout.models.PersonDetailsViewDataModel
-import kotlinx.android.synthetic.main.person_details_field_layout.view.*
+import kotlinx.android.synthetic.main.person_details_picker_layout.view.*
 
-class PersonDetailsLayout(context: Context, attributeSet: AttributeSet?): FrameLayout(context, attributeSet) {
+class PersonDetailsPickerLayout(context: Context, attributeSet: AttributeSet?): FrameLayout(context, attributeSet) {
 
     var value: String? = null
         set(value) {
             field = value
-            value?.let { personDetailField.setText(it) }
+            value?.let { personDetailsPickerValueView.text = it }
         }
-        get() = personDetailField.text?.toString()
+        get() = personDetailsPickerValueView.text?.toString()
 
     init {
         initAttributesAndView(attributeSet = attributeSet)
     }
 
+    @SuppressLint("CustomViewStyleable")
     private fun initAttributesAndView(attributeSet: AttributeSet?) {
         attributeSet?.let {
             val attributes = context.obtainStyledAttributes(it, R.styleable.PersonDetailsLayout, 0, 0)
-            val binding = PersonDetailsFieldLayoutBinding.inflate(LayoutInflater.from(context), null, false)
+            val binding = PersonDetailsPickerLayoutBinding.inflate(LayoutInflater.from(context), null, false)
             binding.dataModel = PersonDetailsViewDataModel(
                 label = attributes.getString(R.styleable.PersonDetailsLayout_label),
                 showLine = attributes.getBoolean(R.styleable.PersonDetailsLayout_showLine, true),
@@ -40,15 +42,7 @@ class PersonDetailsLayout(context: Context, attributeSet: AttributeSet?): FrameL
         }
     }
 
-    override fun onViewAdded(child: View?) {
-        super.onViewAdded(child)
-        setupUI()
-    }
-
-    private fun setupUI() {
-        personDetailsLayout.setOnClickListener {
-            personDetailField.requestFocus()
-        }
-    }
+    fun setOnDetailsPressed(listener: OnClickListener) =
+        personDetailsPickerLayout.setOnClickListener(listener)
 
 }

@@ -18,6 +18,7 @@ typealias UsersBlock = (List<UserModel>) -> Unit
 typealias GroupInsertionSuccessBlock = () -> Unit
 typealias PaymentsClosure = (List<Any>) -> Unit
 typealias PaymentInsertionSuccessBlock = () -> Unit
+typealias GroupsSuccessBlock = (List<GroupModel>) -> Unit
 
 class DBManager(context: Context) {
 
@@ -269,6 +270,35 @@ class DBManager(context: Context) {
             personsCursor?.close()
             withContext(Dispatchers.Main) {
                 paymentsClosure(genericList)
+            }
+        }
+    }
+
+    suspend fun initializeGroups(userId: Int?, groupsSuccessBlock: GroupsSuccessBlock) {
+        withContext(Dispatchers.Default) {
+            val groups = arrayListOf<GroupModel>()
+            val groupsCursor = database?.query(
+                SQLiteHelper.GROUPS_TABLE_NAME,
+                null,
+                "${SQLiteHelper.USER_ID}=?",
+                arrayOf(userId?.toString()),
+                null,
+                null,
+                null
+            )
+            if (groupsCursor?.moveToFirst() == true && groupsCursor.count > 0)
+                do {
+                    groups.add(
+                        GroupModel(
+                            groupId = groupsCursor.getIntOrNull(groupsCursor.getColumnIndex(SQLiteHelper.ID)),
+                            groupName = groupsCursor.getStringOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_NAME))
+                        )
+                    )
+                }
+                while(groupsCursor.moveToNext())
+            groupsCursor?.close()
+            withContext(Dispatchers.Main) {
+                groupsSuccessBlock(groups)
             }
         }
     }

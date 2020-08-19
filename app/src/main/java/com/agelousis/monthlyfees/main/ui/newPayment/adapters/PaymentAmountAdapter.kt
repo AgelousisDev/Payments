@@ -30,5 +30,6 @@ class PaymentAmountAdapter(private val paymentModelList: List<PaymentAmountModel
 
     override fun getItemCount() = paymentModelList.size
 
+    fun reloadData() = notifyDataSetChanged()
 
 }

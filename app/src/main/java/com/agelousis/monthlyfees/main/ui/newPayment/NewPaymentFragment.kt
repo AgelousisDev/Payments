@@ -7,11 +7,21 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.agelousis.monthlyfees.R
+import com.agelousis.monthlyfees.database.DBManager
 import com.agelousis.monthlyfees.databinding.FragmentNewPaymentLayoutBinding
+import com.agelousis.monthlyfees.main.MainActivity
 import com.agelousis.monthlyfees.main.ui.newPayment.adapters.PaymentAmountAdapter
 import com.agelousis.monthlyfees.main.ui.newPayment.presenters.NewPaymentPresenter
+import com.agelousis.monthlyfees.main.ui.newPaymentAmount.NewPaymentAmountFragment
+import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
 import com.agelousis.monthlyfees.main.ui.payments.models.PaymentAmountModel
+import com.agelousis.monthlyfees.main.ui.payments.models.PersonModel
+import com.agelousis.monthlyfees.utils.extensions.showListDialog
 import kotlinx.android.synthetic.main.fragment_new_payment_layout.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class NewPaymentFragment: Fragment(), NewPaymentPresenter {
 
@@ -23,10 +33,16 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         )
     }
 
+    private val uiScope = CoroutineScope(Dispatchers.Main)
+    private val dbManager by lazy { context?.let { DBManager(context = it) } }
     private val args: NewPaymentFragmentArgs by navArgs()
+    private val availableGroups by lazy { arrayListOf<GroupModel>() }
+    private val availablePayments by lazy { ArrayList(args.personDataModel?.payments ?: listOf()) }
+    private var binding: FragmentNewPaymentLayoutBinding? = null
+    private var currentPersonModel: PersonModel? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        FragmentNewPaymentLayoutBinding.inflate(
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentNewPaymentLayoutBinding.inflate(
             inflater,
             container,
             false
@@ -34,15 +50,27 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             it.groupModel = args.groupDataModel
             it.personModel = args.personDataModel
             it.presenter = this
-        }.root
+        }
+        return binding?.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
         configureRecyclerView()
+        initializeGroups()
+        initializeNewPayments()
     }
 
     private fun setupUI() {
+        groupDetailsLayout.setOnDetailsPressed {
+            context?.showListDialog(
+                title = resources.getString(R.string.key_select_group_label),
+                items = availableGroups.mapNotNull { it.groupName }
+            ) {
+                groupDetailsLayout.value = availableGroups.getOrNull(index = it)?.groupName
+            }
+        }
         activeAppSwitchLayout.setOnClickListener {
             activeAppSwitchLayout.isChecked = !activeAppSwitchLayout.isChecked
         }
@@ -51,10 +79,33 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         }
     }
 
+    private fun initializeNewPayments() {
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<PaymentAmountModel>(NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA)
+            ?.observe(viewLifecycleOwner, {
+                availablePayments.add(it)
+                (paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
+            })
+    }
+
     private fun configureRecyclerView() {
         paymentAmountRecyclerView.adapter = PaymentAmountAdapter(
-            paymentModelList = args.personDataModel?.payments ?: return
+            paymentModelList = availablePayments
         )
+    }
+
+    private fun initializeGroups() {
+        availableGroups.clear()
+        uiScope.launch {
+            dbManager?.initializeGroups(
+                userId = (activity as? MainActivity)?.userModel?.id
+            ) {
+                availableGroups.addAll(it)
+            }
+        }
+    }
+
+    fun checkInputFields() {
+
     }
 
 }
