@@ -6,6 +6,7 @@ import com.agelousis.monthlyfees.views.dateLayout.DateFieldLayout
 import com.agelousis.monthlyfees.views.detailsSwitch.DetailsAppSwitch
 import com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
 import com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsPickerLayout
+import com.agelousis.monthlyfees.views.searchLayout.MaterialSearchView
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 @BindingAdapter("personDetails")
@@ -33,6 +34,13 @@ fun setCurrencyAmount(currencyFieldLayout: CurrencyFieldLayout, amount: Double?)
 fun setDateValue(dateFieldLayout: DateFieldLayout, date: String?) {
     date?.let {
         dateFieldLayout.dateValue = it
+    }
+}
+
+@BindingAdapter("materialSearchProfile")
+fun setMaterialSearchProfile(materialSearchView: MaterialSearchView, profileImagePath: String?) {
+    profileImagePath?.let {
+        materialSearchView.binding?.profileImagePath = it
     }
 }
 

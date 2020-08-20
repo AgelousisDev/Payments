@@ -5,14 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.agelousis.monthlyfees.R
-import com.agelousis.monthlyfees.database.DBManager
 import com.agelousis.monthlyfees.databinding.FragmentNewPaymentLayoutBinding
 import com.agelousis.monthlyfees.main.MainActivity
 import com.agelousis.monthlyfees.main.ui.newPayment.adapters.PaymentAmountAdapter
 import com.agelousis.monthlyfees.main.ui.newPayment.presenters.NewPaymentPresenter
+import com.agelousis.monthlyfees.main.ui.newPayment.viewModels.NewPaymentViewModel
 import com.agelousis.monthlyfees.main.ui.newPaymentAmount.NewPaymentAmountFragment
 import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
 import com.agelousis.monthlyfees.main.ui.payments.models.PaymentAmountModel
@@ -37,7 +38,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     }
 
     private val uiScope = CoroutineScope(Dispatchers.Main)
-    private val dbManager by lazy { context?.let { DBManager(context = it) } }
+    private val viewModel by lazy { ViewModelProvider(this).get(NewPaymentViewModel::class.java) }
     private val args: NewPaymentFragmentArgs by navArgs()
     private val availableGroups by lazy { arrayListOf<GroupModel>() }
     private val availablePayments by lazy { ArrayList(args.personDataModel?.payments ?: listOf()) }
@@ -61,7 +62,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
         configureRecyclerView()
-        initializeGroups()
+        initializeGroupsObserver()
         initializeNewPayments()
     }
 
@@ -99,14 +100,16 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         )
     }
 
-    private fun initializeGroups() {
-        availableGroups.clear()
+    private fun initializeGroupsObserver() {
+        viewModel.groupsLiveData.observe(viewLifecycleOwner) {
+            availableGroups.clear()
+            availableGroups.addAll(it)
+        }
         uiScope.launch {
-            dbManager?.initializeGroups(
+            viewModel.initializeGroups(
+                context = context ?: return@launch,
                 userId = (activity as? MainActivity)?.userModel?.id
-            ) {
-                availableGroups.addAll(it)
-            }
+            )
         }
     }
 

@@ -46,5 +46,6 @@
     <string name="key_note_label">Note</string>
     <string name="key_add_payment_label">Add Payment</string>
     <string name="key_select_group_label">Select Group</string>
+    <string name="key_search_in_payments_label">Search in payments</string>
 
 </resources>
