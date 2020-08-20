@@ -7,6 +7,9 @@
         <variable
             name="personModel"
             type="com.agelousis.monthlyfees.main.ui.payments.models.PersonModel" />
+        <variable
+            name="presenter"
+            type="com.agelousis.monthlyfees.main.ui.payments.presenters.PaymentPresenter" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,6 +17,7 @@
         android:focusable="true"
         android:clickable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:onClick="@{() -> presenter.onPaymentSelected(personModel)}"
         tools:targetApi="M">
 
         <androidx.appcompat.widget.AppCompatImageView

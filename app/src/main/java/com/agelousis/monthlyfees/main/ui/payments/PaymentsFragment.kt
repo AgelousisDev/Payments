@@ -16,6 +16,7 @@ import com.agelousis.monthlyfees.main.ui.payments.models.EmptyModel
 import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
 import com.agelousis.monthlyfees.main.ui.payments.models.PersonModel
 import com.agelousis.monthlyfees.main.ui.payments.presenters.GroupPresenter
+import com.agelousis.monthlyfees.main.ui.payments.presenters.PaymentPresenter
 import com.agelousis.monthlyfees.main.ui.payments.viewModels.PaymentListViewModel
 import com.agelousis.monthlyfees.utils.extensions.whenNull
 import kotlinx.android.synthetic.main.activity_main.*
@@ -25,12 +26,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
-class PaymentsFragment : Fragment(), GroupPresenter {
+class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
 
     override fun onGroupSelected(groupModel: GroupModel) {
         findNavController().navigate(
             PaymentsFragmentDirections.actionPaymentListFragmentToNewPaymentFragment(
                 groupDataModel = groupModel
+            )
+        )
+    }
+
+    override fun onPaymentSelected(personModel: PersonModel) {
+        findNavController().navigate(
+            PaymentsFragmentDirections.actionPaymentListFragmentToNewPaymentFragment(
+                personDataModel = personModel
             )
         )
     }
@@ -61,12 +70,16 @@ class PaymentsFragment : Fragment(), GroupPresenter {
         searchLayout.onProfileImageClicked {
             (activity as? MainActivity)?.drawerLayout?.openDrawer(GravityCompat.START)
         }
+        searchLayout.onQueryListener {
+
+        }
     }
     
     private fun configureRecyclerView() {
         paymentListRecyclerView.adapter = PaymentsAdapter(
             list = filteredList,
-            groupPresenter = this
+            groupPresenter = this,
+            paymentPresenter = this
         )
     }
 
@@ -107,7 +120,10 @@ class PaymentsFragment : Fragment(), GroupPresenter {
                         )
                     }
             }
-        } ?: filteredList.addAll(list)
+        }
+        filteredList.addAll(
+            list.filterIsInstance<GroupModel>()
+        )
 
         if (filteredList.isEmpty())
             query.whenNull {

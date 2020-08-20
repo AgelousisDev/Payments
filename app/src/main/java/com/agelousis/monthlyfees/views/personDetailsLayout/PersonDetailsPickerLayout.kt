@@ -5,8 +5,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.core.content.ContextCompat
 import com.agelousis.monthlyfees.R
-import com.agelousis.monthlyfees.databinding.PersonDetailsFieldLayoutBinding
 import com.agelousis.monthlyfees.databinding.PersonDetailsPickerLayoutBinding
 import com.agelousis.monthlyfees.views.personDetailsLayout.enumerations.ImeOptionsType
 import com.agelousis.monthlyfees.views.personDetailsLayout.enumerations.PersonDetailFieldType
@@ -21,6 +21,12 @@ class PersonDetailsPickerLayout(context: Context, attributeSet: AttributeSet?): 
             value?.let { personDetailsPickerValueView.text = it }
         }
         get() = personDetailsPickerValueView.text?.toString()
+
+    var errorState = false
+        set(value) {
+            field = value
+            lineSeparator.setBackgroundColor(ContextCompat.getColor(context, if (value) R.color.red else R.color.grey))
+        }
 
     init {
         initAttributesAndView(attributeSet = attributeSet)

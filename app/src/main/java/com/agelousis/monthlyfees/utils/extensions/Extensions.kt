@@ -6,6 +6,9 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View
+import android.view.animation.AlphaAnimation
+import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -231,6 +234,30 @@ val Double?.euroFormattedString: String?
         decimalFormatter.applyPattern(pattern)
         return decimalFormatter.format(unwrappedAmount)
     }
+
+fun Context.message(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+}
+
+fun View.infiniteAlphaAnimation(state: Boolean) {
+    if (state) {
+        if (animation == null)
+            startAnimation(
+                AlphaAnimation(0.0f, 1.0f).also {
+                    it.repeatMode = AlphaAnimation.REVERSE
+                    it.repeatCount = AlphaAnimation.INFINITE
+                    it.duration = 1500
+                    it.interpolator = LinearInterpolator()
+                }
+            )
+    }
+    else {
+        if (animation != null) {
+            alpha = 1.0f
+            clearAnimation()
+        }
+    }
+}
 
 @BindingAdapter("picassoImageUri")
 fun AppCompatImageView.loadImageUri(imageUri: Uri?) {

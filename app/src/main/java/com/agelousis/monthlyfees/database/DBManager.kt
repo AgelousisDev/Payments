@@ -182,6 +182,31 @@ class DBManager(context: Context) {
     suspend fun initializePayments(userId: Int?, paymentsClosure: PaymentsClosure) {
         withContext(Dispatchers.Default) {
             val genericList = arrayListOf<Any>()
+            val groups = arrayListOf<GroupModel>()
+            //initialize groups first
+            val groupsCursor = database?.query(
+                SQLiteHelper.GROUPS_TABLE_NAME,
+                null,
+                "${SQLiteHelper.USER_ID}=?",
+                arrayOf(userId?.toString()),
+                null,
+                null,
+                null
+            )
+            if (groupsCursor?.moveToFirst() == true && groupsCursor.count > 0)
+                do {
+                    groups.add(
+                        GroupModel(
+                            groupId = groupsCursor.getIntOrNull(groupsCursor.getColumnIndex(SQLiteHelper.ID)),
+                            groupName = groupsCursor.getStringOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_NAME))
+                        )
+                    )
+                }
+                while(groupsCursor.moveToNext())
+            groupsCursor?.close()
+            genericList.addAll(
+                groups
+            )
             val personsCursor = database?.query(
                 SQLiteHelper.PERSONS_TABLE_NAME,
                 null,
@@ -217,21 +242,11 @@ class DBManager(context: Context) {
                         while(paymentsCursor.moveToNext())
                     }
                     paymentsCursor?.close()
-                    val groupsCursor = database?.query(
-                        SQLiteHelper.GROUPS_TABLE_NAME,
-                        arrayOf(SQLiteHelper.GROUP_NAME),
-                        "${SQLiteHelper.ID}=? AND ${SQLiteHelper.USER_ID}=?",
-                        arrayOf(personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID))?.toString(), userId?.toString()),
-                        null,
-                        null,
-                        null
-                    )
-                    groupsCursor?.moveToFirst() ?: continue
                     genericList.add(
                         PersonModel(
                             paymentId = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.ID)),
                             groupId = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)),
-                            groupName = groupsCursor.getStringOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_NAME)),
+                            groupName = groups.firstOrNull { it.groupId == personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)) }?.groupName,
                             firstName = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.FIRST_NAME)),
                             phone = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.PHONE)),
                             parentName = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.PARENT_NAME)),
@@ -242,31 +257,11 @@ class DBManager(context: Context) {
                             payments = payments
                         )
                     )
-                    groupsCursor.close()
+                    genericList.removeAll {
+                        (it as? GroupModel)?.groupId == personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID))
+                    }
                 }
                 while (personsCursor.moveToNext())
-            else {
-                val groupsCursor = database?.query(
-                    SQLiteHelper.GROUPS_TABLE_NAME,
-                    null,
-                    "${SQLiteHelper.USER_ID}=?",
-                    arrayOf(userId?.toString()),
-                    null,
-                    null,
-                    null
-                )
-                if (groupsCursor?.moveToFirst() == true && groupsCursor.count > 0)
-                    do {
-                        genericList.add(
-                            GroupModel(
-                                groupId = groupsCursor.getIntOrNull(groupsCursor.getColumnIndex(SQLiteHelper.ID)),
-                                groupName = groupsCursor.getStringOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_NAME))
-                            )
-                        )
-                    }
-                    while (groupsCursor.moveToNext())
-                groupsCursor?.close()
-            }
             personsCursor?.close()
             withContext(Dispatchers.Main) {
                 paymentsClosure(genericList)

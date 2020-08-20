@@ -5,6 +5,8 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import androidx.core.content.ContextCompat
+import androidx.core.widget.doOnTextChanged
 import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.databinding.PersonDetailsFieldLayoutBinding
 import com.agelousis.monthlyfees.views.personDetailsLayout.enumerations.ImeOptionsType
@@ -20,6 +22,12 @@ class PersonDetailsLayout(context: Context, attributeSet: AttributeSet?): FrameL
             value?.let { personDetailField.setText(it) }
         }
         get() = personDetailField.text?.toString()
+
+    var errorState = false
+        set(value) {
+            field = value
+            lineSeparator.setBackgroundColor(ContextCompat.getColor(context, if (value) R.color.red else R.color.grey))
+        }
 
     init {
         initAttributesAndView(attributeSet = attributeSet)
@@ -48,6 +56,9 @@ class PersonDetailsLayout(context: Context, attributeSet: AttributeSet?): FrameL
     private fun setupUI() {
         personDetailsLayout.setOnClickListener {
             personDetailField.requestFocus()
+        }
+        personDetailField.doOnTextChanged { _, _, _, _ ->
+            errorState = false
         }
     }
 

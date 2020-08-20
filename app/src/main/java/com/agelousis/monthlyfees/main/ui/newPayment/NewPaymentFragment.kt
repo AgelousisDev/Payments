@@ -18,6 +18,7 @@ import com.agelousis.monthlyfees.main.ui.newPaymentAmount.NewPaymentAmountFragme
 import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
 import com.agelousis.monthlyfees.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.monthlyfees.main.ui.payments.models.PersonModel
+import com.agelousis.monthlyfees.utils.extensions.message
 import com.agelousis.monthlyfees.utils.extensions.showListDialog
 import kotlinx.android.synthetic.main.fragment_new_payment_layout.*
 import kotlinx.coroutines.CoroutineScope
@@ -61,8 +62,9 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
+        addObservers()
         configureRecyclerView()
-        initializeGroupsObserver()
+        initializeGroups()
         initializeNewPayments()
     }
 
@@ -72,6 +74,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                 title = resources.getString(R.string.key_select_group_label),
                 items = availableGroups.mapNotNull { it.groupName }
             ) {
+                groupDetailsLayout.errorState = false
                 groupDetailsLayout.value = availableGroups.getOrNull(index = it)?.groupName
             }
         }
@@ -83,6 +86,17 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         }
         currentPersonModel?.let {
             binding?.personModel = it
+        }
+    }
+
+    private fun addObservers() {
+        viewModel.groupsLiveData.observe(viewLifecycleOwner) {
+            availableGroups.clear()
+            availableGroups.addAll(it)
+        }
+        viewModel.paymentInsertionStateLiveData.observe(viewLifecycleOwner) { paymentInsertionState ->
+            if (paymentInsertionState)
+                findNavController().popBackStack()
         }
     }
 
@@ -100,11 +114,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         )
     }
 
-    private fun initializeGroupsObserver() {
-        viewModel.groupsLiveData.observe(viewLifecycleOwner) {
-            availableGroups.clear()
-            availableGroups.addAll(it)
-        }
+    private fun initializeGroups() {
         uiScope.launch {
             viewModel.initializeGroups(
                 context = context ?: return@launch,
@@ -114,7 +124,25 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     }
 
     fun checkInputFields() {
-
+        currentPersonModel?.let { unwrappedPersonModel ->
+            uiScope.launch {
+                viewModel.addPayment(
+                    context = this@NewPaymentFragment.context ?: return@launch,
+                    userId = (activity as? MainActivity)?.userModel?.id,
+                    personModel = unwrappedPersonModel
+                )
+            }
+        } ?: run {
+            binding?.groupDetailsLayout?.errorState = binding?.groupDetailsLayout?.value == null
+            binding?.firstNameLayout?.errorState = binding?.firstNameLayout?.value == null
+            binding?.phoneLayout?.errorState = binding?.phoneLayout?.value == null
+            binding?.parentNameLayout?.errorState = binding?.parentNameLayout?.value == null
+            binding?.emailLayout?.errorState = binding?.emailLayout?.value == null
+            if (availablePayments.isEmpty())
+                context?.message(
+                    message = resources.getString(R.string.key_add_payment_message)
+                )
+        }
     }
 
     private fun fillCurrentPersonModel() {
