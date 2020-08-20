@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import com.agelousis.monthlyfees.R
@@ -21,6 +22,11 @@ class CurrencyFieldLayout(context: Context, attrs: AttributeSet?): FrameLayout(c
 
     var amountListener: AmountListener? = null
     private var current = ""
+    var errorState = false
+        set(value) {
+            field = value
+            lineSeparator.setBackgroundColor(ContextCompat.getColor(context, if (value) R.color.red else R.color.grey))
+        }
 
     var doubleValue: Double? = null
         set(value) {
@@ -60,6 +66,7 @@ class CurrencyFieldLayout(context: Context, attrs: AttributeSet?): FrameLayout(c
 
     private fun setupUI() {
         currencyField.doOnTextChanged { text, _, _, _ ->
+            errorState = false
             if (text?.isEmpty() == true) {
                 currencyField.text?.clear()
                 return@doOnTextChanged

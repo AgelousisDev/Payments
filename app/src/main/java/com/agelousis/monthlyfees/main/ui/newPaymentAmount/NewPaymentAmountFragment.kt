@@ -58,6 +58,9 @@ class NewPaymentAmountFragment: Fragment() {
                 )
             )
             findNavController().popBackStack()
+        } ?: run {
+            amountLayout.errorState = amountLayout.doubleValue == null
+            dateDetailsLayout.errorState = dateDetailsLayout.dateValue == null
         }
     }
 

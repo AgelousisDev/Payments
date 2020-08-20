@@ -22,10 +22,13 @@ import kotlinx.android.synthetic.main.fragment_new_payment_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.ArrayList
 
 class NewPaymentFragment: Fragment(), NewPaymentPresenter {
 
     override fun onPaymentAmount(paymentAmountModel: PaymentAmountModel?) {
+        fillCurrentPersonModel()
         findNavController().navigate(
             NewPaymentFragmentDirections.actionNewPaymentFragmentToNewPaymentAmountFragment(
                 paymentAmountDataModel = paymentAmountModel
@@ -77,6 +80,9 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         freeAppSwitchLayout.setOnClickListener {
             freeAppSwitchLayout.isChecked = !freeAppSwitchLayout.isChecked
         }
+        currentPersonModel?.let {
+            binding?.personModel = it
+        }
     }
 
     private fun initializeNewPayments() {
@@ -106,6 +112,21 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
 
     fun checkInputFields() {
 
+    }
+
+    private fun fillCurrentPersonModel() {
+        currentPersonModel = PersonModel(
+            groupId = availableGroups.firstOrNull { it.groupName?.toLowerCase(Locale.getDefault()) == binding?.groupDetailsLayout?.value?.toLowerCase(Locale.getDefault()) }?.groupId,
+            groupName = binding?.groupDetailsLayout?.value,
+            firstName = binding?.firstNameLayout?.value,
+            phone = binding?.phoneLayout?.value,
+            parentName = binding?.parentNameLayout?.value,
+            parentPhone = binding?.parentPhoneLayout?.value,
+            email = binding?.emailLayout?.value,
+            active = binding?.activeAppSwitchLayout?.isChecked,
+            free = binding?.freeAppSwitchLayout?.isChecked,
+            payments = availablePayments
+        )
     }
 
 }

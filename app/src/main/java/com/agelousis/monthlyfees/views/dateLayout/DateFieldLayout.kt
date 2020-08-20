@@ -6,6 +6,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.core.content.ContextCompat
 import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.databinding.DateFieldLayoutBinding
 import com.agelousis.monthlyfees.utils.constants.Constants
@@ -22,7 +23,13 @@ class DateFieldLayout(context: Context, attributeSet: AttributeSet?): FrameLayou
             field = value
             value?.let { dateView.text = it }
         }
-        get() = dateView.text?.toString()
+        get() = if (dateView.text?.toString()?.isEmpty() == true) null else dateView.text?.toString()
+
+    var errorState = false
+        set(value) {
+            field = value
+            lineSeparator.setBackgroundColor(ContextCompat.getColor(context, if (value) R.color.red else R.color.grey))
+        }
 
     override fun onDatePickerShow() {
         val c = Calendar.getInstance()
@@ -30,6 +37,7 @@ class DateFieldLayout(context: Context, attributeSet: AttributeSet?): FrameLayou
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
         DatePickerDialog(context, { _, selectedYear, selectedMonthOfYear, selectedDayOfMonth ->
+            errorState = false
             dateView.text = String.format(Constants.DATE_FORMAT_VALUE, selectedDayOfMonth, selectedMonthOfYear + 1, selectedYear)
         }, year, month, day).show()
     }
