@@ -2,12 +2,14 @@ package com.agelousis.monthlyfees.main
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -17,6 +19,7 @@ import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.database.DBManager
 import com.agelousis.monthlyfees.login.LoginActivity
 import com.agelousis.monthlyfees.login.models.UserModel
+import com.agelousis.monthlyfees.main.enumerations.FloatingButtonType
 import com.agelousis.monthlyfees.main.ui.newPayment.NewPaymentFragment
 import com.agelousis.monthlyfees.main.ui.newPaymentAmount.NewPaymentAmountFragment
 import com.agelousis.monthlyfees.main.ui.payments.PaymentsFragment
@@ -103,7 +106,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 )
             R.id.newPaymentFragment ->
-                (supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.checkInputFields()
+                when(floatingButtonType) {
+                    FloatingButtonType.NORMAL ->
+                        (supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.checkInputFields()
+                    FloatingButtonType.NEGATIVE -> {
+                        (supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.dismissPayment()
+                        returnFloatingButtonBackToNormal()
+                    }
+                }
             R.id.newPaymentAmountFragment ->
                 (supportFragmentManager.currentNavigationFragment as? NewPaymentAmountFragment)?.checkInputFields()
         }
@@ -125,13 +135,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             field = value
             floatingButton.setImageResource(value)
         }
-    var floatingButtonState: Boolean = true
+    private var floatingButtonState: Boolean = true
         set(value) {
             field = value
             if (value)
                 floatingButton.show()
             else floatingButton.hide()
         }
+    var floatingButtonType = FloatingButtonType.NORMAL
 
     override fun onBackPressed() {
         if (supportFragmentManager.currentNavigationFragment is PaymentsFragment)
@@ -194,6 +205,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
             }
         }
+    }
+
+    fun setFloatingButtonAsPaymentRemovalButton() {
+        floatingButtonType = FloatingButtonType.NEGATIVE
+        floatingButtonImage = R.drawable.ic_delete
+        floatingButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red))
+    }
+
+    fun returnFloatingButtonBackToNormal() {
+        floatingButtonType = FloatingButtonType.NORMAL
+        floatingButtonImage = R.drawable.ic_check
+        floatingButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorAccent))
     }
 
 }

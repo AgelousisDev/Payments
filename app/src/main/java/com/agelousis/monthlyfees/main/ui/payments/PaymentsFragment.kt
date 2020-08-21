@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.custom.enumerations.SwipeAction
-import com.agelousis.monthlyfees.custom.itemDecoration.HeaderItemDecoration
 import com.agelousis.monthlyfees.custom.itemTouchHelper.SwipeItemTouchHelper
 import com.agelousis.monthlyfees.databinding.FragmentPaymentsLayoutBinding
 import com.agelousis.monthlyfees.main.MainActivity
@@ -94,18 +93,18 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
     }
     
     private fun configureRecyclerView() {
-        paymentListRecyclerView.adapter = PaymentsAdapter(
-            list = filteredList,
-            groupPresenter = this,
-            paymentPresenter = this
-        )
-        paymentListRecyclerView.addItemDecoration(
+        /*paymentListRecyclerView.addItemDecoration(
             HeaderItemDecoration(
                 context = context ?: return,
                 parent = paymentListRecyclerView
             ) { position ->
                 filteredList.getOrNull(index = position) is GroupModel
             }
+        )*/
+        paymentListRecyclerView.adapter = PaymentsAdapter(
+            list = filteredList,
+            groupPresenter = this,
+            paymentPresenter = this
         )
         configureSwipeEvents()
     }

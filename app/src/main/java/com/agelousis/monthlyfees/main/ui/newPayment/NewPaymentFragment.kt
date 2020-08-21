@@ -12,6 +12,7 @@ import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.database.DatabaseTriggeringType
 import com.agelousis.monthlyfees.databinding.FragmentNewPaymentLayoutBinding
 import com.agelousis.monthlyfees.main.MainActivity
+import com.agelousis.monthlyfees.main.enumerations.FloatingButtonType
 import com.agelousis.monthlyfees.main.ui.newPayment.adapters.PaymentAmountAdapter
 import com.agelousis.monthlyfees.main.ui.newPayment.presenters.NewPaymentPresenter
 import com.agelousis.monthlyfees.main.ui.newPayment.viewModels.NewPaymentViewModel
@@ -40,6 +41,16 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         )
     }
 
+    override fun onPaymentAmountLongPressed(paymentAmountModel: PaymentAmountModel?) {
+        when((activity as? MainActivity)?.floatingButtonType) {
+            FloatingButtonType.NORMAL ->
+                (activity as? MainActivity)?.setFloatingButtonAsPaymentRemovalButton()
+            FloatingButtonType.NEGATIVE ->
+                (activity as? MainActivity)?.returnFloatingButtonBackToNormal()
+        }
+        paymentReadyForDeletion = paymentAmountModel
+    }
+
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(NewPaymentViewModel::class.java) }
     private val args: NewPaymentFragmentArgs by navArgs()
@@ -50,6 +61,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     private val availablePayments by lazy { ArrayList(args.personDataModel?.payments ?: listOf()) }
     private var binding: FragmentNewPaymentLayoutBinding? = null
     private var currentPersonModel: PersonModel? = null
+    private var paymentReadyForDeletion: PaymentAmountModel? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentNewPaymentLayoutBinding.inflate(
@@ -117,7 +129,8 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
 
     private fun configureRecyclerView() {
         paymentAmountRecyclerView.adapter = PaymentAmountAdapter(
-            paymentModelList = availablePayments
+            paymentModelList = availablePayments,
+            presenter = this
         )
     }
 
@@ -187,6 +200,12 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             free = binding?.freeAppSwitchLayout?.isChecked,
             payments = availablePayments
         )
+    }
+
+    fun dismissPayment() {
+        availablePayments.remove(paymentReadyForDeletion)
+        (paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
+        (activity as? MainActivity)?.returnFloatingButtonBackToNormal()
     }
 
 }

@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.agelousis.monthlyfees.databinding.FragmentNewPaymentAmountLayoutBinding
-import com.agelousis.monthlyfees.main.MainActivity
 import com.agelousis.monthlyfees.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.monthlyfees.utils.extensions.ifLet
 import com.agelousis.monthlyfees.utils.extensions.second
@@ -47,7 +46,6 @@ class NewPaymentAmountFragment: Fragment() {
             amountLayout.doubleValue,
             dateDetailsLayout.dateValue
         ) {
-            (activity as? MainActivity)?.floatingButtonState = true
             findNavController().previousBackStackEntry?.savedStateHandle?.set(
                 PAYMENT_AMOUNT_DATA_EXTRA,
                 PaymentAmountModel(

@@ -4,10 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.monthlyfees.databinding.PaymentAmountRowLayoutBinding
+import com.agelousis.monthlyfees.main.ui.newPayment.presenters.NewPaymentPresenter
 import com.agelousis.monthlyfees.main.ui.newPayment.viewHolders.PaymentAmountViewHolder
 import com.agelousis.monthlyfees.main.ui.payments.models.PaymentAmountModel
 
-class PaymentAmountAdapter(private val paymentModelList: List<PaymentAmountModel>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PaymentAmountAdapter(private val paymentModelList: ArrayList<PaymentAmountModel>, private val presenter: NewPaymentPresenter): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PaymentAmountViewHolder(
@@ -24,12 +25,18 @@ class PaymentAmountAdapter(private val paymentModelList: List<PaymentAmountModel
         (holder as? PaymentAmountViewHolder)?.bind(
             paymentAmountModel = paymentModelList.getOrNull(
                 index = position
-            ) ?: return
+            ) ?: return,
+            presenter = presenter
         )
     }
 
     override fun getItemCount() = paymentModelList.size
 
     fun reloadData() = notifyDataSetChanged()
+
+    fun removeItem(position: Int) {
+        paymentModelList.removeAt(position)
+        notifyItemRemoved(position)
+    }
 
 }
