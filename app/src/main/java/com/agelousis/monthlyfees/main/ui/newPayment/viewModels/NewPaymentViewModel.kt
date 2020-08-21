@@ -31,4 +31,14 @@ class NewPaymentViewModel: ViewModel() {
         }
     }
 
+    suspend fun updatePayment(context: Context, userId: Int?, personModel: PersonModel) {
+        val dbManager = DBManager(context = context)
+        dbManager.updatePayment(
+            userId = userId,
+            personModel = personModel
+        ) {
+            paymentInsertionStateLiveData.value = true
+        }
+    }
+
 }

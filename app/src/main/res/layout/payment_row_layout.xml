@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <import type="android.view.View" />
+        <import type="com.agelousis.monthlyfees.utils.extensions.ExtensionsKt" />
         <variable
             name="personModel"
             type="com.agelousis.monthlyfees.main.ui.payments.models.PersonModel" />
@@ -20,16 +21,28 @@
         android:onClick="@{() -> presenter.onPaymentSelected(personModel)}"
         tools:targetApi="M">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/entryPdfImageView"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+        <FrameLayout
+            android:id="@+id/paymentRowHeaderFrameLayout"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginTop="@dimen/nav_header_vertical_spacing"
             android:layout_marginStart="@dimen/nav_header_vertical_spacing"
-            app:tint="@color/colorAccent"
-            app:srcCompat="@drawable/ic_payment"
+            android:elevation="8dp"
+            android:background="@drawable/oval_background"
+            backgroundDrawableTintColor="@{personModel.headerFrameBackgroundColor}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/TextViewTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textStyle="normal"
+                android:textColor="@{ExtensionsKt.getGetContrastColor(personModel.headerFrameBackgroundColor)}"
+                android:text="@{String.valueOf(personModel.groupName.charAt(0)).toUpperCase()}"/>
+
+        </FrameLayout>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/entryCustomerNameTextView"
@@ -40,8 +53,8 @@
             android:gravity="start"
             android:textSize="14sp"
             android:text="@{personModel.firstName}"
-            app:layout_constraintStart_toEndOf="@+id/entryPdfImageView"
-            app:layout_constraintTop_toTopOf="@+id/entryPdfImageView"
+            app:layout_constraintStart_toEndOf="@+id/paymentRowHeaderFrameLayout"
+            app:layout_constraintTop_toTopOf="@+id/paymentRowHeaderFrameLayout"
             tools:text="Vagelis Agelousis" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -70,7 +83,7 @@
             android:text="@{personModel.phone}"
             android:textSize="12sp"
             android:textColor="@color/grey"
-            app:layout_constraintStart_toEndOf="@+id/entryPdfImageView"
+            app:layout_constraintStart_toEndOf="@+id/paymentRowHeaderFrameLayout"
             app:layout_constraintTop_toBottomOf="@+id/entryCustomerNameTextView"
             tools:text="10-11-2019" />
 

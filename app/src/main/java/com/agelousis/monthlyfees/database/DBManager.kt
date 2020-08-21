@@ -118,8 +118,8 @@ class DBManager(context: Context) {
                     it.put(SQLiteHelper.PROFILE_IMAGE, userModel.profileImage)
                     it.put(SQLiteHelper.BIOMETRICS, userModel.biometrics)
                 },
-                "id=${userModel.id}",
-                null
+                "${SQLiteHelper.ID}=?",
+                arrayOf(userModel.id?.toString())
             )
             withContext(Dispatchers.Main) {
                 userBlock(userModel)
@@ -166,6 +166,48 @@ class DBManager(context: Context) {
                     null,
                     ContentValues().also {
                         it.put(SQLiteHelper.PERSON_ID, personId?.toInt())
+                        it.put(SQLiteHelper.PAYMENT_AMOUNT, paymentAmountModel.paymentAmount)
+                        it.put(SQLiteHelper.PAYMENT_DATE, paymentAmountModel.paymentDate)
+                        it.put(SQLiteHelper.SKIP_PAYMENT, paymentAmountModel.skipPayment)
+                        it.put(SQLiteHelper.PAYMENT_NOTE, paymentAmountModel.paymentNote)
+                    }
+                )
+            }
+            withContext(Dispatchers.Main) {
+                paymentInsertionSuccessBlock()
+            }
+        }
+    }
+
+    suspend fun updatePayment(userId: Int?, personModel: PersonModel, paymentInsertionSuccessBlock: PaymentInsertionSuccessBlock) {
+        withContext(Dispatchers.Default) {
+            database?.update(
+                SQLiteHelper.PERSONS_TABLE_NAME,
+                ContentValues().also {
+                    it.put(SQLiteHelper.USER_ID, userId)
+                    it.put(SQLiteHelper.GROUP_ID, personModel.groupId)
+                    it.put(SQLiteHelper.FIRST_NAME, personModel.firstName)
+                    it.put(SQLiteHelper.PHONE, personModel.phone)
+                    it.put(SQLiteHelper.PARENT_NAME, personModel.parentName)
+                    it.put(SQLiteHelper.PARENT_PHONE, personModel.parentPhone)
+                    it.put(SQLiteHelper.EMAIL, personModel.email)
+                    it.put(SQLiteHelper.ACTIVE, personModel.active)
+                    it.put(SQLiteHelper.FREE, personModel.free)
+                },
+                "${SQLiteHelper.ID}=?",
+                arrayOf(personModel.paymentId?.toString())
+            )
+            database?.delete(
+                SQLiteHelper.PAYMENTS_TABLE_NAME,
+                "${SQLiteHelper.PERSON_ID}=?",
+                arrayOf(personModel.paymentId?.toString())
+            )
+            personModel.payments?.forEach { paymentAmountModel ->
+                database?.insert(
+                    SQLiteHelper.PAYMENTS_TABLE_NAME,
+                    null,
+                    ContentValues().also {
+                        it.put(SQLiteHelper.PERSON_ID, personModel.paymentId)
                         it.put(SQLiteHelper.PAYMENT_AMOUNT, paymentAmountModel.paymentAmount)
                         it.put(SQLiteHelper.PAYMENT_DATE, paymentAmountModel.paymentDate)
                         it.put(SQLiteHelper.SKIP_PAYMENT, paymentAmountModel.skipPayment)

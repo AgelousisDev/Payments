@@ -4,9 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Resources
+import android.graphics.Color
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.LinearInterpolator
 import android.widget.Toast
@@ -35,6 +37,7 @@ import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
 import kotlin.NoSuchElementException
+import kotlin.random.Random.Default.nextInt
 
 typealias PositiveButtonBlock = () -> Unit
 typealias InputGroupDialogBlock = (GroupModel) -> Unit
@@ -259,6 +262,16 @@ fun View.infiniteAlphaAnimation(state: Boolean) {
     }
 }
 
+val Context.randomColor: Int
+    get() = Color.argb(255, nextInt(256), nextInt(256), nextInt(256))
+
+val Int.getContrastColor: Int
+    get() {
+        val luminance = ( 0.299 * Color.red(this) + 0.587 * Color.green(this) + 0.114 * Color.green(this)) / 255
+        val d = if (luminance > 0.5) 0 else 255
+        return  Color.rgb(d, d, d)
+    }
+
 @BindingAdapter("picassoImageUri")
 fun AppCompatImageView.loadImageUri(imageUri: Uri?) {
     imageUri?.let {
@@ -295,5 +308,12 @@ fun switchStateChanged(switchMaterial: SwitchMaterial, optionPresenter: OptionPr
 fun setSrcCompat(appCompatImageView: AppCompatImageView, resourceId: Int?) {
     resourceId?.let {
         appCompatImageView.setImageResource(it)
+    }
+}
+
+@BindingAdapter("backgroundDrawableTintColor")
+fun setBackgroundDrawableTintColor(viewGroup: ViewGroup, color: Int?) {
+    color?.let {
+        viewGroup.background?.setTint(it)
     }
 }

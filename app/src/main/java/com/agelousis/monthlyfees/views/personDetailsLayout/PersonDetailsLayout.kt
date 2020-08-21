@@ -21,7 +21,7 @@ class PersonDetailsLayout(context: Context, attributeSet: AttributeSet?): FrameL
             field = value
             value?.let { personDetailField.setText(it) }
         }
-        get() = personDetailField.text?.toString()
+        get() = if (personDetailField.text?.toString()?.isEmpty() == true) null else personDetailField.text?.toString()
 
     var errorState = false
         set(value) {

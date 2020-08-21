@@ -20,6 +20,9 @@ data class PersonModel(val paymentId: Int? = null,
     val totalPaymentAmount: String?
         get() = payments?.mapNotNull { it.paymentAmount }?.sum()?.toString()
     @IgnoredOnParcel var showLine = true
+
+    @IgnoredOnParcel var headerFrameBackgroundColor: Int? = null
+
 }
 
 @Parcelize

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -18,6 +19,7 @@ import com.agelousis.monthlyfees.main.ui.payments.models.PersonModel
 import com.agelousis.monthlyfees.main.ui.payments.presenters.GroupPresenter
 import com.agelousis.monthlyfees.main.ui.payments.presenters.PaymentPresenter
 import com.agelousis.monthlyfees.main.ui.payments.viewModels.PaymentListViewModel
+import com.agelousis.monthlyfees.utils.extensions.randomColor
 import com.agelousis.monthlyfees.utils.extensions.whenNull
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_payments_layout.*
@@ -106,7 +108,8 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
         list.filterIsInstance<PersonModel>().takeIf { it.isNotEmpty() }?.let { payments ->
             payments.groupBy { it.groupName ?: "" }.toSortedMap().forEach { map ->
                 map.value.filter { it.firstName?.toLowerCase(Locale.getDefault())?.contains(query?.toLowerCase(Locale.getDefault()) ?: "") == true }
-                    .takeIf { it.isNotEmpty() }?.let { filteredByQueryPayments ->
+                    .takeIf { it.isNotEmpty() }?.let inner@ { filteredByQueryPayments ->
+                        val headerRandomColor = context?.randomColor ?: ContextCompat.getColor(context ?: return@inner, R.color.colorAccent)
                         filteredList.add(
                             GroupModel(
                                 groupId = filteredByQueryPayments.firstOrNull()?.groupId,
@@ -114,8 +117,11 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
                             )
                         )
                         filteredList.addAll(
-                            filteredByQueryPayments.also {
-                                it.lastOrNull()?.showLine = false
+                            filteredByQueryPayments.also { personModelList ->
+                                personModelList.lastOrNull()?.showLine = false
+                                personModelList.forEach { personModel ->
+                                    personModel.headerFrameBackgroundColor = headerRandomColor
+                                }
                             }
                         )
                     }

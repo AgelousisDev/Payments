@@ -20,7 +20,7 @@ class PersonDetailsPickerLayout(context: Context, attributeSet: AttributeSet?): 
             field = value
             value?.let { personDetailsPickerValueView.text = it }
         }
-        get() = personDetailsPickerValueView.text?.toString()
+        get() = if (personDetailsPickerValueView.text?.toString()?.isEmpty() == true) null else personDetailsPickerValueView.text?.toString()
 
     var errorState = false
         set(value) {

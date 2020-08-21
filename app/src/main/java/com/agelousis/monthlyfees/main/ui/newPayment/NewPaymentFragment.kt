@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.agelousis.monthlyfees.R
+import com.agelousis.monthlyfees.database.DatabaseTriggeringType
 import com.agelousis.monthlyfees.databinding.FragmentNewPaymentLayoutBinding
 import com.agelousis.monthlyfees.main.MainActivity
 import com.agelousis.monthlyfees.main.ui.newPayment.adapters.PaymentAmountAdapter
@@ -18,6 +19,7 @@ import com.agelousis.monthlyfees.main.ui.newPaymentAmount.NewPaymentAmountFragme
 import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
 import com.agelousis.monthlyfees.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.monthlyfees.main.ui.payments.models.PersonModel
+import com.agelousis.monthlyfees.utils.extensions.ifLet
 import com.agelousis.monthlyfees.utils.extensions.message
 import com.agelousis.monthlyfees.utils.extensions.showListDialog
 import kotlinx.android.synthetic.main.fragment_new_payment_layout.*
@@ -41,6 +43,9 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(NewPaymentViewModel::class.java) }
     private val args: NewPaymentFragmentArgs by navArgs()
+    private val databaseTriggeringType by lazy {
+        args.groupDataModel?.let { DatabaseTriggeringType.INSERT } ?: DatabaseTriggeringType.UPDATE
+    }
     private val availableGroups by lazy { arrayListOf<GroupModel>() }
     private val availablePayments by lazy { ArrayList(args.personDataModel?.payments ?: listOf()) }
     private var binding: FragmentNewPaymentLayoutBinding? = null
@@ -95,8 +100,10 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             availableGroups.addAll(it)
         }
         viewModel.paymentInsertionStateLiveData.observe(viewLifecycleOwner) { paymentInsertionState ->
-            if (paymentInsertionState)
+            if (paymentInsertionState) {
+                currentPersonModel = null
                 findNavController().popBackStack()
+            }
         }
     }
 
@@ -124,14 +131,16 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     }
 
     fun checkInputFields() {
-        currentPersonModel?.let { unwrappedPersonModel ->
-            uiScope.launch {
-                viewModel.addPayment(
-                    context = this@NewPaymentFragment.context ?: return@launch,
-                    userId = (activity as? MainActivity)?.userModel?.id,
-                    personModel = unwrappedPersonModel
-                )
-            }
+        fillCurrentPersonModel()
+        ifLet(
+            currentPersonModel?.groupName,
+            currentPersonModel?.firstName,
+            currentPersonModel?.phone,
+            currentPersonModel?.parentName,
+            currentPersonModel?.email,
+            currentPersonModel?.payments
+        ) {
+            checkDatabasePaymentAction()
         } ?: run {
             binding?.groupDetailsLayout?.errorState = binding?.groupDetailsLayout?.value == null
             binding?.firstNameLayout?.errorState = binding?.firstNameLayout?.value == null
@@ -145,8 +154,28 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         }
     }
 
+    private fun checkDatabasePaymentAction() {
+        uiScope.launch {
+            when(databaseTriggeringType) {
+                DatabaseTriggeringType.INSERT ->
+                    viewModel.addPayment(
+                        context = this@NewPaymentFragment.context ?: return@launch,
+                        userId = (activity as? MainActivity)?.userModel?.id,
+                        personModel = currentPersonModel ?: return@launch
+                    )
+                DatabaseTriggeringType.UPDATE ->
+                    viewModel.updatePayment(
+                        context = this@NewPaymentFragment.context ?: return@launch,
+                        userId = (activity as? MainActivity)?.userModel?.id,
+                        personModel = currentPersonModel ?: return@launch
+                    )
+            }
+        }
+    }
+
     private fun fillCurrentPersonModel() {
         currentPersonModel = PersonModel(
+            paymentId = args.personDataModel?.paymentId,
             groupId = availableGroups.firstOrNull { it.groupName?.toLowerCase(Locale.getDefault()) == binding?.groupDetailsLayout?.value?.toLowerCase(Locale.getDefault()) }?.groupId,
             groupName = binding?.groupDetailsLayout?.value,
             firstName = binding?.firstNameLayout?.value,
