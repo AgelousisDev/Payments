@@ -10,12 +10,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     tools:context=".main.ui.payments.PaymentsFragment">
 
     <com.agelousis.monthlyfees.views.searchLayout.MaterialSearchView
         android:id="@+id/searchLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         materialSearchProfile="@{userModel.profileImage}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

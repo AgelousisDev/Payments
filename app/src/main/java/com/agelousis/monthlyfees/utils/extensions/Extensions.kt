@@ -6,6 +6,8 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import android.graphics.Color
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -271,6 +273,13 @@ val Int.getContrastColor: Int
         val d = if (luminance > 0.5) 0 else 255
         return  Color.rgb(d, d, d)
     }
+
+fun after(millis: Long, runnable: Runnable) {
+    Handler(Looper.getMainLooper()).postDelayed(
+        runnable,
+        millis
+    )
+}
 
 @BindingAdapter("picassoImageUri")
 fun AppCompatImageView.loadImageUri(imageUri: Uri?) {

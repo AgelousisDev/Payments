@@ -17,8 +17,8 @@ data class PersonModel(val paymentId: Int? = null,
                        val free: Boolean?,
                        val payments: List<PaymentAmountModel>?
 ): Parcelable {
-    val totalPaymentAmount: String?
-        get() = payments?.mapNotNull { it.paymentAmount }?.sum()?.toString()
+    val totalPaymentAmount: Double?
+        get() = payments?.mapNotNull { it.paymentAmount }?.sum()
     @IgnoredOnParcel var showLine = true
 
     @IgnoredOnParcel var headerFrameBackgroundColor: Int? = null
