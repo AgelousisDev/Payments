@@ -9,7 +9,11 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.agelousis.monthlyfees.R
+import com.agelousis.monthlyfees.custom.enumerations.SwipeAction
+import com.agelousis.monthlyfees.custom.itemDecoration.HeaderItemDecoration
+import com.agelousis.monthlyfees.custom.itemTouchHelper.SwipeItemTouchHelper
 import com.agelousis.monthlyfees.databinding.FragmentPaymentsLayoutBinding
 import com.agelousis.monthlyfees.main.MainActivity
 import com.agelousis.monthlyfees.main.ui.payments.adapters.PaymentsAdapter
@@ -18,6 +22,8 @@ import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
 import com.agelousis.monthlyfees.main.ui.payments.models.PersonModel
 import com.agelousis.monthlyfees.main.ui.payments.presenters.GroupPresenter
 import com.agelousis.monthlyfees.main.ui.payments.presenters.PaymentPresenter
+import com.agelousis.monthlyfees.main.ui.payments.viewHolders.GroupViewHolder
+import com.agelousis.monthlyfees.main.ui.payments.viewHolders.PaymentViewHolder
 import com.agelousis.monthlyfees.main.ui.payments.viewModels.PaymentListViewModel
 import com.agelousis.monthlyfees.utils.extensions.after
 import com.agelousis.monthlyfees.utils.extensions.randomColor
@@ -93,6 +99,51 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
             groupPresenter = this,
             paymentPresenter = this
         )
+        paymentListRecyclerView.addItemDecoration(
+            HeaderItemDecoration(
+                context = context ?: return,
+                parent = paymentListRecyclerView
+            ) { position ->
+                filteredList.getOrNull(index = position) is GroupModel
+            }
+        )
+        configureSwipeEvents()
+    }
+
+    private fun configureSwipeEvents() {
+        val swipeItemTouchHelper = ItemTouchHelper(
+            SwipeItemTouchHelper(
+                context = context ?: return,
+                swipePredicateBlock = {
+                    it is GroupViewHolder || it is PaymentViewHolder
+                }
+            ) innerBlock@ { swipeAction, position ->
+                when(swipeAction) {
+                    SwipeAction.SHARE -> {
+                        (paymentListRecyclerView.adapter as? PaymentsAdapter)?.restoreItem(
+                            position = position
+                        )
+                    }
+                    SwipeAction.DELETE -> {
+                        (paymentListRecyclerView.adapter as? PaymentsAdapter)?.restoreItem(
+                            position = position
+                        )
+                    }
+                }
+                    /*when(swipeAction) {
+                        SwipeAction.SHARE -> {
+                        (entriesRecyclerView.adapter as? EntriesAdapter)?.restoreItem(
+                                position = position
+                            )
+                            (activity as? EntriesActivity)?.configureActionCall(
+                                phoneNumber = (filteredList.getOrNull(index = position) as? ServiceEntryModel)?.telephone
+                            )
+                    }
+                        SwipeAction.DELETE -> {} showDeleteAlertWithAction(position =  position)
+                    }*/
+            }
+        )
+        swipeItemTouchHelper.attachToRecyclerView(paymentListRecyclerView)
     }
 
     private fun configureObservers() =

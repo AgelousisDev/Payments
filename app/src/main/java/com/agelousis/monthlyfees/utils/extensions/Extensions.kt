@@ -4,7 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
@@ -77,6 +80,8 @@ fun <T> List<T>.third(): T {
         throw NoSuchElementException("List is empty.")
     return this[2]
 }
+
+fun <T> Array<out T>.secondOrNull(): T? = if (isEmpty()) null else this[1]
 
 inline fun <K, T> ifLet(vararg elements: T?, closure: (List<T>) -> K): K? {
     return if (elements.all { it != null })
@@ -279,6 +284,14 @@ fun after(millis: Long, runnable: Runnable) {
         runnable,
         millis
     )
+}
+
+fun Drawable.fromVector(padding: Int): Bitmap {
+    val bitmap = Bitmap.createBitmap(this.intrinsicWidth, this.intrinsicHeight, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(bitmap)
+    this.setBounds(padding, padding, canvas.width - padding, canvas.height - padding)
+    this.draw(canvas)
+    return bitmap
 }
 
 @BindingAdapter("picassoImageUri")
