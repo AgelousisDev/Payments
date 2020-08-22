@@ -26,6 +26,7 @@ import com.agelousis.monthlyfees.main.ui.payments.viewHolders.PaymentViewHolder
 import com.agelousis.monthlyfees.main.ui.payments.viewModels.PaymentListViewModel
 import com.agelousis.monthlyfees.utils.extensions.after
 import com.agelousis.monthlyfees.utils.extensions.randomColor
+import com.agelousis.monthlyfees.utils.extensions.showTwoButtonsDialog
 import com.agelousis.monthlyfees.utils.extensions.whenNull
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_payments_layout.*
@@ -123,11 +124,10 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
                             position = position
                         )
                     }
-                    SwipeAction.DELETE -> {
-                        (paymentListRecyclerView.adapter as? PaymentsAdapter)?.restoreItem(
+                    SwipeAction.DELETE ->
+                        configureDeleteAction(
                             position = position
                         )
-                    }
                 }
                     /*when(swipeAction) {
                         SwipeAction.SHARE -> {
@@ -145,7 +145,32 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
         swipeItemTouchHelper.attachToRecyclerView(paymentListRecyclerView)
     }
 
-    private fun configureObservers() =
+    private fun configureDeleteAction(position: Int) {
+        context?.showTwoButtonsDialog(
+            title = resources.getString(R.string.key_warning_label),
+            message =
+                if (filteredList.getOrNull(index = position) is GroupModel)
+                    String.format(resources.getString(R.string.key_delete_group_message_value), (filteredList.getOrNull(index = position) as? GroupModel)?.groupName)
+                else
+                    resources.getString(R.string.key_delete_payment_message),
+            negativeButtonBlock = {
+                (paymentListRecyclerView.adapter as? PaymentsAdapter)?.restoreItem(
+                    position = position
+                )
+            },
+            positiveButtonText = resources.getString(R.string.key_delete_label),
+            positiveButtonBlock = {
+                uiScope.launch {
+                    viewModel.deleteItem(
+                        context = context ?: return@launch,
+                        item = filteredList.getOrNull(index = position)
+                    )
+                }
+            }
+        )
+    }
+
+    private fun configureObservers() {
         viewModel.paymentsLiveData.observe(viewLifecycleOwner) { list ->
             after(
                 millis = 1000
@@ -158,6 +183,11 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
                 list = list
             )
         }
+        viewModel.deletionLiveData.observe(viewLifecycleOwner) {
+            if (it)
+                initializePayments()
+        }
+    }
 
     fun initializePayments() {
         uiScope.launch {

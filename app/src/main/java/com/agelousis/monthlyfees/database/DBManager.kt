@@ -19,6 +19,7 @@ typealias GroupInsertionSuccessBlock = () -> Unit
 typealias PaymentsClosure = (List<Any>) -> Unit
 typealias PaymentInsertionSuccessBlock = () -> Unit
 typealias GroupsSuccessBlock = (List<GroupModel>) -> Unit
+typealias DeletionSuccessBlock = () -> Unit
 
 class DBManager(context: Context) {
 
@@ -340,8 +341,35 @@ class DBManager(context: Context) {
         }
     }
 
-    fun delete(id: Long) {
-        database?.delete(SQLiteHelper.USERS_TABLE_NAME,  "${SQLiteHelper.ID}=$id", null)
+    suspend fun deleteGroup(groupId: Int?, deletionSuccessBlock: DeletionSuccessBlock) {
+        withContext(Dispatchers.Default) {
+            database?.delete(
+                SQLiteHelper.GROUPS_TABLE_NAME,
+                "${SQLiteHelper.ID}=?",
+                arrayOf(groupId?.toString())
+            )
+            database?.delete(
+                SQLiteHelper.PERSONS_TABLE_NAME,
+                "${SQLiteHelper.GROUP_ID}=?",
+                arrayOf(groupId?.toString())
+            )
+            withContext(Dispatchers.Main) {
+                deletionSuccessBlock()
+            }
+        }
+    }
+
+    suspend fun deletePayment(paymentId: Int?, deletionSuccessBlock: DeletionSuccessBlock) {
+        withContext(Dispatchers.Default) {
+            database?.delete(
+                SQLiteHelper.PERSONS_TABLE_NAME,
+                "${SQLiteHelper.ID}=?",
+                arrayOf(paymentId?.toString())
+            )
+            withContext(Dispatchers.Main) {
+                deletionSuccessBlock()
+            }
+        }
     }
 
     fun close() {
