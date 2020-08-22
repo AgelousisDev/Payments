@@ -14,6 +14,7 @@ import com.agelousis.monthlyfees.databinding.FragmentNewPaymentLayoutBinding
 import com.agelousis.monthlyfees.main.MainActivity
 import com.agelousis.monthlyfees.main.enumerations.FloatingButtonType
 import com.agelousis.monthlyfees.main.ui.newPayment.adapters.PaymentAmountAdapter
+import com.agelousis.monthlyfees.main.ui.newPayment.enumerations.PaymentAmountRowState
 import com.agelousis.monthlyfees.main.ui.newPayment.presenters.NewPaymentPresenter
 import com.agelousis.monthlyfees.main.ui.newPayment.viewModels.NewPaymentViewModel
 import com.agelousis.monthlyfees.main.ui.newPaymentAmount.NewPaymentAmountFragment
@@ -41,14 +42,21 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         )
     }
 
-    override fun onPaymentAmountLongPressed(paymentAmountModel: PaymentAmountModel?) {
+    override fun onPaymentAmountLongPressed(adapterPosition: Int) {
+        availablePayments.getOrNull(index = adapterPosition)?.paymentAmountRowState = availablePayments.getOrNull(index = adapterPosition)?.paymentAmountRowState?.otherState ?: PaymentAmountRowState.NORMAL
+        (paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
         when((activity as? MainActivity)?.floatingButtonType) {
             FloatingButtonType.NORMAL ->
-                (activity as? MainActivity)?.setFloatingButtonAsPaymentRemovalButton()
+                if (availablePayments.any { it.paymentAmountRowState == PaymentAmountRowState.CAN_BE_DISMISSED })
+                    (activity as? MainActivity)?.setFloatingButtonAsPaymentRemovalButton()
             FloatingButtonType.NEGATIVE ->
-                (activity as? MainActivity)?.returnFloatingButtonBackToNormal()
+                if (availablePayments.all { it.paymentAmountRowState == PaymentAmountRowState.NORMAL })
+                    (activity as? MainActivity)?.returnFloatingButtonBackToNormal()
         }
-        paymentReadyForDeletion = paymentAmountModel
+        if (availablePayments.getOrNull(index = adapterPosition)?.paymentAmountRowState == PaymentAmountRowState.CAN_BE_DISMISSED)
+            paymentReadyForDeletionIndexArray.add(adapterPosition)
+        else
+            paymentReadyForDeletionIndexArray.remove(adapterPosition)
     }
 
     private val uiScope = CoroutineScope(Dispatchers.Main)
@@ -61,7 +69,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     private val availablePayments by lazy { ArrayList(args.personDataModel?.payments ?: listOf()) }
     private var binding: FragmentNewPaymentLayoutBinding? = null
     private var currentPersonModel: PersonModel? = null
-    private var paymentReadyForDeletion: PaymentAmountModel? = null
+    private var paymentReadyForDeletionIndexArray = arrayListOf<Int>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentNewPaymentLayoutBinding.inflate(
@@ -203,9 +211,12 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     }
 
     fun dismissPayment() {
-        availablePayments.remove(paymentReadyForDeletion)
-        (paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
-        (activity as? MainActivity)?.returnFloatingButtonBackToNormal()
+        paymentReadyForDeletionIndexArray.forEach { paymentReadyForDeletionIndex ->
+            (paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.removeItem(
+                position = paymentReadyForDeletionIndex
+            )
+            (activity as? MainActivity)?.returnFloatingButtonBackToNormal()
+        }
     }
 
 }

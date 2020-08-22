@@ -21,6 +21,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.biometric.BiometricManager
+import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
@@ -337,5 +338,12 @@ fun setSrcCompat(appCompatImageView: AppCompatImageView, resourceId: Int?) {
 fun setBackgroundDrawableTintColor(viewGroup: ViewGroup, color: Int?) {
     color?.let {
         viewGroup.background?.setTint(it)
+    }
+}
+
+@BindingAdapter("backgroundViewColor")
+fun setBackgroundViewColor(view: View, color: Int?) {
+    color?.let {
+        view.setBackgroundColor(ContextCompat.getColor(view.context, it))
     }
 }

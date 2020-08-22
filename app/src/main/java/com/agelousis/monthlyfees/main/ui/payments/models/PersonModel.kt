@@ -1,6 +1,7 @@
 package com.agelousis.monthlyfees.main.ui.payments.models
 
 import android.os.Parcelable
+import com.agelousis.monthlyfees.main.ui.newPayment.enumerations.PaymentAmountRowState
 import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 
@@ -31,4 +32,8 @@ data class PaymentAmountModel(val paymentId: Int? = null,
                               val paymentDate: String?,
                               val skipPayment: Boolean?,
                               val paymentNote: String?
-): Parcelable
+): Parcelable {
+
+    @IgnoredOnParcel var paymentAmountRowState = PaymentAmountRowState.NORMAL
+
+}

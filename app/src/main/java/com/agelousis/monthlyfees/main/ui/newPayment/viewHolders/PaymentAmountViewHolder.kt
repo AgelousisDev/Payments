@@ -12,7 +12,7 @@ class PaymentAmountViewHolder(private val binding: PaymentAmountRowLayoutBinding
         binding.presenter = presenter
         itemView.setOnLongClickListener {
             presenter.onPaymentAmountLongPressed(
-                paymentAmountModel = binding.paymentAmountModel
+                adapterPosition = adapterPosition
             )
             true
         }
