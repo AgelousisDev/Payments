@@ -1,5 +1,6 @@
 package com.agelousis.monthlyfees.utils.extensions
 
+import android.animation.Animator
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -270,7 +271,7 @@ fun View.infiniteAlphaAnimation(state: Boolean) {
     }
 }
 
-val Context.randomColor: Int
+val randomColor: Int
     get() = Color.argb(255, nextInt(256), nextInt(256), nextInt(256))
 
 val Int.getContrastColor: Int
@@ -293,6 +294,24 @@ fun Drawable.fromVector(padding: Int): Bitmap {
     this.setBounds(padding, padding, canvas.width - padding, canvas.height - padding)
     this.draw(canvas)
     return bitmap
+}
+
+fun AppCompatImageView.setAnimatedImageResourceId(resourceId: Int?) {
+    resourceId?.let {
+        post {
+            animate().scaleX(0.0f).scaleY(0.0f).setInterpolator(LinearInterpolator()).setListener(
+                object: Animator.AnimatorListener {
+                    override fun onAnimationCancel(p0: Animator?) {}
+                    override fun onAnimationRepeat(p0: Animator?) {}
+                    override fun onAnimationStart(p0: Animator?) {}
+                    override fun onAnimationEnd(p0: Animator?) {
+                        setImageResource(it)
+                        animate().scaleX(1.0f).scaleY(1.0f).interpolator = LinearInterpolator()
+                    }
+                }
+            )
+        }
+    }
 }
 
 @BindingAdapter("picassoImageUri")

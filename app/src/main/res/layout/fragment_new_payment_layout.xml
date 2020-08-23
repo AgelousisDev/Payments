@@ -109,7 +109,7 @@
                 android:focusable="true"
                 android:clickable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
-                app:appSwitchLabel="@string/key_is_active_label"
+                app:appSwitchLabel="@string/key_is_free_label"
                 app:appSwitchShowLine="true"
                 appSwitchIsChecked="@{personModel.free == true}"/>
 

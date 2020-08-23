@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -208,7 +207,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
                             key = filteredByQueryPayments.firstOrNull()?.groupId ?: 0,
                             defaultValue = 0
                         ).takeIf { it == 0 }?.let {
-                            colorsList[filteredByQueryPayments.firstOrNull()?.groupId ?: 0] = context?.randomColor ?: ContextCompat.getColor(context ?: return@inner, R.color.colorAccent)
+                            colorsList[filteredByQueryPayments.firstOrNull()?.groupId ?: 0] = randomColor
                         }
                         filteredList.add(
                             GroupModel(
