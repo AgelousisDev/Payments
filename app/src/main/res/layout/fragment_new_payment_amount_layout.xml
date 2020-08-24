@@ -38,11 +38,27 @@
                 app:showLine="true"/>
 
             <com.agelousis.monthlyfees.views.dateLayout.DateFieldLayout
+                android:id="@+id/startDateDetailsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                dateValue="@{paymentAmountModel.startDate}"
+                app:label="@string/key_start_date_label"
+                app:showLine="false"/>
+
+            <com.agelousis.monthlyfees.views.dateLayout.DateFieldLayout
                 android:id="@+id/dateDetailsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 dateValue="@{paymentAmountModel.paymentDate}"
-                app:label="@string/key_date_label"
+                app:label="@string/key_execution_date_label"
+                app:showLine="false"/>
+
+            <com.agelousis.monthlyfees.views.dateLayout.DateFieldLayout
+                android:id="@+id/endDateDetailsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                dateValue="@{paymentAmountModel.endDate}"
+                app:label="@string/key_end_date_label"
                 app:showLine="true"/>
 
             <com.agelousis.monthlyfees.views.detailsSwitch.DetailsAppSwitch

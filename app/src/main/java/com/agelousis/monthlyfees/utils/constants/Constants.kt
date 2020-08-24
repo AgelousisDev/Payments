@@ -6,4 +6,5 @@ object Constants {
     const val PROFILE_IMAGE_NAME = "profile_image"
     const val EURO_VALUE = "€"
     const val DATE_FORMAT_VALUE = "%d/%d/%d"
+    const val CSV_FILE = "CSV_FILE.csv"
 }

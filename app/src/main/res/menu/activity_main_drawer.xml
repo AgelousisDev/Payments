@@ -3,14 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/navigationHome"
-            android:icon="@drawable/ic_home"
-            android:title="@string/key_home_label"/>
-        <item
-            android:id="@+id/navigationProfile"
-            android:icon="@drawable/ic_person"
-            android:title="@string/key_profile_label"/>
-    </group>
+    <item android:title="@string/key_main_label">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/navigationHome"
+                    android:icon="@drawable/ic_home"
+                    android:title="@string/key_home_label"/>
+                <item
+                    android:id="@+id/navigationProfile"
+                    android:icon="@drawable/ic_person"
+                    android:title="@string/key_profile_label"/>
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="@string/key_options_label">
+        <menu>
+            <group>
+                <item
+                    android:id="@+id/navigationImport"
+                    android:icon="@drawable/ic_import"
+                    android:title="@string/key_import_label"/>
+                <item
+                    android:id="@+id/navigationExport"
+                    android:icon="@drawable/ic_export"
+                    android:title="@string/key_export_label"/>
+            </group>
+        </menu>
+    </item>
+
 </menu>

@@ -8,7 +8,6 @@ import com.agelousis.monthlyfees.utils.extensions.ifLet
 import com.agelousis.monthlyfees.utils.extensions.second
 import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
-import java.lang.StringBuilder
 
 @Parcelize
 data class PersonModel(val paymentId: Int? = null,
@@ -30,7 +29,6 @@ data class PersonModel(val paymentId: Int? = null,
     @IgnoredOnParcel var headerFrameBackgroundColor: Int? = null
 
     fun getCommunicationData(context: Context): String {
-        val format = StringBuilder()
         return ifLet(phone, email) {
             String.format("%s, %s", it.first(), it.second())
         } ?: run {
@@ -43,7 +41,9 @@ data class PersonModel(val paymentId: Int? = null,
 @Parcelize
 data class PaymentAmountModel(val paymentId: Int? = null,
                               val paymentAmount: Double?,
+                              val startDate: String?,
                               val paymentDate: String?,
+                              val endDate: String?,
                               val skipPayment: Boolean?,
                               val paymentNote: String?
 ): Parcelable {

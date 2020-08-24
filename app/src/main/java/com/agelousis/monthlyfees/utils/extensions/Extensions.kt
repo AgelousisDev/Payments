@@ -5,9 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Resources
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
+import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Handler
@@ -374,5 +372,12 @@ fun setBackgroundDrawableTintColor(viewGroup: ViewGroup, color: Int?) {
 fun setBackgroundViewColor(view: View, color: Int?) {
     color?.let {
         view.setBackgroundColor(ContextCompat.getColor(view.context, it))
+    }
+}
+
+@BindingAdapter("backgroundViewTintColor")
+fun setBackgroundViewTintColor(view: View, color: Int?) {
+    color?.let {
+        view.background?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(view.context, it), PorterDuff.Mode.SRC_IN)
     }
 }

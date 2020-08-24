@@ -11,6 +11,7 @@ import com.agelousis.monthlyfees.databinding.FragmentNewPaymentAmountLayoutBindi
 import com.agelousis.monthlyfees.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.monthlyfees.utils.extensions.ifLet
 import com.agelousis.monthlyfees.utils.extensions.second
+import com.agelousis.monthlyfees.utils.extensions.third
 import kotlinx.android.synthetic.main.fragment_new_payment_amount_layout.*
 
 class NewPaymentAmountFragment: Fragment() {
@@ -44,13 +45,17 @@ class NewPaymentAmountFragment: Fragment() {
     fun checkInputFields() {
         ifLet(
             amountLayout.doubleValue,
-            dateDetailsLayout.dateValue
+            startDateDetailsLayout.dateValue,
+            dateDetailsLayout.dateValue,
+            endDateDetailsLayout.dateValue
         ) {
             findNavController().previousBackStackEntry?.savedStateHandle?.set(
                 PAYMENT_AMOUNT_DATA_EXTRA,
                 PaymentAmountModel(
                     paymentAmount = it.first().toString().toDouble(),
-                    paymentDate = it.second().toString(),
+                    startDate = it.second().toString(),
+                    paymentDate = it.third().toString(),
+                    endDate = it[3].toString(),
                     skipPayment = skipPaymentAppSwitchLayout.isChecked,
                     paymentNote = notesField.text?.toString()
                 )
