@@ -17,9 +17,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.LinearInterpolator
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.biometric.BiometricManager
 import androidx.core.content.ContextCompat
@@ -299,19 +301,27 @@ fun Drawable.fromVector(padding: Int): Bitmap {
 fun AppCompatImageView.setAnimatedImageResourceId(resourceId: Int?) {
     resourceId?.let {
         post {
-            animate().scaleX(0.0f).scaleY(0.0f).setInterpolator(LinearInterpolator()).setListener(
+            animate().alpha(0.0f).setInterpolator(LinearInterpolator()).setListener(
                 object: Animator.AnimatorListener {
                     override fun onAnimationCancel(p0: Animator?) {}
                     override fun onAnimationRepeat(p0: Animator?) {}
                     override fun onAnimationStart(p0: Animator?) {}
                     override fun onAnimationEnd(p0: Animator?) {
                         setImageResource(it)
-                        animate().scaleX(1.0f).scaleY(1.0f).interpolator = LinearInterpolator()
+                        animate().alpha(1.0f).interpolator = LinearInterpolator()
                     }
                 }
             )
         }
     }
+}
+
+fun Context.initializeField(appCompatEditText: AppCompatEditText) {
+    appCompatEditText.requestFocus()
+    (getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)?.showSoftInput(
+        appCompatEditText,
+        InputMethodManager.SHOW_FORCED
+    )
 }
 
 @BindingAdapter("picassoImageUri")

@@ -8,6 +8,7 @@ import android.widget.FrameLayout
 import androidx.core.widget.doOnTextChanged
 import com.agelousis.monthlyfees.databinding.MaterialSearchViewLayoutBinding
 import com.agelousis.monthlyfees.utils.extensions.infiniteAlphaAnimation
+import com.agelousis.monthlyfees.utils.extensions.initializeField
 import com.agelousis.monthlyfees.utils.extensions.setAnimatedImageResourceId
 import com.agelousis.monthlyfees.views.searchLayout.enumerations.MaterialSearchViewIconState
 import kotlinx.android.synthetic.main.material_search_view_layout.view.*
@@ -50,6 +51,7 @@ class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLa
         searchField.infiniteAlphaAnimation(
             state = true
         )
+        searchIcon.setOnClickListener(this::onSearchIcon)
     }
 
     private fun onDeleteQuery(p0: View) {
@@ -57,7 +59,9 @@ class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLa
     }
 
     private fun onSearchIcon(p0: View) {
-        searchField.requestFocus()
+        context?.initializeField(
+            appCompatEditText = searchField
+        )
     }
 
     fun onQueryListener(searchQueryChangesBlock: SearchQueryChangesBlock) {
@@ -65,7 +69,10 @@ class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLa
             searchField.infiniteAlphaAnimation(
                 state = text?.length == 0
             )
-            searchViewIconState = if (text?.isNotEmpty() == true) MaterialSearchViewIconState.CLOSE else MaterialSearchViewIconState.SEARCH
+            if (searchViewIconState != MaterialSearchViewIconState.CLOSE && !text.isNullOrEmpty())
+                searchViewIconState = MaterialSearchViewIconState.CLOSE
+            if (searchViewIconState != MaterialSearchViewIconState.SEARCH && text.isNullOrEmpty())
+                searchViewIconState = MaterialSearchViewIconState.SEARCH
             searchQueryChangesBlock(if (text?.length ?: 0 > 1) text?.toString() else null)
         }
     }
