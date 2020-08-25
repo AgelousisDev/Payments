@@ -58,5 +58,6 @@
     <string name="key_export_label">Export</string>
     <string name="key_main_label">Main</string>
     <string name="key_options_label">Options</string>
+    <string name="key_export_message">This operation will export your database and save it where you want\nDo you want to proceed?</string>
 
 </resources>

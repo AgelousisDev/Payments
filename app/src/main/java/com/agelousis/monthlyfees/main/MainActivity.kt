@@ -1,5 +1,6 @@
 package com.agelousis.monthlyfees.main
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -36,11 +37,13 @@ import kotlinx.android.synthetic.main.nav_header_main.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener, View.OnClickListener {
 
     companion object {
         const val USER_MODEL_EXTRA = "MainActivity=userModelExtra"
+        const val SAVE_FILE_REQUEST_CODE = 1
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -52,6 +55,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.navigationProfile -> {
                 navHostFragmentContainerView.findNavController().popBackStack(R.id.personalInformationFragment, true)
                 navHostFragmentContainerView.findNavController().navigate(R.id.action_global_personalInformation)
+            }
+            R.id.navigationImport -> {
+
+            }
+            R.id.navigationExport -> {
+                initializeDatabaseExport()
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
@@ -207,6 +216,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    private fun initializeDatabaseExport() {
+        showTwoButtonsDialog(
+            title = resources.getString(R.string.key_export_label),
+            message = resources.getString(R.string.key_export_message),
+            positiveButtonBlock = {
+                saveFile(
+                    requestCode = SAVE_FILE_REQUEST_CODE,
+                    fileName = Constants.DATABASE_FILE_NAME,
+                    mimeType = Constants.GENERAL_MIME_TYPE
+                )
+            }
+        )
+    }
+
     fun setFloatingButtonAsPaymentRemovalButton() {
         floatingButtonType = FloatingButtonType.NEGATIVE
         floatingButtonImage = R.drawable.ic_delete
@@ -217,6 +240,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         floatingButtonType = FloatingButtonType.NORMAL
         floatingButtonImage = R.drawable.ic_check
         floatingButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorAccent))
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK)
+            when(requestCode) {
+                SAVE_FILE_REQUEST_CODE ->
+                    alterFile(
+                        uri = data?.data,
+                        file = getDatabasePath(Constants.DATABASE_FILE_NAME)
+                    )
+            }
     }
 
 }

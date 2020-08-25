@@ -7,4 +7,7 @@ object Constants {
     const val EURO_VALUE = "€"
     const val DATE_FORMAT_VALUE = "%d/%d/%d"
     const val CSV_FILE = "CSV_FILE.csv"
+    const val DATABASE_FILE_PATH = "databases/MONTHLY_FEES"
+    const val DATABASE_FILE_NAME = "MONTHLY_FEES.db"
+    const val GENERAL_MIME_TYPE = "*/*"
 }

@@ -46,7 +46,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         const val PAYMENT_NOTE = "payment_note"
 
         // Database Information
-        private const val DB_NAME = "MONTHLY_FEES"
+        private const val DB_NAME = "MONTHLY_FEES.db"
 
         // database version
         private const val DB_VERSION = 1

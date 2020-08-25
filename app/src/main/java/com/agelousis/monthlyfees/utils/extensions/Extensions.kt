@@ -322,6 +322,22 @@ fun Context.initializeField(appCompatEditText: AppCompatEditText) {
     )
 }
 
+fun AppCompatActivity.saveFile(requestCode: Int, fileName: String, mimeType: String) {
+    startActivityForResult(Intent(Intent.ACTION_CREATE_DOCUMENT).also {
+        it.addCategory(Intent.CATEGORY_OPENABLE)
+        it.type = mimeType
+        it.putExtra(Intent.EXTRA_TITLE, fileName)
+    }, requestCode)
+}
+
+fun AppCompatActivity.alterFile(uri: Uri?, file: File) {
+    contentResolver.openFileDescriptor(uri ?: return, "w")?.use { parcelFileDescriptor ->
+        FileOutputStream(parcelFileDescriptor.fileDescriptor).use {
+            it.write(file.readBytes())
+        }
+    }
+}
+
 @BindingAdapter("picassoImageUri")
 fun AppCompatImageView.loadImageUri(imageUri: Uri?) {
     imageUri?.let {
