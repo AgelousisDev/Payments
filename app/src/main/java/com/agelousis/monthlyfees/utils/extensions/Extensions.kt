@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.LinearInterpolator
 import android.view.inputmethod.InputMethodManager
+import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -49,6 +50,7 @@ import kotlin.random.Random.Default.nextInt
 typealias PositiveButtonBlock = () -> Unit
 typealias InputGroupDialogBlock = (GroupModel) -> Unit
 typealias ItemPositionDialogBlock = (Int) -> Unit
+typealias completionSuccessBlock = (Boolean) -> Unit
 
 fun <T> T?.whenNull(receiver: () -> Unit): T? {
     return if (this == null) {
@@ -337,6 +339,24 @@ fun AppCompatActivity.alterFile(uri: Uri?, file: File) {
         }
     }
 }
+
+fun AppCompatActivity.searchFile(requestCode: Int, mimeType: String) =
+    startActivityForResult(Intent(Intent.ACTION_GET_CONTENT).also {
+        it.type = mimeType
+    }, requestCode)
+
+fun Context.isDBFile(uri: Uri?) =
+    uri?.let {
+        MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(it)) == Constants.BIN_FILE_EXTENSION
+    } ?: false
+
+fun Context.replaceDatabase(byteArray: ByteArray?, completionSuccessBlock: completionSuccessBlock) =
+    byteArray?.let { unwrappedByteArray ->
+        FileOutputStream(this.getDatabasePath(Constants.DATABASE_FILE_NAME)).use {
+            it.write(unwrappedByteArray)
+            completionSuccessBlock(true)
+        }
+    } ?: completionSuccessBlock(false)
 
 @BindingAdapter("picassoImageUri")
 fun AppCompatImageView.loadImageUri(imageUri: Uri?) {

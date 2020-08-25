@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -37,13 +38,13 @@ import kotlinx.android.synthetic.main.nav_header_main.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.File
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener, View.OnClickListener {
 
     companion object {
         const val USER_MODEL_EXTRA = "MainActivity=userModelExtra"
-        const val SAVE_FILE_REQUEST_CODE = 1
+        const val EXPORT_FILE_REQUEST_CODE = 1
+        const val IMPORT_FILE_REQUEST_CODE = 2
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -57,7 +58,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 navHostFragmentContainerView.findNavController().navigate(R.id.action_global_personalInformation)
             }
             R.id.navigationImport -> {
-
+                initializeDatabaseImport()
             }
             R.id.navigationExport -> {
                 initializeDatabaseExport()
@@ -220,14 +221,60 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         showTwoButtonsDialog(
             title = resources.getString(R.string.key_export_label),
             message = resources.getString(R.string.key_export_message),
+            positiveButtonText = resources.getString(R.string.key_proceed_label),
             positiveButtonBlock = {
                 saveFile(
-                    requestCode = SAVE_FILE_REQUEST_CODE,
+                    requestCode = EXPORT_FILE_REQUEST_CODE,
                     fileName = Constants.DATABASE_FILE_NAME,
                     mimeType = Constants.GENERAL_MIME_TYPE
                 )
             }
         )
+    }
+
+    private fun initializeDatabaseImport() {
+        showTwoButtonsDialog(
+            title = resources.getString(R.string.key_import_label),
+            message = resources.getString(R.string.key_import_message),
+            positiveButtonText = resources.getString(R.string.key_proceed_label),
+            positiveButtonBlock = {
+                searchFile(
+                    requestCode = IMPORT_FILE_REQUEST_CODE,
+                    mimeType = Constants.OCTET_STREAM_MIME_TYPE
+                )
+            }
+        )
+    }
+
+    private fun makeDatabaseImport(uri: Uri?) {
+        if (isDBFile(
+                uri = uri
+            ))
+            replaceDatabase(
+                byteArray = contentResolver.openInputStream(uri ?: return)?.readBytes()
+            ) {
+                when(it) {
+                    true -> {
+                        message(
+                            message = resources.getString(R.string.key_database_successfully_imported_message)
+                        )
+                        after(
+                            millis = 1000
+                        ) {
+                            (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
+                        }
+                    }
+                    false ->
+                        message(
+                        message = resources.getString(R.string.key_invalid_database_file_message)
+                    )
+
+                }
+            }
+        else
+            message(
+                message = resources.getString(R.string.key_invalid_database_file_message)
+            )
     }
 
     fun setFloatingButtonAsPaymentRemovalButton() {
@@ -246,10 +293,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK)
             when(requestCode) {
-                SAVE_FILE_REQUEST_CODE ->
+                EXPORT_FILE_REQUEST_CODE ->
                     alterFile(
                         uri = data?.data,
                         file = getDatabasePath(Constants.DATABASE_FILE_NAME)
+                    )
+                IMPORT_FILE_REQUEST_CODE ->
+                    makeDatabaseImport(
+                        uri = data?.data
                     )
             }
     }
