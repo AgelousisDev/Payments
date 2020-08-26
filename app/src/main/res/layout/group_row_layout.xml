@@ -30,7 +30,7 @@
         android:fontFamily="@font/ubuntu_monospace"
         android:textStyle="bold"
         android:text="@{groupModel.groupName}"
-        android:textColor="@{(groupModel.groupHeaderColor != null) ? groupModel.groupHeaderColor : @color/grey}"
+        android:textColor="@{(groupModel.color != null) ? groupModel.color : @color/grey}"
         tools:text="Group 1"/>
 
     </LinearLayout>

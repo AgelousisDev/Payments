@@ -29,7 +29,7 @@
             android:layout_marginStart="@dimen/nav_header_vertical_spacing"
             android:elevation="8dp"
             android:background="@drawable/oval_background"
-            backgroundDrawableTintColor="@{personModel.headerFrameBackgroundColor}"
+            backgroundDrawableTintColor="@{personModel.groupColor}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -39,7 +39,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:textStyle="normal"
-                android:textColor="@{ExtensionsKt.getGetContrastColor(personModel.headerFrameBackgroundColor)}"
+                android:textColor="@color/white"
                 android:text="@{String.valueOf(personModel.groupName.charAt(0)).toUpperCase()}"/>
 
         </FrameLayout>
@@ -66,7 +66,7 @@
             android:gravity="end"
             android:text="@{personModel.totalPaymentAmount != null ? ExtensionsKt.getEuroFormattedString(personModel.totalPaymentAmount) : @string/key_empty_field_label}"
             android:textSize="18sp"
-            android:textColor="@{personModel.headerFrameBackgroundColor}"
+            android:textColor="@{personModel.groupColor}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

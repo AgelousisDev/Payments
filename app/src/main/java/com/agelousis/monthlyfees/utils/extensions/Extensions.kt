@@ -10,9 +10,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.AlphaAnimation
 import android.view.animation.LinearInterpolator
 import android.view.inputmethod.InputMethodManager
@@ -45,12 +43,12 @@ import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
 import kotlin.NoSuchElementException
-import kotlin.random.Random.Default.nextInt
+import kotlin.math.max
 
 typealias PositiveButtonBlock = () -> Unit
 typealias InputGroupDialogBlock = (GroupModel) -> Unit
 typealias ItemPositionDialogBlock = (Int) -> Unit
-typealias completionSuccessBlock = (Boolean) -> Unit
+typealias CompletionSuccessBlock = (Boolean) -> Unit
 
 fun <T> T?.whenNull(receiver: () -> Unit): T? {
     return if (this == null) {
@@ -200,8 +198,10 @@ fun Context.showGroupInputDialog(inputHint: String, isCancellable: Boolean? = nu
         setPositiveButton(positiveButtonText ?: resources.getString(R.string.key_ok_label)) { _, _ ->
             inputGroupDialogBlock(
                 GroupModel(
-                groupName = binding.groupField.text?.toString()
-            ))
+                    groupName = binding.groupField.text?.toString(),
+                    color = ContextCompat.getColor(this@showGroupInputDialog, R.color.colorAccent)
+                )
+            )
         }
     }
     val materialDialog = materialAlertDialogBuilder.create()
@@ -229,7 +229,7 @@ fun Context.showListDialog(title: String, items: List<String>, isCancellable: Bo
 }
 
 val Context.hasBiometrics: Boolean
-    get() = BiometricManager.from(this).canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
+    get() = BiometricManager.from(this).canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS
 
 val FragmentManager.currentNavigationFragment: Fragment?
     get() = primaryNavigationFragment?.childFragmentManager?.fragments?.firstOrNull()
@@ -272,9 +272,6 @@ fun View.infiniteAlphaAnimation(state: Boolean) {
         }
     }
 }
-
-val randomColor: Int
-    get() = Color.argb(255, nextInt(256), nextInt(256), nextInt(256))
 
 val Int.getContrastColor: Int
     get() {
@@ -350,13 +347,29 @@ fun Context.isDBFile(uri: Uri?) =
         MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(it)) == Constants.BIN_FILE_EXTENSION
     } ?: false
 
-fun Context.replaceDatabase(byteArray: ByteArray?, completionSuccessBlock: completionSuccessBlock) =
+fun Context.replaceDatabase(byteArray: ByteArray?, completionSuccessBlock: CompletionSuccessBlock) =
     byteArray?.let { unwrappedByteArray ->
         FileOutputStream(this.getDatabasePath(Constants.DATABASE_FILE_NAME)).use {
             it.write(unwrappedByteArray)
             completionSuccessBlock(true)
         }
     } ?: completionSuccessBlock(false)
+
+fun View.circularReveal() {
+    if (viewTreeObserver.isAlive)
+        viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                val finalRadius: Float = max(width.toFloat(), height.toFloat())
+                // create the animator for this view (the start radius is zero)
+                val circularReveal = ViewAnimationUtils.createCircularReveal(this@circularReveal, width - (width / 4), height - (height / 5), 0f, finalRadius)
+                circularReveal.duration = 500
+                // make the view visible and start the animation
+                visibility = View.VISIBLE
+                circularReveal.start()
+                viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
+}
 
 @BindingAdapter("picassoImageUri")
 fun AppCompatImageView.loadImageUri(imageUri: Uri?) {

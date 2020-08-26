@@ -24,7 +24,6 @@ import com.agelousis.monthlyfees.main.ui.payments.viewHolders.GroupViewHolder
 import com.agelousis.monthlyfees.main.ui.payments.viewHolders.PaymentViewHolder
 import com.agelousis.monthlyfees.main.ui.payments.viewModels.PaymentListViewModel
 import com.agelousis.monthlyfees.utils.extensions.after
-import com.agelousis.monthlyfees.utils.extensions.randomColor
 import com.agelousis.monthlyfees.utils.extensions.showTwoButtonsDialog
 import com.agelousis.monthlyfees.utils.extensions.whenNull
 import kotlinx.android.synthetic.main.activity_main.*
@@ -56,7 +55,6 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
     private val viewModel by lazy { ViewModelProvider(this).get(PaymentListViewModel::class.java) }
     private val itemsList by lazy { arrayListOf<Any>() }
     private val filteredList by lazy { arrayListOf<Any>() }
-    private val colorsList = mutableMapOf<Int, Int>()
     private var searchViewState: Boolean = false
         set(value) {
             field  = value
@@ -203,26 +201,16 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
             payments.groupBy { it.groupName ?: "" }.toSortedMap().forEach { map ->
                 map.value.filter { it.firstName?.toLowerCase(Locale.getDefault())?.contains(query?.toLowerCase(Locale.getDefault()) ?: "") == true || it.groupName?.toLowerCase(Locale.getDefault())?.contains(query?.toLowerCase(Locale.getDefault()) ?: "") == true }
                     .takeIf { it.isNotEmpty() }?.let inner@ { filteredByQueryPayments ->
-                        colorsList.getOrDefault(
-                            key = filteredByQueryPayments.firstOrNull()?.groupId ?: 0,
-                            defaultValue = 0
-                        ).takeIf { it == 0 }?.let {
-                            colorsList[filteredByQueryPayments.firstOrNull()?.groupId ?: 0] = randomColor
-                        }
                         filteredList.add(
                             GroupModel(
                                 groupId = filteredByQueryPayments.firstOrNull()?.groupId,
                                 groupName = map.key,
-                            ).also {
-                                it.groupHeaderColor = colorsList[filteredByQueryPayments.firstOrNull()?.groupId ?: 0]
-                            }
+                                color = filteredByQueryPayments.firstOrNull()?.groupColor
+                            )
                         )
                         filteredList.addAll(
                             filteredByQueryPayments.also { personModelList ->
                                 personModelList.lastOrNull()?.showLine = false
-                                personModelList.forEach { personModel ->
-                                    personModel.headerFrameBackgroundColor = colorsList[personModel.groupId ?: 0]
-                                }
                             }
                         )
                     }

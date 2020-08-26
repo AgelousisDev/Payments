@@ -136,6 +136,7 @@ class DBManager(context: Context) {
                 ContentValues().also {
                     it.put(SQLiteHelper.USER_ID, userId)
                     it.put(SQLiteHelper.GROUP_NAME, groupModel.groupName)
+                    it.put(SQLiteHelper.COLOR, groupModel.color)
                 }
             )
             withContext(Dispatchers.Main) {
@@ -245,7 +246,8 @@ class DBManager(context: Context) {
                     groups.add(
                         GroupModel(
                             groupId = groupsCursor.getIntOrNull(groupsCursor.getColumnIndex(SQLiteHelper.ID)),
-                            groupName = groupsCursor.getStringOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_NAME))
+                            groupName = groupsCursor.getStringOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_NAME)),
+                            color = groupsCursor.getIntOrNull(groupsCursor.getColumnIndex(SQLiteHelper.COLOR))
                         )
                     )
                 }
@@ -303,7 +305,8 @@ class DBManager(context: Context) {
                             email = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.EMAIL)),
                             active = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.ACTIVE)) ?: 0 > 0,
                             free = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.FREE)) ?: 0 > 0,
-                            payments = payments
+                            payments = payments,
+                            groupColor = groups.firstOrNull { it.groupId == personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)) }?.color
                         )
                     )
                     genericList.removeAll {
@@ -335,7 +338,8 @@ class DBManager(context: Context) {
                     groups.add(
                         GroupModel(
                             groupId = groupsCursor.getIntOrNull(groupsCursor.getColumnIndex(SQLiteHelper.ID)),
-                            groupName = groupsCursor.getStringOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_NAME))
+                            groupName = groupsCursor.getStringOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_NAME)),
+                            color = groupsCursor.getIntOrNull(groupsCursor.getColumnIndex(SQLiteHelper.COLOR))
                         )
                     )
                 }

@@ -20,13 +20,12 @@ data class PersonModel(val paymentId: Int? = null,
                        val email: String?,
                        val active: Boolean?,
                        val free: Boolean?,
-                       val payments: List<PaymentAmountModel>?
+                       val payments: List<PaymentAmountModel>?,
+                       val groupColor: Int? = null
 ): Parcelable {
     val totalPaymentAmount: Double?
         get() = payments?.mapNotNull { it.paymentAmount }?.sum()
     @IgnoredOnParcel var showLine = true
-
-    @IgnoredOnParcel var headerFrameBackgroundColor: Int? = null
 
     fun getCommunicationData(context: Context): String {
         return ifLet(phone, email) {

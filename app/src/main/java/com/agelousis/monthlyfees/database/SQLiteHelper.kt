@@ -25,6 +25,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
 
         // Groups Table Columns
         const val GROUP_NAME = "group_name"
+        const val COLOR = "color"
 
         // Persons Table Columns
         const val GROUP_ID = "group_id"
@@ -57,7 +58,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
 
         //Creating groups table query
         private const val GROUPS_TABLE_CREATION_QUERY = "CREATE TABLE $GROUPS_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "$USER_ID INTEGER, $GROUP_NAME TEXT);"
+                "$USER_ID INTEGER, $GROUP_NAME TEXT, $COLOR INTEGER);"
 
         //Creating persons group query
         private const val PERSONS_TABLE_CREATION_QUERY = "CREATE TABLE $PERSONS_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT, " +

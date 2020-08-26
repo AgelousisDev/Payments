@@ -19,6 +19,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.database.DBManager
+import com.agelousis.monthlyfees.group.GroupActivity
 import com.agelousis.monthlyfees.login.LoginActivity
 import com.agelousis.monthlyfees.login.models.UserModel
 import com.agelousis.monthlyfees.main.enumerations.FloatingButtonType
@@ -106,14 +107,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 }
             R.id.paymentsFragment ->
-                showGroupInputDialog(
-                    inputHint = resources.getString(R.string.key_group_name_label),
-                    positiveButtonText = resources.getString(R.string.key_add_label),
-                    inputGroupDialogBlock = {
-                        insertGroup(
-                            groupModel = it
-                        )
-                    }
+                startActivityForResult(
+                    Intent(this, GroupActivity::class.java),
+                    GroupActivity.GROUP_SELECTION_REQUEST_CODE
                 )
             R.id.newPaymentFragment ->
                 when(floatingButtonType) {
@@ -301,6 +297,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 IMPORT_FILE_REQUEST_CODE ->
                     makeDatabaseImport(
                         uri = data?.data
+                    )
+                GroupActivity.GROUP_SELECTION_REQUEST_CODE ->
+                    insertGroup(
+                        groupModel = data?.extras?.getParcelable(GroupActivity.GROUP_MODEL_EXTRA) ?: return
                     )
             }
     }
