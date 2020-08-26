@@ -156,6 +156,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         ifLet(
             currentPersonModel?.groupName,
             currentPersonModel?.firstName,
+            currentPersonModel?.surname,
             currentPersonModel?.phone,
             currentPersonModel?.parentName,
             currentPersonModel?.email,
@@ -165,6 +166,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         } ?: run {
             binding?.groupDetailsLayout?.errorState = binding?.groupDetailsLayout?.value == null
             binding?.firstNameLayout?.errorState = binding?.firstNameLayout?.value == null
+            binding?.surnameLayout?.errorState = binding?.surnameLayout?.value == null
             binding?.phoneLayout?.errorState = binding?.phoneLayout?.value == null
             binding?.parentNameLayout?.errorState = binding?.parentNameLayout?.value == null
             binding?.emailLayout?.errorState = binding?.emailLayout?.value == null
@@ -200,6 +202,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             groupId = availableGroups.firstOrNull { it.groupName?.toLowerCase(Locale.getDefault()) == binding?.groupDetailsLayout?.value?.toLowerCase(Locale.getDefault()) }?.groupId,
             groupName = binding?.groupDetailsLayout?.value,
             firstName = binding?.firstNameLayout?.value,
+            surname = binding?.surnameLayout?.value,
             phone = binding?.phoneLayout?.value,
             parentName = binding?.parentNameLayout?.value,
             parentPhone = binding?.parentPhoneLayout?.value,

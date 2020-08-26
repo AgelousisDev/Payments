@@ -30,6 +30,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         // Persons Table Columns
         const val GROUP_ID = "group_id"
         const val FIRST_NAME = "first_name"
+        const val SURNAME = "surname"
         const val PHONE = "phone"
         const val PARENT_NAME = "parent_name"
         const val PARENT_PHONE = "parent_phone"
@@ -62,7 +63,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
 
         //Creating persons group query
         private const val PERSONS_TABLE_CREATION_QUERY = "CREATE TABLE $PERSONS_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "$USER_ID INTEGER, $GROUP_ID INTEGER, $FIRST_NAME TEXT, $PHONE TEXT, $PARENT_NAME TEXT, $PARENT_PHONE TEXT, $EMAIL TEXT," +
+                "$USER_ID INTEGER, $GROUP_ID INTEGER, $FIRST_NAME TEXT, $SURNAME TEXT, $PHONE TEXT, $PARENT_NAME TEXT, $PARENT_PHONE TEXT, $EMAIL TEXT," +
                 "$ACTIVE BOOLEAN, $FREE BOOLEAN);"
 
         //Creating payments group query

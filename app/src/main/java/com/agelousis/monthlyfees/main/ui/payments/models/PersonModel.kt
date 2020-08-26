@@ -14,6 +14,7 @@ data class PersonModel(val paymentId: Int? = null,
                        val groupId: Int?,
                        val groupName: String?,
                        val firstName: String?,
+                       val surname: String?,
                        val phone: String?,
                        val parentName: String?,
                        val parentPhone: String?,
@@ -25,6 +26,10 @@ data class PersonModel(val paymentId: Int? = null,
 ): Parcelable {
     val totalPaymentAmount: Double?
         get() = payments?.mapNotNull { it.paymentAmount }?.sum()
+
+    val fullName: String
+        get() = String.format("%s %s", firstName ?: "", surname ?: "")
+
     @IgnoredOnParcel var showLine = true
 
     fun getCommunicationData(context: Context): String {

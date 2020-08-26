@@ -154,6 +154,7 @@ class DBManager(context: Context) {
                     it.put(SQLiteHelper.USER_ID, userId)
                     it.put(SQLiteHelper.GROUP_ID, personModel.groupId)
                     it.put(SQLiteHelper.FIRST_NAME, personModel.firstName)
+                    it.put(SQLiteHelper.SURNAME, personModel.surname)
                     it.put(SQLiteHelper.PHONE, personModel.phone)
                     it.put(SQLiteHelper.PARENT_NAME, personModel.parentName)
                     it.put(SQLiteHelper.PARENT_PHONE, personModel.parentPhone)
@@ -191,6 +192,7 @@ class DBManager(context: Context) {
                     it.put(SQLiteHelper.USER_ID, userId)
                     it.put(SQLiteHelper.GROUP_ID, personModel.groupId)
                     it.put(SQLiteHelper.FIRST_NAME, personModel.firstName)
+                    it.put(SQLiteHelper.SURNAME, personModel.surname)
                     it.put(SQLiteHelper.PHONE, personModel.phone)
                     it.put(SQLiteHelper.PARENT_NAME, personModel.parentName)
                     it.put(SQLiteHelper.PARENT_PHONE, personModel.parentPhone)
@@ -299,6 +301,7 @@ class DBManager(context: Context) {
                             groupId = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)),
                             groupName = groups.firstOrNull { it.groupId == personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)) }?.groupName,
                             firstName = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.FIRST_NAME)),
+                            surname = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.SURNAME)),
                             phone = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.PHONE)),
                             parentName = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.PARENT_NAME)),
                             parentPhone = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.PARENT_PHONE)),

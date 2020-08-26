@@ -52,7 +52,7 @@
             android:fontFamily="@font/ubuntu"
             android:gravity="start"
             android:textSize="14sp"
-            android:text="@{personModel.firstName}"
+            android:text="@{personModel.fullName}"
             app:layout_constraintStart_toEndOf="@+id/paymentRowHeaderFrameLayout"
             app:layout_constraintTop_toTopOf="@+id/paymentRowHeaderFrameLayout"
             tools:text="Vagelis Agelousis" />

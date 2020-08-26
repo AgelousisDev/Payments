@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.biometric.BiometricManager
+import androidx.core.animation.addListener
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.BindingAdapter
@@ -49,6 +50,7 @@ typealias PositiveButtonBlock = () -> Unit
 typealias InputGroupDialogBlock = (GroupModel) -> Unit
 typealias ItemPositionDialogBlock = (Int) -> Unit
 typealias CompletionSuccessBlock = (Boolean) -> Unit
+typealias CircularAnimationCompletionBlock = () -> Unit
 
 fun <T> T?.whenNull(receiver: () -> Unit): T? {
     return if (this == null) {
@@ -355,7 +357,7 @@ fun Context.replaceDatabase(byteArray: ByteArray?, completionSuccessBlock: Compl
         }
     } ?: completionSuccessBlock(false)
 
-fun View.circularReveal() {
+fun View.circularReveal(circularAnimationCompletionBlock: CircularAnimationCompletionBlock) {
     if (viewTreeObserver.isAlive)
         viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
@@ -365,10 +367,28 @@ fun View.circularReveal() {
                 circularReveal.duration = 500
                 // make the view visible and start the animation
                 visibility = View.VISIBLE
+                circularReveal.addListener(
+                    onEnd = {
+                        circularAnimationCompletionBlock()
+                    }
+                )
                 circularReveal.start()
                 viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
+}
+
+fun View.circularUnReveal(circularAnimationCompletionBlock: CircularAnimationCompletionBlock) {
+    val finalRadius = max(width.toFloat(), height.toFloat()) * 1.1f
+    val circularReveal = ViewAnimationUtils.createCircularReveal(this@circularUnReveal, width - (width / 4), height / 5, finalRadius, 0.0f)
+    circularReveal.duration = 500
+    circularReveal.addListener(
+        onEnd = {
+            visibility = View.INVISIBLE
+            circularAnimationCompletionBlock()
+        }
+    )
+    circularReveal.start()
 }
 
 @BindingAdapter("picassoImageUri")

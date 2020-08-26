@@ -13,8 +13,8 @@ import com.agelousis.monthlyfees.databinding.ActivityGroupBinding
 import com.agelousis.monthlyfees.group.presenter.GroupActivityPresenter
 import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
 import com.agelousis.monthlyfees.utils.constants.Constants
-import com.agelousis.monthlyfees.utils.extensions.after
 import com.agelousis.monthlyfees.utils.extensions.circularReveal
+import com.agelousis.monthlyfees.utils.extensions.circularUnReveal
 import dev.sasikanth.colorsheet.ColorPickerListener
 import dev.sasikanth.colorsheet.ColorSheet
 import kotlinx.android.synthetic.main.activity_group.*
@@ -34,19 +34,22 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
     }
 
     override fun onGroupAdd() {
-        setResult(
-            Activity.RESULT_OK,
-            Intent().also {
-                it.putExtra(
-                    GROUP_MODEL_EXTRA,
-                    GroupModel(
-                        color = uiBarColor ?: ContextCompat.getColor(this, R.color.colorAccent),
-                        groupName = groupField.text?.toString()
+        rootLayout.circularUnReveal {
+            setResult(
+                Activity.RESULT_OK,
+                Intent().also {
+                    it.putExtra(
+                        GROUP_MODEL_EXTRA,
+                        GroupModel(
+                            color = uiBarColor ?: ContextCompat.getColor(this, R.color.colorAccent),
+                            groupName = groupField.text?.toString()
+                        )
                     )
-                )
-            }
-        )
-        finish()
+                }
+            )
+            finish()
+            overridePendingTransition(0, 0)
+        }
     }
 
     override fun invoke(color: Int) {
@@ -83,10 +86,7 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
     }
 
     private fun setupUI() {
-        rootLayout.circularReveal()
-        after(
-            millis = 400
-        ) {
+        rootLayout.circularReveal {
             uiBarColor = ContextCompat.getColor(this, R.color.colorAccent)
         }
         groupField.doAfterTextChanged {

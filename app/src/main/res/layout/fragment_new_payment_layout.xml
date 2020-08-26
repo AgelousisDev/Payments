@@ -42,6 +42,16 @@
                 app:fieldType="TEXT" />
 
             <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
+                android:id="@+id/surnameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:label="@string/key_first_name_label"
+                personDetails="@{personModel.surname}"
+                app:showLine="true"
+                app:imeOptionType="actionNext"
+                app:fieldType="TEXT" />
+
+            <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
                 android:id="@+id/phoneLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -91,14 +91,6 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
     }
     
     private fun configureRecyclerView() {
-        /*paymentListRecyclerView.addItemDecoration(
-            HeaderItemDecoration(
-                context = context ?: return,
-                parent = paymentListRecyclerView
-            ) { position ->
-                filteredList.getOrNull(index = position) is GroupModel
-            }
-        )*/
         paymentListRecyclerView.adapter = PaymentsAdapter(
             list = filteredList,
             groupPresenter = this,
