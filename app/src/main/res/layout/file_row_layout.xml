@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="fileDataModel"
+            type="com.agelousis.monthlyfees.main.ui.files.models.FileDataModel" />
+        <variable
+            name="presenter"
+            type="com.agelousis.monthlyfees.main.ui.files.presenter.FilePresenter" />
+    </data>
+<com.google.android.material.card.MaterialCardView
+    android:layout_width="100dp"
+    android:layout_height="wrap_content"
+    android:onClick="@{() -> presenter.onFileSelected(fileDataModel)}"
+    app:elevation="16dp"
+    app:cardBackgroundColor="@color/whiteTwo"
+    app:cardCornerRadius="8dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_horizontal_margin">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/fileRowImageView"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:srcCompat="@drawable/ic_pdf"
+            app:tint="@color/grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/materialTextView"
+            style="@style/TextViewTitleLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="@dimen/nav_header_vertical_spacing"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:text="@{fileDataModel.description}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fileRowImageView"
+            tools:text="Vagelis Agelousis" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
+</layout>

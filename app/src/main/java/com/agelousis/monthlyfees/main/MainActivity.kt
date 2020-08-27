@@ -23,6 +23,7 @@ import com.agelousis.monthlyfees.group.GroupActivity
 import com.agelousis.monthlyfees.login.LoginActivity
 import com.agelousis.monthlyfees.login.models.UserModel
 import com.agelousis.monthlyfees.main.enumerations.FloatingButtonType
+import com.agelousis.monthlyfees.main.ui.files.FilesFragment
 import com.agelousis.monthlyfees.main.ui.newPayment.NewPaymentFragment
 import com.agelousis.monthlyfees.main.ui.newPaymentAmount.NewPaymentAmountFragment
 import com.agelousis.monthlyfees.main.ui.payments.PaymentsFragment
@@ -58,6 +59,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 navHostFragmentContainerView.findNavController().popBackStack(R.id.personalInformationFragment, true)
                 navHostFragmentContainerView.findNavController().navigate(R.id.action_global_personalInformation)
             }
+            R.id.navigationFiles -> {
+                navHostFragmentContainerView.findNavController().popBackStack(R.id.filesFragment, true)
+                navHostFragmentContainerView.findNavController().navigate(R.id.action_global_filesFragment)
+            }
             R.id.navigationImport -> {
                 initializeDatabaseImport()
             }
@@ -90,6 +95,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 appBarTitle = resources.getString(R.string.key_add_payment_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
+            }
+            in FilesFragment::class.java.name -> {
+                appBarTitle = resources.getString(R.string.key_files_label)
+                floatingButtonState = false
             }
         }
     }

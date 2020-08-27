@@ -14,6 +14,10 @@
                     android:id="@+id/navigationProfile"
                     android:icon="@drawable/ic_person"
                     android:title="@string/key_profile_label"/>
+                <item
+                    android:id="@+id/navigationFiles"
+                    android:icon="@drawable/ic_pdf"
+                    android:title="@string/key_files_label"/>
             </group>
         </menu>
     </item>

@@ -108,12 +108,12 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
                 }
             ) innerBlock@ { swipeAction, position ->
                 when(swipeAction) {
-                    SwipeAction.SHARE -> {
+                    SwipeAction.RIGHT -> {
                         (paymentListRecyclerView.adapter as? PaymentsAdapter)?.restoreItem(
                             position = position
                         )
                     }
-                    SwipeAction.DELETE ->
+                    SwipeAction.LEFT ->
                         configureDeleteAction(
                             position = position
                         )

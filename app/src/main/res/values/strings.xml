@@ -31,6 +31,7 @@
     <string name="key_search">Search</string>
     <string name="key_person_info_label">Person Info</string>
     <string name="key_first_name_label">First Name</string>
+    <string name="key_surname_label">Surname</string>
     <string name="key_phone_label">Phone</string>
     <string name="key_parent_name_label">Parent Name</string>
     <string name="key_parent_phone_label">Parent Phone</string>
@@ -63,5 +64,6 @@
     <string name="key_proceed_label">Proceed</string>
     <string name="key_invalid_database_file_message">Invalid database file\nSelect another File</string>
     <string name="key_database_successfully_imported_message">Database is updated</string>
+    <string name="key_files_label">Files</string>
 
 </resources>

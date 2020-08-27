@@ -58,6 +58,12 @@
             android:defaultValue="@null" />
     </fragment>
 
+    <fragment
+        android:id="@+id/filesFragment"
+        android:name="com.agelousis.monthlyfees.main.ui.files.FilesFragment"
+        android:label="FilesFragment"
+        tools:layout="@layout/fragment_files_layout"/>
+
     <action
         android:id="@+id/action_global_personalInformation"
         app:destination="@id/personalInformationFragment"
@@ -68,6 +74,13 @@
     <action
         android:id="@+id/action_global_paymentsFragment"
         app:destination="@id/paymentsFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    <action
+        android:id="@+id/action_global_filesFragment"
+        app:destination="@id/filesFragment"
         app:enterAnim="@anim/nav_default_enter_anim"
         app:exitAnim="@anim/nav_default_exit_anim"
         app:popEnterAnim="@anim/nav_default_pop_enter_anim"

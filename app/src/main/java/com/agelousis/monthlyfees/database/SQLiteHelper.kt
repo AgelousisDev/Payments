@@ -12,6 +12,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         const val GROUPS_TABLE_NAME = "groups"
         const val PERSONS_TABLE_NAME = "persons"
         const val PAYMENTS_TABLE_NAME = "payments"
+        const val FILES_TABLE_NAME = "files"
 
         // Generic Columns
         const val ID = "id"
@@ -47,6 +48,11 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         const val SKIP_PAYMENT = "skip_payment"
         const val PAYMENT_NOTE = "payment_note"
 
+        // Files Table Columns
+        const val DESCRIPTION = "description"
+        const val FILENAME = "file_name"
+        const val DATE_TIME = "date_time"
+
         // Database Information
         private const val DB_NAME = "MONTHLY_FEES.db"
 
@@ -61,15 +67,19 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         private const val GROUPS_TABLE_CREATION_QUERY = "CREATE TABLE $GROUPS_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "$USER_ID INTEGER, $GROUP_NAME TEXT, $COLOR INTEGER);"
 
-        //Creating persons group query
+        //Creating persons table query
         private const val PERSONS_TABLE_CREATION_QUERY = "CREATE TABLE $PERSONS_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "$USER_ID INTEGER, $GROUP_ID INTEGER, $FIRST_NAME TEXT, $SURNAME TEXT, $PHONE TEXT, $PARENT_NAME TEXT, $PARENT_PHONE TEXT, $EMAIL TEXT," +
                 "$ACTIVE BOOLEAN, $FREE BOOLEAN);"
 
-        //Creating payments group query
+        //Creating payments table query
         private const val PAYMENTS_TABLE_CREATION_QUERY = "CREATE TABLE $PAYMENTS_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "$PERSON_ID INTEGER, $PAYMENT_AMOUNT DOUBLE, $START_DATE TEXT, $PAYMENT_DATE TEXT, $END_DATE TEXT, $SKIP_PAYMENT BOOLEAN," +
                 "$PAYMENT_NOTE TEXT);"
+
+        //Creating files table query
+        private const val FILES_TABLE_CREATION_QUERY = "CREATE TABLE $FILES_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "$USER_ID INTEGER, $DESCRIPTION TEXT, $FILENAME TEXT, $DATE_TIME TEXT);"
 
     }
 
@@ -78,6 +88,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         db?.execSQL(GROUPS_TABLE_CREATION_QUERY)
         db?.execSQL(PERSONS_TABLE_CREATION_QUERY)
         db?.execSQL(PAYMENTS_TABLE_CREATION_QUERY)
+        db?.execSQL(FILES_TABLE_CREATION_QUERY)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -85,6 +96,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         db?.execSQL("DROP TABLE IF EXISTS $GROUPS_TABLE_NAME")
         db?.execSQL("DROP TABLE IF EXISTS $PERSONS_TABLE_NAME")
         db?.execSQL("DROP TABLE IF EXISTS $PAYMENTS_TABLE_NAME")
+        db?.execSQL("DROP TABLE IF EXISTS $FILES_TABLE_NAME")
         onCreate(db)
     }
 
