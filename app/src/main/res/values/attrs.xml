@@ -20,4 +20,7 @@
         <attr name="appSwitchLabel" format="string|reference" />
         <attr name="appSwitchShowLine" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="MaterialSearchView">
+        <attr name="searchHint" format="reference|string" />
+    </declare-styleable>
 </resources>

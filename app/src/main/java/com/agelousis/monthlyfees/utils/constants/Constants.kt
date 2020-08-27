@@ -8,11 +8,13 @@ object Constants {
     const val PROFILE_IMAGE_NAME = "profile_image"
     const val EURO_VALUE = "€"
     const val DATE_FORMAT_VALUE = "%d/%d/%d"
-    const val CSV_FILE = "CSV_FILE.csv"
     const val DATABASE_FILE_NAME = "MONTHLY_FEES.db"
     const val GENERAL_MIME_TYPE = "*/*"
     const val BIN_FILE_EXTENSION = "bin"
     const val OCTET_STREAM_MIME_TYPE = "application/octet-stream"
+    const val DATE_FORMAT = "MMM dd, yyyy HH:mm:ss"
+    const val FILE_DATE_FORMAT = "yyyy_MM_dd_HH_mm_ss"
+    const val MONTH_DATE_FORMAT = "MMM yyyy"
 
     object Colors {
         val colorPickerColors = intArrayOf(

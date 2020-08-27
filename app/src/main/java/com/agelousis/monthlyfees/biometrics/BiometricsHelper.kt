@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import com.agelousis.monthlyfees.R
@@ -22,7 +23,7 @@ class BiometricsHelper(private val biometricsListener: BiometricsListener): Biom
             .setTitle(context.resources.getString(R.string.key_biometric_authentication_title))
             .setSubtitle(context.resources.getString(R.string.key_biometric_authentication_message))
             .setConfirmationRequired(true)
-            .setDeviceCredentialAllowed(true)
+            .setAllowedAuthenticators(BiometricManager.Authenticators.DEVICE_CREDENTIAL)
             .build()
         val biometricPrompt = BiometricPrompt(context as? AppCompatActivity ?: return, executor, this)
         biometricPrompt.authenticate(promptInfo)

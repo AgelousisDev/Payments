@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.widget.doOnTextChanged
+import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.databinding.MaterialSearchViewLayoutBinding
 import com.agelousis.monthlyfees.utils.extensions.infiniteAlphaAnimation
 import com.agelousis.monthlyfees.utils.extensions.initializeField
@@ -30,16 +31,21 @@ class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLa
         }
 
     init {
-        initAttributesAndView()
+        initAttributesAndView(attributeSet = attributeSet)
     }
 
-    private fun initAttributesAndView() {
-        binding = MaterialSearchViewLayoutBinding.inflate(
-            LayoutInflater.from(context),
-            null,
-            false
-        )
-        addView(binding?.root)
+    private fun initAttributesAndView(attributeSet: AttributeSet?) {
+        attributeSet?.let {
+            val attributes = context.obtainStyledAttributes(it, R.styleable.MaterialSearchView, 0, 0)
+            binding = MaterialSearchViewLayoutBinding.inflate(
+                LayoutInflater.from(context),
+                null,
+                false
+            )
+            binding?.hint = attributes.getString(R.styleable.MaterialSearchView_searchHint)
+            attributes.recycle()
+            addView(binding?.root)
+        }
     }
 
     override fun onViewAdded(child: View?) {

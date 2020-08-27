@@ -7,6 +7,7 @@ import androidx.core.database.getDoubleOrNull
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getStringOrNull
 import com.agelousis.monthlyfees.login.models.UserModel
+import com.agelousis.monthlyfees.main.ui.files.models.FileDataModel
 import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
 import com.agelousis.monthlyfees.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.monthlyfees.main.ui.payments.models.PersonModel
@@ -15,11 +16,11 @@ import kotlinx.coroutines.withContext
 
 typealias UserBlock = (UserModel?) -> Unit
 typealias UsersBlock = (List<UserModel>) -> Unit
-typealias GroupInsertionSuccessBlock = () -> Unit
+typealias InsertionSuccessBlock = () -> Unit
 typealias PaymentsClosure = (List<Any>) -> Unit
-typealias PaymentInsertionSuccessBlock = () -> Unit
-typealias GroupsSuccessBlock = (List<GroupModel>) -> Unit
 typealias DeletionSuccessBlock = () -> Unit
+typealias GroupsSuccessBlock = (List<GroupModel>) -> Unit
+typealias FilesSuccessBlock = (List<FileDataModel>) -> Unit
 
 class DBManager(context: Context) {
 
@@ -128,7 +129,7 @@ class DBManager(context: Context) {
         }
     }
 
-    suspend fun insertGroup(userId: Int?, groupModel: GroupModel, groupInsertionSuccessBlock: GroupInsertionSuccessBlock) {
+    suspend fun insertGroup(userId: Int?, groupModel: GroupModel, insertionSuccessBlock: InsertionSuccessBlock) {
         withContext(Dispatchers.Default) {
             database?.insert(
                 SQLiteHelper.GROUPS_TABLE_NAME,
@@ -140,12 +141,12 @@ class DBManager(context: Context) {
                 }
             )
             withContext(Dispatchers.Main) {
-                groupInsertionSuccessBlock()
+                insertionSuccessBlock()
             }
         }
     }
 
-    suspend fun insertPayment(userId: Int?, personModel: PersonModel, paymentInsertionSuccessBlock: PaymentInsertionSuccessBlock) {
+    suspend fun insertPayment(userId: Int?, personModel: PersonModel, insertionSuccessBlock: InsertionSuccessBlock) {
         withContext(Dispatchers.Default) {
             val personId = database?.insert(
                 SQLiteHelper.PERSONS_TABLE_NAME,
@@ -179,12 +180,12 @@ class DBManager(context: Context) {
                 )
             }
             withContext(Dispatchers.Main) {
-                paymentInsertionSuccessBlock()
+                insertionSuccessBlock()
             }
         }
     }
 
-    suspend fun updatePayment(userId: Int?, personModel: PersonModel, paymentInsertionSuccessBlock: PaymentInsertionSuccessBlock) {
+    suspend fun updatePayment(userId: Int?, personModel: PersonModel, insertionSuccessBlock: InsertionSuccessBlock) {
         withContext(Dispatchers.Default) {
             database?.update(
                 SQLiteHelper.PERSONS_TABLE_NAME,
@@ -224,7 +225,7 @@ class DBManager(context: Context) {
                 )
             }
             withContext(Dispatchers.Main) {
-                paymentInsertionSuccessBlock()
+                insertionSuccessBlock()
             }
         }
     }
@@ -381,6 +382,55 @@ class DBManager(context: Context) {
             )
             withContext(Dispatchers.Main) {
                 deletionSuccessBlock()
+            }
+        }
+    }
+
+    suspend fun insertFile(userId: Int?, fileDataModel: FileDataModel, insertionSuccessBlock: InsertionSuccessBlock) {
+        withContext(Dispatchers.Default) {
+            database?.insert(
+                SQLiteHelper.FILES_TABLE_NAME,
+                null,
+                ContentValues().also {
+                    it.put(SQLiteHelper.USER_ID, userId)
+                    it.put(SQLiteHelper.DESCRIPTION, fileDataModel.description)
+                    it.put(SQLiteHelper.FILENAME, fileDataModel.fileName)
+                    it.put(SQLiteHelper.DATE_TIME, fileDataModel.dateTime)
+                }
+            )
+            withContext(Dispatchers.Main) {
+                insertionSuccessBlock()
+            }
+        }
+    }
+
+    suspend fun initializeFiles(userId: Int?, filesSuccessBlock: FilesSuccessBlock) {
+        withContext(Dispatchers.Default) {
+            val files = arrayListOf<FileDataModel>()
+            val filesCursor = database?.query(
+                SQLiteHelper.FILES_TABLE_NAME,
+                null,
+                "${SQLiteHelper.USER_ID}=?",
+                arrayOf(userId?.toString()),
+                null,
+                null,
+                null
+            )
+            if (filesCursor?.moveToFirst() == true && filesCursor.count > 0)
+                do {
+                    files.add(
+                        FileDataModel(
+                            fileId = filesCursor.getIntOrNull(filesCursor.getColumnIndex(SQLiteHelper.ID)),
+                            description = filesCursor.getStringOrNull(filesCursor.getColumnIndex(SQLiteHelper.DESCRIPTION)),
+                            fileName = filesCursor.getStringOrNull(filesCursor.getColumnIndex(SQLiteHelper.FILENAME)),
+                            dateTime = filesCursor.getStringOrNull(filesCursor.getColumnIndex(SQLiteHelper.DATE_TIME))
+                        )
+                    )
+                }
+                while(filesCursor.moveToNext())
+            filesCursor?.close()
+            withContext(Dispatchers.Main) {
+                filesSuccessBlock(files)
             }
         }
     }

@@ -42,6 +42,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.text.DecimalFormat
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.NoSuchElementException
 import kotlin.math.max
@@ -390,6 +391,18 @@ fun View.circularUnReveal(circularAnimationCompletionBlock: CircularAnimationCom
     )
     circularReveal.start()
 }
+
+val Date.monthFormattedString: String
+    get() = SimpleDateFormat(Constants.MONTH_DATE_FORMAT, Locale.getDefault()).format(this)
+
+val Date.isSameYearAndMonthWithCurrentDate: Boolean
+    get() {
+        val firstCalendar = Calendar.getInstance()
+        firstCalendar.time = this
+        val secondCalendar = Calendar.getInstance()
+        secondCalendar.time = Date()
+        return (firstCalendar.get(Calendar.YEAR) == secondCalendar.get(Calendar.YEAR) && firstCalendar.get(Calendar.MONTH) == secondCalendar.get(Calendar.MONTH))
+    }
 
 @BindingAdapter("picassoImageUri")
 fun AppCompatImageView.loadImageUri(imageUri: Uri?) {

@@ -2,6 +2,9 @@
 <layout>
     <data>
         <variable
+            name="hint"
+            type="String" />
+        <variable
             name="profileImagePath"
             type="String" />
     </data>
@@ -41,7 +44,7 @@
             android:gravity="center_vertical"
             android:singleLine="true"
             android:maxLines="1"
-            android:hint="@string/key_search_in_payments_label"
+            android:hint="@{hint}"
             android:background="@null"
             android:imeOptions="actionDone"
             app:layout_constraintBottom_toBottomOf="parent"

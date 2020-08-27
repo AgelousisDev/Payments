@@ -217,7 +217,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
                 filteredList.add(
                     EmptyModel(
                         text = resources.getString(R.string.key_no_entries_message),
-                        imageIconResource = R.drawable.ic_empy
+                        imageIconResource = R.drawable.ic_empty
                     )
                 )
             }?.let {

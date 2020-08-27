@@ -65,5 +65,8 @@
     <string name="key_invalid_database_file_message">Invalid database file\nSelect another File</string>
     <string name="key_database_successfully_imported_message">Database is updated</string>
     <string name="key_files_label">Files</string>
+    <string name="key_this_month_label">THIS MONTH</string>
+    <string name="key_no_files_message">There are no files at this time</string>
+    <string name="key_search_in_files_label">Search in files</string>
 
 </resources>
