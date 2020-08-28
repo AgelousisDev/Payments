@@ -17,21 +17,23 @@ import com.agelousis.monthlyfees.main.ui.files.models.HeaderModel
 import com.agelousis.monthlyfees.main.ui.files.presenter.FilePresenter
 import com.agelousis.monthlyfees.main.ui.files.viewModel.FilesViewModel
 import com.agelousis.monthlyfees.main.ui.payments.models.EmptyModel
-import com.agelousis.monthlyfees.utils.extensions.after
-import com.agelousis.monthlyfees.utils.extensions.isSameYearAndMonthWithCurrentDate
-import com.agelousis.monthlyfees.utils.extensions.monthFormattedString
-import com.agelousis.monthlyfees.utils.extensions.whenNull
+import com.agelousis.monthlyfees.utils.extensions.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_files_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.*
 
 class FilesFragment: Fragment(), FilePresenter {
 
     override fun onFileSelected(fileDataModel: FileDataModel) {
-
+        context?.openPDF(
+            pdfFile = File(
+                context?.filesDir ?: return, fileDataModel.fileName ?: return
+            )
+        )
     }
 
     private val uiScope = CoroutineScope(Dispatchers.Main)

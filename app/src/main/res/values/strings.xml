@@ -68,5 +68,8 @@
     <string name="key_this_month_label">THIS MONTH</string>
     <string name="key_no_files_message">There are no files at this time</string>
     <string name="key_search_in_files_label">Search in files</string>
+    <string name="key_yes_label">YES</string>
+    <string name="key_no_label">NO</string>
+    <string name="key_file_saved_message">PDF created successfully. Navigate to see the list of PDFs</string>
 
 </resources>

@@ -23,9 +23,7 @@ import com.agelousis.monthlyfees.main.ui.payments.presenters.PaymentPresenter
 import com.agelousis.monthlyfees.main.ui.payments.viewHolders.GroupViewHolder
 import com.agelousis.monthlyfees.main.ui.payments.viewHolders.PaymentViewHolder
 import com.agelousis.monthlyfees.main.ui.payments.viewModels.PaymentListViewModel
-import com.agelousis.monthlyfees.utils.extensions.after
-import com.agelousis.monthlyfees.utils.extensions.showTwoButtonsDialog
-import com.agelousis.monthlyfees.utils.extensions.whenNull
+import com.agelousis.monthlyfees.utils.extensions.*
 import com.agelousis.monthlyfees.utils.helpers.PDFHelper
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_payments_layout.*
@@ -110,13 +108,9 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
             ) innerBlock@ { swipeAction, position ->
                 when(swipeAction) {
                     SwipeAction.RIGHT -> {
-                        PDFHelper.shared.initializePDF(
-                            context = context ?: return@innerBlock,
-                            userModel = (activity as? MainActivity)?.userModel,
-                            payments = listOf(filteredList.getOrNull(index = position) as PersonModel),
-                        ) {
-
-                        }
+                        configurePDFAction(
+                            position = position
+                        )
                         (paymentListRecyclerView.adapter as? PaymentsAdapter)?.restoreItem(
                             position = position
                         )
@@ -129,6 +123,47 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
             }
         )
         swipeItemTouchHelper.attachToRecyclerView(paymentListRecyclerView)
+    }
+
+    private fun configurePDFAction(position: Int) {
+        uiScope.launch {
+            filteredList.getOrNull(index = position)?.asIs<GroupModel> { groupModel ->
+                viewModel.initializePayments(
+                    context = context ?: return@asIs,
+                    userModel = (activity as? MainActivity)?.userModel,
+                    groupModel = groupModel
+                ) {
+                    initializePDFCreation(
+                        persons = it
+                    )
+                }
+            }
+            filteredList.getOrNull(index = position)?.asIs<PersonModel> { personModel ->
+                initializePDFCreation(
+                    persons = listOf(personModel)
+                )
+            }
+        }
+    }
+
+    private fun initializePDFCreation(persons: List<PersonModel>) {
+        PDFHelper.shared.initializePDF(
+            context = context ?: return,
+            userModel = (activity as? MainActivity)?.userModel,
+            persons = persons,
+        ) { pdfFile ->
+            uiScope.launch {
+                viewModel.insertFile(
+                    context = context ?: return@launch,
+                    userModel = (activity as? MainActivity)?.userModel,
+                    file = pdfFile,
+                    description = persons.firstOrNull()?.groupName ?: ""
+                )
+                context?.message(
+                    message = resources.getString(R.string.key_file_saved_message)
+                )
+            }
+        }
     }
 
     private fun configureDeleteAction(position: Int) {
@@ -179,7 +214,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
         uiScope.launch {
             viewModel.initializePayments(
                 context = context ?: return@launch,
-                userModel = (activity as? MainActivity)?.userModel ?: return@launch
+                userModel = (activity as? MainActivity)?.userModel
             )
         }
     }

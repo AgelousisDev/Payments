@@ -23,6 +23,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.biometric.BiometricManager
 import androidx.core.animation.addListener
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
@@ -406,6 +407,22 @@ val Date.isSameYearAndMonthWithCurrentDate: Boolean
 
 val Date.pdfFormattedCurrentDate: String
     get() = SimpleDateFormat(Constants.FILE_DATE_FORMAT, Locale.getDefault()).format(this)
+
+inline fun <reified J> Any.asIs(block: (J) -> Unit) {
+    if (this is J)
+        block(this)
+}
+
+fun Context.openPDF(pdfFile: File) {
+    val pdfUri = FileProvider.getUriForFile(
+        this,
+        "$packageName.provider", pdfFile)
+    startActivity(Intent().also {
+        it.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        it.action = Intent.ACTION_VIEW
+        it.data = pdfUri
+    })
+}
 
 @BindingAdapter("picassoImageUri")
 fun AppCompatImageView.loadImageUri(imageUri: Uri?) {
