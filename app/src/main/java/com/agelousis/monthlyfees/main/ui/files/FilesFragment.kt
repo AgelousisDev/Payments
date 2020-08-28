@@ -8,6 +8,7 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.agelousis.monthlyfees.R
+import com.agelousis.monthlyfees.custom.itemDecoration.HeaderItemDecoration
 import com.agelousis.monthlyfees.databinding.FragmentFilesLayoutBinding
 import com.agelousis.monthlyfees.main.MainActivity
 import com.agelousis.monthlyfees.main.ui.files.adapters.FilesAdapter
@@ -77,6 +78,15 @@ class FilesFragment: Fragment(), FilePresenter {
             list = filteredList,
             presenter = this
         )
+        filesListRecyclerView.addItemDecoration(
+            HeaderItemDecoration(
+                parent = filesListRecyclerView
+            ) { position ->
+                filteredList.getOrNull(
+                    index = position
+                ) is HeaderModel
+            }
+        )
     }
 
     private fun addObservers() {
@@ -101,7 +111,7 @@ class FilesFragment: Fragment(), FilePresenter {
 
     private fun configureFileList(files: List<FileDataModel>, query: String? = null) {
         filteredList.clear()
-        files.groupBy { it.fileDate }.toSortedMap().forEach { map ->
+        files.groupBy { it.fileDate }.toSortedMap(compareByDescending { it }).forEach { map ->
             map.value.filter { it.description?.toLowerCase(Locale.getDefault())?.contains(query?.toLowerCase(Locale.getDefault()) ?: "") == true }
                 .takeIf { it.isNotEmpty() }?.let inner@ { filteredByQueryList ->
                     val header = if (map.key.isSameYearAndMonthWithCurrentDate) resources.getString(R.string.key_this_month_label) else map.key.monthFormattedString

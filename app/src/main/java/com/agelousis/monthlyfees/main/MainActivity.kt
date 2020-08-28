@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.annotation.DrawableRes
@@ -160,6 +161,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     var floatingButtonType = FloatingButtonType.NORMAL
 
     override fun onBackPressed() {
+        unCheckAllMenuItems(
+            menu = navigationView.menu
+        )
         if (supportFragmentManager.currentNavigationFragment is PaymentsFragment)
             showSimpleDialog(
                 title = resources.getString(R.string.key_logout_label),
@@ -280,6 +284,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             message(
                 message = resources.getString(R.string.key_invalid_database_file_message)
             )
+    }
+
+    private fun unCheckAllMenuItems(menu: Menu) {
+        for (i in 0 until menu.size()) {
+            val item = menu.getItem(i)
+            if(item.hasSubMenu())
+                unCheckAllMenuItems(item.subMenu)
+            else
+                item.isChecked = false
+        }
     }
 
     fun setFloatingButtonAsPaymentRemovalButton() {

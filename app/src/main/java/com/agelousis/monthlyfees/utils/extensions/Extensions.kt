@@ -404,6 +404,9 @@ val Date.isSameYearAndMonthWithCurrentDate: Boolean
         return (firstCalendar.get(Calendar.YEAR) == secondCalendar.get(Calendar.YEAR) && firstCalendar.get(Calendar.MONTH) == secondCalendar.get(Calendar.MONTH))
     }
 
+val Date.pdfFormattedCurrentDate: String
+    get() = SimpleDateFormat(Constants.FILE_DATE_FORMAT, Locale.getDefault()).format(this)
+
 @BindingAdapter("picassoImageUri")
 fun AppCompatImageView.loadImageUri(imageUri: Uri?) {
     imageUri?.let {

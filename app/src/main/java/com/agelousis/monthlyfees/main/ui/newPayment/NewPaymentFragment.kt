@@ -35,9 +35,10 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
 
     override fun onPaymentAmount(paymentAmountModel: PaymentAmountModel?) {
         fillCurrentPersonModel()
+        paymentAmountUpdateIndex = paymentAmountModel?.let { availablePayments.indexOf(it) }
         findNavController().navigate(
             NewPaymentFragmentDirections.actionNewPaymentFragmentToNewPaymentAmountFragment(
-                paymentAmountDataModel = paymentAmountModel
+                paymentAmountDataModel = paymentAmountModel,
             )
         )
     }
@@ -70,6 +71,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     private var binding: FragmentNewPaymentLayoutBinding? = null
     private var currentPersonModel: PersonModel? = null
     private var paymentReadyForDeletionIndexArray = arrayListOf<Int>()
+    private var paymentAmountUpdateIndex: Int? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentNewPaymentLayoutBinding.inflate(
@@ -129,8 +131,13 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
 
     private fun initializeNewPayments() {
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<PaymentAmountModel>(NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA)
-            ?.observe(viewLifecycleOwner, {
-                availablePayments.add(it)
+            ?.observe(viewLifecycleOwner, { paymentAmountModel ->
+                paymentAmountUpdateIndex?.let { index ->
+                    availablePayments.set(
+                        index = index,
+                        paymentAmountModel
+                    )
+                } ?: availablePayments.add(paymentAmountModel)
                 (paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
             })
     }

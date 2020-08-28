@@ -26,6 +26,7 @@ import com.agelousis.monthlyfees.main.ui.payments.viewModels.PaymentListViewMode
 import com.agelousis.monthlyfees.utils.extensions.after
 import com.agelousis.monthlyfees.utils.extensions.showTwoButtonsDialog
 import com.agelousis.monthlyfees.utils.extensions.whenNull
+import com.agelousis.monthlyfees.utils.helpers.PDFHelper
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_payments_layout.*
 import kotlinx.coroutines.CoroutineScope
@@ -109,6 +110,13 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
             ) innerBlock@ { swipeAction, position ->
                 when(swipeAction) {
                     SwipeAction.RIGHT -> {
+                        PDFHelper.shared.initializePDF(
+                            context = context ?: return@innerBlock,
+                            userModel = (activity as? MainActivity)?.userModel,
+                            payments = listOf(filteredList.getOrNull(index = position) as PersonModel),
+                        ) {
+
+                        }
                         (paymentListRecyclerView.adapter as? PaymentsAdapter)?.restoreItem(
                             position = position
                         )
@@ -118,17 +126,6 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
                             position = position
                         )
                 }
-                    /*when(swipeAction) {
-                        SwipeAction.SHARE -> {
-                        (entriesRecyclerView.adapter as? EntriesAdapter)?.restoreItem(
-                                position = position
-                            )
-                            (activity as? EntriesActivity)?.configureActionCall(
-                                phoneNumber = (filteredList.getOrNull(index = position) as? ServiceEntryModel)?.telephone
-                            )
-                    }
-                        SwipeAction.DELETE -> {} showDeleteAlertWithAction(position =  position)
-                    }*/
             }
         )
         swipeItemTouchHelper.attachToRecyclerView(paymentListRecyclerView)
