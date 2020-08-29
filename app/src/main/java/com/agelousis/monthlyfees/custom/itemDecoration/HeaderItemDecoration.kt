@@ -37,6 +37,7 @@ class HeaderItemDecoration(parent: RecyclerView, private val headerPredicateBloc
 
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         super.onDrawOver(c, parent, state)
+        if (!headerPredicateBlock(0)) return
         val topChild = parent.getChildAt(0) ?: return
         val topChildPosition = parent.getChildAdapterPosition(topChild)
         if (topChildPosition == RecyclerView.NO_POSITION) {

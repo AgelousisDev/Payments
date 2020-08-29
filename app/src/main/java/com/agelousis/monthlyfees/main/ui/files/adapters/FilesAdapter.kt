@@ -1,8 +1,10 @@
 package com.agelousis.monthlyfees.main.ui.files.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.databinding.EmptyRowLayoutBinding
 import com.agelousis.monthlyfees.databinding.FileRowLayoutBinding
 import com.agelousis.monthlyfees.databinding.HeaderRowLayoutBinding
@@ -15,7 +17,7 @@ import com.agelousis.monthlyfees.main.ui.files.viewHolders.HeaderViewHolder
 import com.agelousis.monthlyfees.main.ui.payments.models.EmptyModel
 import com.agelousis.monthlyfees.main.ui.payments.viewHolders.EmptyViewHolder
 
-class FilesAdapter(private val list: List<Any>, private val presenter: FilePresenter): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class FilesAdapter(private val list: ArrayList<Any>, private val presenter: FilePresenter): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -84,5 +86,37 @@ class FilesAdapter(private val list: List<Any>, private val presenter: FilePrese
     }
 
     fun reloadData() = notifyDataSetChanged()
+
+    fun restoreItem(position: Int) = notifyItemChanged(position)
+
+    fun removeItemAndUpdate(context: Context, position: Int): Boolean {
+        list.removeAt(position)
+        notifyItemRemoved(position)
+        //notifyItemRangeChanged(position, list.size)
+
+        val uselessHeaderRow = list.filterIsInstance<HeaderModel>().firstOrNull { headerModel ->
+            list.filterIsInstance<FileDataModel>().all { headerModel.dateTime != it.fileDate }
+        }
+        uselessHeaderRow?.let {
+            val headerPosition = list.indexOf(it)
+            list.removeAt(headerPosition)
+            notifyItemRemoved(headerPosition)
+            //notifyItemRangeChanged(headerPosition, list.size)
+        }
+        addEmptyViewIf(emptyRow = EmptyModel(
+            text = context.resources.getString(R.string.key_no_files_message)
+        )) {
+            list.isEmpty()
+        }
+        return list.any { it is EmptyModel }
+    }
+
+    private fun addEmptyViewIf(emptyRow: EmptyModel, predicate: () -> Boolean) {
+        if (predicate()) {
+            list.add(emptyRow)
+            notifyItemInserted(0)
+            notifyItemRangeChanged(0, list.size)
+        }
+    }
 
 }

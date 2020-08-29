@@ -1,4 +1,4 @@
-package com.agelousis.monthlyfees.main.ui.personalInformation
+package com.agelousis.monthlyfees.main.ui.personalInformation.presenter
 
 interface OptionPresenter {
     fun onChangeProfilePicture()

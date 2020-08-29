@@ -73,6 +73,11 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     private var paymentReadyForDeletionIndexArray = arrayListOf<Int>()
     private var paymentAmountUpdateIndex: Int? = null
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        configureObservers()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentNewPaymentLayoutBinding.inflate(
             inflater,
@@ -89,7 +94,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
-        addObservers()
         configureRecyclerView()
         initializeGroups()
         initializeNewPayments()
@@ -116,7 +120,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         }
     }
 
-    private fun addObservers() {
+    private fun configureObservers() {
         viewModel.groupsLiveData.observe(viewLifecycleOwner) {
             availableGroups.clear()
             availableGroups.addAll(it)

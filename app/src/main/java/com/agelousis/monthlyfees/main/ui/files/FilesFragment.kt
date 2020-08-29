@@ -7,23 +7,30 @@ import android.view.ViewGroup
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.agelousis.monthlyfees.R
+import com.agelousis.monthlyfees.custom.enumerations.SwipeAction
 import com.agelousis.monthlyfees.custom.itemDecoration.HeaderItemDecoration
+import com.agelousis.monthlyfees.custom.itemTouchHelper.SwipeItemTouchHelper
 import com.agelousis.monthlyfees.databinding.FragmentFilesLayoutBinding
 import com.agelousis.monthlyfees.main.MainActivity
+import com.agelousis.monthlyfees.main.enumerations.SwipeItemType
 import com.agelousis.monthlyfees.main.ui.files.adapters.FilesAdapter
 import com.agelousis.monthlyfees.main.ui.files.models.FileDataModel
 import com.agelousis.monthlyfees.main.ui.files.models.HeaderModel
 import com.agelousis.monthlyfees.main.ui.files.presenter.FilePresenter
+import com.agelousis.monthlyfees.main.ui.files.viewHolders.FileViewHolder
 import com.agelousis.monthlyfees.main.ui.files.viewModel.FilesViewModel
 import com.agelousis.monthlyfees.main.ui.payments.models.EmptyModel
 import com.agelousis.monthlyfees.utils.extensions.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_files_layout.*
+import kotlinx.android.synthetic.main.fragment_files_layout.searchLayout
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
+import java.text.SimpleDateFormat
 import java.util.*
 
 class FilesFragment: Fragment(), FilePresenter {
@@ -46,6 +53,11 @@ class FilesFragment: Fragment(), FilePresenter {
             searchLayout.visibility = if (value) View.VISIBLE else View.GONE
         }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        configureObservers()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         FragmentFilesLayoutBinding.inflate(
             inflater,
@@ -59,7 +71,6 @@ class FilesFragment: Fragment(), FilePresenter {
         super.onViewCreated(view, savedInstanceState)
         configureSearchView()
         configureRecyclerView()
-        addObservers()
         initializeFiles()
     }
 
@@ -89,9 +100,35 @@ class FilesFragment: Fragment(), FilePresenter {
                 ) is HeaderModel
             }
         )
+        configureSwipeEvents()
     }
 
-    private fun addObservers() {
+    private fun configureSwipeEvents() {
+        val swipeItemTouchHelper = ItemTouchHelper(
+            SwipeItemTouchHelper(
+                context = context ?: return,
+                swipeItemType = SwipeItemType.PDF_ITEM,
+                swipePredicateBlock = {
+                    it is FileViewHolder
+                }
+            ) innerBlock@ { swipeAction, position ->
+                when(swipeAction) {
+                    SwipeAction.RIGHT -> {
+                        (filesListRecyclerView.adapter as? FilesAdapter)?.restoreItem(
+                            position = position
+                        )
+                    }
+                    SwipeAction.LEFT -> {}
+                        /*configureDeleteAction(
+                            position = position
+                        )*/
+                }
+            }
+        )
+        swipeItemTouchHelper.attachToRecyclerView(filesListRecyclerView)
+    }
+
+    private fun configureObservers() {
         viewModel.filesLiveData.observe(viewLifecycleOwner) { files ->
             fileList.clear()
             fileList.addAll(
@@ -113,13 +150,21 @@ class FilesFragment: Fragment(), FilePresenter {
 
     private fun configureFileList(files: List<FileDataModel>, query: String? = null) {
         filteredList.clear()
-        files.groupBy { it.fileDate }.toSortedMap(compareByDescending { it }).forEach { map ->
+        files.groupBy {
+            val calendar = Calendar.getInstance()
+            calendar.time = it.fileDate
+            val dateString = String.format("%d %d", calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1)
+            with(SimpleDateFormat("yyyy MM", Locale.getDefault())) {
+                parse(dateString)
+            }
+        }.toSortedMap(compareByDescending { it }).forEach { map ->
             map.value.filter { it.description?.toLowerCase(Locale.getDefault())?.contains(query?.toLowerCase(Locale.getDefault()) ?: "") == true }
                 .takeIf { it.isNotEmpty() }?.let inner@ { filteredByQueryList ->
-                    val header = if (map.key.isSameYearAndMonthWithCurrentDate) resources.getString(R.string.key_this_month_label) else map.key.monthFormattedString
+                    val header = if (map.key?.isSameYearAndMonthWithCurrentDate == true) resources.getString(R.string.key_this_month_label) else map.key?.monthFormattedString
                     filteredList.add(
                         HeaderModel(
-                            header = header
+                            dateTime = map.value.firstOrNull()?.fileDate,
+                            header = header ?: resources.getString(R.string.key_empty_field_label)
                         )
                     )
                     filteredList.addAll(
@@ -151,7 +196,7 @@ class FilesFragment: Fragment(), FilePresenter {
         (filesListRecyclerView.adapter as? FilesAdapter)?.reloadData()
     }
 
-    fun initializeFiles() {
+    private fun initializeFiles() {
         uiScope.launch {
             viewModel.initializeFiles(
                 context = context ?: return@launch,

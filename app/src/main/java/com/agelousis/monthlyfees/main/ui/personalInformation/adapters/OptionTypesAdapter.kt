@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.monthlyfees.databinding.OptionTypeRowLayoutBinding
-import com.agelousis.monthlyfees.main.ui.personalInformation.OptionPresenter
+import com.agelousis.monthlyfees.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.monthlyfees.main.ui.personalInformation.models.OptionType
 import com.agelousis.monthlyfees.main.ui.personalInformation.viewHolders.OptionViewHolder
 

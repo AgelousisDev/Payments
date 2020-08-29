@@ -14,6 +14,7 @@ import com.agelousis.monthlyfees.custom.enumerations.SwipeAction
 import com.agelousis.monthlyfees.custom.itemTouchHelper.SwipeItemTouchHelper
 import com.agelousis.monthlyfees.databinding.FragmentPaymentsLayoutBinding
 import com.agelousis.monthlyfees.main.MainActivity
+import com.agelousis.monthlyfees.main.enumerations.SwipeItemType
 import com.agelousis.monthlyfees.main.ui.payments.adapters.PaymentsAdapter
 import com.agelousis.monthlyfees.main.ui.payments.models.EmptyModel
 import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
@@ -22,7 +23,7 @@ import com.agelousis.monthlyfees.main.ui.payments.presenters.GroupPresenter
 import com.agelousis.monthlyfees.main.ui.payments.presenters.PaymentPresenter
 import com.agelousis.monthlyfees.main.ui.payments.viewHolders.GroupViewHolder
 import com.agelousis.monthlyfees.main.ui.payments.viewHolders.PaymentViewHolder
-import com.agelousis.monthlyfees.main.ui.payments.viewModels.PaymentListViewModel
+import com.agelousis.monthlyfees.main.ui.payments.viewModels.PaymentViewModel
 import com.agelousis.monthlyfees.utils.extensions.*
 import com.agelousis.monthlyfees.utils.helpers.PDFHelper
 import kotlinx.android.synthetic.main.activity_main.*
@@ -51,7 +52,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
     }
 
     private val uiScope = CoroutineScope(Dispatchers.Main)
-    private val viewModel by lazy { ViewModelProvider(this).get(PaymentListViewModel::class.java) }
+    private val viewModel by lazy { ViewModelProvider(this).get(PaymentViewModel::class.java) }
     private val itemsList by lazy { arrayListOf<Any>() }
     private val filteredList by lazy { arrayListOf<Any>() }
     private var searchViewState: Boolean = false
@@ -59,6 +60,11 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
             field  = value
             searchLayout.visibility = if (value) View.VISIBLE else View.GONE
         }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        configureObservers()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         FragmentPaymentsLayoutBinding.inflate(
@@ -73,7 +79,6 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
         super.onViewCreated(view, savedInstanceState)
         configureSearchView()
         configureRecyclerView()
-        configureObservers()
         initializePayments()
     }
 
@@ -102,6 +107,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
         val swipeItemTouchHelper = ItemTouchHelper(
             SwipeItemTouchHelper(
                 context = context ?: return,
+                swipeItemType = SwipeItemType.PERSON_ITEM,
                 swipePredicateBlock = {
                     it is GroupViewHolder || it is PaymentViewHolder
                 }
@@ -157,7 +163,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
                     context = context ?: return@launch,
                     userModel = (activity as? MainActivity)?.userModel,
                     file = pdfFile,
-                    description = persons.firstOrNull()?.groupName ?: ""
+                    description = if (persons.isSizeOne) persons.firstOrNull()?.fullName ?: "" else persons.firstOrNull()?.groupName ?: ""
                 )
                 context?.message(
                     message = resources.getString(R.string.key_file_saved_message)

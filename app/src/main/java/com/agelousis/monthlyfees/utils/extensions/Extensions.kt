@@ -34,7 +34,7 @@ import com.agelousis.monthlyfees.database.SQLiteHelper
 import com.agelousis.monthlyfees.databinding.GroupInputDialogViewBinding
 import com.agelousis.monthlyfees.login.models.UserModel
 import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
-import com.agelousis.monthlyfees.main.ui.personalInformation.OptionPresenter
+import com.agelousis.monthlyfees.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.monthlyfees.utils.constants.Constants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -423,6 +423,16 @@ fun Context.openPDF(pdfFile: File) {
         it.data = pdfUri
     })
 }
+
+val <T> Iterable<T>.isSizeOne: Boolean
+    get() {
+        var counter = 0
+        for (element in this) {
+            counter++
+            if (counter > 1) break
+        }
+        return counter == 1
+    }
 
 @BindingAdapter("picassoImageUri")
 fun AppCompatImageView.loadImageUri(imageUri: Uri?) {

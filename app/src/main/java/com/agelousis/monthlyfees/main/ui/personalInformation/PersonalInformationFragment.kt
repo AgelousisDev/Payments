@@ -18,6 +18,7 @@ import com.agelousis.monthlyfees.login.models.UserModel
 import com.agelousis.monthlyfees.main.MainActivity
 import com.agelousis.monthlyfees.main.ui.personalInformation.adapters.OptionTypesAdapter
 import com.agelousis.monthlyfees.main.ui.personalInformation.models.OptionType
+import com.agelousis.monthlyfees.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.monthlyfees.utils.constants.Constants
 import com.agelousis.monthlyfees.utils.extensions.*
 import kotlinx.android.synthetic.main.fragment_personal_information_layout.*

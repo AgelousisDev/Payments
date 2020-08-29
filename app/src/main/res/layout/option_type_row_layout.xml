@@ -10,7 +10,7 @@
             type="com.agelousis.monthlyfees.main.ui.personalInformation.models.OptionType" />
         <variable
             name="presenter"
-            type="com.agelousis.monthlyfees.main.ui.personalInformation.OptionPresenter" />
+            type="com.agelousis.monthlyfees.main.ui.personalInformation.presenter.OptionPresenter" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
