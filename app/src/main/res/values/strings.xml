@@ -26,7 +26,8 @@
     <string name="key_add_label">Add</string>
     <string name="key_add_group_label">Add Group</string>
     <string name="key_group_name_label">Group name</string>
-    <string name="key_no_entries_message">There are no entries yet\n Click \'+\' to add a Group and then click on each one to add Persons</string>
+    <string name="key_no_persons_title_message">No persons added</string>
+    <string name="key_no_persons_message">Click \'+\' to add a Group and then click on each one to add Persons</string>
     <string name="key_no_results_found_value">No results found with \'%s\'</string>
     <string name="key_search">Search</string>
     <string name="key_person_info_label">Person Info</string>
@@ -66,7 +67,8 @@
     <string name="key_database_successfully_imported_message">Database is updated</string>
     <string name="key_files_label">Files</string>
     <string name="key_this_month_label">THIS MONTH</string>
-    <string name="key_no_files_message">There are no files at this time</string>
+    <string name="key_no_files_title_message">There are no files at this time</string>
+    <string name="key_no_files_message">Navigate to home &amp; swipe group or person to create a PDF</string>
     <string name="key_search_in_files_label">Search in files</string>
     <string name="key_yes_label">YES</string>
     <string name="key_no_label">NO</string>

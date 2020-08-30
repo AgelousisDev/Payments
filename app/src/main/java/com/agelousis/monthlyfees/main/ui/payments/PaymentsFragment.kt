@@ -254,18 +254,19 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
             query.whenNull {
                 filteredList.add(
                     EmptyModel(
-                        text = resources.getString(R.string.key_no_entries_message),
-                        imageIconResource = R.drawable.ic_empty
+                        title = resources.getString(R.string.key_no_persons_title_message),
+                        message = resources.getString(R.string.key_no_persons_message),
+                        imageIconResource = R.drawable.ic_invoice
                     )
                 )
             }?.let {
                 filteredList.add(
                     EmptyModel(
-                        text = String.format(
+                        message = String.format(
                             resources.getString(R.string.key_no_results_found_value),
                             it
                         ),
-                        imageIconResource = R.drawable.ic_search
+                        imageIconResource = R.drawable.ic_colored_search
                     )
                 )
             }

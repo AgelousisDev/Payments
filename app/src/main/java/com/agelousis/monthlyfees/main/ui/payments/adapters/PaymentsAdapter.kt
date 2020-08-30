@@ -106,7 +106,9 @@ class PaymentsAdapter(private val list: ArrayList<Any>, private val groupPresent
             //notifyItemRangeChanged(headerPosition, list.size)
         }
         addEmptyViewIf(emptyRow = EmptyModel(
-            text = context.resources.getString(R.string.key_no_entries_message)
+            title = context.resources.getString(R.string.key_no_persons_title_message),
+            message = context.resources.getString(R.string.key_no_persons_message),
+            imageIconResource = R.drawable.ic_invoice
         )) {
             list.isEmpty()
         }

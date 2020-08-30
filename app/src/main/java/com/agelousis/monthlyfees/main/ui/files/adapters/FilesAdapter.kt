@@ -103,9 +103,13 @@ class FilesAdapter(private val list: ArrayList<Any>, private val presenter: File
             notifyItemRemoved(headerPosition)
             //notifyItemRangeChanged(headerPosition, list.size)
         }
-        addEmptyViewIf(emptyRow = EmptyModel(
-            text = context.resources.getString(R.string.key_no_files_message)
-        )) {
+        addEmptyViewIf(
+            emptyRow = EmptyModel(
+                title = context.resources.getString(R.string.key_no_files_title_message),
+                message = context.resources.getString(R.string.key_no_files_message),
+                imageIconResource = R.drawable.ic_colored_pdf
+            )
+        ) {
             list.isEmpty()
         }
         return list.any { it is EmptyModel }
