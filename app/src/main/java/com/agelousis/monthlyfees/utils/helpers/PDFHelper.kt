@@ -14,6 +14,7 @@ import com.itextpdf.text.pdf.BaseFont
 import com.itextpdf.text.pdf.PdfPCell
 import com.itextpdf.text.pdf.PdfPTable
 import com.itextpdf.text.pdf.PdfWriter
+import com.itextpdf.text.pdf.draw.LineSeparator
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -58,7 +59,7 @@ class PDFHelper {
     private fun addHeaderImage(context: Context, document: Document, userModel: UserModel?) {
         val imageByteArray = context.contentResolver.openInputStream(Uri.fromFile(File(context.filesDir, userModel?.profileImage ?: return)))?.readBytes() ?: return
         val image = Image.getInstance(imageByteArray)
-        image.scaleAbsolute(80.0f, 80.0f)
+        image.scalePercent(10.0f, 10.0f)
         document.add(Paragraph().also {
             it.add(image)
             it.alignment = Element.ALIGN_CENTER
@@ -122,6 +123,24 @@ class PDFHelper {
                     withBorder = false
                 )
             )
+            table.addCell(
+                getCell(
+                    text = "${context.resources.getString(R.string.key_total_payments_label)}: ${personModel.totalPaymentAmount.euroFormattedString ?: context.resources.getString(R.string.key_no_label)}",
+                    withBorder = false
+                )
+            )
+            table.addCell(
+                getCell(
+                    text = "",
+                    withBorder = false
+                )
+            )
+            table.addCell(
+                getCell(
+                    text = "",
+                    withBorder = false
+                )
+            )
             document.add(table)
 
             document.add(Chunk.NEWLINE)
@@ -133,7 +152,7 @@ class PDFHelper {
             )
 
             document.add(Chunk.NEWLINE)
-            document.add(Chunk.NEWLINE)
+            document.add(Chunk(LineSeparator()))
         }
     }
 
@@ -177,6 +196,7 @@ class PDFHelper {
                 )
             )
             document.add(table)
+            document.add(Chunk.NEWLINE)
         }
     }
 

@@ -16,6 +16,7 @@ object Constants {
     const val FILE_DATE_FORMAT = "yyyy_MM_dd_HH_mm_ss"
     const val MONTH_DATE_FORMAT = "MMMM yyyy"
     const val PDF_FILE_NAME_FORMAT_VALUE = "sample_%s.pdf"
+    const val PDF_MIME_TYPE = "application/pdf"
 
     object Colors {
         val colorPickerColors = intArrayOf(

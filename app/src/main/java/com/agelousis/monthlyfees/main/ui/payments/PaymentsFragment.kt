@@ -23,7 +23,7 @@ import com.agelousis.monthlyfees.main.ui.payments.presenters.GroupPresenter
 import com.agelousis.monthlyfees.main.ui.payments.presenters.PaymentPresenter
 import com.agelousis.monthlyfees.main.ui.payments.viewHolders.GroupViewHolder
 import com.agelousis.monthlyfees.main.ui.payments.viewHolders.PaymentViewHolder
-import com.agelousis.monthlyfees.main.ui.payments.viewModels.PaymentViewModel
+import com.agelousis.monthlyfees.main.ui.payments.viewModels.PaymentsViewModel
 import com.agelousis.monthlyfees.utils.extensions.*
 import com.agelousis.monthlyfees.utils.helpers.PDFHelper
 import kotlinx.android.synthetic.main.activity_main.*
@@ -52,7 +52,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
     }
 
     private val uiScope = CoroutineScope(Dispatchers.Main)
-    private val viewModel by lazy { ViewModelProvider(this).get(PaymentViewModel::class.java) }
+    private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
     private val itemsList by lazy { arrayListOf<Any>() }
     private val filteredList by lazy { arrayListOf<Any>() }
     private var searchViewState: Boolean = false

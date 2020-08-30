@@ -12,7 +12,7 @@ import com.agelousis.monthlyfees.utils.extensions.pdfFormattedCurrentDate
 import java.io.File
 import java.util.*
 
-class PaymentViewModel: ViewModel() {
+class PaymentsViewModel: ViewModel() {
 
     val paymentsLiveData by lazy { MutableLiveData<List<Any>>() }
     val deletionLiveData by lazy { MutableLiveData<Boolean>() }

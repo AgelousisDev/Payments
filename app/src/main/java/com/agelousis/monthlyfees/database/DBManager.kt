@@ -136,7 +136,7 @@ class DBManager(context: Context) {
                 SQLiteHelper.GROUPS_TABLE_NAME,
                 null,
                 ContentValues().also {
-                    it.put(SQLiteHelper.USER_ID, userId)
+                    it.put(SQLiteHelper.USER_ID, userId ?: return@withContext)
                     it.put(SQLiteHelper.GROUP_NAME, groupModel.groupName)
                     it.put(SQLiteHelper.COLOR, groupModel.color)
                 }
@@ -153,7 +153,7 @@ class DBManager(context: Context) {
                 SQLiteHelper.PERSONS_TABLE_NAME,
                 null,
                 ContentValues().also {
-                    it.put(SQLiteHelper.USER_ID, userId)
+                    it.put(SQLiteHelper.USER_ID, userId ?: return@withContext)
                     it.put(SQLiteHelper.GROUP_ID, personModel.groupId)
                     it.put(SQLiteHelper.FIRST_NAME, personModel.firstName)
                     it.put(SQLiteHelper.SURNAME, personModel.surname)
@@ -240,7 +240,7 @@ class DBManager(context: Context) {
                 SQLiteHelper.GROUPS_TABLE_NAME,
                 null,
                 "${SQLiteHelper.USER_ID}=?",
-                arrayOf(userId?.toString()),
+                arrayOf(userId?.toString() ?: return@withContext),
                 null,
                 null,
                 null
@@ -264,7 +264,7 @@ class DBManager(context: Context) {
                 SQLiteHelper.PERSONS_TABLE_NAME,
                 null,
                 "${SQLiteHelper.USER_ID}=?",
-                arrayOf(userId?.toString()),
+                arrayOf(userId?.toString() ?: return@withContext),
                 null,
                 null,
                 null)
@@ -274,7 +274,7 @@ class DBManager(context: Context) {
                         SQLiteHelper.PAYMENTS_TABLE_NAME,
                         null,
                         "${SQLiteHelper.PERSON_ID}=?",
-                        arrayOf(personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.ID))?.toString()),
+                        arrayOf(personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.ID))?.toString() ?: return@withContext),
                         null,
                         null,
                         null
@@ -333,7 +333,7 @@ class DBManager(context: Context) {
                 SQLiteHelper.PERSONS_TABLE_NAME,
                 null,
                 "${SQLiteHelper.USER_ID}=? AND ${SQLiteHelper.GROUP_ID}=?",
-                arrayOf(userId?.toString(), groupId?.toString()),
+                arrayOf(userId?.toString() ?: return@withContext, groupId?.toString() ?: return@withContext),
                 null,
                 null,
                 null
@@ -342,7 +342,7 @@ class DBManager(context: Context) {
                 SQLiteHelper.GROUPS_TABLE_NAME,
                 null,
                 "${SQLiteHelper.ID}=? AND ${SQLiteHelper.USER_ID}=?",
-                arrayOf(groupId?.toString(), userId?.toString()),
+                arrayOf(groupId?.toString() ?: return@withContext, userId?.toString() ?: return@withContext),
                 null,
                 null,
                 null
@@ -354,7 +354,7 @@ class DBManager(context: Context) {
                         SQLiteHelper.PAYMENTS_TABLE_NAME,
                         null,
                         "${SQLiteHelper.PERSON_ID}=?",
-                        arrayOf(personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.ID))?.toString()),
+                        arrayOf(personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.ID))?.toString() ?: return@withContext),
                         null,
                         null,
                         null
@@ -411,7 +411,7 @@ class DBManager(context: Context) {
                 SQLiteHelper.GROUPS_TABLE_NAME,
                 null,
                 "${SQLiteHelper.USER_ID}=?",
-                arrayOf(userId?.toString()),
+                arrayOf(userId?.toString() ?: return@withContext),
                 null,
                 null,
                 null
@@ -439,12 +439,12 @@ class DBManager(context: Context) {
             database?.delete(
                 SQLiteHelper.GROUPS_TABLE_NAME,
                 "${SQLiteHelper.ID}=?",
-                arrayOf(groupId?.toString())
+                arrayOf(groupId?.toString() ?: return@withContext)
             )
             database?.delete(
                 SQLiteHelper.PERSONS_TABLE_NAME,
                 "${SQLiteHelper.GROUP_ID}=?",
-                arrayOf(groupId?.toString())
+                arrayOf(groupId?.toString() ?: return@withContext)
             )
             withContext(Dispatchers.Main) {
                 deletionSuccessBlock()
@@ -457,7 +457,7 @@ class DBManager(context: Context) {
             database?.delete(
                 SQLiteHelper.PERSONS_TABLE_NAME,
                 "${SQLiteHelper.ID}=?",
-                arrayOf(paymentId?.toString())
+                arrayOf(paymentId?.toString() ?: return@withContext)
             )
             withContext(Dispatchers.Main) {
                 deletionSuccessBlock()
@@ -471,7 +471,7 @@ class DBManager(context: Context) {
                 SQLiteHelper.FILES_TABLE_NAME,
                 null,
                 ContentValues().also {
-                    it.put(SQLiteHelper.USER_ID, userId)
+                    it.put(SQLiteHelper.USER_ID, userId ?: return@withContext)
                     it.put(SQLiteHelper.DESCRIPTION, fileDataModel.description)
                     it.put(SQLiteHelper.FILENAME, fileDataModel.fileName)
                     it.put(SQLiteHelper.DATE_TIME, fileDataModel.dateTime)
@@ -490,7 +490,7 @@ class DBManager(context: Context) {
                 SQLiteHelper.FILES_TABLE_NAME,
                 null,
                 "${SQLiteHelper.USER_ID}=?",
-                arrayOf(userId?.toString()),
+                arrayOf(userId?.toString() ?: return@withContext),
                 null,
                 null,
                 null
@@ -510,6 +510,19 @@ class DBManager(context: Context) {
             filesCursor?.close()
             withContext(Dispatchers.Main) {
                 filesSuccessBlock(files)
+            }
+        }
+    }
+
+    suspend fun deleteFile(fileId: Int?, deletionSuccessBlock: DeletionSuccessBlock) {
+        withContext(Dispatchers.Default) {
+            database?.delete(
+                SQLiteHelper.FILES_TABLE_NAME,
+                "${SQLiteHelper.ID}=?",
+                arrayOf(fileId?.toString() ?: return@withContext)
+            )
+            withContext(Dispatchers.Main) {
+                deletionSuccessBlock()
             }
         }
     }

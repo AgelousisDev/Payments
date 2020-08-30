@@ -408,6 +408,16 @@ val Date.isSameYearAndMonthWithCurrentDate: Boolean
 val Date.pdfFormattedCurrentDate: String
     get() = SimpleDateFormat(Constants.FILE_DATE_FORMAT, Locale.getDefault()).format(this)
 
+val Date.yearMonth: Date?
+    get() {
+        val calendar = Calendar.getInstance()
+        calendar.time = this
+        val dateString = String.format("%d %d", calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1)
+        return with(SimpleDateFormat("yyyy MM", Locale.getDefault())) {
+            parse(dateString)
+        }
+    }
+
 inline fun <reified J> Any.asIs(block: (J) -> Unit) {
     if (this is J)
         block(this)
@@ -421,6 +431,18 @@ fun Context.openPDF(pdfFile: File) {
         it.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         it.action = Intent.ACTION_VIEW
         it.data = pdfUri
+    })
+}
+
+fun Context.sharePDF(pdfFile: File) {
+    val pdfUri = FileProvider.getUriForFile(
+        this,
+        "$packageName.provider", pdfFile)
+    startActivity(Intent().also {
+        it.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        it.action = Intent.ACTION_SEND
+        it.type = Constants.PDF_MIME_TYPE
+        it.putExtra(Intent.EXTRA_STREAM, pdfUri)
     })
 }
 

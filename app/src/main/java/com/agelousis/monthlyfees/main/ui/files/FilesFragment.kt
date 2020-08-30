@@ -30,7 +30,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
-import java.text.SimpleDateFormat
 import java.util.*
 
 class FilesFragment: Fragment(), FilePresenter {
@@ -114,18 +113,50 @@ class FilesFragment: Fragment(), FilePresenter {
             ) innerBlock@ { swipeAction, position ->
                 when(swipeAction) {
                     SwipeAction.RIGHT -> {
+                        configureShareAction(
+                            position = position
+                        )
                         (filesListRecyclerView.adapter as? FilesAdapter)?.restoreItem(
                             position = position
                         )
                     }
-                    SwipeAction.LEFT -> {}
-                        /*configureDeleteAction(
+                    SwipeAction.LEFT ->
+                        configureDeleteAction(
                             position = position
-                        )*/
+                        )
                 }
             }
         )
         swipeItemTouchHelper.attachToRecyclerView(filesListRecyclerView)
+    }
+
+    private fun configureShareAction(position: Int) {
+        context?.sharePDF(
+            pdfFile = File(
+                context?.filesDir ?: return, (filteredList.getOrNull(index = position) as? FileDataModel)?.fileName ?: return
+            )
+        )
+    }
+
+    private fun configureDeleteAction(position: Int) {
+        context?.showTwoButtonsDialog(
+            title = resources.getString(R.string.key_warning_label),
+            message = resources.getString(R.string.key_delete_file_message),
+            negativeButtonBlock = {
+                (filesListRecyclerView.adapter as? FilesAdapter)?.restoreItem(
+                    position = position
+                )
+            },
+            positiveButtonText = resources.getString(R.string.key_delete_label),
+            positiveButtonBlock = {
+                uiScope.launch {
+                    viewModel.deleteFile(
+                        context = context ?: return@launch,
+                        fileDataModel = filteredList.getOrNull(index = position) as? FileDataModel ?: return@launch
+                    )
+                }
+            }
+        )
     }
 
     private fun configureObservers() {
@@ -143,21 +174,15 @@ class FilesFragment: Fragment(), FilePresenter {
                 files = files
             )
         }
-        viewModel.fileInsertionLiveData.observe(viewLifecycleOwner) {
-
+        viewModel.fileDeletionLiveData.observe(viewLifecycleOwner) {
+            if (it)
+                initializeFiles()
         }
     }
 
     private fun configureFileList(files: List<FileDataModel>, query: String? = null) {
         filteredList.clear()
-        files.groupBy {
-            val calendar = Calendar.getInstance()
-            calendar.time = it.fileDate
-            val dateString = String.format("%d %d", calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1)
-            with(SimpleDateFormat("yyyy MM", Locale.getDefault())) {
-                parse(dateString)
-            }
-        }.toSortedMap(compareByDescending { it }).forEach { map ->
+        files.groupBy { it.fileDate.yearMonth }.toSortedMap(compareByDescending { it }).forEach { map ->
             map.value.filter { it.description?.toLowerCase(Locale.getDefault())?.contains(query?.toLowerCase(Locale.getDefault()) ?: "") == true }
                 .takeIf { it.isNotEmpty() }?.let inner@ { filteredByQueryList ->
                     val header = if (map.key?.isSameYearAndMonthWithCurrentDate == true) resources.getString(R.string.key_this_month_label) else map.key?.monthFormattedString
@@ -168,7 +193,7 @@ class FilesFragment: Fragment(), FilePresenter {
                         )
                     )
                     filteredList.addAll(
-                        filteredByQueryList
+                        filteredByQueryList.sortedByDescending { it.fileDate }
                     )
                 }
         }

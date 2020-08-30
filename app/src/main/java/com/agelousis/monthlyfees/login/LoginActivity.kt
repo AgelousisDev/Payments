@@ -103,10 +103,23 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener {
 
     override fun onBiometricsSucceed() {
         Handler(Looper.getMainLooper()).postDelayed({
-            showMainActivity(
-                userModel = sharedPreferences.userModel ?: return@postDelayed
-            )
-            },
+            uiScope.launch {
+                dbManager?.searchUser(
+                    userModel = sharedPreferences.userModel ?: return@launch
+                ) { userModel ->
+                    if (userModel == null)
+                        Toast.makeText(
+                            this@LoginActivity,
+                            resources.getString(R.string.key_wrong_credentials_message),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    else
+                        showMainActivity(
+                            userModel = userModel
+                        )
+                }
+            }
+        },
             500
         )
     }
