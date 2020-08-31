@@ -344,12 +344,16 @@ fun AppCompatActivity.alterFile(uri: Uri?, file: File) {
 fun AppCompatActivity.searchFile(requestCode: Int, mimeType: String) =
     startActivityForResult(Intent(Intent.ACTION_GET_CONTENT).also {
         it.type = mimeType
+        it.addCategory(Intent.CATEGORY_OPENABLE)
     }, requestCode)
 
 fun Context.isDBFile(uri: Uri?) =
     uri?.let {
         MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(it)) == Constants.BIN_FILE_EXTENSION
     } ?: false
+
+val Uri.isGoogleDrive: Boolean
+    get() = toString().contains(Constants.GOOGLE_DRIVE_URI)
 
 fun Context.replaceDatabase(byteArray: ByteArray?, completionSuccessBlock: CompletionSuccessBlock) =
     byteArray?.let { unwrappedByteArray ->
@@ -380,9 +384,9 @@ fun View.circularReveal(circularAnimationCompletionBlock: CircularAnimationCompl
         })
 }
 
-fun View.circularUnReveal(circularAnimationCompletionBlock: CircularAnimationCompletionBlock) {
+fun View.circularUnReveal(centerX: Int? = null, centerY: Int? = null, circularAnimationCompletionBlock: CircularAnimationCompletionBlock) {
     val finalRadius = max(width.toFloat(), height.toFloat()) * 1.1f
-    val circularReveal = ViewAnimationUtils.createCircularReveal(this@circularUnReveal, width - (width / 4), height / 5, finalRadius, 0.0f)
+    val circularReveal = ViewAnimationUtils.createCircularReveal(this@circularUnReveal, centerX ?: width - (width / 4), centerY ?: height / 5, finalRadius, 0.0f)
     circularReveal.duration = 500
     circularReveal.addListener(
         onEnd = {

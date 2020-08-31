@@ -35,10 +35,15 @@ import java.util.*
 class FilesFragment: Fragment(), FilePresenter {
 
     override fun onFileSelected(fileDataModel: FileDataModel) {
-        context?.openPDF(
-            pdfFile = File(
-                context?.filesDir ?: return, fileDataModel.fileName ?: return
+        File(context?.filesDir ?: return, fileDataModel.fileName ?: return).takeIf {
+            it.exists()
+        }?.let {
+            context?.openPDF(
+                pdfFile = it
             )
+        } ?: context?.showSimpleDialog(
+            title = resources.getString(R.string.key_warning_label),
+            message = resources.getString(R.string.key_file_not_exist_due_to_backup_message)
         )
     }
 
@@ -131,10 +136,15 @@ class FilesFragment: Fragment(), FilePresenter {
     }
 
     private fun configureShareAction(position: Int) {
-        context?.sharePDF(
-            pdfFile = File(
-                context?.filesDir ?: return, (filteredList.getOrNull(index = position) as? FileDataModel)?.fileName ?: return
+        File(context?.filesDir ?: return, (filteredList.getOrNull(index = position) as? FileDataModel)?.fileName ?: return).takeIf {
+            it.exists()
+        }?.let {
+            context?.sharePDF(
+                pdfFile = it
             )
+        } ?: context?.showSimpleDialog(
+            title = resources.getString(R.string.key_warning_label),
+            message = resources.getString(R.string.key_file_not_exist_due_to_backup_message)
         )
     }
 

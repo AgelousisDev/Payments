@@ -249,7 +249,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             positiveButtonBlock = {
                 searchFile(
                     requestCode = IMPORT_FILE_REQUEST_CODE,
-                    mimeType = Constants.OCTET_STREAM_MIME_TYPE
+                    mimeType = Constants.GENERAL_MIME_TYPE
                 )
             }
         )
@@ -258,7 +258,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun makeDatabaseImport(uri: Uri?) {
         if (isDBFile(
                 uri = uri
-            ))
+            ) || uri?.isGoogleDrive == true)
             replaceDatabase(
                 byteArray = contentResolver.openInputStream(uri ?: return)?.readBytes()
             ) {

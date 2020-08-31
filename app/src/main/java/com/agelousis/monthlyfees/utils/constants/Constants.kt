@@ -17,6 +17,7 @@ object Constants {
     const val MONTH_DATE_FORMAT = "MMMM yyyy"
     const val PDF_FILE_NAME_FORMAT_VALUE = "sample_%s.pdf"
     const val PDF_MIME_TYPE = "application/pdf"
+    const val GOOGLE_DRIVE_URI = "content://com.google.android.apps.docs.storage"
 
     object Colors {
         val colorPickerColors = intArrayOf(

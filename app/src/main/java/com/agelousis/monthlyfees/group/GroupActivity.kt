@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -71,6 +72,18 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
             field = value
             addGroupButton.visibility = if (value) View.VISIBLE else View.GONE
         }
+    private var onTouchCenterX: Float? = null
+    private var onTouchCenterY: Float? = null
+
+    override fun onBackPressed() {
+        rootLayout.circularUnReveal(
+            centerX = onTouchCenterX?.toInt(),
+            centerY = onTouchCenterY?.toInt()
+        ) {
+            super.onBackPressed()
+            overridePendingTransition(0, 0)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +96,16 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
             }.root
         )
         setupUI()
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        when(event?.action) {
+            MotionEvent.ACTION_DOWN -> {
+                onTouchCenterX = event.x
+                onTouchCenterY = event.y
+            }
+        }
+        return super.onTouchEvent(event)
     }
 
     private fun setupUI() {
