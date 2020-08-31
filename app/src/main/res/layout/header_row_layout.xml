@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="android.view.View" />
         <variable
@@ -7,25 +8,24 @@
             type="com.agelousis.monthlyfees.main.ui.files.models.HeaderModel" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:orientation="vertical"
-        android:background="@color/whiteTwo"
-        android:paddingStart="@dimen/nav_header_vertical_spacing"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:paddingBottom="@dimen/nav_header_vertical_spacing"
-        android:paddingEnd="@dimen/nav_header_vertical_spacing">
+        android:background="@color/whiteTwo">
 
         <com.google.android.material.textview.MaterialTextView
+            style="@style/TextViewTitleLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_monospace"
-            android:textStyle="bold"
+            android:layout_marginStart="@dimen/nav_header_vertical_spacing"
             android:text="@{headerModel.header}"
-            tools:text="January 2020"/>
+            tools:text="January 2020"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

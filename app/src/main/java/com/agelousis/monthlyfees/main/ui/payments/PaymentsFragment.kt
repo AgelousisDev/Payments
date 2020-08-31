@@ -250,7 +250,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
             }
         }
         filteredList.addAll(
-            list.filterIsInstance<GroupModel>()
+            list.filterIsInstance<GroupModel>().filter { it.groupName?.toLowerCase(Locale.getDefault())?.contains(query?.toLowerCase(Locale.getDefault()) ?: "") == true }
         )
 
         if (filteredList.isEmpty())

@@ -67,8 +67,10 @@ class PaymentsViewModel: ViewModel() {
                 description = description,
                 fileName = file.name,
                 dateTime = Date().pdfFormattedCurrentDate
-            )
-        ) {}
+            ).also {
+                it.fileData = file.readBytes()
+            }
+        )
     }
 
 }

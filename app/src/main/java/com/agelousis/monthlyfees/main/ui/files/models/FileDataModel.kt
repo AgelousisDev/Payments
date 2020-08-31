@@ -21,4 +21,6 @@ data class FileDataModel(val fileId: Int? = null,
                 showingDateFormat.format(fileDate ?: return@let null)
         }
 
+    var fileData: ByteArray? = null
+
 }

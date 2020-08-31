@@ -43,7 +43,7 @@ class FilesFragment: Fragment(), FilePresenter {
             )
         } ?: context?.showSimpleDialog(
             title = resources.getString(R.string.key_warning_label),
-            message = resources.getString(R.string.key_file_not_exist_due_to_backup_message)
+            message = resources.getString(R.string.key_file_not_exists_message)
         )
     }
 
@@ -144,7 +144,7 @@ class FilesFragment: Fragment(), FilePresenter {
             )
         } ?: context?.showSimpleDialog(
             title = resources.getString(R.string.key_warning_label),
-            message = resources.getString(R.string.key_file_not_exist_due_to_backup_message)
+            message = resources.getString(R.string.key_file_not_exists_message)
         )
     }
 
@@ -171,6 +171,9 @@ class FilesFragment: Fragment(), FilePresenter {
 
     private fun configureObservers() {
         viewModel.filesLiveData.observe(viewLifecycleOwner) { files ->
+            initializeActualFiles(
+                files = files
+            )
             fileList.clear()
             fileList.addAll(
                 files
@@ -239,6 +242,13 @@ class FilesFragment: Fragment(), FilePresenter {
                 userId = (activity as? MainActivity)?.userModel?.id
             )
         }
+    }
+
+    private fun initializeActualFiles(files: List<FileDataModel>) {
+        viewModel.createFilesIfRequired(
+            context = context ?: return,
+            files = files
+        )
     }
 
 }

@@ -3,6 +3,7 @@ package com.agelousis.monthlyfees.database
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import androidx.core.database.getBlobOrNull
 import androidx.core.database.getDoubleOrNull
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getStringOrNull
@@ -465,7 +466,7 @@ class DBManager(context: Context) {
         }
     }
 
-    suspend fun insertFile(userId: Int?, fileDataModel: FileDataModel, insertionSuccessBlock: InsertionSuccessBlock) {
+    suspend fun insertFile(userId: Int?, fileDataModel: FileDataModel, insertionSuccessBlock: InsertionSuccessBlock? = null) {
         withContext(Dispatchers.Default) {
             database?.insert(
                 SQLiteHelper.FILES_TABLE_NAME,
@@ -475,10 +476,11 @@ class DBManager(context: Context) {
                     it.put(SQLiteHelper.DESCRIPTION, fileDataModel.description)
                     it.put(SQLiteHelper.FILENAME, fileDataModel.fileName)
                     it.put(SQLiteHelper.DATE_TIME, fileDataModel.dateTime)
+                    it.put(SQLiteHelper.FILE_DATA, fileDataModel.fileData)
                 }
             )
             withContext(Dispatchers.Main) {
-                insertionSuccessBlock()
+                insertionSuccessBlock?.invoke()
             }
         }
     }
@@ -503,7 +505,9 @@ class DBManager(context: Context) {
                             description = filesCursor.getStringOrNull(filesCursor.getColumnIndex(SQLiteHelper.DESCRIPTION)),
                             fileName = filesCursor.getStringOrNull(filesCursor.getColumnIndex(SQLiteHelper.FILENAME)),
                             dateTime = filesCursor.getStringOrNull(filesCursor.getColumnIndex(SQLiteHelper.DATE_TIME))
-                        )
+                        ).also {
+                            it.fileData = filesCursor.getBlobOrNull(filesCursor.getColumnIndex(SQLiteHelper.FILE_DATA))
+                        }
                     )
                 }
                 while(filesCursor.moveToNext())

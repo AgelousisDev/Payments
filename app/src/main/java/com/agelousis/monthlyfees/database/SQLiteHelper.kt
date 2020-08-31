@@ -52,6 +52,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         const val DESCRIPTION = "description"
         const val FILENAME = "file_name"
         const val DATE_TIME = "date_time"
+        const val FILE_DATA = "file_data"
 
         // Database Information
         private const val DB_NAME = "MONTHLY_FEES.db"
@@ -79,7 +80,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
 
         //Creating files table query
         private const val FILES_TABLE_CREATION_QUERY = "CREATE TABLE $FILES_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "$USER_ID INTEGER, $DESCRIPTION TEXT, $FILENAME TEXT, $DATE_TIME TEXT);"
+                "$USER_ID INTEGER, $DESCRIPTION TEXT, $FILENAME TEXT, $DATE_TIME TEXT, $FILE_DATA BLOB);"
 
     }
 
