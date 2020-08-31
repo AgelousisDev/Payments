@@ -49,7 +49,7 @@ class FilesFragment: Fragment(), FilePresenter {
     private var searchViewState: Boolean = false
         set(value) {
             field  = value
-            searchLayout.visibility = if (value) View.VISIBLE else View.GONE
+            searchLayout?.visibility = if (value) View.VISIBLE else View.GONE
         }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

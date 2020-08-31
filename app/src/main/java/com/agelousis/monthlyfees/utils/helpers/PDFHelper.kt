@@ -67,7 +67,7 @@ class PDFHelper {
     }
 
     private fun addPersons(context: Context, document: Document, persons: List<PersonModel>) {
-        persons.forEach { personModel ->
+        persons.forEachIndexed { index, personModel ->
             val table = PdfPTable(3)
             table.addCell(
                 getCell(
@@ -152,7 +152,8 @@ class PDFHelper {
             )
 
             document.add(Chunk.NEWLINE)
-            document.add(Chunk(LineSeparator()))
+            if (index < persons.size - 1)
+                document.add(Chunk(LineSeparator()))
         }
     }
 

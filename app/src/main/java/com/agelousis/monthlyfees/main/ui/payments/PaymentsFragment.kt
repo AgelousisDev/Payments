@@ -58,7 +58,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
     private var searchViewState: Boolean = false
         set(value) {
             field  = value
-            searchLayout.visibility = if (value) View.VISIBLE else View.GONE
+            searchLayout?.visibility = if (value) View.VISIBLE else View.GONE
         }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -164,6 +164,9 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
                     userModel = (activity as? MainActivity)?.userModel,
                     file = pdfFile,
                     description = if (persons.isSizeOne) persons.firstOrNull()?.fullName ?: "" else persons.firstOrNull()?.groupName ?: ""
+                )
+                context?.sharePDF(
+                    pdfFile = pdfFile
                 )
                 context?.message(
                     message = resources.getString(R.string.key_file_saved_message)

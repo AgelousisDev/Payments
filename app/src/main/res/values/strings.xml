@@ -60,7 +60,7 @@
     <string name="key_export_label">Export</string>
     <string name="key_main_label">Main</string>
     <string name="key_options_label">Options</string>
-    <string name="key_export_message">This operation will export your database and save it where you want. Do you want to proceed?</string>
+    <string name="key_export_message">This operation will export your database and save it where you want. Do you want to proceed?\nNote that generated pdf files won\'t be included in the backup file.</string>
     <string name="key_import_message">This operation is going to overwrite your current data with the data of the imported file. Are you sure?</string>
     <string name="key_proceed_label">Proceed</string>
     <string name="key_invalid_database_file_message">Invalid database file\nSelect another File</string>
