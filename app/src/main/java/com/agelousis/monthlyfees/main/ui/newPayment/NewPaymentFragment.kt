@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.transition.TransitionInflater
 import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.database.DatabaseTriggeringType
 import com.agelousis.monthlyfees.databinding.FragmentNewPaymentLayoutBinding
@@ -76,6 +77,11 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         configureObservers()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enterTransition = TransitionInflater.from(context ?: return).inflateTransition(R.transition.slide_right)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

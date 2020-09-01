@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.transition.TransitionInflater
 import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.custom.enumerations.SwipeAction
 import com.agelousis.monthlyfees.custom.itemTouchHelper.SwipeItemTouchHelper

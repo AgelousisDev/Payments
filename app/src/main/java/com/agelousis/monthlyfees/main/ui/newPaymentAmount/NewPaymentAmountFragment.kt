@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.transition.TransitionInflater
+import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.databinding.FragmentNewPaymentAmountLayoutBinding
 import com.agelousis.monthlyfees.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.monthlyfees.utils.extensions.ifLet
@@ -21,6 +23,11 @@ class NewPaymentAmountFragment: Fragment() {
     }
 
     private val args: NewPaymentAmountFragmentArgs by navArgs()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enterTransition = TransitionInflater.from(context ?: return).inflateTransition(R.transition.slide_right)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         FragmentNewPaymentAmountLayoutBinding.inflate(
