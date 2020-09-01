@@ -57,6 +57,9 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener {
                 ) { biometricsState ->
                     userModel.username = usernameField.text?.toString()
                     userModel.password = passwordField.text?.toString()
+                    userModel.address = ""
+                    userModel.idCardNumber = ""
+                    userModel.socialInsuranceNumber = ""
                     userModel.biometrics = biometricsState
                     dbManager?.userModel = userModel
                     if (keepMeSignedInCheckBox.isChecked)

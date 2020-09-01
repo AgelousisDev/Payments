@@ -8,5 +8,8 @@ data class UserModel(var id: Int? = null,
                      var username: String? = null,
                      var password: String? = null,
                      var biometrics: Boolean? = null,
-                     var profileImage: String? = null
+                     var profileImage: String? = null,
+                     var address: String? = null,
+                     var idCardNumber: String? = null,
+                     var socialInsuranceNumber: String? = null
 ): Parcelable

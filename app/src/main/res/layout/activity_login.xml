@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="android.view.View" />
         <import type="com.agelousis.monthlyfees.login.SignInState" />
         <variable
             name="userModel"
@@ -45,6 +46,7 @@
             android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:layout_marginStart="32dp"
             android:background="@drawable/line_background"/>
+
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -115,9 +117,90 @@
                         android:layout_height="wrap_content"
                         android:singleLine="true"
                         android:maxLines="1"
-                        android:imeOptions="actionDone"
+                        android:imeOptions="actionNext"
                         android:inputType="textPassword"
                         android:text="@{userModel.password}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/addressTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:hint="@string/key_address_label"
+                    android:visibility="@{signInState == SignInState.SIGN_UP ? View.VISIBLE : View.GONE}"
+                    app:hintEnabled="true"
+                    app:endIconMode="clear_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/passwordTextInputLayout">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/addressField"
+                        style="@style/TextViewTitleLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:imeOptions="actionDone"
+                        android:inputType="textPassword"
+                        android:text="@{userModel.address}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/idCardTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:hint="@string/key_id_card_number"
+                    android:visibility="@{signInState == SignInState.SIGN_UP ? View.VISIBLE : View.GONE}"
+                    app:hintEnabled="true"
+                    app:endIconMode="clear_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/addressTextInputLayout">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/idCardField"
+                        style="@style/TextViewTitleLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:imeOptions="actionNext"
+                        android:inputType="textPassword"
+                        android:text="@{userModel.idCardNumber}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/socialInsuranceTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:hint="@string/key_social_insurance_number"
+                    android:visibility="@{signInState == SignInState.SIGN_UP ? View.VISIBLE : View.GONE}"
+                    app:hintEnabled="true"
+                    app:endIconMode="clear_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/idCardTextInputLayout">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/socialInsuranceField"
+                        style="@style/TextViewTitleLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:imeOptions="actionDone"
+                        android:inputType="textPassword"
+                        android:text="@{userModel.socialInsuranceNumber}"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -129,7 +212,7 @@
                     android:text="@string/key_keep_sign_in_label"
                     android:checked="@{userModel != null}"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/passwordTextInputLayout" />
+                    app:layout_constraintTop_toBottomOf="@+id/socialInsuranceTextInputLayout" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
