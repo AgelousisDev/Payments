@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.transition.TransitionInflater
 import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.custom.enumerations.SwipeAction
 import com.agelousis.monthlyfees.custom.itemTouchHelper.SwipeItemTouchHelper
@@ -50,6 +49,29 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
                 personDataModel = personModel
             )
         )
+    }
+
+    override fun onPaymentLongPressed(personModel: PersonModel) {
+        ifLet(
+            personModel.phone,
+            personModel.email
+        ) { args ->
+            context?.showListDialog(
+                title = resources.getString(R.string.key_select_option_label),
+                items = resources.getStringArray(R.array.key_payment_action_array).toList()
+            ) { position ->
+                when(position) {
+                    0 ->
+                        (activity as? MainActivity)?.configureCallAction(
+                            phone = args.first()
+                        )
+                    1 ->
+                        (activity as? MainActivity)?.configureEmailAction(
+                            email = args.second()
+                        )
+                }
+            }
+        }
     }
 
     private val uiScope = CoroutineScope(Dispatchers.Main)

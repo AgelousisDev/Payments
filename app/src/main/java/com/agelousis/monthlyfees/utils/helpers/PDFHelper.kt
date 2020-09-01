@@ -8,6 +8,7 @@ import com.agelousis.monthlyfees.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.monthlyfees.main.ui.payments.models.PersonModel
 import com.agelousis.monthlyfees.utils.constants.Constants
 import com.agelousis.monthlyfees.utils.extensions.euroFormattedString
+import com.agelousis.monthlyfees.utils.extensions.invoiceNumber
 import com.agelousis.monthlyfees.utils.extensions.pdfFormattedCurrentDate
 import com.itextpdf.text.*
 import com.itextpdf.text.pdf.BaseFont
@@ -43,9 +44,10 @@ class PDFHelper {
             document = document,
             userModel = userModel
         )
+        document.add(Chunk.NEWLINE)
         document.add(
             Paragraph(
-                context.resources.getString(R.string.app_name),
+                context.resources.getString(R.string.key_payments_label),
                 Font(ubuntuFont, 16.0f, Font.BOLD)
             ).also {
                 it.alignment = Element.ALIGN_CENTER
@@ -62,46 +64,44 @@ class PDFHelper {
     }
 
     private fun addUserDetails(context: Context, document: Document, userModel: UserModel?) {
-        val table = PdfPTable(1)
         String.format("%s %s", userModel?.firstName ?: "", userModel?.lastName ?: "").takeIf { it.isNotEmpty() && it.isNotBlank() }?.let { fullName->
-            table.addCell(
-                getCell(
-                    text = fullName,
-                    withBorder = false
+            document.add(
+                Paragraph(
+                    "${System.lineSeparator()}$fullName",
+                    Font(ubuntuFont, 8.0f, Font.BOLD)
                 )
             )
         }
         userModel?.address?.takeIf { it.isNotEmpty() }?.let {
-            table.addCell(
-                getCell(
-                    text = it,
-                    withBorder = false
+            document.add(
+                Paragraph(
+                    it,
+                    Font(ubuntuFont, 8.0f, Font.BOLD)
                 )
             )
         }
         userModel?.idCardNumber?.takeIf { it.isNotEmpty() }?.let {
-            table.addCell(
-                getCell(
-                    text = "${context.resources.getString(R.string.key_id_card_number_label)}: $it",
-                    withBorder = false
+            document.add(
+                Paragraph(
+                    "${context.resources.getString(R.string.key_id_card_number_label)}: $it",
+                    Font(ubuntuFont, 8.0f, Font.BOLD)
                 )
             )
         }
         userModel?.socialInsuranceNumber?.takeIf { it.isNotEmpty() }?.let {
-            table.addCell(
-                getCell(
-                    text = "${context.resources.getString(R.string.key_social_insurance_number_label)}: $it",
-                    withBorder = false
+            document.add(
+                Paragraph(
+                    "${context.resources.getString(R.string.key_social_insurance_number_label)}: $it",
+                    Font(ubuntuFont, 8.0f, Font.BOLD)
                 )
             )
         }
-        document.add(table)
     }
 
     private fun addHeaderImage(context: Context, document: Document, userModel: UserModel?) {
         val imageByteArray = context.contentResolver.openInputStream(Uri.fromFile(File(context.filesDir, userModel?.profileImage ?: return)))?.readBytes() ?: return
         val image = Image.getInstance(imageByteArray)
-        image.scalePercent(10.0f, 10.0f)
+        //image.scalePercent(10.0f, 10.0f)
         document.add(Paragraph().also {
             it.add(image)
             it.alignment = Element.ALIGN_CENTER
@@ -173,7 +173,7 @@ class PDFHelper {
             )
             table.addCell(
                 getCell(
-                    text = "",
+                    text = "${context.resources.getString(R.string.key_invoice_number_label)}: ${personModel.paymentId.invoiceNumber ?: context.resources.getString(R.string.key_empty_field_label)}",
                     withBorder = false
                 )
             )

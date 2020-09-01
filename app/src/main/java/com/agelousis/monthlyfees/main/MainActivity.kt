@@ -3,6 +3,7 @@ package com.agelousis.monthlyfees.main
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
@@ -12,6 +13,7 @@ import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.navigation.NavController
@@ -48,6 +50,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         const val USER_MODEL_EXTRA = "MainActivity=userModelExtra"
         const val EXPORT_FILE_REQUEST_CODE = 1
         const val IMPORT_FILE_REQUEST_CODE = 2
+        const val CALL_PHONE_PERMISSION_REQUEST_CODE = 10
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -159,6 +162,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             else floatingButton.hide()
         }
     var floatingButtonType = FloatingButtonType.NORMAL
+    private var selectedPhoneNumber: String? = null
 
     override fun onBackPressed() {
         unCheckAllMenuItems(
@@ -306,6 +310,40 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         floatingButtonType = FloatingButtonType.NORMAL
         floatingButtonImage = R.drawable.ic_check
         floatingButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorAccent))
+    }
+
+    fun configureCallAction(phone: String) {
+        if (hasPermissions(
+                android.Manifest.permission.CALL_PHONE
+            ))
+            call(
+                phone = phone
+            )
+        else {
+            selectedPhoneNumber = phone
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.CALL_PHONE),
+                CALL_PHONE_PERMISSION_REQUEST_CODE
+            )
+        }
+    }
+
+    fun configureEmailAction(email: String) {
+        textEmail(
+            email = email,
+        )
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode) {
+            CALL_PHONE_PERMISSION_REQUEST_CODE ->
+                if (grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_GRANTED)
+                    call(
+                        phone = selectedPhoneNumber ?: return
+                    )
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -1,9 +1,11 @@
 package com.agelousis.monthlyfees.utils.extensions
 
 import android.animation.Animator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.*
 import android.graphics.drawable.Drawable
@@ -22,23 +24,22 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.biometric.BiometricManager
 import androidx.core.animation.addListener
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.custom.picasso.CircleTransformation
 import com.agelousis.monthlyfees.database.SQLiteHelper
-import com.agelousis.monthlyfees.databinding.GroupInputDialogViewBinding
 import com.agelousis.monthlyfees.login.models.UserModel
-import com.agelousis.monthlyfees.main.ui.payments.models.GroupModel
 import com.agelousis.monthlyfees.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.monthlyfees.utils.constants.Constants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.squareup.picasso.Picasso
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.text.DecimalFormat
@@ -49,7 +50,6 @@ import kotlin.NoSuchElementException
 import kotlin.math.max
 
 typealias PositiveButtonBlock = () -> Unit
-typealias InputGroupDialogBlock = (GroupModel) -> Unit
 typealias ItemPositionDialogBlock = (Int) -> Unit
 typealias CompletionSuccessBlock = (Boolean) -> Unit
 typealias CircularAnimationCompletionBlock = () -> Unit
@@ -114,11 +114,22 @@ val Int.px: Int
 
 fun Context.saveProfileImage(byteArray: ByteArray?) =
     byteArray?.let { bytes ->
+        val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size, BitmapFactory.Options().also {
+            it.inSampleSize = when(bytes.size) {
+                in 0..1024 -> 2
+                in 1024..4096 -> 6
+                in 4096..8192 -> 10
+                else -> 12
+            }
+        })
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+
         val newFile = File(filesDir, "${Constants.PROFILE_IMAGE_NAME}_${System.currentTimeMillis()}")
         if (!newFile.exists())
             newFile.createNewFile()
         FileOutputStream(newFile).use {
-            it.write(bytes)
+            it.write(byteArrayOutputStream.toByteArray())
         }
         newFile.name
     }
@@ -179,45 +190,6 @@ fun Context.showSimpleDialog(title: String, message: String, isCancellable: Bool
     val materialDialog = materialAlertDialogBuilder.create()
     materialDialog.show()
     materialDialog.getButton(AlertDialog.BUTTON_POSITIVE).isAllCaps = false
-}
-
-fun Context.showGroupInputDialog(inputHint: String, isCancellable: Boolean? = null, negativeButtonBlock: PositiveButtonBlock? = null,
-                                 positiveButtonText: String? = null, inputGroupDialogBlock: InputGroupDialogBlock) {
-    val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog)
-    val binding = GroupInputDialogViewBinding.inflate(
-        LayoutInflater.from(this),
-        null,
-        false
-    )
-    binding.map = mapOf(
-        "inputHint" to inputHint
-    )
-    materialAlertDialogBuilder.setView(binding.root)
-    materialAlertDialogBuilder.apply {
-        setCancelable(isCancellable ?: true)
-        setNegativeButton(resources.getString(R.string.key_cancel_label)) { dialogInterface, _ ->
-            dialogInterface.dismiss()
-            negativeButtonBlock?.invoke()
-        }
-        setPositiveButton(positiveButtonText ?: resources.getString(R.string.key_ok_label)) { _, _ ->
-            inputGroupDialogBlock(
-                GroupModel(
-                    groupName = binding.groupField.text?.toString(),
-                    color = ContextCompat.getColor(this@showGroupInputDialog, R.color.colorAccent)
-                )
-            )
-        }
-    }
-    val materialDialog = materialAlertDialogBuilder.create()
-    materialDialog.show()
-    materialDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
-    materialDialog.getButton(AlertDialog.BUTTON_POSITIVE).alpha = 0.5f
-    materialDialog.getButton(AlertDialog.BUTTON_NEGATIVE).isAllCaps = false
-    materialDialog.getButton(AlertDialog.BUTTON_POSITIVE).isAllCaps = false
-    binding.groupField.doAfterTextChanged {
-        materialDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = it?.isNotEmpty() == true && it.isNotBlank()
-        materialDialog.getButton(AlertDialog.BUTTON_POSITIVE).alpha = if (it?.isNotEmpty() == true && it.isNotBlank()) 1.0f else 0.5f
-    }
 }
 
 fun Context.showListDialog(title: String, items: List<String>, isCancellable: Boolean = true, itemPositionDialogBlock: ItemPositionDialogBlock) {
@@ -459,6 +431,30 @@ val <T> Iterable<T>.isSizeOne: Boolean
         }
         return counter == 1
     }
+
+val Int?.invoiceNumber: String?
+    get() = this?.let { String.format("MF%04d", it) }
+
+fun Context.hasPermissions(vararg permissions: String): Boolean {
+    permissions.forEach {
+        if (ActivityCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED) {
+            return false
+        }
+    }
+    return true
+}
+
+@SuppressLint("MissingPermission")
+fun Context.call(phone: String) = startActivity(Intent(Intent.ACTION_CALL, Uri.parse("tel:$phone")))
+
+fun Context.textEmail(email: String, content: String? = null) {
+    startActivity(Intent(Intent.ACTION_SEND).also {
+        it.putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+        it.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.app_name))
+        it.putExtra(Intent.EXTRA_TEXT, content)
+        it.type = "text/plain"
+    })
+}
 
 @BindingAdapter("picassoImageUri")
 fun AppCompatImageView.loadImageUri(imageUri: Uri?) {

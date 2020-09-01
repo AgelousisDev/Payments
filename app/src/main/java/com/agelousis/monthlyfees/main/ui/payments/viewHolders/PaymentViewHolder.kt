@@ -10,6 +10,12 @@ class PaymentViewHolder(private val binding: PaymentRowLayoutBinding): RecyclerV
     fun bind(personModel: PersonModel, presenter: PaymentPresenter) {
         binding.personModel = personModel
         binding.presenter = presenter
+        itemView.setOnLongClickListener {
+            presenter.onPaymentLongPressed(
+                personModel = binding.personModel ?: return@setOnLongClickListener true
+            )
+            true
+        }
         binding.executePendingBindings()
     }
 

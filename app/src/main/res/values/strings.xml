@@ -79,5 +79,12 @@
     <string name="key_address_label">Address</string>
     <string name="key_id_card_number_label">ID Number</string>
     <string name="key_social_insurance_number_label">Social Insurance Number</string>
+    <string name="key_invoice_number_label">Invoice Number</string>
+    <string name="key_select_option_label">Select an option</string>
+
+    <string-array name="key_payment_action_array">
+        <item>Call</item>
+        <item>Email</item>
+    </string-array>
 
 </resources>
