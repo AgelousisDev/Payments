@@ -245,7 +245,7 @@ fun Context.toast(message: String) {
 val Double?.euroFormattedString: String?
     get() {
         val unwrappedAmount = this ?: return null
-        val pattern = "€ #,##0"
+        val pattern = "€ #,###.##"
         val locale = Locale.getDefault()
         val numberFormatter = NumberFormat.getNumberInstance(locale)
         val decimalFormatter = numberFormatter as DecimalFormat
