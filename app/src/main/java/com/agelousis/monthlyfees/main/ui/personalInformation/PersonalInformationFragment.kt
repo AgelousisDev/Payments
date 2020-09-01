@@ -31,11 +31,23 @@ class PersonalInformationFragment: Fragment(), OptionPresenter {
         )
     }
 
+    override fun onFirstNameChange(newFirstName: String) {
+        if (newFirstName == resources.getString(R.string.key_empty_field_label)) return
+        newUserModel?.firstName = newFirstName
+    }
+
+    override fun onLastNameChange(newLastName: String) {
+        if (newLastName == resources.getString(R.string.key_empty_field_label)) return
+        newUserModel?.lastName = newLastName
+    }
+
     override fun onUsernameChange(newUsername: String) {
+        if (newUsername == resources.getString(R.string.key_empty_field_label)) return
         newUserModel?.username = newUsername
     }
 
     override fun onPasswordChange(newPassword: String) {
+        if (newPassword == resources.getString(R.string.key_empty_field_label)) return
         newUserModel?.password = newPassword
     }
 
@@ -43,11 +55,32 @@ class PersonalInformationFragment: Fragment(), OptionPresenter {
         newUserModel?.biometrics = state
     }
 
+    override fun onAddressChange(newAddress: String) {
+        if (newAddress == resources.getString(R.string.key_empty_field_label)) return
+        newUserModel?.address = newAddress
+    }
+
+    override fun onIdCardNumberChange(newIdCardNumber: String) {
+        if (newIdCardNumber == resources.getString(R.string.key_empty_field_label)) return
+        newUserModel?.idCardNumber = newIdCardNumber
+    }
+
+    override fun onSocialInsuranceNumberChange(newSocialInsuranceNumber: String) {
+        if (newSocialInsuranceNumber == resources.getString(R.string.key_empty_field_label)) return
+        newUserModel?.socialInsuranceNumber = newSocialInsuranceNumber
+    }
+
     private val sharedPreferences by lazy { context?.getSharedPreferences(Constants.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE) }
     private val dbManager by lazy { context?.let { DBManager(context = it) } }
     private val newUserModel by lazy { (activity as? MainActivity)?.userModel?.copy() }
     private val optionTypes by lazy {
         arrayListOf(
+            OptionType.CHANGE_FIRST_NAME.also {
+                it.userModel = newUserModel
+            },
+            OptionType.CHANGE_LAST_NAME.also {
+                it.userModel = newUserModel
+            },
             OptionType.CHANGE_USERNAME.also {
                 it.userModel = newUserModel
             },
@@ -60,6 +93,15 @@ class PersonalInformationFragment: Fragment(), OptionPresenter {
             OptionType.CHANGE_BIOMETRICS_STATE.also {
                 it.userModel = newUserModel
                 it.biometricAvailability = context?.hasBiometrics == true && sharedPreferences?.userModel != null
+            },
+            OptionType.CHANGE_ADDRESS.also {
+                it.userModel = newUserModel
+            },
+            OptionType.CHANGE_ID_CARD_NUMBER.also {
+                it.userModel = newUserModel
+            },
+            OptionType.CHANGE_SOCIAL_INSURANCE_NUMBER.also {
+                it.userModel = newUserModel
             }
         )
     }

@@ -33,7 +33,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Get help" />
 
-
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/switchMaterial"
         android:layout_width="wrap_content"
@@ -49,13 +48,13 @@
     <androidx.appcompat.widget.AppCompatEditText
         style="@style/TextViewLabel"
         android:id="@+id/optionField"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="end"
         android:background="@null"
-        android:visibility="@{optionType == OptionType.CHANGE_USERNAME || optionType == OptionType.CHANGE_PASSWORD ? View.VISIBLE : View.GONE}"
+        android:visibility="@{optionType == OptionType.CHANGE_FIRST_NAME || optionType == OptionType.CHANGE_LAST_NAME || optionType == OptionType.CHANGE_USERNAME || optionType == OptionType.CHANGE_PASSWORD || optionType == OptionType.CHANGE_ADDRESS || optionType == OptionType.CHANGE_ADDRESS || optionType == OptionType.CHANGE_ID_CARD_NUMBER || optionType == OptionType.CHANGE_SOCIAL_INSURANCE_NUMBER ? View.VISIBLE : View.GONE}"
         android:inputType="@{optionType == OptionType.CHANGE_PASSWORD ? 0x00000081 : 0x00000001}"
-        android:text="@{optionType == OptionType.CHANGE_USERNAME ? optionType.userModel.username : optionType.userModel.password}"
+        personalInformation="@{optionType}"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -11,5 +11,7 @@ data class UserModel(var id: Int? = null,
                      var profileImage: String? = null,
                      var address: String? = null,
                      var idCardNumber: String? = null,
-                     var socialInsuranceNumber: String? = null
+                     var socialInsuranceNumber: String? = null,
+                     var firstName: String? = null,
+                     var lastName: String? = null
 ): Parcelable

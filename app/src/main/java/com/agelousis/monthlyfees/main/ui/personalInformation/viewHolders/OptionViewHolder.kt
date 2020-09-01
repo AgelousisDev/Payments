@@ -13,6 +13,14 @@ class OptionViewHolder(private val binding: OptionTypeRowLayoutBinding): Recycle
         binding.presenter = optionPresenter
         binding.optionField.doAfterTextChanged {
             when(binding.optionType) {
+                OptionType.CHANGE_FIRST_NAME ->
+                    optionPresenter.onFirstNameChange(
+                        newFirstName = it?.toString() ?: return@doAfterTextChanged
+                    )
+                OptionType.CHANGE_LAST_NAME ->
+                    optionPresenter.onLastNameChange(
+                        newLastName = it?.toString() ?: return@doAfterTextChanged
+                    )
                 OptionType.CHANGE_USERNAME ->
                     optionPresenter.onUsernameChange(
                         newUsername = it?.toString() ?: return@doAfterTextChanged
@@ -20,6 +28,18 @@ class OptionViewHolder(private val binding: OptionTypeRowLayoutBinding): Recycle
                 OptionType.CHANGE_PASSWORD ->
                     optionPresenter.onPasswordChange(
                         newPassword = it?.toString() ?: return@doAfterTextChanged
+                    )
+                OptionType.CHANGE_ADDRESS ->
+                    optionPresenter.onAddressChange(
+                        newAddress = it?.toString() ?: return@doAfterTextChanged
+                    )
+                OptionType.CHANGE_ID_CARD_NUMBER ->
+                    optionPresenter.onIdCardNumberChange(
+                        newIdCardNumber = it?.toString() ?: return@doAfterTextChanged
+                    )
+                OptionType.CHANGE_SOCIAL_INSURANCE_NUMBER ->
+                    optionPresenter.onSocialInsuranceNumberChange(
+                        newSocialInsuranceNumber = it?.toString() ?: return@doAfterTextChanged
                     )
                 else -> {}
             }

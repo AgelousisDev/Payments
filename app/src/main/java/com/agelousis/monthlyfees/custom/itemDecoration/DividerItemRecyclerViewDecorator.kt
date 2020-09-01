@@ -19,12 +19,14 @@ class DividerItemRecyclerViewDecorator(context: Context, private val margin: Int
     override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         super.onDraw(c, parent, state)
         val right = parent.width - margin
-        parent.children.forEach { view ->
-            val params = view.layoutParams as? RecyclerView.LayoutParams
-            val top = view.bottom + (params?.bottomMargin ?: 0)
-            val bottom = top + (divider?.intrinsicHeight ?: 0)
-            divider?.setBounds(margin, top, right, bottom)
-            divider?.draw(c)
+        parent.children.forEachIndexed { index, view ->
+            if (index < parent.childCount - 1) {
+                val params = view.layoutParams as? RecyclerView.LayoutParams
+                val top = view.bottom + (params?.bottomMargin ?: 0)
+                val bottom = top + (divider?.intrinsicHeight ?: 0)
+                divider?.setBounds(margin, top, right, bottom)
+                divider?.draw(c)
+            }
         }
     }
 

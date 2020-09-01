@@ -38,6 +38,11 @@ class PDFHelper {
             document = document,
             userModel = userModel,
         )
+        addUserDetails(
+            context = context,
+            document = document,
+            userModel = userModel
+        )
         document.add(
             Paragraph(
                 context.resources.getString(R.string.app_name),
@@ -54,6 +59,43 @@ class PDFHelper {
         document.close()
 
         pdfInitializationSuccessBlock(pdfFile)
+    }
+
+    private fun addUserDetails(context: Context, document: Document, userModel: UserModel?) {
+        val table = PdfPTable(1)
+        String.format("%s %s", userModel?.firstName ?: "", userModel?.lastName ?: "").takeIf { it.isNotEmpty() && it.isNotBlank() }?.let { fullName->
+            table.addCell(
+                getCell(
+                    text = fullName,
+                    withBorder = false
+                )
+            )
+        }
+        userModel?.address?.takeIf { it.isNotEmpty() }?.let {
+            table.addCell(
+                getCell(
+                    text = it,
+                    withBorder = false
+                )
+            )
+        }
+        userModel?.idCardNumber?.takeIf { it.isNotEmpty() }?.let {
+            table.addCell(
+                getCell(
+                    text = "${context.resources.getString(R.string.key_id_card_number_label)}: $it",
+                    withBorder = false
+                )
+            )
+        }
+        userModel?.socialInsuranceNumber?.takeIf { it.isNotEmpty() }?.let {
+            table.addCell(
+                getCell(
+                    text = "${context.resources.getString(R.string.key_social_insurance_number_label)}: $it",
+                    withBorder = false
+                )
+            )
+        }
+        document.add(table)
     }
 
     private fun addHeaderImage(context: Context, document: Document, userModel: UserModel?) {
