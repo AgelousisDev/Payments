@@ -113,7 +113,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 uiScope.launch {
                     (supportFragmentManager.currentNavigationFragment as? PersonalInformationFragment)?.updateUser { newUserModel ->
                         sharedPreferences.userModel = sharedPreferences.userModel?.also {
+                            it.firstName = newUserModel?.firstName
+                            it.lastName = newUserModel?.lastName
+                            it.username = newUserModel?.username
+                            it.password = newUserModel?.password
                             it.biometrics = newUserModel?.biometrics
+                            it.profileImage = newUserModel?.profileImage
+                            it.address = newUserModel?.address
+                            it.idCardNumber = newUserModel?.idCardNumber
+                            it.socialInsuranceNumber = newUserModel?.socialInsuranceNumber
                         }
                         startActivity(Intent(this@MainActivity, LoginActivity::class.java))
                         finish()

@@ -192,9 +192,13 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener {
         when(requestCode) {
             PROFILE_SELECT_REQUEST_CODE ->
                 data?.data?.let { imageUri ->
-                    userModel.profileImage = saveProfileImage(
-                        byteArray = contentResolver.openInputStream(imageUri)?.readBytes()
-                    )
+                    profileImageView.loadImageBitmap(
+                        imageUri = imageUri
+                    ) { bitmap ->
+                        userModel.profileImage = saveProfileImage(
+                            bitmap = bitmap
+                        )
+                    }
                     profileImageView.setBackgroundResource(0)
                     profileImageView.loadImageUri(
                         imageUri = imageUri

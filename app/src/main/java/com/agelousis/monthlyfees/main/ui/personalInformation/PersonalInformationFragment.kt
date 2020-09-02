@@ -132,11 +132,12 @@ class PersonalInformationFragment: Fragment(), OptionPresenter {
     }
 
     suspend fun updateUser(successBlock: (UserModel?) -> Unit) {
-        if ((activity as? MainActivity)?.userModel != newUserModel)
+        if ((activity as? MainActivity)?.userModel != newUserModel) {
             dbManager?.updateUser(
                 userModel = newUserModel ?: return,
                 userBlock = successBlock
             )
+        }
         else {
             context?.toast(
                 message = resources.getString(R.string.key_no_changes_message)
@@ -152,12 +153,16 @@ class PersonalInformationFragment: Fragment(), OptionPresenter {
         when(requestCode) {
             LoginActivity.PROFILE_SELECT_REQUEST_CODE ->
                 data?.data?.let { imageUri ->
-                    newUserModel?.profileImage = context?.saveProfileImage(
-                        byteArray = context?.contentResolver?.openInputStream(imageUri)?.readBytes()
-                    )
-                    optionTypes.firstOrNull { it == OptionType.CHANGE_PROFILE_IMAGE }?.userModel?.profileImage = newUserModel?.profileImage
-                    optionRecyclerView.scheduleLayoutAnimation()
-                    (optionRecyclerView.adapter as? OptionTypesAdapter)?.reloadData()
+                    loadImageBitmap(
+                        imageUri = imageUri
+                    ) { bitmap ->
+                        newUserModel?.profileImage = context?.saveProfileImage(
+                            bitmap = bitmap
+                        )
+                        optionTypes.firstOrNull { it == OptionType.CHANGE_PROFILE_IMAGE }?.userModel?.profileImage = newUserModel?.profileImage
+                        optionRecyclerView.scheduleLayoutAnimation()
+                        (optionRecyclerView.adapter as? OptionTypesAdapter)?.reloadData()
+                    }
                 }
         }
     }

@@ -39,9 +39,10 @@ import com.agelousis.monthlyfees.utils.constants.Constants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.squareup.picasso.Picasso
-import java.io.ByteArrayOutputStream
+import com.squareup.picasso.Target
 import java.io.File
 import java.io.FileOutputStream
+import java.lang.Exception
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
@@ -53,6 +54,7 @@ typealias PositiveButtonBlock = () -> Unit
 typealias ItemPositionDialogBlock = (Int) -> Unit
 typealias CompletionSuccessBlock = (Boolean) -> Unit
 typealias CircularAnimationCompletionBlock = () -> Unit
+typealias BitmapBlock = (Bitmap?) -> Unit
 
 fun <T> T?.whenNull(receiver: () -> Unit): T? {
     return if (this == null) {
@@ -114,33 +116,36 @@ val Int.px: Int
 
 fun Context.saveProfileImage(byteArray: ByteArray?) =
     byteArray?.let { bytes ->
-        val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size, BitmapFactory.Options().also {
-            it.inSampleSize = when(bytes.size) {
-                in 0..1024 -> 2
-                in 1024..4096 -> 6
-                in 4096..8192 -> 10
-                else -> 12
-            }
-        })
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-
         val newFile = File(filesDir, "${Constants.PROFILE_IMAGE_NAME}_${System.currentTimeMillis()}")
         if (!newFile.exists())
             newFile.createNewFile()
         FileOutputStream(newFile).use {
-            it.write(byteArrayOutputStream.toByteArray())
+            it.write(bytes)
         }
+        newFile.name
+    }
+
+fun Context.saveProfileImage(bitmap: Bitmap?) =
+    bitmap?.let {
+        val newFile = File(filesDir, "${Constants.PROFILE_IMAGE_NAME}_${System.currentTimeMillis()}")
+        if (!newFile.exists())
+            newFile.createNewFile()
+        it.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(newFile))
         newFile.name
     }
 
 var SharedPreferences.userModel: UserModel?
     set(value) {
         edit().also {
+            it.putString(SQLiteHelper.FIRST_NAME, value?.firstName)
+            it.putString(SQLiteHelper.SURNAME, value?.lastName)
             it.putString(SQLiteHelper.USERNAME, value?.username)
             it.putString(SQLiteHelper.PASSWORD, value?.password)
             it.putBoolean(SQLiteHelper.BIOMETRICS, value?.biometrics == true)
             it.putString(SQLiteHelper.PROFILE_IMAGE, value?.profileImage)
+            it.putString(SQLiteHelper.ADDRESS, value?.address)
+            it.putString(SQLiteHelper.ID_CARD_NUMBER, value?.idCardNumber)
+            it.putString(SQLiteHelper.SOCIAL_INSURANCE_NUMBER, value?.socialInsuranceNumber)
             it.apply()
         }
     }
@@ -149,13 +154,17 @@ var SharedPreferences.userModel: UserModel?
             getString(SQLiteHelper.USERNAME, null),
             getString(SQLiteHelper.PASSWORD, null),
             getBoolean(SQLiteHelper.BIOMETRICS, false),
-            getString(SQLiteHelper.PROFILE_IMAGE, null)
         ) {
             UserModel(
+                firstName = getString(SQLiteHelper.FIRST_NAME, null),
+                lastName = getString(SQLiteHelper.SURNAME, null),
                 username = it.first().toString(),
                 password = it.second().toString(),
                 biometrics = it.third().toString().toBoolean(),
-                profileImage = it.last().toString()
+                profileImage = getString(SQLiteHelper.PROFILE_IMAGE, null),
+                address = getString(SQLiteHelper.ADDRESS, null),
+                idCardNumber = getString(SQLiteHelper.ID_CARD_NUMBER, null),
+                socialInsuranceNumber = getString(SQLiteHelper.SOCIAL_INSURANCE_NUMBER, null)
             )
         }
 
@@ -454,6 +463,30 @@ fun Context.textEmail(email: String, content: String? = null) {
         it.putExtra(Intent.EXTRA_TEXT, content)
         it.type = "text/plain"
     })
+}
+
+fun AppCompatImageView.loadImageBitmap(imageUri: Uri?, bitmapBlock: BitmapBlock) {
+    imageUri?.let {
+        Picasso.get().load(it).resize(width, height).transform(CircleTransformation()).centerCrop().into(object: Target {
+            override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {}
+            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
+            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                bitmapBlock(bitmap)
+            }
+        })
+    }
+}
+
+fun loadImageBitmap(imageUri: Uri?, bitmapBlock: BitmapBlock) {
+    imageUri?.let {
+        Picasso.get().load(it).resize(60.px, 60.px).transform(CircleTransformation()).centerCrop().into(object: Target {
+            override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {}
+            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
+            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                bitmapBlock(bitmap)
+            }
+        })
+    }
 }
 
 @BindingAdapter("picassoImageUri")

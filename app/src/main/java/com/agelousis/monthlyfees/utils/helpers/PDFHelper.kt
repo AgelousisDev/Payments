@@ -101,7 +101,7 @@ class PDFHelper {
     private fun addHeaderImage(context: Context, document: Document, userModel: UserModel?) {
         val imageByteArray = context.contentResolver.openInputStream(Uri.fromFile(File(context.filesDir, userModel?.profileImage ?: return)))?.readBytes() ?: return
         val image = Image.getInstance(imageByteArray)
-        //image.scalePercent(10.0f, 10.0f)
+        image.scaleAbsolute(60.0f, 60.0f)
         document.add(Paragraph().also {
             it.add(image)
             it.alignment = Element.ALIGN_CENTER
