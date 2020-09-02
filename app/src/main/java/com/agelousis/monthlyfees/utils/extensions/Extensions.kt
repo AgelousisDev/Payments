@@ -467,7 +467,7 @@ fun Context.textEmail(email: String, content: String? = null) {
 
 fun AppCompatImageView.loadImageBitmap(imageUri: Uri?, bitmapBlock: BitmapBlock) {
     imageUri?.let {
-        Picasso.get().load(it).resize(width, height).transform(CircleTransformation()).centerCrop().into(object: Target {
+        Picasso.get().load(it).resize(200, 200).transform(CircleTransformation()).centerCrop().into(object: Target {
             override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {}
             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
@@ -479,7 +479,7 @@ fun AppCompatImageView.loadImageBitmap(imageUri: Uri?, bitmapBlock: BitmapBlock)
 
 fun loadImageBitmap(imageUri: Uri?, bitmapBlock: BitmapBlock) {
     imageUri?.let {
-        Picasso.get().load(it).resize(60.px, 60.px).transform(CircleTransformation()).centerCrop().into(object: Target {
+        Picasso.get().load(it).resize(200.px, 200.px).transform(CircleTransformation()).centerCrop().into(object: Target {
             override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {}
             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
