@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
+import androidx.core.widget.doAfterTextChanged
 import com.agelousis.monthlyfees.R
 import com.agelousis.monthlyfees.biometrics.BiometricsHelper
 import com.agelousis.monthlyfees.biometrics.BiometricsListener
@@ -131,6 +132,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener {
         ).also {
             it.userModel = sharedPreferences.userModel
             it.signInState = signInState
+            it.loginButtonState = sharedPreferences.userModel?.username?.isNotEmpty() == true && sharedPreferences.userModel?.password?.isNotEmpty() == true
             it.presenter = this
         }
         setContentView(
@@ -140,6 +142,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener {
             context = this
         )
         configureLoginState()
+        setupUI()
     }
 
     private fun showBiometricsAlert(predicate: () -> Boolean, closure: (Boolean) -> Unit) {
@@ -182,6 +185,15 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener {
                 if (signInState == SignInState.LOGIN)
                     showBiometrics()
             }
+        }
+    }
+
+    private fun setupUI() {
+        usernameField.doAfterTextChanged {
+            binding?.loginButtonState = it?.isNotEmpty() == true && passwordField.text?.isNotEmpty() == true
+        }
+        passwordField.doAfterTextChanged {
+            binding?.loginButtonState = it?.isNotEmpty() == true && usernameField.text?.isNotEmpty() == true
         }
     }
 

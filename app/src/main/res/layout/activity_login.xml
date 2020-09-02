@@ -14,6 +14,9 @@
         <variable
             name="presenter"
             type="com.agelousis.monthlyfees.login.presenter.LoginPresenter" />
+        <variable
+            name="loginButtonState"
+            type="Boolean" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -141,6 +144,7 @@
 
     <com.google.android.material.button.MaterialButton
         style="@style/BasicMaterialButton"
+        android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:insetBottom="0dp"
@@ -148,6 +152,8 @@
         android:text="@{signInState.getTitle(context)}"
         tools:text="@string/key_sign_up_label"
         android:onClick="@{() -> presenter.onSignIn()}"
+        android:enabled="@{loginButtonState}"
+        android:alpha="@{loginButtonState ? 1.0f : 0.5f}"
         app:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
