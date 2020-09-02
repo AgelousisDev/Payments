@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:hint="@string/key_group_name_label"
-        app:boxBackgroundColor="@color/white"
+        app:boxBackgroundColor="@color/colorPrimaryDark"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
         app:startIconDrawable="@drawable/ic_group"
