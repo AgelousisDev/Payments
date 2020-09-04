@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Monthly Fees</string>
+    <string name="app_name">Payments</string>
     <string name="key_sign_up_label">Sign Up</string>
     <string name="key_login_label">Login</string>
     <string name="key_username_label">Username</string>
