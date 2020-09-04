@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <import type="android.view.View" />
-        <import type="com.agelousis.monthlyfees.utils.extensions.ExtensionsKt" />
+        <import type="com.agelousis.payments.utils.extensions.ExtensionsKt" />
         <variable
             name="personModel"
-            type="com.agelousis.monthlyfees.main.ui.payments.models.PersonModel" />
+            type="com.agelousis.payments.main.ui.payments.models.PersonModel" />
         <variable
             name="presenter"
-            type="com.agelousis.monthlyfees.main.ui.payments.presenters.PaymentPresenter" />
+            type="com.agelousis.payments.main.ui.payments.presenters.PaymentPresenter" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

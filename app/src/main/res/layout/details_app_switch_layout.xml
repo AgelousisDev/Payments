@@ -6,7 +6,7 @@
         <import type="android.view.View" />
         <variable
             name="detailsAppSwitchDataModel"
-            type="com.agelousis.monthlyfees.views.detailsSwitch.models.DetailsAppSwitchDataModel" />
+            type="com.agelousis.payments.views.detailsSwitch.models.DetailsAppSwitchDataModel" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"

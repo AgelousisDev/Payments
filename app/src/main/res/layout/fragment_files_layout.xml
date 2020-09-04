@@ -3,7 +3,7 @@
     <data>
         <variable
             name="userModel"
-            type="com.agelousis.monthlyfees.login.models.UserModel" />
+            type="com.agelousis.payments.login.models.UserModel" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -11,7 +11,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true">
 
-    <com.agelousis.monthlyfees.views.searchLayout.MaterialSearchView
+    <com.agelousis.payments.views.searchLayout.MaterialSearchView
         android:id="@+id/searchLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

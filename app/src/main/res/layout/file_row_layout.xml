@@ -5,10 +5,10 @@
     <data>
         <variable
             name="fileDataModel"
-            type="com.agelousis.monthlyfees.main.ui.files.models.FileDataModel" />
+            type="com.agelousis.payments.main.ui.files.models.FileDataModel" />
         <variable
             name="presenter"
-            type="com.agelousis.monthlyfees.main.ui.files.presenter.FilePresenter" />
+            type="com.agelousis.payments.main.ui.files.presenter.FilePresenter" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"

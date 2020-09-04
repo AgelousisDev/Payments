@@ -6,10 +6,10 @@
         <import type="android.view.View" />
         <variable
             name="dataModel"
-            type="com.agelousis.monthlyfees.views.personDetailsLayout.models.PersonDetailsViewDataModel" />
+            type="com.agelousis.payments.views.personDetailsLayout.models.PersonDetailsViewDataModel" />
         <variable
             name="presenter"
-            type="com.agelousis.monthlyfees.views.dateLayout.interfaces.DatePickerPresenter" />
+            type="com.agelousis.payments.views.dateLayout.interfaces.DatePickerPresenter" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"

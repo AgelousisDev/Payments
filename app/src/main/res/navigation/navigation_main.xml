@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/paymentsFragment"
-        android:name="com.agelousis.monthlyfees.main.ui.payments.PaymentsFragment"
+        android:name="com.agelousis.payments.main.ui.payments.PaymentsFragment"
         android:label="PaymentsFragment"
         tools:layout="@layout/fragment_payments_layout" >
         <action
@@ -20,22 +20,22 @@
     </fragment>
     <fragment
         android:id="@+id/personalInformationFragment"
-        android:name="com.agelousis.monthlyfees.main.ui.personalInformation.PersonalInformationFragment"
+        android:name="com.agelousis.payments.main.ui.personalInformation.PersonalInformationFragment"
         android:label="PersonalInformationFragment"
         tools:layout="@layout/fragment_personal_information_layout"/>
     <fragment
         android:id="@+id/newPaymentFragment"
-        android:name="com.agelousis.monthlyfees.main.ui.newPayment.NewPaymentFragment"
+        android:name="com.agelousis.payments.main.ui.newPayment.NewPaymentFragment"
         android:label="NewPaymentFragment"
         tools:layout="@layout/fragment_new_payment_layout">
         <argument
             android:name="groupDataModel"
-            app:argType="com.agelousis.monthlyfees.main.ui.payments.models.GroupModel"
+            app:argType="com.agelousis.payments.main.ui.payments.models.GroupModel"
             app:nullable="true"
             android:defaultValue="@null" />
         <argument
             android:name="personDataModel"
-            app:argType="com.agelousis.monthlyfees.main.ui.payments.models.PersonModel"
+            app:argType="com.agelousis.payments.main.ui.payments.models.PersonModel"
             app:nullable="true"
             android:defaultValue="@null" />
         <action
@@ -48,19 +48,19 @@
     </fragment>
     <fragment
         android:id="@+id/newPaymentAmountFragment"
-        android:name="com.agelousis.monthlyfees.main.ui.newPaymentAmount.NewPaymentAmountFragment"
+        android:name="com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment"
         android:label="NewPaymentAmountFragment"
         tools:layout="@layout/fragment_new_payment_amount_layout">
         <argument
             android:name="paymentAmountDataModel"
             android:defaultValue="@null"
-            app:argType="com.agelousis.monthlyfees.main.ui.payments.models.PaymentAmountModel"
+            app:argType="com.agelousis.payments.main.ui.payments.models.PaymentAmountModel"
             app:nullable="true" />
     </fragment>
 
     <fragment
         android:id="@+id/filesFragment"
-        android:name="com.agelousis.monthlyfees.main.ui.files.FilesFragment"
+        android:name="com.agelousis.payments.main.ui.files.FilesFragment"
         android:label="FilesFragment"
         tools:layout="@layout/fragment_files_layout"/>
 

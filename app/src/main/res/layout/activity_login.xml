@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <import type="android.view.View" />
-        <import type="com.agelousis.monthlyfees.login.SignInState" />
+        <import type="com.agelousis.payments.login.SignInState" />
         <variable
             name="userModel"
-            type="com.agelousis.monthlyfees.login.models.UserModel" />
+            type="com.agelousis.payments.login.models.UserModel" />
         <variable
             name="signInState"
-            type="com.agelousis.monthlyfees.login.SignInState" />
+            type="com.agelousis.payments.login.SignInState" />
         <variable
             name="presenter"
-            type="com.agelousis.monthlyfees.login.presenter.LoginPresenter" />
+            type="com.agelousis.payments.login.presenter.LoginPresenter" />
         <variable
             name="loginButtonState"
             type="Boolean" />

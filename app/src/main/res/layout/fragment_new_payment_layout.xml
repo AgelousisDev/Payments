@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
     <data>
-        <import type="com.agelousis.monthlyfees.main.ui.payments.models.PaymentAmountModel" />
+        <import type="com.agelousis.payments.main.ui.payments.models.PaymentAmountModel" />
         <variable
             name="personModel"
-            type="com.agelousis.monthlyfees.main.ui.payments.models.PersonModel" />
+            type="com.agelousis.payments.main.ui.payments.models.PersonModel" />
         <variable
             name="groupModel"
-            type="com.agelousis.monthlyfees.main.ui.payments.models.GroupModel" />
+            type="com.agelousis.payments.main.ui.payments.models.GroupModel" />
         <variable
             name="presenter"
-            type="com.agelousis.monthlyfees.main.ui.newPayment.presenters.NewPaymentPresenter" />
+            type="com.agelousis.payments.main.ui.newPayment.presenters.NewPaymentPresenter" />
     </data>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -31,7 +31,7 @@
             android:orientation="vertical"
             android:animateLayoutChanges="true">
 
-            <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
+            <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
                 android:id="@+id/firstNameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
                 app:imeOptionType="actionNext"
                 app:fieldType="TEXT" />
 
-            <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
+            <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
                 android:id="@+id/surnameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                 app:imeOptionType="actionNext"
                 app:fieldType="TEXT" />
 
-            <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
+            <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
                 android:id="@+id/phoneLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
                 app:imeOptionType="actionNext"
                 app:fieldType="NUMBER" />
 
-            <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
+            <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
                 android:id="@+id/parentNameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
                 app:imeOptionType="actionNext"
                 app:fieldType="TEXT" />
 
-            <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
+            <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
                 android:id="@+id/parentPhoneLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
                 app:imeOptionType="actionNext"
                 app:fieldType="NUMBER" />
 
-            <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsLayout
+            <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
                 android:id="@+id/emailLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
                 app:imeOptionType="actionDone"
                 app:fieldType="EMAIL" />
 
-            <com.agelousis.monthlyfees.views.personDetailsLayout.PersonDetailsPickerLayout
+            <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
                 android:id="@+id/groupDetailsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -101,7 +101,7 @@
                 app:imeOptionType="actionDone"
                 app:fieldType="TEXT" />
 
-            <com.agelousis.monthlyfees.views.detailsSwitch.DetailsAppSwitch
+            <com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
                 android:id="@+id/activeAppSwitchLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
                 app:appSwitchShowLine="true"
                 appSwitchIsChecked="@{personModel.active == true}"/>
 
-            <com.agelousis.monthlyfees.views.detailsSwitch.DetailsAppSwitch
+            <com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
                 android:id="@+id/freeAppSwitchLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

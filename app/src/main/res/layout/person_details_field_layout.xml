@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <import type="android.view.View" />
-        <import type="com.agelousis.monthlyfees.views.personDetailsLayout.enumerations.PersonDetailFieldType" />
-        <import type="com.agelousis.monthlyfees.views.personDetailsLayout.enumerations.ImeOptionsType" />
+        <import type="com.agelousis.payments.views.personDetailsLayout.enumerations.PersonDetailFieldType" />
+        <import type="com.agelousis.payments.views.personDetailsLayout.enumerations.ImeOptionsType" />
         <variable
             name="dataModel"
-            type="com.agelousis.monthlyfees.views.personDetailsLayout.models.PersonDetailsViewDataModel" />
+            type="com.agelousis.payments.views.personDetailsLayout.models.PersonDetailsViewDataModel" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/personDetailsLayout"

@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <import type="com.agelousis.monthlyfees.utils.extensions.ExtensionsKt" />
+        <import type="com.agelousis.payments.utils.extensions.ExtensionsKt" />
         <variable
             name="paymentAmountModel"
-            type="com.agelousis.monthlyfees.main.ui.payments.models.PaymentAmountModel" />
+            type="com.agelousis.payments.main.ui.payments.models.PaymentAmountModel" />
         <variable
             name="presenter"
-            type="com.agelousis.monthlyfees.main.ui.newPayment.presenters.NewPaymentPresenter" />
+            type="com.agelousis.payments.main.ui.newPayment.presenters.NewPaymentPresenter" />
     </data>
  <com.google.android.material.card.MaterialCardView
      android:layout_width="wrap_content"

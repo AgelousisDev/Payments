@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <import type="android.view.View" />
-        <import type="com.agelousis.monthlyfees.main.ui.personalInformation.models.OptionType" />
+        <import type="com.agelousis.payments.main.ui.personalInformation.models.OptionType" />
         <variable
             name="optionType"
-            type="com.agelousis.monthlyfees.main.ui.personalInformation.models.OptionType" />
+            type="com.agelousis.payments.main.ui.personalInformation.models.OptionType" />
         <variable
             name="presenter"
-            type="com.agelousis.monthlyfees.main.ui.personalInformation.presenter.OptionPresenter" />
+            type="com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"

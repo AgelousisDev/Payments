@@ -6,7 +6,7 @@
         <import type="android.view.View" />
         <variable
             name="emptyModel"
-            type="com.agelousis.monthlyfees.main.ui.payments.models.EmptyModel" />
+            type="com.agelousis.payments.main.ui.payments.models.EmptyModel" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout

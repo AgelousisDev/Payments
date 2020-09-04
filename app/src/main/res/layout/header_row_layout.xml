@@ -5,7 +5,7 @@
         <import type="android.view.View" />
         <variable
             name="headerModel"
-            type="com.agelousis.monthlyfees.main.ui.files.models.HeaderModel" />
+            type="com.agelousis.payments.main.ui.files.models.HeaderModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
