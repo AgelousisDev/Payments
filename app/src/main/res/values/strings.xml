@@ -81,6 +81,7 @@
     <string name="key_social_insurance_number_label">Social Insurance Number</string>
     <string name="key_invoice_number_label">Invoice Number</string>
     <string name="key_select_option_label">Select an option</string>
+    <string name="key_select_user_from_backup_label">Select a User</string>
 
     <string-array name="key_payment_action_array">
         <item>Call</item>

@@ -3,6 +3,7 @@ package com.agelousis.payments.login
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.ViewModelProvider
 import com.agelousis.payments.R
 import com.agelousis.payments.biometrics.BiometricsHelper
 import com.agelousis.payments.biometrics.BiometricsListener
@@ -17,7 +19,10 @@ import com.agelousis.payments.database.DBManager
 import com.agelousis.payments.databinding.ActivityLoginBinding
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.login.presenter.LoginPresenter
+import com.agelousis.payments.login.viewModel.LoginViewModel
 import com.agelousis.payments.main.MainActivity
+import com.agelousis.payments.userSelection.UserSelectionFragment
+import com.agelousis.payments.userSelection.presenters.UserSelectionPresenter
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import kotlinx.android.synthetic.main.activity_login.*
@@ -25,7 +30,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener {
+class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, UserSelectionPresenter {
 
     private var binding: ActivityLoginBinding? = null
     private val uiScope = CoroutineScope(Dispatchers.Main)
@@ -36,11 +41,13 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener {
             Context.MODE_PRIVATE
         )
     }
+    private val viewModel by lazy { ViewModelProvider(this).get(LoginViewModel::class.java) }
     private var dbManager: DBManager? = null
     private var signInState = SignInState.SIGN_UP
 
     companion object {
         const val PROFILE_SELECT_REQUEST_CODE = 1
+        const val IMPORT_FILE_REQUEST_CODE = 2
     }
 
     override fun onProfileSelect() =
@@ -102,6 +109,10 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener {
         }
     }
 
+    override fun onImport() {
+        initializeDatabaseImport()
+    }
+
     override fun onBiometricsSucceed() {
         Handler(Looper.getMainLooper()).postDelayed({
             uiScope.launch {
@@ -125,6 +136,14 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener {
         )
     }
 
+    override fun onUserSelected(userModel: UserModel) {
+        signInState = SignInState.LOGIN
+        binding?.signInState = signInState
+        usernameField.setText(userModel.username)
+        passwordField.setText(userModel.password)
+        keepMeSignedInCheckBox.isChecked = true
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(
@@ -141,6 +160,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener {
         dbManager = DBManager(
             context = this
         )
+        addObservers()
         configureLoginState()
         setupUI()
     }
@@ -176,6 +196,15 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener {
         finish()
     }
 
+    private fun addObservers() {
+        viewModel.usersLiveData.observe(this) { users ->
+            UserSelectionFragment.show(
+                supportFragmentManager = supportFragmentManager,
+                users = ArrayList(users)
+            )
+        }
+    }
+
     private fun configureLoginState() {
         uiScope.launch {
             dbManager?.checkUsers {
@@ -197,6 +226,58 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener {
         }
     }
 
+    private fun initializeUsers() =
+        uiScope.launch {
+            viewModel.initializeUsers(
+                context = this@LoginActivity
+            )
+        }
+
+    private fun initializeDatabaseImport() {
+        showTwoButtonsDialog(
+            title = resources.getString(R.string.key_import_label),
+            message = resources.getString(R.string.key_import_message),
+            positiveButtonText = resources.getString(R.string.key_proceed_label),
+            positiveButtonBlock = {
+                searchFile(
+                    requestCode = IMPORT_FILE_REQUEST_CODE,
+                    mimeType = Constants.GENERAL_MIME_TYPE
+                )
+            }
+        )
+    }
+
+    private fun makeDatabaseImport(uri: Uri?) {
+        if (isDBFile(
+                uri = uri
+            ) || uri?.isGoogleDrive == true)
+            replaceDatabase(
+                byteArray = contentResolver.openInputStream(uri ?: return)?.readBytes()
+            ) {
+                when(it) {
+                    true -> {
+                        message(
+                            message = resources.getString(R.string.key_database_successfully_imported_message)
+                        )
+                        after(
+                            millis = 1000
+                        ) {
+                            initializeUsers()
+                        }
+                    }
+                    false ->
+                        message(
+                            message = resources.getString(R.string.key_invalid_database_file_message)
+                        )
+
+                }
+            }
+        else
+            message(
+                message = resources.getString(R.string.key_invalid_database_file_message)
+            )
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK)
@@ -216,6 +297,10 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener {
                         imageUri = imageUri
                     )
                 }
+            IMPORT_FILE_REQUEST_CODE ->
+                makeDatabaseImport(
+                    uri = data?.data
+                )
         }
     }
 

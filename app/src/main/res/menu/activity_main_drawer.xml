@@ -26,10 +26,6 @@
         <menu>
             <group>
                 <item
-                    android:id="@+id/navigationImport"
-                    android:icon="@drawable/ic_import"
-                    android:title="@string/key_import_label"/>
-                <item
                     android:id="@+id/navigationExport"
                     android:icon="@drawable/ic_export"
                     android:title="@string/key_export_label"/>

@@ -34,22 +34,65 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textview.MaterialTextView
-            style="@style/TextViewTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:textColor="@color/colorAccent"
-            android:text="@{signInState.getTitle(context)}"
-            tools:text="@string/key_sign_up_label"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <View
-            android:layout_width="40dp"
-            android:layout_height="4dp"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:layout_marginStart="32dp"
-            android:background="@drawable/line_background"/>
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/TextViewTitle"
+                android:id="@+id/signUpLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:textColor="@color/colorAccent"
+                android:text="@{signInState.getTitle(context)}"
+                tools:text="@string/key_sign_up_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
+            <View
+                android:layout_width="40dp"
+                android:layout_height="4dp"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="32dp"
+                android:background="@drawable/line_background"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/signUpLabel"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginEnd="32dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="@{() -> presenter.onImport()}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextViewTitle"
+                    android:id="@+id/importLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:textColor="@color/grey"
+                    android:text="@string/key_import_label"/>
+
+                <View
+                    android:layout_width="40dp"
+                    android:layout_height="4dp"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:layout_gravity="end"
+                    android:background="@drawable/line_background"
+                    android:backgroundTint="@color/grey"/>
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"

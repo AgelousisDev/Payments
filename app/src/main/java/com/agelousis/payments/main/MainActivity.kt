@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
-import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -50,7 +49,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     companion object {
         const val USER_MODEL_EXTRA = "MainActivity=userModelExtra"
         const val EXPORT_FILE_REQUEST_CODE = 1
-        const val IMPORT_FILE_REQUEST_CODE = 2
         const val CALL_PHONE_PERMISSION_REQUEST_CODE = 10
     }
 
@@ -67,9 +65,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.navigationFiles -> {
                 navHostFragmentContainerView.findNavController().popBackStack(R.id.filesFragment, true)
                 navHostFragmentContainerView.findNavController().navigate(R.id.action_global_filesFragment)
-            }
-            R.id.navigationImport -> {
-                initializeDatabaseImport()
             }
             R.id.navigationExport -> {
                 initializeDatabaseExport()
@@ -254,51 +249,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         )
     }
 
-    private fun initializeDatabaseImport() {
-        showTwoButtonsDialog(
-            title = resources.getString(R.string.key_import_label),
-            message = resources.getString(R.string.key_import_message),
-            positiveButtonText = resources.getString(R.string.key_proceed_label),
-            positiveButtonBlock = {
-                searchFile(
-                    requestCode = IMPORT_FILE_REQUEST_CODE,
-                    mimeType = Constants.GENERAL_MIME_TYPE
-                )
-            }
-        )
-    }
-
-    private fun makeDatabaseImport(uri: Uri?) {
-        if (isDBFile(
-                uri = uri
-            ) || uri?.isGoogleDrive == true)
-            replaceDatabase(
-                byteArray = contentResolver.openInputStream(uri ?: return)?.readBytes()
-            ) {
-                when(it) {
-                    true -> {
-                        message(
-                            message = resources.getString(R.string.key_database_successfully_imported_message)
-                        )
-                        after(
-                            millis = 1000
-                        ) {
-                            (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
-                        }
-                    }
-                    false ->
-                        message(
-                        message = resources.getString(R.string.key_invalid_database_file_message)
-                    )
-
-                }
-            }
-        else
-            message(
-                message = resources.getString(R.string.key_invalid_database_file_message)
-            )
-    }
-
     private fun unCheckAllMenuItems(menu: Menu) {
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
@@ -363,10 +313,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     alterFile(
                         uri = data?.data,
                         file = getDatabasePath(SQLiteHelper.DB_NAME)
-                    )
-                IMPORT_FILE_REQUEST_CODE ->
-                    makeDatabaseImport(
-                        uri = data?.data
                     )
                 GroupActivity.GROUP_SELECTION_REQUEST_CODE ->
                     insertGroup(
