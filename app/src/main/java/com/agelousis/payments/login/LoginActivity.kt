@@ -1,15 +1,20 @@
 package com.agelousis.payments.login
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.MotionEvent
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import com.agelousis.payments.R
@@ -138,10 +143,12 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
 
     override fun onUserSelected(userModel: UserModel) {
         signInState = SignInState.LOGIN
+        saveProfileImage(
+            fileName = userModel.profileImage,
+            byteArray = userModel.profileImageData
+        )
         binding?.signInState = signInState
-        usernameField.setText(userModel.username)
-        passwordField.setText(userModel.password)
-        keepMeSignedInCheckBox.isChecked = true
+        binding?.userModel = userModel
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -217,12 +224,26 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setupUI() {
         usernameField.doAfterTextChanged {
             binding?.loginButtonState = it?.isNotEmpty() == true && passwordField.text?.isNotEmpty() == true
         }
         passwordField.doAfterTextChanged {
             binding?.loginButtonState = it?.isNotEmpty() == true && usernameField.text?.isNotEmpty() == true
+        }
+        importLayout.setOnTouchListener { _, motionEvent ->
+            when(motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    importLabel.setTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+                    importLine.background?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(this, R.color.colorAccent), PorterDuff.Mode.SRC_IN)
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    importLabel.setTextColor(ContextCompat.getColor(this, R.color.grey))
+                    importLine.background?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(this, R.color.grey), PorterDuff.Mode.SRC_IN)
+                }
+            }
+            false
         }
     }
 
@@ -291,6 +312,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                         userModel.profileImage = saveProfileImage(
                             bitmap = bitmap
                         )
+                        userModel.profileImageData = bitmap?.byteArray
                     }
                     profileImageView.setBackgroundResource(0)
                     profileImageView.loadImageUri(

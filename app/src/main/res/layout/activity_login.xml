@@ -61,13 +61,13 @@
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
             <LinearLayout
+                android:id="@+id/importLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginEnd="32dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
                 android:onClick="@{() -> presenter.onImport()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -83,6 +83,7 @@
                     android:text="@string/key_import_label"/>
 
                 <View
+                    android:id="@+id/importLine"
                     android:layout_width="40dp"
                     android:layout_height="4dp"
                     android:layout_marginTop="@dimen/activity_horizontal_margin"

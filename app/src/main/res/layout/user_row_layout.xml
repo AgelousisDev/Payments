@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="android.view.View" />
         <variable
             name="userModel"
             type="com.agelousis.payments.login.models.UserModel" />
@@ -25,6 +26,7 @@
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:background="@drawable/oval_background"
         android:elevation="8dp"
+        android:visibility="@{userModel.profileImageData != null ? View.INVISIBLE : View.VISIBLE}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -40,6 +42,17 @@
             tools:text="B"/>
 
     </FrameLayout>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/userRowImageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:visibility="@{userModel.profileImageData != null ? View.VISIBLE : View.GONE}"
+        imageFromByteArray="@{userModel.profileImageData}"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
         style="@style/TextViewTitleLabel"

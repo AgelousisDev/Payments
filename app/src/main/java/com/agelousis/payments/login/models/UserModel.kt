@@ -1,6 +1,7 @@
 package com.agelousis.payments.login.models
 
 import android.os.Parcelable
+import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -14,4 +15,8 @@ data class UserModel(var id: Int? = null,
                      var socialInsuranceNumber: String? = null,
                      var firstName: String? = null,
                      var lastName: String? = null
-): Parcelable
+): Parcelable {
+
+    @IgnoredOnParcel var profileImageData: ByteArray? = null
+
+}

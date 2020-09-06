@@ -12,7 +12,10 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import android.view.*
+import android.view.View
+import android.view.ViewAnimationUtils
+import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.view.animation.AlphaAnimation
 import android.view.animation.LinearInterpolator
 import android.view.inputmethod.InputMethodManager
@@ -40,9 +43,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
-import java.lang.Exception
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
@@ -133,6 +136,17 @@ fun Context.saveProfileImage(bitmap: Bitmap?) =
         it.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(newFile))
         newFile.name
     }
+
+fun Context.saveProfileImage(fileName: String?, byteArray: ByteArray?) {
+    byteArray?.let { bytes ->
+        val newFile = File(filesDir, fileName ?: return@let)
+        if (!newFile.exists())
+            newFile.createNewFile()
+        FileOutputStream(newFile).use {
+            it.write(bytes)
+        }
+    }
+}
 
 var SharedPreferences.userModel: UserModel?
     set(value) {
@@ -489,7 +503,13 @@ fun loadImageBitmap(imageUri: Uri?, bitmapBlock: BitmapBlock) {
     }
 }
 
-@BindingAdapter("picassoImageUri")
+val Bitmap.byteArray: ByteArray?
+    get() {
+        val stream = ByteArrayOutputStream()
+        this.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        return stream.toByteArray()
+    }
+
 fun AppCompatImageView.loadImageUri(imageUri: Uri?) {
     imageUri?.let {
         Picasso.get().load(it).placeholder(R.drawable.ic_person).resize(width, height)
@@ -498,8 +518,8 @@ fun AppCompatImageView.loadImageUri(imageUri: Uri?) {
 }
 
 @BindingAdapter("picassoImagePath")
-fun AppCompatImageView.loadImagePath(path: String?) {
-    path?.let {
+fun AppCompatImageView.loadImagePath(fileName: String?) {
+    fileName?.let {
         Picasso.get().load(File(context.filesDir, it)).placeholder(R.drawable.ic_person)
             .resize(60.px, 60.px).transform(CircleTransformation()).centerCrop().into(this)
     }
@@ -508,7 +528,8 @@ fun AppCompatImageView.loadImagePath(path: String?) {
 @BindingAdapter("picassoImageFromInternalFiles")
 fun setPicassoImageFromInternalFiles(appCompatImageView: AppCompatImageView, fileName: String?) {
     fileName?.let {
-        Picasso.get().load(File(appCompatImageView.context.filesDir, it)).transform(CircleTransformation()).into(appCompatImageView)
+        Picasso.get().load(File(appCompatImageView.context.filesDir, it)).placeholder(R.drawable.ic_person)
+            .transform(CircleTransformation()).into(appCompatImageView)
     }
 }
 
@@ -546,5 +567,13 @@ fun setBackgroundViewColor(view: View, color: Int?) {
 fun setBackgroundViewTintColor(view: View, color: Int?) {
     color?.let {
         view.background?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(view.context, it), PorterDuff.Mode.SRC_IN)
+    }
+}
+
+@BindingAdapter("imageFromByteArray")
+fun setImageFromByteArray(appCompatImageView: AppCompatImageView, byteArray: ByteArray?) {
+    byteArray?.let {
+        val bitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
+        appCompatImageView.setImageBitmap(bitmap)
     }
 }

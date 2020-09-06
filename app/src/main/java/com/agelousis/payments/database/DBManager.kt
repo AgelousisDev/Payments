@@ -54,6 +54,7 @@ class DBManager(context: Context) {
                     contentValue.put(SQLiteHelper.SOCIAL_INSURANCE_NUMBER, userModel.socialInsuranceNumber)
                     contentValue.put(SQLiteHelper.FIRST_NAME, userModel.firstName)
                     contentValue.put(SQLiteHelper.SURNAME, userModel.lastName)
+                    contentValue.put(SQLiteHelper.PROFILE_IMAGE_DATA, userModel.profileImageData)
                     database?.insert(SQLiteHelper.USERS_TABLE_NAME, null, contentValue)
                 }
                 cursor?.close()
@@ -69,7 +70,7 @@ class DBManager(context: Context) {
         withContext(Dispatchers.Default) {
             val cursor = database?.query(
                 SQLiteHelper.USERS_TABLE_NAME,
-                arrayOf(SQLiteHelper.ID, SQLiteHelper.USERNAME, SQLiteHelper.PASSWORD, SQLiteHelper.BIOMETRICS, SQLiteHelper.PROFILE_IMAGE, SQLiteHelper.ADDRESS, SQLiteHelper.ID_CARD_NUMBER, SQLiteHelper.SOCIAL_INSURANCE_NUMBER, SQLiteHelper.FIRST_NAME, SQLiteHelper.SURNAME),
+                arrayOf(SQLiteHelper.ID, SQLiteHelper.USERNAME, SQLiteHelper.PASSWORD, SQLiteHelper.BIOMETRICS, SQLiteHelper.PROFILE_IMAGE, SQLiteHelper.ADDRESS, SQLiteHelper.ID_CARD_NUMBER, SQLiteHelper.SOCIAL_INSURANCE_NUMBER, SQLiteHelper.FIRST_NAME, SQLiteHelper.SURNAME, SQLiteHelper.PROFILE_IMAGE_DATA),
                 "${SQLiteHelper.USERNAME}=? AND ${SQLiteHelper.PASSWORD}=?",
                 arrayOf(userModel.username, userModel.password),
                 null,
@@ -90,7 +91,9 @@ class DBManager(context: Context) {
                     socialInsuranceNumber = cursor?.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.SOCIAL_INSURANCE_NUMBER)),
                     firstName = cursor?.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.FIRST_NAME)),
                     lastName = cursor?.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.SURNAME))
-                )
+                ).also {
+                    it.profileImageData = cursor?.getBlobOrNull(cursor.getColumnIndex(SQLiteHelper.PROFILE_IMAGE_DATA))
+                }
             }
             else null
             cursor?.close()
@@ -103,7 +106,7 @@ class DBManager(context: Context) {
     suspend fun checkUsers(usersBlock: UsersBlock) {
         withContext(Dispatchers.Default) {
             val usersList = arrayListOf<UserModel>()
-            val cursor = database?.query(SQLiteHelper.USERS_TABLE_NAME, arrayOf(SQLiteHelper.ID, SQLiteHelper.USERNAME, SQLiteHelper.PASSWORD, SQLiteHelper.BIOMETRICS, SQLiteHelper.PROFILE_IMAGE, SQLiteHelper.ADDRESS, SQLiteHelper.ID_CARD_NUMBER, SQLiteHelper.SOCIAL_INSURANCE_NUMBER, SQLiteHelper.FIRST_NAME, SQLiteHelper.SURNAME), null, null, null, null, null)
+            val cursor = database?.query(SQLiteHelper.USERS_TABLE_NAME, arrayOf(SQLiteHelper.ID, SQLiteHelper.USERNAME, SQLiteHelper.PASSWORD, SQLiteHelper.BIOMETRICS, SQLiteHelper.PROFILE_IMAGE, SQLiteHelper.ADDRESS, SQLiteHelper.ID_CARD_NUMBER, SQLiteHelper.SOCIAL_INSURANCE_NUMBER, SQLiteHelper.FIRST_NAME, SQLiteHelper.SURNAME, SQLiteHelper.PROFILE_IMAGE_DATA), null, null, null, null, null)
             if (cursor?.moveToFirst() == true)
                 do {
                     usersList.add(
@@ -118,7 +121,9 @@ class DBManager(context: Context) {
                             socialInsuranceNumber = cursor.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.SOCIAL_INSURANCE_NUMBER)),
                             firstName = cursor.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.FIRST_NAME)),
                             lastName = cursor.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.SURNAME))
-                        )
+                        ).also {
+                            it.profileImageData = cursor.getBlobOrNull(cursor.getColumnIndex(SQLiteHelper.PROFILE_IMAGE_DATA))
+                        }
                     )
                 } while (cursor.moveToNext())
             cursor?.close()
@@ -142,6 +147,7 @@ class DBManager(context: Context) {
                     it.put(SQLiteHelper.SOCIAL_INSURANCE_NUMBER, userModel.socialInsuranceNumber)
                     it.put(SQLiteHelper.FIRST_NAME, userModel.firstName)
                     it.put(SQLiteHelper.SURNAME, userModel.lastName)
+                    it.put(SQLiteHelper.PROFILE_IMAGE_DATA, userModel.profileImageData)
                 },
                 "${SQLiteHelper.ID}=?",
                 arrayOf(userModel.id?.toString())

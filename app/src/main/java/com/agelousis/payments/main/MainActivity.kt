@@ -214,7 +214,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         navigationView.getHeaderView(0).navigationViewProfileImageView.loadImagePath(
-            path = userModel?.profileImage
+            fileName = userModel?.profileImage
         )
         navigationView.getHeaderView(0).navigationViewProfileUsername.text = userModel?.username ?: resources.getString(R.string.key_empty_field_label)
     }

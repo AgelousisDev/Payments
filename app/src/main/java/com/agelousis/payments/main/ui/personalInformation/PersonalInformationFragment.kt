@@ -159,6 +159,7 @@ class PersonalInformationFragment: Fragment(), OptionPresenter {
                         newUserModel?.profileImage = context?.saveProfileImage(
                             bitmap = bitmap
                         )
+                        newUserModel?.profileImageData = bitmap?.byteArray
                         optionTypes.firstOrNull { it == OptionType.CHANGE_PROFILE_IMAGE }?.userModel?.profileImage = newUserModel?.profileImage
                         optionRecyclerView.scheduleLayoutAnimation()
                         (optionRecyclerView.adapter as? OptionTypesAdapter)?.reloadData()
