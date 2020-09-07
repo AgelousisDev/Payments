@@ -24,9 +24,8 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        android:background="@drawable/oval_background"
+        android:background="@{userModel.profileImageData == null ? @drawable/oval_background : null}"
         android:elevation="8dp"
-        android:visibility="@{userModel.profileImageData != null ? View.INVISIBLE : View.VISIBLE}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -39,20 +38,18 @@
             android:text="@{String.valueOf(userModel.username.charAt(0)).toUpperCase()}"
             android:textColor="@color/white"
             android:textStyle="normal"
+            android:visibility="@{userModel.profileImageData == null ? View.VISIBLE : View.GONE}"
             tools:text="B"/>
 
-    </FrameLayout>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/userRowImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{userModel.profileImageData != null ? View.VISIBLE : View.GONE}"
+            imageFromByteArray="@{userModel.profileImageData}"
+            android:scaleType="centerCrop"/>
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/userRowImageView"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:visibility="@{userModel.profileImageData != null ? View.VISIBLE : View.GONE}"
-        imageFromByteArray="@{userModel.profileImageData}"
-        android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    </FrameLayout>
 
     <com.google.android.material.textview.MaterialTextView
         style="@style/TextViewTitleLabel"
