@@ -34,6 +34,8 @@ import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.ArrayList
 
 class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, UserSelectionPresenter {
 
@@ -188,7 +190,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
     }
 
     private fun showBiometrics() {
-        if (sharedPreferences.userModel?.biometrics == true && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+        if (sharedPreferences.userModel?.biometrics == true && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && Date().isValidProductDate)
             BiometricsHelper(
                 biometricsListener = this
             ).showBiometricsPrompt(
@@ -245,6 +247,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
             }
             false
         }
+        checkProductDate()
     }
 
     private fun initializeUsers() =
@@ -297,6 +300,17 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
             message(
                 message = resources.getString(R.string.key_invalid_database_file_message)
             )
+    }
+
+    private fun checkProductDate() {
+        if (!Date().isValidProductDate)
+            showSimpleDialog(
+                isCancellable = false,
+                title = resources.getString(R.string.key_warning_label),
+                message = resources.getString(R.string.key_license_expired_message)
+            ) {
+                this@LoginActivity.finish()
+            }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

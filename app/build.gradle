@@ -21,6 +21,11 @@ android {
     }
 
     buildTypes {
+        develop {
+            signingConfig signingConfigs.debug
+            debuggable true
+            buildConfigField("String", "VALID_PRODUCT_DATE", '"2020_10_01_10_00_00"')
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

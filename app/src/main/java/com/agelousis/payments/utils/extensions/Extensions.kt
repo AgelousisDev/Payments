@@ -33,6 +33,7 @@ import androidx.core.content.FileProvider
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.agelousis.payments.BuildConfig
 import com.agelousis.payments.R
 import com.agelousis.payments.custom.picasso.CircleTransformation
 import com.agelousis.payments.database.SQLiteHelper
@@ -415,6 +416,18 @@ val Date.yearMonth: Date?
         return with(SimpleDateFormat("yyyy MM", Locale.getDefault())) {
             parse(dateString)
         }
+    }
+
+val Date.isValidProductDate: Boolean
+    get() {
+        val firstCalendar = Calendar.getInstance()
+        firstCalendar.time = this
+        val productDate = SimpleDateFormat(Constants.FILE_DATE_FORMAT, Locale.getDefault()).parse(BuildConfig.VALID_PRODUCT_DATE) ?: return false
+        val secondCalendar = Calendar.getInstance()
+        secondCalendar.time = productDate
+        return firstCalendar.get(Calendar.YEAR) <= secondCalendar.get(Calendar.YEAR) &&
+                firstCalendar.get(Calendar.MONTH) <= secondCalendar.get(Calendar.MONTH) &&
+                firstCalendar.get(Calendar.DAY_OF_YEAR) < secondCalendar.get(Calendar.DAY_OF_YEAR)
     }
 
 inline fun <reified J> Any.asIs(block: (J) -> Unit) {
