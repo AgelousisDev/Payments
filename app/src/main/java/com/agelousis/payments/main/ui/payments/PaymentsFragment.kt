@@ -1,5 +1,6 @@
 package com.agelousis.payments.main.ui.payments
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.R
 import com.agelousis.payments.custom.enumerations.SwipeAction
 import com.agelousis.payments.custom.itemTouchHelper.SwipeItemTouchHelper
@@ -123,6 +125,28 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
             groupPresenter = this,
             paymentPresenter = this
         )
+        paymentListRecyclerView.addItemDecoration(
+            object: RecyclerView.ItemDecoration() {
+                override fun getItemOffsets(
+                    outRect: Rect,
+                    view: View,
+                    parent: RecyclerView,
+                    state: RecyclerView.State
+                ) {
+                    super.getItemOffsets(outRect, view, parent, state)
+                    when(filteredList.getOrNull(parent.getChildAdapterPosition(view))) {
+                        is GroupModel -> {
+                            outRect.top = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
+                            outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
+                        }
+                        is PersonModel -> {
+                            outRect.left = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
+                            outRect.right = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
+                        }
+                    }
+                }
+            }
+        )
         configureSwipeEvents()
     }
 
@@ -131,6 +155,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
             SwipeItemTouchHelper(
                 context = context ?: return,
                 swipeItemType = SwipeItemType.PERSON_ITEM,
+                marginStart = resources.getDimension(R.dimen.activity_horizontal_margin),
                 swipePredicateBlock = {
                     it is GroupViewHolder || it is PaymentViewHolder
                 }
@@ -200,6 +225,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
 
     private fun configureDeleteAction(position: Int) {
         context?.showTwoButtonsDialog(
+            isCancellable = false,
             title = resources.getString(R.string.key_warning_label),
             message =
                 if (filteredList.getOrNull(index = position) is GroupModel)
@@ -266,7 +292,13 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
                         )
                         filteredList.addAll(
                             filteredByQueryPayments.also { personModelList ->
-                                personModelList.lastOrNull()?.showLine = false
+                                if (personModelList.isSizeOne)
+                                    personModelList.firstOrNull()?.backgroundDrawable = R.drawable.payment_row_radius_background
+                                else {
+                                    personModelList.firstOrNull()?.backgroundDrawable = R.drawable.payment_row_header_background
+                                    personModelList.lastOrNull()?.backgroundDrawable = R.drawable.payment_row_footer_background
+                                }
+                                //personModelList.lastOrNull()?.showLine = false
                             }
                         )
                     }

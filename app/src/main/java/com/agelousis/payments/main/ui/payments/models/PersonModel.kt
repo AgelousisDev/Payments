@@ -30,8 +30,6 @@ data class PersonModel(val paymentId: Int? = null,
     val fullName: String
         get() = String.format("%s %s", firstName ?: "", surname ?: "")
 
-    @IgnoredOnParcel var showLine = true
-
     fun getCommunicationData(context: Context): String {
         return ifLet(phone, email) {
             String.format("%s, %s", it.first(), it.second())
@@ -39,6 +37,8 @@ data class PersonModel(val paymentId: Int? = null,
             phone ?: email ?: context.resources.getString(R.string.key_empty_field_label)
         }
     }
+
+    @IgnoredOnParcel var backgroundDrawable = R.drawable.payment_row_background
 
 }
 

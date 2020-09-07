@@ -17,19 +17,19 @@
         android:layout_height="wrap_content"
         android:focusable="true"
         android:clickable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
+        viewBackground="@{personModel.backgroundDrawable}"
         android:onClick="@{() -> presenter.onPaymentSelected(personModel)}"
         tools:targetApi="M">
 
         <FrameLayout
             android:id="@+id/paymentRowHeaderFrameLayout"
+            backgroundDrawableTintColor="@{personModel.groupColor}"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
-            android:layout_marginStart="@dimen/nav_header_vertical_spacing"
-            android:elevation="8dp"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:background="@drawable/oval_background"
-            backgroundDrawableTintColor="@{personModel.groupColor}"
+            android:elevation="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -38,9 +38,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:textStyle="normal"
+                android:text="@{String.valueOf(personModel.groupName.charAt(0)).toUpperCase()}"
                 android:textColor="@color/white"
-                android:text="@{String.valueOf(personModel.groupName.charAt(0)).toUpperCase()}"/>
+                android:textStyle="normal" />
 
         </FrameLayout>
 
@@ -61,7 +61,7 @@
             android:id="@+id/entryTotalAmountTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/nav_header_vertical_spacing"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:fontFamily="@font/ubuntu"
             android:gravity="end"
             android:text="@{personModel.totalPaymentAmount != null ? ExtensionsKt.getEuroFormattedString(personModel.totalPaymentAmount) : @string/key_empty_field_label}"
@@ -79,6 +79,7 @@
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:fontFamily="@font/ubuntu_monospace"
             android:gravity="start"
             android:text="@{personModel.getCommunicationData(context)}"
@@ -89,19 +90,8 @@
             app:layout_constraintEnd_toStartOf="@+id/entryTotalAmountTextView"
             app:layout_constraintStart_toEndOf="@+id/paymentRowHeaderFrameLayout"
             app:layout_constraintTop_toBottomOf="@+id/entryCustomerNameTextView"
-            tools:text="10-11-2019" />
-
-        <View
-            android:id="@+id/savedRowSeparator"
-            android:layout_width="0dp"
-            android:layout_height="0.25dp"
-            android:background="@color/grey"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:visibility="@{personModel.showLine ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/entryDateTextView"
-            app:layout_constraintTop_toBottomOf="@+id/entryDateTextView"/>
+            tools:text="10-11-2019" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

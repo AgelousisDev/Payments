@@ -26,7 +26,7 @@
             style="@style/TextViewTitleLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/nav_header_vertical_spacing"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:text="@{groupModel.groupName}"
             android:textColor="@{(groupModel.color != null) ? groupModel.color : @color/grey}"
             app:layout_constraintBottom_toBottomOf="parent"

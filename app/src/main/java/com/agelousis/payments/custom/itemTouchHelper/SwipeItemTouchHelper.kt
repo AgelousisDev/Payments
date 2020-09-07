@@ -9,7 +9,7 @@ import com.agelousis.payments.main.enumerations.SwipeItemType
 
 typealias SwipeActionBlock = (swipeAction: SwipeAction, position: Int) -> Unit
 typealias SwipePredicateBlock = (viewHolder: RecyclerView.ViewHolder) -> Boolean
-class SwipeItemTouchHelper(private val context: Context, private val swipeItemType: SwipeItemType, private val swipePredicateBlock: SwipePredicateBlock, private val swipeActionBlock: SwipeActionBlock): ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.START or ItemTouchHelper.END) {
+class SwipeItemTouchHelper(private val context: Context, private val swipeItemType: SwipeItemType, private val swipePredicateBlock: SwipePredicateBlock, private val marginStart: Float? = null, private val swipeActionBlock: SwipeActionBlock): ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.START or ItemTouchHelper.END) {
 
     private val paint = Paint()
 
@@ -28,7 +28,7 @@ class SwipeItemTouchHelper(private val context: Context, private val swipeItemTy
             if (dX > 0) {
                 paint.color = swipeItemType.getColors(context = context)[0]
                 val background =
-                    RectF(itemView.left.toFloat(), itemView.top.toFloat(), dX, itemView.bottom.toFloat())
+                    RectF(itemView.left.toFloat(), itemView.top.toFloat(), dX + (marginStart ?: 0.0f), itemView.bottom.toFloat())
                 c.drawRect(background, paint)
                 icon = swipeItemType.getIcons(context = context).getOrNull(index = 0) ?: return
                 val iconDest = RectF(itemView.left.toFloat() + width, itemView.top.toFloat() + width, itemView.left.toFloat() + 2 * width, itemView.bottom.toFloat() - width)

@@ -577,3 +577,10 @@ fun setImageFromByteArray(appCompatImageView: AppCompatImageView, byteArray: Byt
         appCompatImageView.setImageBitmap(bitmap)
     }
 }
+
+@BindingAdapter("viewBackground")
+fun setViewBackground(viewGroup: ViewGroup, resourceId: Int?) {
+    resourceId?.let {
+        viewGroup.setBackgroundResource(resourceId)
+    }
+}
