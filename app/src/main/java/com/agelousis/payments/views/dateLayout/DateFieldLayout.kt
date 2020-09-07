@@ -3,6 +3,7 @@ package com.agelousis.payments.views.dateLayout
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.res.ColorStateList
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
@@ -15,8 +16,7 @@ import com.agelousis.payments.views.personDetailsLayout.models.PersonDetailsView
 import kotlinx.android.synthetic.main.date_field_layout.view.*
 import java.util.*
 
-class DateFieldLayout(context: Context, attributeSet: AttributeSet?): FrameLayout(context, attributeSet),
-    DatePickerPresenter {
+class DateFieldLayout(context: Context, attributeSet: AttributeSet?): FrameLayout(context, attributeSet), DatePickerPresenter {
 
     var dateValue: String? = null
         set(value) {
@@ -29,6 +29,7 @@ class DateFieldLayout(context: Context, attributeSet: AttributeSet?): FrameLayou
         set(value) {
             field = value
             lineSeparator.setBackgroundColor(ContextCompat.getColor(context, if (value) R.color.red else R.color.grey))
+            dateIcon.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(context, if (value) R.color.red else R.color.dayNightTextOnBackground))
         }
 
     override fun onDatePickerShow() {

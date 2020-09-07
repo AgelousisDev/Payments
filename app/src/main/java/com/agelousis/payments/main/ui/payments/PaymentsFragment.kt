@@ -127,21 +127,20 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
         )
         paymentListRecyclerView.addItemDecoration(
             object: RecyclerView.ItemDecoration() {
-                override fun getItemOffsets(
-                    outRect: Rect,
-                    view: View,
-                    parent: RecyclerView,
-                    state: RecyclerView.State
-                ) {
+                override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
                     super.getItemOffsets(outRect, view, parent, state)
-                    when(filteredList.getOrNull(parent.getChildAdapterPosition(view))) {
+                    val adapterPosition = parent.getChildAdapterPosition(view)
+                    when(filteredList.getOrNull(adapterPosition)) {
                         is GroupModel -> {
-                            outRect.top = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
+                            if (adapterPosition > 0)
+                                outRect.top = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
                             outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
                         }
                         is PersonModel -> {
                             outRect.left = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
                             outRect.right = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
+                            if (adapterPosition == filteredList.size - 1)
+                                outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
                         }
                     }
                 }
