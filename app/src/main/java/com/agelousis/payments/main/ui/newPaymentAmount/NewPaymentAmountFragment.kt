@@ -58,9 +58,9 @@ class NewPaymentAmountFragment: Fragment() {
                 PAYMENT_AMOUNT_DATA_EXTRA,
                 PaymentAmountModel(
                     paymentAmount = it.first().toString().toDouble(),
-                    startDate = it.second().toString(),
-                    paymentDate = it.third().toString(),
-                    endDate = it[3].toString(),
+                    startDate = startDateDetailsLayout.dateValue,
+                    paymentDate = it.second().toString(),
+                    endDate = endDateDetailsLayout.dateValue,
                     skipPayment = skipPaymentAppSwitchLayout.isChecked,
                     paymentNote = notesField.text?.toString()
                 )
