@@ -52,9 +52,7 @@ class NewPaymentAmountFragment: Fragment() {
     fun checkInputFields() {
         ifLet(
             amountLayout.doubleValue,
-            startDateDetailsLayout.dateValue,
             dateDetailsLayout.dateValue,
-            endDateDetailsLayout.dateValue
         ) {
             findNavController().previousBackStackEntry?.savedStateHandle?.set(
                 PAYMENT_AMOUNT_DATA_EXTRA,

@@ -420,6 +420,8 @@ val Date.yearMonth: Date?
 
 val Date.isValidProductDate: Boolean
     get() {
+        if (BuildConfig.VALID_PRODUCT_DATE.isEmpty())
+            return true
         val firstCalendar = Calendar.getInstance()
         firstCalendar.time = this
         val productDate = SimpleDateFormat(Constants.FILE_DATE_FORMAT, Locale.getDefault()).parse(BuildConfig.VALID_PRODUCT_DATE) ?: return false
