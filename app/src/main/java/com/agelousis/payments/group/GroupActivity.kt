@@ -2,7 +2,6 @@ package com.agelousis.payments.group
 
 import android.app.Activity
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
@@ -14,8 +13,7 @@ import com.agelousis.payments.databinding.ActivityGroupBinding
 import com.agelousis.payments.group.presenter.GroupActivityPresenter
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.utils.constants.Constants
-import com.agelousis.payments.utils.extensions.circularReveal
-import com.agelousis.payments.utils.extensions.circularUnReveal
+import com.agelousis.payments.utils.extensions.*
 import dev.sasikanth.colorsheet.ColorPickerListener
 import dev.sasikanth.colorsheet.ColorSheet
 import kotlinx.android.synthetic.main.activity_group.*
@@ -24,6 +22,7 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
 
     companion object {
         const val GROUP_SELECTION_REQUEST_CODE = 3
+        const val GROUP_IMAGE_REQUEST_CODE = 4
         const val GROUP_MODEL_EXTRA = "GroupActivity=groupModelExtra"
     }
 
@@ -41,13 +40,9 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
                 Intent().also {
                     it.putExtra(
                         GROUP_MODEL_EXTRA,
-                        selectedGroupModel?.also { groupModel ->
-                            groupModel.color = uiBarColor ?: ContextCompat.getColor(this, R.color.colorAccent)
+                        selectedGroupModel.also { groupModel ->
                             groupModel.groupName = groupField.text?.toString()
-                        } ?: GroupModel(
-                            color = uiBarColor ?: ContextCompat.getColor(this, R.color.colorAccent),
-                            groupName = groupField.text?.toString()
-                        )
+                        }
                     )
                 }
             )
@@ -56,18 +51,26 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
         }
     }
 
+    override fun onGroupImage() =
+        openGallery(
+            requestCode = GROUP_IMAGE_REQUEST_CODE
+        )
+
     override fun invoke(color: Int) {
         uiBarColor = color
     }
 
+    private var binding: ActivityGroupBinding? = null
     private var uiBarColor: Int? = null
         set(value) {
             field = value
             value?.let {
                 window?.statusBarColor = it
-                rootLayout.setBackgroundColor(it)
-                groupTextInputLayout.hintTextColor = ColorStateList.valueOf(it)
+                //rootLayout.setBackgroundColor(it)
+                //groupTextInputLayout.hintTextColor = ColorStateList.valueOf(it)
                 window?.navigationBarColor = it
+                selectedGroupModel.color = it
+                binding?.groupModel = selectedGroupModel
             }
         }
     private var addGroupButtonState: Boolean = false
@@ -77,7 +80,7 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
         }
     private var onTouchCenterX: Float? = null
     private var onTouchCenterY: Float? = null
-    private val selectedGroupModel by lazy { intent?.extras?.getParcelable<GroupModel>(GROUP_MODEL_EXTRA) }
+    private val selectedGroupModel by lazy { intent?.extras?.getParcelable(GROUP_MODEL_EXTRA) ?: GroupModel() }
 
     override fun onBackPressed() {
         rootLayout.circularUnReveal(
@@ -92,13 +95,14 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         overridePendingTransition(0, 0)
+        binding = ActivityGroupBinding.inflate(
+            layoutInflater
+        ).also {
+            it.groupModel = selectedGroupModel
+            it.presenter = this
+        }
         setContentView(
-            ActivityGroupBinding.inflate(
-                layoutInflater
-            ).also {
-                it.groupModel = selectedGroupModel
-                it.presenter = this
-            }.root
+            binding?.root
         )
         setupUI()
     }
@@ -115,11 +119,31 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
 
     private fun setupUI() {
         rootLayout.circularReveal {
-            uiBarColor = selectedGroupModel?.color ?: ContextCompat.getColor(this, R.color.colorAccent)
+            uiBarColor = selectedGroupModel.color ?: ContextCompat.getColor(this, R.color.colorAccent)
         }
         groupField.doAfterTextChanged {
             addGroupButtonState = it?.isNotEmpty() == true
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK)
+            when(requestCode) {
+                GROUP_IMAGE_REQUEST_CODE -> {
+                    data?.data?.let { imageUri ->
+                        loadImageBitmap(
+                            imageUri = imageUri
+                        ) { bitmap ->
+                            selectedGroupModel.groupImage = saveImage(
+                                bitmap = bitmap,
+                                fileName = "${Constants.GROUP_IMAGE_NAME}_${System.currentTimeMillis()}"
+                            )
+                            binding?.groupModel = selectedGroupModel
+                        }
+                    }
+                }
+            }
     }
 
 }

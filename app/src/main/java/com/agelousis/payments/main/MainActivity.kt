@@ -221,6 +221,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun configureGroup(groupModel: GroupModel, successBlock: () -> Unit) {
         uiScope.launch {
+            groupModel.groupImageData = this@MainActivity byteArrayFromInternalImage groupModel.groupImage
             groupModel.groupId?.let {
                 dbManager.updateGroup(
                     groupModel = groupModel,

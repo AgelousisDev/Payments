@@ -18,6 +18,7 @@ object Constants {
     const val PDF_MIME_TYPE = "application/pdf"
     const val GOOGLE_DRIVE_URI = "content://com.google.android.apps.docs.storage"
     const val USER_SELECTION_FRAGMENT_TAG = "userSelectionFragmentTag"
+    const val GROUP_IMAGE_NAME = "group_image"
 
     object Colors {
         val colorPickerColors = intArrayOf(

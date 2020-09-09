@@ -4,9 +4,8 @@ import android.content.Context
 import com.agelousis.payments.R
 import com.agelousis.payments.utils.extensions.euroFormattedString
 
-data class PaymentAmountSumModel(
-    val sum: Double?,
-    val color: Int?,
+data class PaymentAmountSumModel(val sum: Double?,
+                                 val color: Int?
 ) {
 
     fun getFormattedPaymentsSum(context: Context) =

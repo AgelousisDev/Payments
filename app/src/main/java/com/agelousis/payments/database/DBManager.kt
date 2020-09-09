@@ -168,6 +168,8 @@ class DBManager(context: Context) {
                     it.put(SQLiteHelper.USER_ID, userId ?: return@withContext)
                     it.put(SQLiteHelper.GROUP_NAME, groupModel.groupName)
                     it.put(SQLiteHelper.COLOR, groupModel.color)
+                    it.put(SQLiteHelper.GROUP_IMAGE, groupModel.groupImage)
+                    it.put(SQLiteHelper.GROUP_IMAGE_DATA, groupModel.groupImageData)
                 }
             )
             withContext(Dispatchers.Main) {
@@ -183,6 +185,8 @@ class DBManager(context: Context) {
                 ContentValues().also {
                     it.put(SQLiteHelper.GROUP_NAME, groupModel.groupName)
                     it.put(SQLiteHelper.COLOR, groupModel.color)
+                    it.put(SQLiteHelper.GROUP_IMAGE, groupModel.groupImage)
+                    it.put(SQLiteHelper.GROUP_IMAGE_DATA, groupModel.groupImageData)
                 },
                 "${SQLiteHelper.ID}=?",
                 arrayOf(groupModel.groupId?.toString())
@@ -295,8 +299,11 @@ class DBManager(context: Context) {
                         GroupModel(
                             groupId = groupsCursor.getIntOrNull(groupsCursor.getColumnIndex(SQLiteHelper.ID)),
                             groupName = groupsCursor.getStringOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_NAME)),
-                            color = groupsCursor.getIntOrNull(groupsCursor.getColumnIndex(SQLiteHelper.COLOR))
-                        )
+                            color = groupsCursor.getIntOrNull(groupsCursor.getColumnIndex(SQLiteHelper.COLOR)),
+                            groupImage = groupsCursor.getStringOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_IMAGE))
+                        ).also {
+                            it.groupImageData = groupsCursor.getBlobOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_IMAGE_DATA))
+                        }
                     )
                 }
                 while(groupsCursor.moveToNext())
@@ -464,8 +471,11 @@ class DBManager(context: Context) {
                         GroupModel(
                             groupId = groupsCursor.getIntOrNull(groupsCursor.getColumnIndex(SQLiteHelper.ID)),
                             groupName = groupsCursor.getStringOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_NAME)),
-                            color = groupsCursor.getIntOrNull(groupsCursor.getColumnIndex(SQLiteHelper.COLOR))
-                        )
+                            color = groupsCursor.getIntOrNull(groupsCursor.getColumnIndex(SQLiteHelper.COLOR)),
+                            groupImage = groupsCursor.getStringOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_IMAGE))
+                        ).also {
+                            it.groupImageData = groupsCursor.getBlobOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_IMAGE_DATA))
+                        }
                     )
                 }
                 while(groupsCursor.moveToNext())

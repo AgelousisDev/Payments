@@ -53,12 +53,14 @@
         android:clickable="true"
         android:focusable="true"
         android:background="?attr/selectableItemBackgroundBorderless"
+        android:onClick="@{() -> presenter.onGroupImage()}"
+        picassoGroupImageFromInternalFiles="@{groupModel.groupImage}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_group"
-        app:tint="@color/white" />
+        imageTintColor="@{groupModel.groupImage == null ? @color/white : (Integer) null}"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/groupTextInputLayout"
@@ -67,6 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:hint="@string/key_group_name_label"
+        app:hintTextColor="@{groupModel.color != null ? groupModel.color : @color/colorAccent}"
         app:boxBackgroundColor="@color/colorPrimaryDark"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"

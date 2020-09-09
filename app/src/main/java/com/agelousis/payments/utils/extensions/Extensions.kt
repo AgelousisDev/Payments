@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.*
 import android.graphics.drawable.Drawable
@@ -138,6 +139,15 @@ fun Context.saveProfileImage(bitmap: Bitmap?) =
         newFile.name
     }
 
+fun Context.saveImage(bitmap: Bitmap?, fileName: String?) =
+    bitmap?.let {
+        val newFile = File(filesDir, "${fileName ?: return@let null}_${System.currentTimeMillis()}")
+        if (!newFile.exists())
+            newFile.createNewFile()
+        it.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(newFile))
+        newFile.name
+    }
+
 fun Context.saveProfileImage(fileName: String?, byteArray: ByteArray?) {
     byteArray?.let { bytes ->
         val newFile = File(filesDir, fileName ?: return@let)
@@ -148,6 +158,14 @@ fun Context.saveProfileImage(fileName: String?, byteArray: ByteArray?) {
         }
     }
 }
+
+infix fun Context.byteArrayFromInternalImage(imageName: String?) =
+    imageName?.let {
+        val bitmap = BitmapFactory.decodeFile(File(filesDir, it).absolutePath)
+        val bytesArray = bitmap.byteArray
+        bitmap.recycle()
+        bytesArray
+    }
 
 var SharedPreferences.userModel: UserModel?
     set(value) {
@@ -432,7 +450,7 @@ val Date.isValidProductDate: Boolean
                 firstCalendar.get(Calendar.DAY_OF_YEAR) < secondCalendar.get(Calendar.DAY_OF_YEAR)
     }
 
-infix fun Date.formattedDateWith(pattern: String) =
+infix fun Date.formattedDateWith(pattern: String): String? =
     SimpleDateFormat(pattern, Locale.getDefault()).format(this)
 
 inline fun <reified J> Any.asIs(block: (J) -> Unit) {
@@ -551,6 +569,14 @@ fun setPicassoImageFromInternalFiles(appCompatImageView: AppCompatImageView, fil
     }
 }
 
+@BindingAdapter("picassoGroupImageFromInternalFiles")
+fun setPicassoGroupImageFromInternalFiles(appCompatImageView: AppCompatImageView, fileName: String?) {
+    fileName?.let {
+        Picasso.get().load(File(appCompatImageView.context.filesDir, it)).placeholder(R.drawable.ic_group)
+            .transform(CircleTransformation()).into(appCompatImageView)
+    }
+}
+
 @BindingAdapter("switchStateChanged")
 fun switchStateChanged(switchMaterial: SwitchMaterial, optionPresenter: OptionPresenter) {
     switchMaterial.setOnCheckedChangeListener { _, isChecked ->
@@ -608,4 +634,9 @@ fun setViewBackground(viewGroup: ViewGroup, resourceId: Int?) {
     resourceId?.let {
         viewGroup.setBackgroundResource(resourceId)
     }
+}
+
+@BindingAdapter("imageTintColor")
+fun setImageTintColor(appCompatImageView: AppCompatImageView, color: Int?) {
+    appCompatImageView.imageTintList = color?.let { ColorStateList.valueOf(it) }
 }
