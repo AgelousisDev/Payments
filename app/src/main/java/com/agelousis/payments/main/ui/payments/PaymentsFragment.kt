@@ -149,6 +149,8 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
                             if (adapterPosition == filteredList.size - 1)
                                 outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
                         }
+                        is PaymentAmountSumModel ->
+                            outRect.top = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
                     }
                 }
             }

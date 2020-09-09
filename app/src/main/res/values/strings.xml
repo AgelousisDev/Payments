@@ -84,6 +84,7 @@
     <string name="key_select_user_from_backup_label">Select a User</string>
     <string name="key_license_expired_message">Your license has been expired. Please contact with the developers…</string>
     <string name="key_payment_month_label">Payment Month</string>
+    <string name="key_total_amount_value_label">Total: %s</string>
 
     <string-array name="key_payment_action_array">
         <item>Call</item>

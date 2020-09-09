@@ -2,7 +2,6 @@
 <layout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
-        <import type="com.agelousis.payments.utils.extensions.ExtensionsKt" />
         <variable
             name="paymentAmountSumModel"
             type="com.agelousis.payments.main.ui.payments.models.PaymentAmountSumModel" />
@@ -16,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:text="@{ExtensionsKt.getEuroFormattedString(paymentAmountSumModel.sum)}"
+        android:text="@{paymentAmountSumModel.getFormattedPaymentsSum(context)}"
         android:textColor="@{(paymentAmountSumModel.color != null) ? paymentAmountSumModel.color : @color/grey}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
