@@ -41,7 +41,10 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
                 Intent().also {
                     it.putExtra(
                         GROUP_MODEL_EXTRA,
-                        GroupModel(
+                        selectedGroupModel?.also { groupModel ->
+                            groupModel.color = uiBarColor ?: ContextCompat.getColor(this, R.color.colorAccent)
+                            groupModel.groupName = groupField.text?.toString()
+                        } ?: GroupModel(
                             color = uiBarColor ?: ContextCompat.getColor(this, R.color.colorAccent),
                             groupName = groupField.text?.toString()
                         )
@@ -74,6 +77,7 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
         }
     private var onTouchCenterX: Float? = null
     private var onTouchCenterY: Float? = null
+    private val selectedGroupModel by lazy { intent?.extras?.getParcelable<GroupModel>(GROUP_MODEL_EXTRA) }
 
     override fun onBackPressed() {
         rootLayout.circularUnReveal(
@@ -92,6 +96,7 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
             ActivityGroupBinding.inflate(
                 layoutInflater
             ).also {
+                it.groupModel = selectedGroupModel
                 it.presenter = this
             }.root
         )
@@ -110,7 +115,7 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
 
     private fun setupUI() {
         rootLayout.circularReveal {
-            uiBarColor = ContextCompat.getColor(this, R.color.colorAccent)
+            uiBarColor = selectedGroupModel?.color ?: ContextCompat.getColor(this, R.color.colorAccent)
         }
         groupField.doAfterTextChanged {
             addGroupButtonState = it?.isNotEmpty() == true

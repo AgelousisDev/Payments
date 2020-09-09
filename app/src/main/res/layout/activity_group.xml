@@ -2,6 +2,9 @@
 <layout>
     <data>
         <variable
+            name="groupModel"
+            type="com.agelousis.payments.main.ui.payments.models.GroupModel" />
+        <variable
             name="presenter"
             type="com.agelousis.payments.group.presenter.GroupActivityPresenter" />
     </data>
@@ -12,6 +15,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccent"
+    backgroundViewContextColor="@{groupModel.color}"
     tools:context=".group.GroupActivity"
     android:animateLayoutChanges="true"
     android:id="@+id/rootLayout">
@@ -86,7 +90,8 @@
             android:imeOptions="actionDone"
             android:inputType="text"
             android:singleLine="true"
-            android:maxLines="1"/>
+            android:maxLines="1"
+            android:text="@{groupModel.groupName}"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

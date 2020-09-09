@@ -76,6 +76,12 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
         }
     }
 
+    override fun onGroupLongPressed(groupModel: GroupModel) {
+        (activity as? MainActivity)?.startGroupActivity(
+            groupModel = groupModel
+        )
+    }
+
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
     private val itemsList by lazy { arrayListOf<Any>() }

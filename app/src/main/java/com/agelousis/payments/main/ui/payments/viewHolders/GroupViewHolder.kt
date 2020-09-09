@@ -10,6 +10,12 @@ class GroupViewHolder(private val binding: GroupRowLayoutBinding): RecyclerView.
     fun bind(groupModel: GroupModel, presenter: GroupPresenter) {
         binding.groupModel = groupModel
         binding.presenter = presenter
+        itemView.setOnLongClickListener {
+            presenter.onGroupLongPressed(
+                groupModel = binding.groupModel ?: return@setOnLongClickListener true
+            )
+            true
+        }
         binding.executePendingBindings()
     }
 

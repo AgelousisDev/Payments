@@ -18,6 +18,7 @@ import kotlinx.coroutines.withContext
 typealias UserBlock = (UserModel?) -> Unit
 typealias UsersBlock = (List<UserModel>) -> Unit
 typealias InsertionSuccessBlock = () -> Unit
+typealias UpdateSuccessBlock = () -> Unit
 typealias PaymentsClosure = (List<Any>) -> Unit
 typealias PersonsClosure = (List<PersonModel>) -> Unit
 typealias DeletionSuccessBlock = () -> Unit
@@ -171,6 +172,23 @@ class DBManager(context: Context) {
             )
             withContext(Dispatchers.Main) {
                 insertionSuccessBlock()
+            }
+        }
+    }
+
+    suspend fun updateGroup(groupModel: GroupModel, updateSuccessBlock: UpdateSuccessBlock) {
+        withContext(Dispatchers.Default) {
+            database?.update(
+                SQLiteHelper.GROUPS_TABLE_NAME,
+                ContentValues().also {
+                    it.put(SQLiteHelper.GROUP_NAME, groupModel.groupName)
+                    it.put(SQLiteHelper.COLOR, groupModel.color)
+                },
+                "${SQLiteHelper.ID}=?",
+                arrayOf(groupModel.groupId?.toString())
+            )
+            withContext(Dispatchers.Main) {
+                updateSuccessBlock()
             }
         }
     }

@@ -578,6 +578,13 @@ fun setBackgroundViewColor(view: View, color: Int?) {
     }
 }
 
+@BindingAdapter("backgroundViewContextColor")
+fun setBackgroundViewContextColor(viewGroup: ViewGroup, resourceId: Int?) {
+    resourceId?.let {
+        viewGroup.setBackgroundColor(resourceId)
+    }
+}
+
 @BindingAdapter("backgroundViewTintColor")
 fun setBackgroundViewTintColor(view: View, color: Int?) {
     color?.let {

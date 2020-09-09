@@ -123,11 +123,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         finish()
                     }
                 }
-            R.id.paymentsFragment ->
-                startActivityForResult(
-                    Intent(this, GroupActivity::class.java),
-                    GroupActivity.GROUP_SELECTION_REQUEST_CODE
-                )
+            R.id.paymentsFragment -> startGroupActivity()
             R.id.newPaymentFragment ->
                 when(floatingButtonType) {
                     FloatingButtonType.NORMAL ->
@@ -223,14 +219,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         floatingButton.setOnClickListener(this)
     }
 
-    private fun insertGroup(groupModel: GroupModel) {
+    private fun configureGroup(groupModel: GroupModel, successBlock: () -> Unit) {
         uiScope.launch {
-            dbManager.insertGroup(
-                userId = userModel?.id,
-                groupModel = groupModel
-            ) {
-                (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
-            }
+            groupModel.groupId?.let {
+                dbManager.updateGroup(
+                    groupModel = groupModel,
+                    updateSuccessBlock = successBlock
+                )
+            } ?: dbManager.insertGroup(
+                    userId = userModel?.id,
+                    groupModel = groupModel,
+                insertionSuccessBlock = successBlock
+            )
         }
     }
 
@@ -294,6 +294,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         )
     }
 
+    fun startGroupActivity(groupModel: GroupModel? = null) =
+        startActivityForResult(
+            Intent(this, GroupActivity::class.java).also {
+                it.putExtra(GroupActivity.GROUP_MODEL_EXTRA, groupModel)
+            },
+            GroupActivity.GROUP_SELECTION_REQUEST_CODE
+        )
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when(requestCode) {
@@ -315,9 +323,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         file = getDatabasePath(SQLiteHelper.DB_NAME)
                     )
                 GroupActivity.GROUP_SELECTION_REQUEST_CODE ->
-                    insertGroup(
+                    configureGroup(
                         groupModel = data?.extras?.getParcelable(GroupActivity.GROUP_MODEL_EXTRA) ?: return
-                    )
+                    ) {
+                        (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
+                    }
             }
     }
 
