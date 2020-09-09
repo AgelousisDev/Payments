@@ -218,9 +218,8 @@ class DBManager(context: Context) {
                     ContentValues().also {
                         it.put(SQLiteHelper.PERSON_ID, personId?.toInt())
                         it.put(SQLiteHelper.PAYMENT_AMOUNT, paymentAmountModel.paymentAmount)
-                        it.put(SQLiteHelper.START_DATE, paymentAmountModel.startDate)
+                        it.put(SQLiteHelper.PAYMENT_MONTH, paymentAmountModel.paymentMonth)
                         it.put(SQLiteHelper.PAYMENT_DATE, paymentAmountModel.paymentDate)
-                        it.put(SQLiteHelper.END_DATE, paymentAmountModel.endDate)
                         it.put(SQLiteHelper.SKIP_PAYMENT, paymentAmountModel.skipPayment)
                         it.put(SQLiteHelper.PAYMENT_NOTE, paymentAmountModel.paymentNote)
                     }
@@ -263,9 +262,8 @@ class DBManager(context: Context) {
                     ContentValues().also {
                         it.put(SQLiteHelper.PERSON_ID, personModel.paymentId)
                         it.put(SQLiteHelper.PAYMENT_AMOUNT, paymentAmountModel.paymentAmount)
-                        it.put(SQLiteHelper.START_DATE, paymentAmountModel.startDate)
+                        it.put(SQLiteHelper.PAYMENT_MONTH, paymentAmountModel.paymentMonth)
                         it.put(SQLiteHelper.PAYMENT_DATE, paymentAmountModel.paymentDate)
-                        it.put(SQLiteHelper.END_DATE, paymentAmountModel.endDate)
                         it.put(SQLiteHelper.SKIP_PAYMENT, paymentAmountModel.skipPayment)
                         it.put(SQLiteHelper.PAYMENT_NOTE, paymentAmountModel.paymentNote)
                     }
@@ -333,9 +331,8 @@ class DBManager(context: Context) {
                                     paymentId = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.ID)),
                                     paymentAmount = paymentsCursor.getDoubleOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PAYMENT_AMOUNT)),
                                     paymentNote = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PAYMENT_NOTE)),
-                                    startDate = paymentsCursor.getStringOrNull(index = paymentsCursor.getColumnIndex(SQLiteHelper.START_DATE)),
+                                    paymentMonth = paymentsCursor.getStringOrNull(index = paymentsCursor.getColumnIndex(SQLiteHelper.PAYMENT_MONTH)),
                                     paymentDate = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PAYMENT_DATE)),
-                                    endDate = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.END_DATE)),
                                     skipPayment = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.SKIP_PAYMENT)) ?: 0 > 0
                                 )
                             )
@@ -413,9 +410,8 @@ class DBManager(context: Context) {
                                     paymentId = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.ID)),
                                     paymentAmount = paymentsCursor.getDoubleOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PAYMENT_AMOUNT)),
                                     paymentNote = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PAYMENT_NOTE)),
-                                    startDate = paymentsCursor.getStringOrNull(index = paymentsCursor.getColumnIndex(SQLiteHelper.START_DATE)),
+                                    paymentMonth = paymentsCursor.getStringOrNull(index = paymentsCursor.getColumnIndex(SQLiteHelper.PAYMENT_MONTH)),
                                     paymentDate = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PAYMENT_DATE)),
-                                    endDate = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.END_DATE)),
                                     skipPayment = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.SKIP_PAYMENT)) ?: 0 > 0
                                 )
                             )

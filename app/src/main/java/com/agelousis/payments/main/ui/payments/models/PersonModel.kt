@@ -45,9 +45,8 @@ data class PersonModel(val paymentId: Int? = null,
 @Parcelize
 data class PaymentAmountModel(val paymentId: Int? = null,
                               val paymentAmount: Double?,
-                              val startDate: String?,
+                              val paymentMonth: String?,
                               val paymentDate: String?,
-                              val endDate: String?,
                               val skipPayment: Boolean?,
                               val paymentNote: String?
 ): Parcelable {

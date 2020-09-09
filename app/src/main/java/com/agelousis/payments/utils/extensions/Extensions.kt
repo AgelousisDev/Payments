@@ -432,6 +432,9 @@ val Date.isValidProductDate: Boolean
                 firstCalendar.get(Calendar.DAY_OF_YEAR) < secondCalendar.get(Calendar.DAY_OF_YEAR)
     }
 
+infix fun Date.formattedDateWith(pattern: String) =
+    SimpleDateFormat(pattern, Locale.getDefault()).format(this)
+
 inline fun <reified J> Any.asIs(block: (J) -> Unit) {
     if (this is J)
         block(this)

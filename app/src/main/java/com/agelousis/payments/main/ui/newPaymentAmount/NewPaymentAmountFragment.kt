@@ -11,10 +11,13 @@ import androidx.transition.TransitionInflater
 import com.agelousis.payments.R
 import com.agelousis.payments.databinding.FragmentNewPaymentAmountLayoutBinding
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
+import com.agelousis.payments.utils.constants.Constants
+import com.agelousis.payments.utils.extensions.formattedDateWith
 import com.agelousis.payments.utils.extensions.ifLet
 import com.agelousis.payments.utils.extensions.second
-import com.agelousis.payments.utils.extensions.third
+import com.agelousis.payments.utils.extensions.showListDialog
 import kotlinx.android.synthetic.main.fragment_new_payment_amount_layout.*
+import java.util.*
 
 class NewPaymentAmountFragment: Fragment() {
 
@@ -44,6 +47,15 @@ class NewPaymentAmountFragment: Fragment() {
     }
 
     private fun setupUI() {
+        paymentMonthDetailsLayout.setOnClickListener {
+            context?.showListDialog(
+                title = resources.getString(R.string.key_select_option_label),
+                items = resources.getStringArray(R.array.key_months_array).toList()
+            ) { position ->
+                paymentMonthDetailsLayout.value = resources.getStringArray(R.array.key_months_array).getOrNull(index = position)
+            }
+        }
+        dateDetailsLayout.dateValue = Date() formattedDateWith Constants.DATE_FORMAT_VALUE
         skipPaymentAppSwitchLayout.setOnClickListener {
             skipPaymentAppSwitchLayout.isChecked = !skipPaymentAppSwitchLayout.isChecked
         }
@@ -58,9 +70,8 @@ class NewPaymentAmountFragment: Fragment() {
                 PAYMENT_AMOUNT_DATA_EXTRA,
                 PaymentAmountModel(
                     paymentAmount = it.first().toString().toDouble(),
-                    startDate = startDateDetailsLayout.dateValue,
+                    paymentMonth = paymentMonthDetailsLayout.value,
                     paymentDate = it.second().toString(),
-                    endDate = endDateDetailsLayout.dateValue,
                     skipPayment = skipPaymentAppSwitchLayout.isChecked,
                     paymentNote = notesField.text?.toString()
                 )

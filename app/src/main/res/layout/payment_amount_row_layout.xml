@@ -23,7 +23,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="92dp">
+        android:layout_height="72dp">
 
         <View
             android:id="@+id/paymentAmountRowLineSeparator"
@@ -35,7 +35,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/materialTextView"
+            android:id="@+id/paymentAmountRowDateAmount"
             style="@style/TextViewTitleLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,19 +46,6 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="$100,00" />
 
-        <com.google.android.material.textview.MaterialTextView
-            style="@style/TextViewLabel"
-            android:id="@+id/paymentAmountStartDateLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/nav_header_vertical_spacing"
-            android:text="@{paymentAmountModel.startDate}"
-            android:gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/paymentAmountRowLineSeparator"
-            app:layout_constraintTop_toBottomOf="@+id/materialTextView"
-            tools:text="24/05/2020" />
-
         <View
             android:id="@+id/paymentAmountRowDateLineSeparator"
             android:layout_width="16dp"
@@ -68,20 +55,20 @@
             backgroundViewTintColor="@{paymentAmountModel.paymentAmountRowState.backgroundTint}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/paymentAmountRowLineSeparator"
-            app:layout_constraintTop_toBottomOf="@+id/paymentAmountStartDateLabel" />
+            app:layout_constraintTop_toBottomOf="@+id/paymentAmountRowDateAmount" />
 
         <com.google.android.material.textview.MaterialTextView
             style="@style/TextViewLabel"
-            android:id="@+id/paymentAmountEndDateLabel"
+            android:id="@+id/paymentAmountPaymentMonthLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/nav_header_vertical_spacing"
-            android:text="@{paymentAmountModel.endDate}"
+            android:text="@{paymentAmountModel.paymentMonth}"
             android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/paymentAmountRowLineSeparator"
             app:layout_constraintTop_toBottomOf="@+id/paymentAmountRowDateLineSeparator"
-            tools:text="24/06/2020" />
+            tools:text="January" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

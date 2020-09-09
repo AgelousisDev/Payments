@@ -210,13 +210,7 @@ class PDFHelper {
             )
             table.addCell(
                 getCell(
-                    text = "${context.resources.getString(R.string.key_start_date_label)}: ${paymentAmountModel.startDate ?: context.resources.getString(R.string.key_empty_field_label)}",
-                    withBorder = true
-                )
-            )
-            table.addCell(
-                getCell(
-                    text = "${context.resources.getString(R.string.key_end_date_label)}: ${paymentAmountModel.endDate ?: context.resources.getString(R.string.key_empty_field_label)}",
+                    text = "${context.resources.getString(R.string.key_payment_month_label)}: ${paymentAmountModel.paymentMonth ?: context.resources.getString(R.string.key_empty_field_label)}",
                     withBorder = true
                 )
             )
@@ -229,6 +223,12 @@ class PDFHelper {
             table.addCell(
                 getCell(
                     text = "${context.resources.getString(R.string.key_skip_payment_label)}: ${if (paymentAmountModel.skipPayment == true) context.resources.getString(R.string.key_yes_label) else context.resources.getString(R.string.key_no_label)}",
+                    withBorder = true
+                )
+            )
+            table.addCell(
+                getCell(
+                    text = "",
                     withBorder = true
                 )
             )
