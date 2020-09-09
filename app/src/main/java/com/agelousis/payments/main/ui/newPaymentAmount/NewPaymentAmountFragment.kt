@@ -47,7 +47,7 @@ class NewPaymentAmountFragment: Fragment() {
     }
 
     private fun setupUI() {
-        paymentMonthDetailsLayout.setOnClickListener {
+        paymentMonthDetailsLayout.setOnDetailsPressed {
             context?.showListDialog(
                 title = resources.getString(R.string.key_select_option_label),
                 items = resources.getStringArray(R.array.key_months_array).toList()
@@ -55,7 +55,7 @@ class NewPaymentAmountFragment: Fragment() {
                 paymentMonthDetailsLayout.value = resources.getStringArray(R.array.key_months_array).getOrNull(index = position)
             }
         }
-        dateDetailsLayout.dateValue = Date() formattedDateWith Constants.DATE_FORMAT_VALUE
+        dateDetailsLayout.dateValue = Date() formattedDateWith Constants.DATE_FORMAT
         skipPaymentAppSwitchLayout.setOnClickListener {
             skipPaymentAppSwitchLayout.isChecked = !skipPaymentAppSwitchLayout.isChecked
         }

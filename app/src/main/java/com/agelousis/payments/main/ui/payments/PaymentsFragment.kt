@@ -20,6 +20,7 @@ import com.agelousis.payments.main.enumerations.SwipeItemType
 import com.agelousis.payments.main.ui.payments.adapters.PaymentsAdapter
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.main.ui.payments.models.GroupModel
+import com.agelousis.payments.main.ui.payments.models.PaymentAmountSumModel
 import com.agelousis.payments.main.ui.payments.models.PersonModel
 import com.agelousis.payments.main.ui.payments.presenters.GroupPresenter
 import com.agelousis.payments.main.ui.payments.presenters.PaymentPresenter
@@ -38,10 +39,8 @@ import java.util.*
 class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
 
     override fun onGroupSelected(groupModel: GroupModel) {
-        findNavController().navigate(
-            PaymentsFragmentDirections.actionPaymentListFragmentToNewPaymentFragment(
-                groupDataModel = groupModel
-            )
+        (activity as? MainActivity)?.startGroupActivity(
+            groupModel = groupModel
         )
     }
 
@@ -76,9 +75,11 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
         }
     }
 
-    override fun onGroupLongPressed(groupModel: GroupModel) {
-        (activity as? MainActivity)?.startGroupActivity(
-            groupModel = groupModel
+    override fun onPersonAdd(groupModel: GroupModel) {
+        findNavController().navigate(
+            PaymentsFragmentDirections.actionPaymentListFragmentToNewPaymentFragment(
+                groupDataModel = groupModel
+            )
         )
     }
 
@@ -303,8 +304,13 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
                                     personModelList.firstOrNull()?.backgroundDrawable = R.drawable.payment_row_header_background
                                     personModelList.lastOrNull()?.backgroundDrawable = R.drawable.payment_row_footer_background
                                 }
-                                //personModelList.lastOrNull()?.showLine = false
                             }
+                        )
+                        filteredList.add(
+                            PaymentAmountSumModel(
+                                sum = filteredByQueryPayments.mapNotNull { it.totalPaymentAmount }.sum(),
+                                color = filteredByQueryPayments.firstOrNull()?.groupColor
+                            )
                         )
                     }
             }

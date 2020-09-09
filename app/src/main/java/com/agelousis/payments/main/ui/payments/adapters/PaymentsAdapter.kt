@@ -7,15 +7,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.R
 import com.agelousis.payments.databinding.EmptyRowLayoutBinding
 import com.agelousis.payments.databinding.GroupRowLayoutBinding
+import com.agelousis.payments.databinding.PaymentAmountSumLayoutBinding
 import com.agelousis.payments.databinding.PaymentRowLayoutBinding
 import com.agelousis.payments.main.ui.payments.enumerations.PaymentsAdapterViewType
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.main.ui.payments.models.GroupModel
+import com.agelousis.payments.main.ui.payments.models.PaymentAmountSumModel
 import com.agelousis.payments.main.ui.payments.models.PersonModel
 import com.agelousis.payments.main.ui.payments.presenters.GroupPresenter
 import com.agelousis.payments.main.ui.payments.presenters.PaymentPresenter
 import com.agelousis.payments.main.ui.payments.viewHolders.EmptyViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.GroupViewHolder
+import com.agelousis.payments.main.ui.payments.viewHolders.PaymentAmountSumViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.PaymentViewHolder
 
 class PaymentsAdapter(private val list: ArrayList<Any>, private val groupPresenter: GroupPresenter, private val paymentPresenter: PaymentPresenter): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -42,6 +45,14 @@ class PaymentsAdapter(private val list: ArrayList<Any>, private val groupPresent
             PaymentsAdapterViewType.PAYMENT_VIEW.type ->
                 PaymentViewHolder(
                     binding = PaymentRowLayoutBinding.inflate(
+                        inflater,
+                        parent,
+                        false
+                    )
+                )
+            PaymentsAdapterViewType.PAYMENT_AMOUNT_SUM_VIEW.type ->
+                PaymentAmountSumViewHolder(
+                    binding = PaymentAmountSumLayoutBinding.inflate(
                         inflater,
                         parent,
                         false
@@ -78,12 +89,18 @@ class PaymentsAdapter(private val list: ArrayList<Any>, private val groupPresent
             ) as? PersonModel ?: return,
             presenter = paymentPresenter
         )
+        (holder as? PaymentAmountSumViewHolder)?.bind(
+            paymentAmountSumModel = list.getOrNull(
+                index = position
+            ) as? PaymentAmountSumModel ?: return
+        )
     }
 
     override fun getItemViewType(position: Int): Int {
         (list.getOrNull(index = position) as? EmptyModel)?.let { return PaymentsAdapterViewType.EMPTY_VIEW.type }
         (list.getOrNull(index = position) as? GroupModel)?.let { return PaymentsAdapterViewType.GROUP_VIEW.type }
         (list.getOrNull(index = position) as? PersonModel)?.let { return PaymentsAdapterViewType.PAYMENT_VIEW.type }
+        (list.getOrNull(index = position) as? PaymentAmountSumModel)?.let { return PaymentsAdapterViewType.PAYMENT_AMOUNT_SUM_VIEW.type }
         return super.getItemViewType(position)
     }
 
