@@ -23,7 +23,7 @@
 
         <FrameLayout
             android:id="@+id/paymentRowHeaderFrameLayout"
-            backgroundDrawableTintColor="@{personModel.groupColor}"
+            backgroundDrawableTintColor="@{personModel.groupImage == null ? personModel.groupColor : @color/white}"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -39,8 +39,17 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@{String.valueOf(personModel.groupName.charAt(0)).toUpperCase()}"
+                android:visibility="@{personModel.groupImage == null ? View.VISIBLE : View.GONE}"
                 android:textColor="@color/white"
                 android:textStyle="normal" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/userRowImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="@{personModel.groupImage != null ? View.VISIBLE : View.GONE}"
+                picassoGroupImageFromInternalFiles="@{personModel.groupImage}"
+                android:scaleType="centerCrop"/>
 
         </FrameLayout>
 

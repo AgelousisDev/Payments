@@ -16,12 +16,16 @@ import com.agelousis.payments.views.personDetailsLayout.models.PersonDetailsView
 import kotlinx.android.synthetic.main.date_field_layout.view.*
 import java.util.*
 
+typealias DateSelectionClosure = (String) -> Unit
 class DateFieldLayout(context: Context, attributeSet: AttributeSet?): FrameLayout(context, attributeSet), DatePickerPresenter {
 
     var dateValue: String? = null
         set(value) {
             field = value
-            value?.let { dateView.text = it }
+            value?.let {
+                dateView.text = it
+                dateSelectionClosure?.invoke(it)
+            }
         }
         get() = if (dateView.text?.toString()?.isEmpty() == true) null else dateView.text?.toString()
 
@@ -31,6 +35,7 @@ class DateFieldLayout(context: Context, attributeSet: AttributeSet?): FrameLayou
             lineSeparator.setBackgroundColor(ContextCompat.getColor(context, if (value) R.color.red else R.color.grey))
             dateIcon.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(context, if (value) R.color.red else R.color.dayNightTextOnBackground))
         }
+    var dateSelectionClosure: DateSelectionClosure? = null
 
     override fun onDatePickerShow() {
         val c = Calendar.getInstance()
@@ -39,7 +44,7 @@ class DateFieldLayout(context: Context, attributeSet: AttributeSet?): FrameLayou
         val day = c.get(Calendar.DAY_OF_MONTH)
         DatePickerDialog(context, { _, selectedYear, selectedMonthOfYear, selectedDayOfMonth ->
             errorState = false
-            dateView.text = String.format(Constants.DATE_FORMAT_VALUE, selectedDayOfMonth, selectedMonthOfYear + 1, selectedYear)
+            dateValue = String.format(Constants.DATE_FORMAT_VALUE, selectedDayOfMonth, selectedMonthOfYear + 1, selectedYear)
         }, year, month, day).show()
     }
 

@@ -12,10 +12,7 @@ import com.agelousis.payments.R
 import com.agelousis.payments.databinding.FragmentNewPaymentAmountLayoutBinding
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.utils.constants.Constants
-import com.agelousis.payments.utils.extensions.formattedDateWith
-import com.agelousis.payments.utils.extensions.ifLet
-import com.agelousis.payments.utils.extensions.second
-import com.agelousis.payments.utils.extensions.showListDialog
+import com.agelousis.payments.utils.extensions.*
 import kotlinx.android.synthetic.main.fragment_new_payment_amount_layout.*
 import java.util.*
 
@@ -55,7 +52,16 @@ class NewPaymentAmountFragment: Fragment() {
                 paymentMonthDetailsLayout.value = resources.getStringArray(R.array.key_months_array).getOrNull(index = position)
             }
         }
-        dateDetailsLayout.dateValue = Date() formattedDateWith Constants.DATE_FORMAT
+        dateDetailsLayout.dateSelectionClosure = { dateString ->
+            (dateString toDateWith Constants.GENERAL_DATE_FORMAT)?.toCalendar?.let { calendar ->
+                paymentMonthDetailsLayout.value = resources.getStringArray(R.array.key_months_array).getOrNull(index = calendar.get(Calendar.MONTH) + 1)
+            }
+        }
+        after(
+            millis = 600
+        ) {
+            dateDetailsLayout.dateValue = Date() formattedDateWith Constants.GENERAL_DATE_FORMAT
+        }
         skipPaymentAppSwitchLayout.setOnClickListener {
             skipPaymentAppSwitchLayout.isChecked = !skipPaymentAppSwitchLayout.isChecked
         }

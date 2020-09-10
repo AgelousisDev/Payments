@@ -40,9 +40,7 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
                 Intent().also {
                     it.putExtra(
                         GROUP_MODEL_EXTRA,
-                        selectedGroupModel.also { groupModel ->
-                            groupModel.groupName = groupField.text?.toString()
-                        }
+                        selectedGroupModel
                     )
                 }
             )
@@ -66,8 +64,6 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
             field = value
             value?.let {
                 window?.statusBarColor = it
-                //rootLayout.setBackgroundColor(it)
-                //groupTextInputLayout.hintTextColor = ColorStateList.valueOf(it)
                 window?.navigationBarColor = it
                 selectedGroupModel.color = it
                 binding?.groupModel = selectedGroupModel
@@ -118,11 +114,12 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
     }
 
     private fun setupUI() {
-        rootLayout.circularReveal {
+        binding?.rootLayout?.circularReveal {
             uiBarColor = selectedGroupModel.color ?: ContextCompat.getColor(this, R.color.colorAccent)
         }
-        groupField.doAfterTextChanged {
+        binding?.groupField?.doAfterTextChanged {
             addGroupButtonState = it?.isNotEmpty() == true
+            selectedGroupModel.groupName = it?.toString()
         }
     }
 

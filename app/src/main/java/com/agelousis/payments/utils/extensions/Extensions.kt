@@ -148,7 +148,7 @@ fun Context.saveImage(bitmap: Bitmap?, fileName: String?) =
         newFile.name
     }
 
-fun Context.saveProfileImage(fileName: String?, byteArray: ByteArray?) {
+fun Context.saveImage(fileName: String?, byteArray: ByteArray?) {
     byteArray?.let { bytes ->
         val newFile = File(filesDir, fileName ?: return@let)
         if (!newFile.exists())
@@ -453,6 +453,14 @@ val Date.isValidProductDate: Boolean
 infix fun Date.formattedDateWith(pattern: String): String? =
     SimpleDateFormat(pattern, Locale.getDefault()).format(this)
 
+infix fun String.toDateWith(pattern: String): Date? =
+    SimpleDateFormat(pattern, Locale.getDefault()).parse(this)
+
+val Date.toCalendar: Calendar
+    get() = Calendar.getInstance().also {
+        it.time = this
+    }
+
 inline fun <reified J> Any.asIs(block: (J) -> Unit) {
     if (this is J)
         block(this)
@@ -572,8 +580,7 @@ fun setPicassoImageFromInternalFiles(appCompatImageView: AppCompatImageView, fil
 @BindingAdapter("picassoGroupImageFromInternalFiles")
 fun setPicassoGroupImageFromInternalFiles(appCompatImageView: AppCompatImageView, fileName: String?) {
     fileName?.let {
-        Picasso.get().load(File(appCompatImageView.context.filesDir, it)).placeholder(R.drawable.ic_group)
-            .transform(CircleTransformation()).into(appCompatImageView)
+        Picasso.get().load(File(appCompatImageView.context.filesDir, it)).transform(CircleTransformation()).into(appCompatImageView)
     }
 }
 
@@ -634,9 +641,4 @@ fun setViewBackground(viewGroup: ViewGroup, resourceId: Int?) {
     resourceId?.let {
         viewGroup.setBackgroundResource(resourceId)
     }
-}
-
-@BindingAdapter("imageTintColor")
-fun setImageTintColor(appCompatImageView: AppCompatImageView, color: Int?) {
-    appCompatImageView.imageTintList = color?.let { ColorStateList.valueOf(it) }
 }

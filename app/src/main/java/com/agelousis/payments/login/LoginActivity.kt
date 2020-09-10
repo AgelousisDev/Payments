@@ -145,7 +145,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
 
     override fun onUserSelected(userModel: UserModel) {
         signInState = SignInState.LOGIN
-        saveProfileImage(
+        saveImage(
             fileName = userModel.profileImage,
             byteArray = userModel.profileImageData
         )
@@ -212,6 +212,14 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                 users = ArrayList(users)
             )
         }
+        viewModel.groupsLiveData.observe(this) { groups ->
+            groups.forEach { group ->
+                saveImage(
+                    fileName = group.groupImage ?: return@forEach,
+                    byteArray = group.groupImageData ?: return@forEach
+                )
+            }
+        }
     }
 
     private fun configureLoginState() {
@@ -257,6 +265,13 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
             )
         }
 
+    private fun initializeGroups() =
+        uiScope.launch {
+            viewModel.initializeGroups(
+                context = this@LoginActivity
+            )
+        }
+
     private fun initializeDatabaseImport() {
         showTwoButtonsDialog(
             title = resources.getString(R.string.key_import_label),
@@ -287,6 +302,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                             millis = 1000
                         ) {
                             initializeUsers()
+                            initializeGroups()
                         }
                     }
                     false ->

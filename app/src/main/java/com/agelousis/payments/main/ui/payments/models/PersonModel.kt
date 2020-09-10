@@ -22,7 +22,8 @@ data class PersonModel(val paymentId: Int? = null,
                        val active: Boolean?,
                        val free: Boolean?,
                        val payments: List<PaymentAmountModel>?,
-                       val groupColor: Int? = null
+                       val groupColor: Int? = null,
+                       val groupImage: String? = null
 ): Parcelable {
     val totalPaymentAmount: Double?
         get() = payments?.mapNotNull { it.paymentAmount }?.sum()

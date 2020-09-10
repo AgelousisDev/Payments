@@ -295,7 +295,8 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
                             GroupModel(
                                 groupId = filteredByQueryPayments.firstOrNull()?.groupId,
                                 groupName = map.key,
-                                color = filteredByQueryPayments.firstOrNull()?.groupColor
+                                color = filteredByQueryPayments.firstOrNull()?.groupColor,
+                                groupImage = filteredByQueryPayments.firstOrNull()?.groupImage
                             )
                         )
                         filteredList.addAll(

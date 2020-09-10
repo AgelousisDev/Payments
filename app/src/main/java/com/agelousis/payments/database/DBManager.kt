@@ -361,7 +361,8 @@ class DBManager(context: Context) {
                             active = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.ACTIVE)) ?: 0 > 0,
                             free = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.FREE)) ?: 0 > 0,
                             payments = payments,
-                            groupColor = groups.firstOrNull { it.groupId == personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)) }?.color
+                            groupColor = groups.firstOrNull { it.groupId == personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)) }?.color,
+                            groupImage = groups.firstOrNull { it.groupId == personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)) }?.groupImage
                         )
                     )
                     genericList.removeAll {
@@ -440,7 +441,8 @@ class DBManager(context: Context) {
                             active = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.ACTIVE)) ?: 0 > 0,
                             free = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.FREE)) ?: 0 > 0,
                             payments = payments,
-                            groupColor = groupCursor?.getIntOrNull(groupCursor.getColumnIndex(SQLiteHelper.COLOR))
+                            groupColor = groupCursor?.getIntOrNull(groupCursor.getColumnIndex(SQLiteHelper.COLOR)),
+                            groupImage = groupCursor?.getStringOrNull(groupCursor.getColumnIndex(SQLiteHelper.GROUP_IMAGE))
                         )
                     )
                 }
@@ -461,6 +463,39 @@ class DBManager(context: Context) {
                 null,
                 "${SQLiteHelper.USER_ID}=?",
                 arrayOf(userId?.toString() ?: return@withContext),
+                null,
+                null,
+                null
+            )
+            if (groupsCursor?.moveToFirst() == true && groupsCursor.count > 0)
+                do {
+                    groups.add(
+                        GroupModel(
+                            groupId = groupsCursor.getIntOrNull(groupsCursor.getColumnIndex(SQLiteHelper.ID)),
+                            groupName = groupsCursor.getStringOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_NAME)),
+                            color = groupsCursor.getIntOrNull(groupsCursor.getColumnIndex(SQLiteHelper.COLOR)),
+                            groupImage = groupsCursor.getStringOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_IMAGE))
+                        ).also {
+                            it.groupImageData = groupsCursor.getBlobOrNull(groupsCursor.getColumnIndex(SQLiteHelper.GROUP_IMAGE_DATA))
+                        }
+                    )
+                }
+                while(groupsCursor.moveToNext())
+            groupsCursor?.close()
+            withContext(Dispatchers.Main) {
+                groupsSuccessBlock(groups)
+            }
+        }
+    }
+
+    suspend fun initializeGroups(groupsSuccessBlock: GroupsSuccessBlock) {
+        withContext(Dispatchers.Default) {
+            val groups = arrayListOf<GroupModel>()
+            val groupsCursor = database?.query(
+                SQLiteHelper.GROUPS_TABLE_NAME,
+                null,
+                null,
+                null,
                 null,
                 null,
                 null

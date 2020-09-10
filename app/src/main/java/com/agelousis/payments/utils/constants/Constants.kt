@@ -12,6 +12,7 @@ object Constants {
     const val BIN_FILE_EXTENSION = "bin"
     const val OCTET_STREAM_MIME_TYPE = "application/octet-stream"
     const val DATE_FORMAT = "MMM dd, yyyy HH:mm:ss"
+    const val GENERAL_DATE_FORMAT = "dd/MM/yyyy"
     const val FILE_DATE_FORMAT = "yyyy_MM_dd_HH_mm_ss"
     const val MONTH_DATE_FORMAT = "MMMM yyyy"
     const val PDF_FILE_NAME_FORMAT_VALUE = "sample_%s.pdf"
