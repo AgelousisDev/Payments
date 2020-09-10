@@ -70,6 +70,11 @@ class PersonalInformationFragment: Fragment(), OptionPresenter {
         newUserModel?.socialInsuranceNumber = newSocialInsuranceNumber
     }
 
+    override fun onVatChange(newVat: Int) {
+        if (newVat.isZero) return
+        newUserModel?.vat = newVat
+    }
+
     private val sharedPreferences by lazy { context?.getSharedPreferences(Constants.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE) }
     private val dbManager by lazy { context?.let { DBManager(context = it) } }
     private val newUserModel by lazy { (activity as? MainActivity)?.userModel?.copy() }
@@ -101,6 +106,9 @@ class PersonalInformationFragment: Fragment(), OptionPresenter {
                 it.userModel = newUserModel
             },
             OptionType.CHANGE_SOCIAL_INSURANCE_NUMBER.also {
+                it.userModel = newUserModel
+            },
+            OptionType.VAT.also {
                 it.userModel = newUserModel
             }
         )
@@ -156,6 +164,11 @@ class PersonalInformationFragment: Fragment(), OptionPresenter {
                     loadImageBitmap(
                         imageUri = imageUri
                     ) { bitmap ->
+                        newUserModel?.profileImage?.let {
+                            context?.deleteInternalFile(
+                                fileName = it
+                            )
+                        }
                         newUserModel?.profileImage = context?.saveProfileImage(
                             bitmap = bitmap
                         )

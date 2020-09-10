@@ -14,7 +14,8 @@ data class UserModel(var id: Int? = null,
                      var idCardNumber: String? = null,
                      var socialInsuranceNumber: String? = null,
                      var firstName: String? = null,
-                     var lastName: String? = null
+                     var lastName: String? = null,
+                     var vat: Int? = null
 ): Parcelable {
 
     @IgnoredOnParcel var profileImageData: ByteArray? = null

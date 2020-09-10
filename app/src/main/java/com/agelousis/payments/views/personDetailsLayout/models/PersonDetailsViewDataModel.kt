@@ -7,6 +7,6 @@ data class PersonDetailsViewDataModel(val label: String? = null,
                                       val value: String? = null,
                                       val showLine: Boolean? = null,
                                       val imeOptionsType: ImeOptionsType? = null,
-                                      val type: PersonDetailFieldType? = null
-
+                                      val type: PersonDetailFieldType? = null,
+                                      var customParams: List<String>? = null
 )

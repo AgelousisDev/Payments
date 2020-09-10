@@ -41,6 +41,10 @@ class OptionViewHolder(private val binding: OptionTypeRowLayoutBinding): Recycle
                     optionPresenter.onSocialInsuranceNumberChange(
                         newSocialInsuranceNumber = it?.toString() ?: return@doAfterTextChanged
                     )
+                OptionType.VAT ->
+                    optionPresenter.onVatChange(
+                        newVat = it?.toString()?.toIntOrNull() ?: return@doAfterTextChanged
+                    )
                 else -> {}
             }
         }

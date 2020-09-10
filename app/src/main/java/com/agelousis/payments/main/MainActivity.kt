@@ -118,6 +118,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             it.address = newUserModel?.address
                             it.idCardNumber = newUserModel?.idCardNumber
                             it.socialInsuranceNumber = newUserModel?.socialInsuranceNumber
+                            it.vat = newUserModel?.vat
                         }
                         startActivity(Intent(this@MainActivity, LoginActivity::class.java))
                         finish()

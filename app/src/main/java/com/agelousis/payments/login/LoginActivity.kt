@@ -339,6 +339,11 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                     profileImageView.loadImageBitmap(
                         imageUri = imageUri
                     ) { bitmap ->
+                        userModel.profileImage?.let {
+                            deleteInternalFile(
+                                fileName = it
+                            )
+                        }
                         userModel.profileImage = saveProfileImage(
                             bitmap = bitmap
                         )

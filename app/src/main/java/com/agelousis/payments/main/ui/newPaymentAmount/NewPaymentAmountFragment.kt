@@ -10,16 +10,28 @@ import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import com.agelousis.payments.R
 import com.agelousis.payments.databinding.FragmentNewPaymentAmountLayoutBinding
+import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
+import com.agelousis.payments.views.currencyEditText.interfaces.AmountListener
 import kotlinx.android.synthetic.main.fragment_new_payment_amount_layout.*
 import java.util.*
 
-class NewPaymentAmountFragment: Fragment() {
+class NewPaymentAmountFragment: Fragment(), AmountListener {
 
     companion object {
         const val PAYMENT_AMOUNT_DATA_EXTRA = "NewPaymentAmountFragment=paymentAmountDataExtra"
+    }
+
+    override fun onAmountChanged(amount: Double?) {
+        amountLayout.infoLabel =
+            if (amount != null && !amount.toInt().isZero)
+                String.format(
+                    resources.getString(R.string.key_vat_value_count_message),
+                    (activity as? MainActivity)?.userModel?.vat?.toString()
+                )
+            else null
     }
 
     private val args: NewPaymentAmountFragmentArgs by navArgs()
@@ -44,6 +56,7 @@ class NewPaymentAmountFragment: Fragment() {
     }
 
     private fun setupUI() {
+        amountLayout.amountListener = this
         paymentMonthDetailsLayout.setOnDetailsPressed {
             context?.showListDialog(
                 title = resources.getString(R.string.key_select_option_label),

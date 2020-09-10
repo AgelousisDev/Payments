@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.*
 import android.graphics.drawable.Drawable
@@ -157,6 +156,10 @@ fun Context.saveImage(fileName: String?, byteArray: ByteArray?) {
             it.write(bytes)
         }
     }
+}
+
+fun Context.deleteInternalFile(fileName: String?) {
+    File(filesDir, fileName ?: return).delete()
 }
 
 infix fun Context.byteArrayFromInternalImage(imageName: String?) =
@@ -560,6 +563,9 @@ fun AppCompatImageView.loadImageUri(imageUri: Uri?) {
             .transform(CircleTransformation()).centerCrop().into(this)
     }
 }
+
+val Int?.isZero
+    get() = this == 0
 
 @BindingAdapter("picassoImagePath")
 fun AppCompatImageView.loadImagePath(fileName: String?) {

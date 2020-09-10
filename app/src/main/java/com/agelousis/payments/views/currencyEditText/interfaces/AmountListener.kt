@@ -1,5 +1,5 @@
-package com.raccyprus.carservices.entries.interfaces
+package com.agelousis.payments.views.currencyEditText.interfaces
 
 interface AmountListener {
-    fun onAmountChanged(amount: Double?, id: Int?)
+    fun onAmountChanged(amount: Double?)
 }

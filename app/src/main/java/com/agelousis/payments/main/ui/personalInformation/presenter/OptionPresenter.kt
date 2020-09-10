@@ -10,4 +10,5 @@ interface OptionPresenter {
     fun onSocialInsuranceNumberChange(newSocialInsuranceNumber: String)
     fun onFirstNameChange(newFirstName: String)
     fun onLastNameChange(newLastName: String)
+    fun onVatChange(newVat: Int)
 }

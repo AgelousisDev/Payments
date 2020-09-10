@@ -84,6 +84,11 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
             centerY = onTouchCenterY?.toInt()
         ) {
             super.onBackPressed()
+            selectedGroupModel.groupImage?.let {
+                deleteInternalFile(
+                    fileName = it
+                )
+            }
             overridePendingTransition(0, 0)
         }
     }
@@ -132,6 +137,11 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
                         loadImageBitmap(
                             imageUri = imageUri
                         ) { bitmap ->
+                            selectedGroupModel.groupImage?.let {
+                                deleteInternalFile(
+                                    fileName = it
+                                )
+                            }
                             selectedGroupModel.groupImage = saveImage(
                                 bitmap = bitmap,
                                 fileName = "${Constants.GROUP_IMAGE_NAME}_${System.currentTimeMillis()}"

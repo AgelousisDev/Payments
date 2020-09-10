@@ -30,6 +30,9 @@ fun setPersonalInformation(appCompatEditText: AppCompatEditText, optionType: Opt
             OptionType.CHANGE_SOCIAL_INSURANCE_NUMBER ->
                 it.userModel?.socialInsuranceNumber
                     ?: appCompatEditText.context.resources.getString(R.string.key_empty_field_label)
+            OptionType.VAT ->
+                it.userModel?.vat?.toString()
+                    ?: "0"
             else -> null
         })
     }
