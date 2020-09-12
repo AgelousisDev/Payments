@@ -262,7 +262,7 @@ fun Context.toast(message: String) {
 val Double?.euroFormattedString: String?
     get() {
         val unwrappedAmount = this ?: return null
-        val pattern = "€ #,###.##"
+        val pattern = "€#,###.00"
         val locale = Locale.getDefault()
         val numberFormatter = NumberFormat.getNumberInstance(locale)
         val decimalFormatter = numberFormatter as DecimalFormat
@@ -403,7 +403,7 @@ fun View.circularReveal(circularAnimationCompletionBlock: CircularAnimationCompl
 
 fun View.circularUnReveal(centerX: Int? = null, centerY: Int? = null, circularAnimationCompletionBlock: CircularAnimationCompletionBlock) {
     val finalRadius = max(width.toFloat(), height.toFloat()) * 1.1f
-    val circularReveal = ViewAnimationUtils.createCircularReveal(this@circularUnReveal, centerX ?: width - (width / 4), centerY ?: height / 5, finalRadius, 0.0f)
+    val circularReveal = ViewAnimationUtils.createCircularReveal(this@circularUnReveal, centerX ?: width - 72, centerY ?: 72, finalRadius, 0.0f)
     circularReveal.duration = 500
     circularReveal.addListener(
         onEnd = {
@@ -566,6 +566,19 @@ fun AppCompatImageView.loadImageUri(imageUri: Uri?) {
 
 val Int?.isZero
     get() = this == 0
+
+fun Double?.getAmountWithoutVat(vat: Int?) =
+    ifLet(this, vat) {
+        it.first().toDouble() - (it.first().toDouble() * it.second().toInt()) / 100
+    }
+
+fun Double?.getVatAmount(vat: Int?) =
+    ifLet(this, vat) {
+        (it.first().toDouble() * it.second().toInt()) / 100
+    }
+
+val Int?.percentageEnclosed
+    get() = this?.let { String.format("(%d%%)", it) }
 
 @BindingAdapter("picassoImagePath")
 fun AppCompatImageView.loadImagePath(fileName: String?) {

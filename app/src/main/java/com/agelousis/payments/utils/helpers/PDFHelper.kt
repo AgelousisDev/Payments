@@ -10,6 +10,7 @@ import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.euroFormattedString
 import com.agelousis.payments.utils.extensions.invoiceNumber
 import com.agelousis.payments.utils.extensions.pdfFormattedCurrentDate
+import com.agelousis.payments.utils.extensions.percentageEnclosed
 import com.itextpdf.text.*
 import com.itextpdf.text.pdf.BaseFont
 import com.itextpdf.text.pdf.PdfPCell
@@ -55,6 +56,7 @@ class PDFHelper {
         document.add(Chunk.NEWLINE)
         addPersons(
             context = context,
+            userModel = userModel,
             document = document,
             persons = persons
         )
@@ -108,7 +110,7 @@ class PDFHelper {
         })
     }
 
-    private fun addPersons(context: Context, document: Document, persons: List<PersonModel>) {
+    private fun addPersons(context: Context, userModel: UserModel?, document: Document, persons: List<PersonModel>) {
         persons.forEachIndexed { index, personModel ->
             val table = PdfPTable(3)
             table.addCell(
@@ -189,6 +191,7 @@ class PDFHelper {
 
             addPayments(
                 context = context,
+                userModel = userModel,
                 document = document,
                 payments = personModel.payments
             )
@@ -199,12 +202,31 @@ class PDFHelper {
         }
     }
 
-    private fun addPayments(context: Context, document: Document, payments: List<PaymentAmountModel>?) {
+    private fun addPayments(context: Context, userModel: UserModel?, document: Document, payments: List<PaymentAmountModel>?) {
         payments?.forEach { paymentAmountModel ->
             val table = PdfPTable(3)
             table.addCell(
                 getCell(
                     text = "${context.resources.getString(R.string.key_amount_label)}: ${paymentAmountModel.paymentAmount?.euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label)}",
+                    withBorder = true
+                )
+            )
+            table.addCell(
+                getCell(
+                    text = userModel?.vat?.let { "${context.resources.getString(R.string.key_amount_without_vat_label)}: ${paymentAmountModel.getAmountWithoutVat(context = context, vat = it)}" } ?: "",
+                    withBorder = true
+                )
+            )
+            table.addCell(
+                getCell(
+                    text = userModel?.vat?.let { String.format(
+                        context.resources.getString(R.string.key_vat_amount_value_label),
+                        it.percentageEnclosed ?: "",
+                        paymentAmountModel.getVatAmount(
+                            context = context,
+                            vat = it
+                        )
+                    ) } ?: "",
                     withBorder = true
                 )
             )
@@ -223,18 +245,6 @@ class PDFHelper {
             table.addCell(
                 getCell(
                     text = "${context.resources.getString(R.string.key_skip_payment_label)}: ${if (paymentAmountModel.skipPayment == true) context.resources.getString(R.string.key_yes_label) else context.resources.getString(R.string.key_no_label)}",
-                    withBorder = true
-                )
-            )
-            table.addCell(
-                getCell(
-                    text = "",
-                    withBorder = true
-                )
-            )
-            table.addCell(
-                getCell(
-                    text = "",
                     withBorder = true
                 )
             )

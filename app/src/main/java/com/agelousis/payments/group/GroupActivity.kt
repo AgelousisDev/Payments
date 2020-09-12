@@ -84,11 +84,6 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
             centerY = onTouchCenterY?.toInt()
         ) {
             super.onBackPressed()
-            selectedGroupModel.groupImage?.let {
-                deleteInternalFile(
-                    fileName = it
-                )
-            }
             overridePendingTransition(0, 0)
         }
     }

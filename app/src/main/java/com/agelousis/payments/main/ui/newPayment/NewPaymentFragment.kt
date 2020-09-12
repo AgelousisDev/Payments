@@ -155,6 +155,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     private fun configureRecyclerView() {
         paymentAmountRecyclerView.adapter = PaymentAmountAdapter(
             paymentModelList = availablePayments,
+            vat = (activity as? MainActivity)?.userModel?.vat,
             presenter = this
         )
     }

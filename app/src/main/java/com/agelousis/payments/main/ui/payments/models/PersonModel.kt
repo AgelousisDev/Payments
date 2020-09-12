@@ -4,8 +4,7 @@ import android.content.Context
 import android.os.Parcelable
 import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.newPayment.enumerations.PaymentAmountRowState
-import com.agelousis.payments.utils.extensions.ifLet
-import com.agelousis.payments.utils.extensions.second
+import com.agelousis.payments.utils.extensions.*
 import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 
@@ -53,5 +52,15 @@ data class PaymentAmountModel(val paymentId: Int? = null,
 ): Parcelable {
 
     @IgnoredOnParcel var paymentAmountRowState = PaymentAmountRowState.NORMAL
+
+    fun getAmountWithoutVat(context: Context, vat: Int?) =
+        paymentAmount.getAmountWithoutVat(
+            vat = vat
+        ).euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label)
+
+    fun getVatAmount(context: Context, vat: Int?) =
+        paymentAmount.getVatAmount(
+            vat = vat
+        ).euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label)
 
 }

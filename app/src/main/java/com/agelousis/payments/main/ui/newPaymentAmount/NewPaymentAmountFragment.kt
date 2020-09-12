@@ -29,7 +29,7 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
             if (amount != null && !amount.toInt().isZero)
                 String.format(
                     resources.getString(R.string.key_vat_value_count_message),
-                    (activity as? MainActivity)?.userModel?.vat?.toString()
+                    (activity as? MainActivity)?.userModel?.vat?.percentageEnclosed ?: ""
                 )
             else null
     }

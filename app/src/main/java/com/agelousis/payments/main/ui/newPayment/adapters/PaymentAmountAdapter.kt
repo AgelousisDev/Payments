@@ -8,7 +8,7 @@ import com.agelousis.payments.main.ui.newPayment.presenters.NewPaymentPresenter
 import com.agelousis.payments.main.ui.newPayment.viewHolders.PaymentAmountViewHolder
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 
-class PaymentAmountAdapter(private val paymentModelList: ArrayList<PaymentAmountModel>, private val presenter: NewPaymentPresenter): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PaymentAmountAdapter(private val paymentModelList: ArrayList<PaymentAmountModel>, private val vat: Int?, private val presenter: NewPaymentPresenter): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PaymentAmountViewHolder(
@@ -26,6 +26,7 @@ class PaymentAmountAdapter(private val paymentModelList: ArrayList<PaymentAmount
             paymentAmountModel = paymentModelList.getOrNull(
                 index = position
             ) ?: return,
+            vat = vat,
             presenter = presenter
         )
     }

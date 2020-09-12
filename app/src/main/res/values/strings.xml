@@ -84,9 +84,13 @@
     <string name="key_select_user_from_backup_label">Select a User</string>
     <string name="key_license_expired_message">Your license has been expired. Please contact with the developers…</string>
     <string name="key_payment_month_label">Payment Month</string>
-    <string name="key_total_amount_value_label">Total: %s</string>
+    <string name="key_total_amount_value_label">💶 Total %s</string>
     <string name="key_vat_label">VAT</string>
-    <string name="key_vat_value_count_message">%s%% VAT is counted</string>
+    <string name="key_vat_value_count_message">%s VAT should be counted here</string>
+    <string name="key_payment_month_amount_value_label">%s payment %s</string>
+    <string name="key_vat_amount_value_label">🧾 VAT %s %s</string>
+    <string name="key_summary_label">Summary</string>
+    <string name="key_amount_without_vat_label">Amount without VAT</string>
 
     <string-array name="key_payment_action_array">
         <item>Call</item>

@@ -17,6 +17,8 @@
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:text="@{paymentAmountSumModel.getFormattedPaymentsSum(context)}"
         android:textColor="@{(paymentAmountSumModel.color != null) ? paymentAmountSumModel.color : @color/grey}"
+        android:singleLine="true"
+        android:maxLines="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
