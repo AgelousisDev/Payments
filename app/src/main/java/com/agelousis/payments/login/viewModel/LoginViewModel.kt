@@ -15,14 +15,14 @@ class LoginViewModel: ViewModel() {
     suspend fun initializeUsers(context: Context) {
         val dbManager = DBManager(context = context)
         dbManager.checkUsers {
-            usersLiveData.value = it
+            usersLiveData.value = it.takeIf { it.isNotEmpty() } ?: return@checkUsers
         }
     }
 
     suspend fun initializeGroups(context: Context) {
         val dbManager = DBManager(context = context)
-        dbManager.initializeGroups {
-            groupsLiveData.value = it
+        dbManager.initializeGroups inner@ {
+            groupsLiveData.value = it.takeIf { it.isNotEmpty() } ?: return@inner
         }
     }
 

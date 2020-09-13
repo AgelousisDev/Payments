@@ -112,8 +112,9 @@
                     android:id="@+id/profileImageView"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:background="@drawable/profile_background"
+                    android:background="@{signInState == SignInState.SIGN_UP ? @drawable/profile_background : null}"
                     android:onClick="@{() -> presenter.onProfileSelect()}"
+                    android:enabled="@{signInState == SignInState.SIGN_UP}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_person"
@@ -170,38 +171,60 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    style="@style/TextViewLabel"
-                    android:id="@+id/keepMeSignedInCheckBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/key_keep_sign_in_label"
-                    android:checked="@{userModel != null}"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/passwordTextInputLayout" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:onClick="@{() -> presenter.onUsersSelect()}"
+        android:visibility="@{signInState == SignInState.LOGIN ? View.VISIBLE : View.GONE}"
+        app:srcCompat="@drawable/ic_up_arrow"
+        app:tint="@color/grey"
+        app:layout_constraintBottom_toTopOf="@+id/loginButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/loginButton"
+        style="@style/BasicMaterialButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:alpha="@{loginButtonState ? 1.0f : 0.5f}"
+        android:enabled="@{loginButtonState}"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:onClick="@{() -> presenter.onSignIn()}"
+        android:text="@{signInState.getTitle(context)}"
+        app:backgroundTint="@color/colorAccent"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/signUnButton"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@string/key_login_label" />
+
     <com.google.android.material.button.MaterialButton
         style="@style/BasicMaterialButton"
-        android:id="@+id/loginButton"
-        android:layout_width="match_parent"
+        android:id="@+id/signUnButton"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:insetBottom="0dp"
         android:insetTop="0dp"
-        android:text="@{signInState.getTitle(context)}"
-        tools:text="@string/key_sign_up_label"
-        android:onClick="@{() -> presenter.onSignIn()}"
-        android:enabled="@{loginButtonState}"
-        android:alpha="@{loginButtonState ? 1.0f : 0.5f}"
-        app:backgroundTint="@color/colorAccent"
+        android:text="@string/key_sign_up_label"
+        android:visibility="@{signInState == SignInState.LOGIN ? View.VISIBLE : View.GONE}"
+        android:onClick="@{() -> presenter.onSignUp()}"
+        app:backgroundTint="@color/grey"
+        app:cornerRadius="0dp"
+        app:layout_constraintStart_toEndOf="@+id/loginButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        tools:text="@string/key_sign_up_label"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

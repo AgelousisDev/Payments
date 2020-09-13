@@ -1,5 +1,6 @@
 package com.agelousis.payments.userSelection
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -33,7 +34,7 @@ class UserSelectionFragment: BottomSheetDialogFragment(), UserSelectionPresenter
 
     override fun onUserSelected(userModel: UserModel) {
         (activity as? LoginActivity)?.onUserSelected(
-            userModel = userModel
+            userModel = userModel,
         )
         dismiss()
     }

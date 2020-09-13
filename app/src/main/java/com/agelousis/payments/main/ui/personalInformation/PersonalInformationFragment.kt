@@ -1,7 +1,6 @@
 package com.agelousis.payments.main.ui.personalInformation
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,7 +18,6 @@ import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.personalInformation.adapters.OptionTypesAdapter
 import com.agelousis.payments.main.ui.personalInformation.models.OptionType
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
-import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import kotlinx.android.synthetic.main.fragment_personal_information_layout.*
 
@@ -75,7 +73,6 @@ class PersonalInformationFragment: Fragment(), OptionPresenter {
         newUserModel?.vat = newVat
     }
 
-    private val sharedPreferences by lazy { context?.getSharedPreferences(Constants.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE) }
     private val dbManager by lazy { context?.let { DBManager(context = it) } }
     private val newUserModel by lazy { (activity as? MainActivity)?.userModel?.copy() }
     private val optionTypes by lazy {
@@ -97,7 +94,7 @@ class PersonalInformationFragment: Fragment(), OptionPresenter {
             },
             OptionType.CHANGE_BIOMETRICS_STATE.also {
                 it.userModel = newUserModel
-                it.biometricAvailability = context?.hasBiometrics == true && sharedPreferences?.userModel != null
+                it.biometricAvailability = context?.hasBiometrics == true
             },
             OptionType.CHANGE_ADDRESS.also {
                 it.userModel = newUserModel

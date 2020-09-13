@@ -1,7 +1,6 @@
 package com.agelousis.payments.main
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
@@ -107,19 +106,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when(navHostFragmentContainerView.findNavController().currentDestination?.id) {
             R.id.personalInformationFragment ->
                 uiScope.launch {
-                    (supportFragmentManager.currentNavigationFragment as? PersonalInformationFragment)?.updateUser { newUserModel ->
-                        sharedPreferences.userModel = sharedPreferences.userModel?.also {
-                            it.firstName = newUserModel?.firstName
-                            it.lastName = newUserModel?.lastName
-                            it.username = newUserModel?.username
-                            it.password = newUserModel?.password
-                            it.biometrics = newUserModel?.biometrics
-                            it.profileImage = newUserModel?.profileImage
-                            it.address = newUserModel?.address
-                            it.idCardNumber = newUserModel?.idCardNumber
-                            it.socialInsuranceNumber = newUserModel?.socialInsuranceNumber
-                            it.vat = newUserModel?.vat
-                        }
+                    (supportFragmentManager.currentNavigationFragment as? PersonalInformationFragment)?.updateUser {
                         startActivity(Intent(this@MainActivity, LoginActivity::class.java))
                         finish()
                     }
@@ -141,7 +128,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val dbManager by lazy { DBManager(context = this) }
-    private val sharedPreferences by lazy { getSharedPreferences(Constants.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE) }
     val userModel by lazy { intent?.extras?.getParcelable<UserModel>(USER_MODEL_EXTRA) }
     private var appBarTitle: String? = null
         set(value) {

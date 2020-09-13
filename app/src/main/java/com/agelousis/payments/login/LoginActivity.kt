@@ -2,7 +2,6 @@ package com.agelousis.payments.login
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
@@ -12,9 +11,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.GestureDetector
 import android.view.MotionEvent
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.GestureDetectorCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import com.agelousis.payments.R
@@ -34,23 +35,19 @@ import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
-class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, UserSelectionPresenter {
+class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, UserSelectionPresenter, GestureDetector.OnGestureListener {
 
     private var binding: ActivityLoginBinding? = null
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val userModel by lazy { UserModel() }
-    private val sharedPreferences by lazy {
-        getSharedPreferences(
-            Constants.SHARED_PREFERENCES_KEY,
-            Context.MODE_PRIVATE
-        )
-    }
     private val viewModel by lazy { ViewModelProvider(this).get(LoginViewModel::class.java) }
     private var dbManager: DBManager? = null
     private var signInState = SignInState.SIGN_UP
+    private var mDetector: GestureDetectorCompat? = null
 
     companion object {
         const val PROFILE_SELECT_REQUEST_CODE = 1
@@ -74,9 +71,6 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                     userModel.password = passwordField.text?.toString()
                     userModel.biometrics = biometricsState
                     dbManager?.userModel = userModel
-                    if (keepMeSignedInCheckBox.isChecked)
-                        sharedPreferences.userModel = userModel
-                    else sharedPreferences.userModel = null
                     uiScope.launch {
                         dbManager?.searchUser(
                             userModel = userModel
@@ -103,10 +97,6 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                                 Toast.LENGTH_SHORT
                             ).show()
                         else {
-                            if (keepMeSignedInCheckBox.isChecked)
-                                sharedPreferences.userModel = userModel
-                            else
-                                sharedPreferences.userModel = null
                             showMainActivity(
                                 userModel = userModel
                             )
@@ -114,6 +104,13 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                     }
                 }
         }
+    }
+
+    override fun onSignUp() {
+        signInState = SignInState.SIGN_UP
+        binding?.signInState = signInState
+        binding?.userModel = null
+        binding?.loginButtonState = false
     }
 
     override fun onImport() {
@@ -124,7 +121,10 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
         Handler(Looper.getMainLooper()).postDelayed({
             uiScope.launch {
                 dbManager?.searchUser(
-                    userModel = sharedPreferences.userModel ?: return@launch
+                    userModel = UserModel(
+                        username = usernameField.text?.toString(),
+                        password = passwordField.text?.toString()
+                    )
                 ) { userModel ->
                     if (userModel == null)
                         Toast.makeText(
@@ -145,12 +145,27 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
 
     override fun onUserSelected(userModel: UserModel) {
         signInState = SignInState.LOGIN
-        saveImage(
-            fileName = userModel.profileImage,
-            byteArray = userModel.profileImageData
-        )
+        userModel.profileImage?.let {
+            if (File(filesDir, it).exists())
+                saveImage(
+                    fileName = userModel.profileImage,
+                    byteArray = userModel.profileImageData
+                )
+        }
         binding?.signInState = signInState
         binding?.userModel = userModel
+        binding?.loginButtonState = userModel.username?.isNotEmpty() == true && userModel.password?.isNotEmpty() == true
+        showBiometrics(
+            biometrics = userModel.biometrics == true
+        )
+    }
+
+    override fun onUsersSelect() {
+        viewModel.usersLiveData.value?.takeIf { it.isNotEmpty() }?.let {
+            showUserSelectionFragment(
+                users = it
+            )
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -158,9 +173,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
         binding = ActivityLoginBinding.inflate(
             layoutInflater
         ).also {
-            it.userModel = sharedPreferences.userModel
             it.signInState = signInState
-            it.loginButtonState = sharedPreferences.userModel?.username?.isNotEmpty() == true && sharedPreferences.userModel?.password?.isNotEmpty() == true
             it.presenter = this
         }
         setContentView(
@@ -172,6 +185,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
         addObservers()
         configureLoginState()
         setupUI()
+        initializeUsers()
     }
 
     private fun showBiometricsAlert(predicate: () -> Boolean, closure: (Boolean) -> Unit) {
@@ -189,8 +203,8 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
         else closure(false)
     }
 
-    private fun showBiometrics() {
-        if (sharedPreferences.userModel?.biometrics == true && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && Date().isValidProductDate)
+    private fun showBiometrics(biometrics: Boolean = false) {
+        if (biometrics && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && Date().isValidProductDate)
             BiometricsHelper(
                 biometricsListener = this
             ).showBiometricsPrompt(
@@ -207,9 +221,8 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
 
     private fun addObservers() {
         viewModel.usersLiveData.observe(this) { users ->
-            UserSelectionFragment.show(
-                supportFragmentManager = supportFragmentManager,
-                users = ArrayList(users)
+            showUserSelectionFragment(
+                users = users
             )
         }
         viewModel.groupsLiveData.observe(this) { groups ->
@@ -222,14 +235,18 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
         }
     }
 
+    private fun showUserSelectionFragment(users: List<UserModel>) =
+        UserSelectionFragment.show(
+            supportFragmentManager = supportFragmentManager,
+            users = ArrayList(users),
+        )
+
     private fun configureLoginState() {
         uiScope.launch {
             dbManager?.checkUsers {
                 signInState = if (it.isNotEmpty()) SignInState.LOGIN else SignInState.SIGN_UP
                 binding?.signInState = signInState
                 profileImageView.isEnabled = signInState == SignInState.SIGN_UP
-                if (signInState == SignInState.LOGIN)
-                    showBiometrics()
             }
         }
     }
@@ -256,6 +273,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
             false
         }
         checkProductDate()
+        mDetector = GestureDetectorCompat(this, this)
     }
 
     private fun initializeUsers() =
@@ -360,5 +378,28 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                 )
         }
     }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        super.dispatchTouchEvent(ev)
+        return mDetector?.onTouchEvent(ev) == true
+    }
+
+    override fun onDown(event: MotionEvent) = true
+
+    override fun onFling(event1: MotionEvent, event2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+        if (event2.y + 100.0 < event1.y)
+            showUserSelectionFragment(
+                users = viewModel.usersLiveData.value?.takeIf { it.isNotEmpty() } ?: return true
+            )
+        return true
+    }
+
+    override fun onLongPress(event: MotionEvent) {}
+
+    override fun onScroll(event1: MotionEvent, event2: MotionEvent, distanceX: Float, distanceY: Float) = true
+
+    override fun onShowPress(event: MotionEvent) {}
+
+    override fun onSingleTapUp(event: MotionEvent) = true
 
 }

@@ -3,14 +3,12 @@ package com.agelousis.payments.utils.constants
 import android.graphics.Color
 
 object Constants {
-    const val SHARED_PREFERENCES_KEY = "sharedPreferences"
     const val IMAGE_MIME_TYPE = "image/*"
     const val PROFILE_IMAGE_NAME = "profile_image"
     const val EURO_VALUE = "€"
     const val DATE_FORMAT_VALUE = "%d/%d/%d"
     const val GENERAL_MIME_TYPE = "*/*"
     const val BIN_FILE_EXTENSION = "bin"
-    const val OCTET_STREAM_MIME_TYPE = "application/octet-stream"
     const val DATE_FORMAT = "MMM dd, yyyy HH:mm:ss"
     const val GENERAL_DATE_FORMAT = "dd/MM/yyyy"
     const val FILE_DATE_FORMAT = "yyyy_MM_dd_HH_mm_ss"

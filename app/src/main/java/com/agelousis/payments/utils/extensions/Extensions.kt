@@ -4,7 +4,6 @@ import android.animation.Animator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.*
@@ -37,7 +36,6 @@ import com.agelousis.payments.BuildConfig
 import com.agelousis.payments.R
 import com.agelousis.payments.custom.picasso.CircleTransformation
 import com.agelousis.payments.database.SQLiteHelper
-import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.payments.utils.constants.Constants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -169,40 +167,6 @@ infix fun Context.byteArrayFromInternalImage(imageName: String?) =
         bitmap.recycle()
         bytesArray
     }
-
-var SharedPreferences.userModel: UserModel?
-    set(value) {
-        edit().also {
-            it.putString(SQLiteHelper.FIRST_NAME, value?.firstName)
-            it.putString(SQLiteHelper.SURNAME, value?.lastName)
-            it.putString(SQLiteHelper.USERNAME, value?.username)
-            it.putString(SQLiteHelper.PASSWORD, value?.password)
-            it.putBoolean(SQLiteHelper.BIOMETRICS, value?.biometrics == true)
-            it.putString(SQLiteHelper.PROFILE_IMAGE, value?.profileImage)
-            it.putString(SQLiteHelper.ADDRESS, value?.address)
-            it.putString(SQLiteHelper.ID_CARD_NUMBER, value?.idCardNumber)
-            it.putString(SQLiteHelper.SOCIAL_INSURANCE_NUMBER, value?.socialInsuranceNumber)
-            it.apply()
-        }
-    }
-    get() =
-        ifLet(
-            getString(SQLiteHelper.USERNAME, null),
-            getString(SQLiteHelper.PASSWORD, null),
-            getBoolean(SQLiteHelper.BIOMETRICS, false),
-        ) {
-            UserModel(
-                firstName = getString(SQLiteHelper.FIRST_NAME, null),
-                lastName = getString(SQLiteHelper.SURNAME, null),
-                username = it.first().toString(),
-                password = it.second().toString(),
-                biometrics = it.third().toString().toBoolean(),
-                profileImage = getString(SQLiteHelper.PROFILE_IMAGE, null),
-                address = getString(SQLiteHelper.ADDRESS, null),
-                idCardNumber = getString(SQLiteHelper.ID_CARD_NUMBER, null),
-                socialInsuranceNumber = getString(SQLiteHelper.SOCIAL_INSURANCE_NUMBER, null)
-            )
-        }
 
 fun Context.showTwoButtonsDialog(title: String, message: String, isCancellable: Boolean? = null, negativeButtonBlock: PositiveButtonBlock? = null,
                                  positiveButtonText: String? = null, positiveButtonBlock: PositiveButtonBlock) {
@@ -593,7 +557,7 @@ fun setPicassoImageFromInternalFiles(appCompatImageView: AppCompatImageView, fil
     fileName?.let {
         Picasso.get().load(File(appCompatImageView.context.filesDir, it)).placeholder(R.drawable.ic_person)
             .transform(CircleTransformation()).into(appCompatImageView)
-    }
+    } ?: appCompatImageView.setImageResource(R.drawable.ic_person)
 }
 
 @BindingAdapter("picassoGroupImageFromInternalFiles")
