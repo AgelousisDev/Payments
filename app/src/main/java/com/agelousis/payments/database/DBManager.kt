@@ -256,19 +256,19 @@ class DBManager(context: Context) {
                     it.put(SQLiteHelper.FREE, personModel.free)
                 },
                 "${SQLiteHelper.ID}=?",
-                arrayOf(personModel.paymentId?.toString())
+                arrayOf(personModel.personId?.toString())
             )
             database?.delete(
                 SQLiteHelper.PAYMENTS_TABLE_NAME,
                 "${SQLiteHelper.PERSON_ID}=?",
-                arrayOf(personModel.paymentId?.toString())
+                arrayOf(personModel.personId?.toString())
             )
             personModel.payments?.forEach { paymentAmountModel ->
                 database?.insert(
                     SQLiteHelper.PAYMENTS_TABLE_NAME,
                     null,
                     ContentValues().also {
-                        it.put(SQLiteHelper.PERSON_ID, personModel.paymentId)
+                        it.put(SQLiteHelper.PERSON_ID, personModel.personId)
                         it.put(SQLiteHelper.PAYMENT_AMOUNT, paymentAmountModel.paymentAmount)
                         it.put(SQLiteHelper.PAYMENT_MONTH, paymentAmountModel.paymentMonth)
                         it.put(SQLiteHelper.PAYMENT_DATE, paymentAmountModel.paymentDate)
@@ -353,7 +353,7 @@ class DBManager(context: Context) {
                     paymentsCursor?.close()
                     genericList.add(
                         PersonModel(
-                            paymentId = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.ID)),
+                            personId = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.ID)),
                             groupId = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)),
                             groupName = groups.firstOrNull { it.groupId == personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)) }?.groupName,
                             firstName = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.FIRST_NAME)),
@@ -433,7 +433,7 @@ class DBManager(context: Context) {
                     paymentsCursor?.close()
                     persons.add(
                         PersonModel(
-                            paymentId = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.ID)),
+                            personId = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.ID)),
                             groupId = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)),
                             groupName = groupCursor?.getStringOrNull(groupCursor.getColumnIndex(SQLiteHelper.GROUP_NAME)),
                             firstName = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.FIRST_NAME)),

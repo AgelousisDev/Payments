@@ -216,7 +216,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
 
     private fun fillCurrentPersonModel() {
         currentPersonModel = PersonModel(
-            paymentId = args.personDataModel?.paymentId,
+            personId = args.personDataModel?.personId,
             groupId = availableGroups.firstOrNull { it.groupName?.toLowerCase(Locale.getDefault()) == binding?.groupDetailsLayout?.value?.toLowerCase(Locale.getDefault()) }?.groupId,
             groupName = binding?.groupDetailsLayout?.value,
             firstName = binding?.firstNameLayout?.value,

@@ -9,7 +9,7 @@ import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class PersonModel(val paymentId: Int? = null,
+data class PersonModel(val personId: Int? = null,
                        val groupId: Int?,
                        val groupName: String?,
                        val firstName: String?,

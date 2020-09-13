@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import com.agelousis.payments.R
 import com.agelousis.payments.login.models.UserModel
-import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.models.PersonModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.euroFormattedString
@@ -175,7 +174,7 @@ class PDFHelper {
             )
             table.addCell(
                 getCell(
-                    text = "${context.resources.getString(R.string.key_invoice_number_label)}: ${personModel.paymentId.invoiceNumber ?: context.resources.getString(R.string.key_empty_field_label)}",
+                    text = "${context.resources.getString(R.string.key_invoice_number_label)}: ${personModel.personId.invoiceNumber ?: context.resources.getString(R.string.key_empty_field_label)}",
                     withBorder = false
                 )
             )
@@ -193,7 +192,7 @@ class PDFHelper {
                 context = context,
                 userModel = userModel,
                 document = document,
-                payments = personModel.payments
+                personModel = personModel
             )
 
             document.add(Chunk.NEWLINE)
@@ -202,8 +201,8 @@ class PDFHelper {
         }
     }
 
-    private fun addPayments(context: Context, userModel: UserModel?, document: Document, payments: List<PaymentAmountModel>?) {
-        payments?.forEach { paymentAmountModel ->
+    private fun addPayments(context: Context, userModel: UserModel?, document: Document, personModel: PersonModel) {
+        personModel.payments?.forEach { paymentAmountModel ->
             val table = PdfPTable(3)
             table.addCell(
                 getCell(
@@ -245,6 +244,25 @@ class PDFHelper {
             table.addCell(
                 getCell(
                     text = "${context.resources.getString(R.string.key_skip_payment_label)}: ${if (paymentAmountModel.skipPayment == true) context.resources.getString(R.string.key_yes_label) else context.resources.getString(R.string.key_no_label)}",
+                    withBorder = true
+                )
+            )
+
+            table.addCell(
+                getCell(
+                    text = "${context.resources.getString(R.string.key_invoice_number_label)}: ${personModel.personId.invoiceNumber?.let { String.format("%s-%d", it, paymentAmountModel.paymentId ?: 0) } ?: context.resources.getString(R.string.key_empty_field_label)}",
+                    withBorder = true
+                )
+            )
+            table.addCell(
+                getCell(
+                    text = "",
+                    withBorder = true
+                )
+            )
+            table.addCell(
+                getCell(
+                    text = "",
                     withBorder = true
                 )
             )

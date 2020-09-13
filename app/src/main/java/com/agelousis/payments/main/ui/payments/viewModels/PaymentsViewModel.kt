@@ -52,7 +52,7 @@ class PaymentsViewModel: ViewModel() {
         }
         (item as? PersonModel)?.let {
             dbManager.deletePayment(
-                paymentId = it.paymentId
+                paymentId = it.personId
             ) {
                 deletionLiveData.value = true
             }

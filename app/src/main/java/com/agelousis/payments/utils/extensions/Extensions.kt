@@ -467,7 +467,7 @@ val <T> Iterable<T>.isSizeOne: Boolean
     }
 
 val Int?.invoiceNumber: String?
-    get() = this?.let { String.format("MF%04d", it) }
+    get() = this?.let { String.format("P%04d", it) }
 
 fun Context.hasPermissions(vararg permissions: String): Boolean {
     permissions.forEach {
