@@ -35,7 +35,6 @@ import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -145,13 +144,6 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
 
     override fun onUserSelected(userModel: UserModel) {
         signInState = SignInState.LOGIN
-        userModel.profileImage?.let {
-            if (File(filesDir, it).exists())
-                saveImage(
-                    fileName = userModel.profileImage,
-                    byteArray = userModel.profileImageData
-                )
-        }
         binding?.signInState = signInState
         binding?.userModel = userModel
         binding?.loginButtonState = userModel.username?.isNotEmpty() == true && userModel.password?.isNotEmpty() == true

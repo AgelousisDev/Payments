@@ -67,14 +67,16 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
         }
         dateDetailsLayout.dateSelectionClosure = { dateString ->
             (dateString toDateWith Constants.GENERAL_DATE_FORMAT)?.toCalendar?.let { calendar ->
-                paymentMonthDetailsLayout.value = resources.getStringArray(R.array.key_months_array).getOrNull(index = calendar.get(Calendar.MONTH) + 1)
+                if (paymentMonthDetailsLayout.value.isNullOrEmpty() || paymentMonthDetailsLayout.value == resources.getString(R.string.key_empty_field_label))
+                    paymentMonthDetailsLayout.value = resources.getStringArray(R.array.key_months_array).getOrNull(index = calendar.get(Calendar.MONTH) + 1)
             }
         }
-        after(
-            millis = 600
-        ) {
-            dateDetailsLayout.dateValue = Date() formattedDateWith Constants.GENERAL_DATE_FORMAT
-        }
+        if (dateDetailsLayout.dateValue.isNullOrEmpty())
+            after(
+                millis = 600
+            ) {
+                dateDetailsLayout.dateValue = Date() formattedDateWith Constants.GENERAL_DATE_FORMAT
+            }
         skipPaymentAppSwitchLayout.setOnClickListener {
             skipPaymentAppSwitchLayout.isChecked = !skipPaymentAppSwitchLayout.isChecked
         }

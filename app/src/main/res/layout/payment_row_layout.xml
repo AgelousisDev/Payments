@@ -23,11 +23,11 @@
 
         <FrameLayout
             android:id="@+id/paymentRowHeaderFrameLayout"
-            backgroundDrawableTintColor="@{personModel.groupImage == null ? personModel.groupColor : @color/white}"
+            backgroundDrawableTintColor="@{personModel.groupImage == null ? personModel.groupColor : null}"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:background="@drawable/oval_background"
+            android:background="@{personModel.groupImage == null ? @drawable/oval_background : null}"
             android:elevation="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -76,6 +76,7 @@
             android:text="@{personModel.totalPaymentAmount != null ? ExtensionsKt.getEuroFormattedString(personModel.totalPaymentAmount) : @string/key_empty_field_label}"
             android:textSize="18sp"
             android:textColor="@{personModel.groupColor}"
+            textViewStrikeByPaymentDates="@{personModel.payments}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

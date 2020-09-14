@@ -36,10 +36,12 @@ import com.agelousis.payments.BuildConfig
 import com.agelousis.payments.R
 import com.agelousis.payments.custom.picasso.CircleTransformation
 import com.agelousis.payments.database.SQLiteHelper
+import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.payments.utils.constants.Constants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.android.material.textview.MaterialTextView
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import java.io.ByteArrayOutputStream
@@ -417,6 +419,17 @@ val Date.isValidProductDate: Boolean
                 firstCalendar.get(Calendar.DAY_OF_YEAR) < secondCalendar.get(Calendar.DAY_OF_YEAR)
     }
 
+val Date.isBiggerThanCurrent: Boolean
+    get() {
+        val firstCalendar = Calendar.getInstance()
+        firstCalendar.time = Date()
+        val secondCalendar = Calendar.getInstance()
+        secondCalendar.time = this
+        return firstCalendar.get(Calendar.YEAR) >= secondCalendar.get(Calendar.YEAR) &&
+                firstCalendar.get(Calendar.MONTH) >= secondCalendar.get(Calendar.MONTH) &&
+                firstCalendar.get(Calendar.DAY_OF_YEAR) > secondCalendar.get(Calendar.DAY_OF_YEAR)
+    }
+
 infix fun Date.formattedDateWith(pattern: String): String? =
     SimpleDateFormat(pattern, Locale.getDefault()).format(this)
 
@@ -624,4 +637,10 @@ fun setViewBackground(viewGroup: ViewGroup, resourceId: Int?) {
     resourceId?.let {
         viewGroup.setBackgroundResource(resourceId)
     }
+}
+
+@BindingAdapter("textViewStrikeByPaymentDates")
+fun setStrikeByPaymentDates(materialTextView: MaterialTextView, payments: List<PaymentAmountModel?>) {
+    if (payments.mapNotNull { it?.paymentDate }.all { (it toDateWith Constants.GENERAL_DATE_FORMAT)?.isBiggerThanCurrent == true })
+        materialTextView.paintFlags = materialTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
 }

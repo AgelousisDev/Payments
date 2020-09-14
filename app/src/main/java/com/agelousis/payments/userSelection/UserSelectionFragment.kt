@@ -1,6 +1,5 @@
 package com.agelousis.payments.userSelection
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +11,10 @@ import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.userSelection.adapters.UsersAdapter
 import com.agelousis.payments.userSelection.presenters.UserSelectionPresenter
 import com.agelousis.payments.utils.constants.Constants
+import com.agelousis.payments.utils.extensions.saveImage
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.user_selection_fragment_layout.*
+import java.io.File
 
 class UserSelectionFragment: BottomSheetDialogFragment(), UserSelectionPresenter {
 
@@ -46,7 +47,18 @@ class UserSelectionFragment: BottomSheetDialogFragment(), UserSelectionPresenter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        saveUserProfileImages()
         configureRecyclerView()
+    }
+
+    private fun saveUserProfileImages() {
+        users?.forEach { userModel ->
+            if (!File(context?.filesDir, userModel.profileImage ?: return@forEach).exists())
+                context?.saveImage(
+                    fileName = userModel.profileImage,
+                    byteArray = userModel.profileImageData
+                )
+        }
     }
 
     private fun configureRecyclerView() {
