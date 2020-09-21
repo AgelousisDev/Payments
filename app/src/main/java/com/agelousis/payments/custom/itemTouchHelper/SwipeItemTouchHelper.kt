@@ -2,8 +2,10 @@ package com.agelousis.payments.custom.itemTouchHelper
 
 import android.content.Context
 import android.graphics.*
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.agelousis.payments.R
 import com.agelousis.payments.custom.enumerations.SwipeAction
 import com.agelousis.payments.main.enumerations.SwipeItemType
 
@@ -28,7 +30,9 @@ class SwipeItemTouchHelper(private val context: Context, private val swipeItemTy
             if (dX > 0) {
                 swipeItemType.getColors(context = context)?.firstOrNull()?.let {
                     paint.color = it
-                } ?: run { paint.color = Color.WHITE }
+                } ?: run {
+                    paint.color = ContextCompat.getColor(context, R.color.nativeBackgroundColor)
+                }
                 val background =
                     RectF(itemView.left.toFloat(), itemView.top.toFloat(), dX + (marginStart ?: 0.0f), itemView.bottom.toFloat())
                 c.drawRect(background, paint)
@@ -38,7 +42,9 @@ class SwipeItemTouchHelper(private val context: Context, private val swipeItemTy
             } else {
                 swipeItemType.getColors(context = context)?.getOrNull(index = 1)?.let {
                     paint.color = it
-                } ?: run { paint.color = Color.WHITE }
+                } ?: run {
+                    paint.color = ContextCompat.getColor(context, R.color.nativeBackgroundColor)
+                }
                 val background = RectF(
                     itemView.right.toFloat() + dX,
                     itemView.top.toFloat(),
