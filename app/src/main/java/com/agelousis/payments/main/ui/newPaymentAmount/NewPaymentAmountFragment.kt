@@ -71,7 +71,7 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
                     paymentMonthDetailsLayout.value = resources.getStringArray(R.array.key_months_array).getOrNull(index = calendar.get(Calendar.MONTH) + 1)
             }
         }
-        if (dateDetailsLayout.dateValue.isNullOrEmpty())
+        if (dateDetailsLayout.dateValue.isNullOrEmpty() && args.paymentAmountDataModel?.paymentDate.isNullOrEmpty())
             after(
                 millis = 600
             ) {
