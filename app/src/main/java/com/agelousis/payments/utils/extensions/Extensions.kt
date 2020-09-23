@@ -103,14 +103,14 @@ inline fun <K, T> ifLet(vararg elements: T?, closure: (List<T>) -> K): K? {
 
 fun AppCompatActivity.openGallery(requestCode: Int) =
     startActivityForResult(Intent(
-        Intent.ACTION_PICK
+        Intent.ACTION_GET_CONTENT
     ).also {
         it.type = Constants.IMAGE_MIME_TYPE
     }, requestCode)
 
 fun Fragment.openGallery(requestCode: Int) =
     startActivityForResult(Intent(
-        Intent.ACTION_PICK
+        Intent.ACTION_GET_CONTENT
     ).also {
         it.type = Constants.IMAGE_MIME_TYPE
     }, requestCode)
@@ -506,7 +506,9 @@ fun Context.textEmail(email: String, content: String? = null) {
 fun AppCompatImageView.loadImageBitmap(imageUri: Uri?, bitmapBlock: BitmapBlock) {
     imageUri?.let {
         Picasso.get().load(it).resize(200, 200).transform(CircleTransformation()).centerCrop().into(object: Target {
-            override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {}
+            override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
+                println(e)
+            }
             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                 bitmapBlock(bitmap)
