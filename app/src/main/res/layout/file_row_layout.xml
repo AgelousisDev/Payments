@@ -15,6 +15,7 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
+    android:background="@color/nativeBackgroundColor"
     android:foreground="?attr/selectableItemBackgroundBorderless"
     android:onClick="@{() -> presenter.onFileSelected(fileDataModel)}"
     android:padding="@dimen/activity_horizontal_margin">

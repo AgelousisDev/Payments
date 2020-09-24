@@ -28,11 +28,7 @@ class SwipeItemTouchHelper(private val context: Context, private val swipeItemTy
             val height = itemView.bottom.toFloat() - itemView.top.toFloat()
             val width = height / 3
             if (dX > 0) {
-                swipeItemType.getColors(context = context)?.firstOrNull()?.let {
-                    paint.color = it
-                } ?: run {
-                    paint.color = ContextCompat.getColor(context, R.color.nativeBackgroundColor)
-                }
+                paint.color = ContextCompat.getColor(context, R.color.nativeBackgroundColor)
                 val background =
                     RectF(itemView.left.toFloat(), itemView.top.toFloat(), dX + (marginStart ?: 0.0f), itemView.bottom.toFloat())
                 c.drawRect(background, paint)
@@ -40,11 +36,7 @@ class SwipeItemTouchHelper(private val context: Context, private val swipeItemTy
                 val iconDest = RectF(itemView.left.toFloat() + width, itemView.top.toFloat() + width, itemView.left.toFloat() + 2 * width, itemView.bottom.toFloat() - width)
                 c.drawBitmap(icon, null, iconDest, paint)
             } else {
-                swipeItemType.getColors(context = context)?.getOrNull(index = 1)?.let {
-                    paint.color = it
-                } ?: run {
-                    paint.color = ContextCompat.getColor(context, R.color.nativeBackgroundColor)
-                }
+                paint.color = ContextCompat.getColor(context, R.color.nativeBackgroundColor)
                 val background = RectF(
                     itemView.right.toFloat() + dX,
                     itemView.top.toFloat(),
