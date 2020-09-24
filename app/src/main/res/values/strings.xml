@@ -91,6 +91,8 @@
     <string name="key_vat_amount_value_label">🧾 VAT %s %s</string>
     <string name="key_summary_label">Summary</string>
     <string name="key_amount_without_vat_label">Amount without VAT</string>
+    <string name="key_single_payment_label">Single Payment</string>
+    <string name="key_euro_value">€%s</string>
 
     <string-array name="key_payment_action_array">
         <item>Call</item>

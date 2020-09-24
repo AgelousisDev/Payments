@@ -559,6 +559,10 @@ fun Double?.getVatAmount(vat: Int?) =
 val Int?.percentageEnclosed
     get() = this?.let { String.format("(%d%%)", it) }
 
+fun View.animateAlpha(toAlpha: Float) {
+    animate().alpha(toAlpha).interpolator = LinearInterpolator()
+}
+
 @BindingAdapter("picassoImagePath")
 fun AppCompatImageView.loadImagePath(fileName: String?) {
     fileName?.let {
@@ -645,4 +649,6 @@ fun setViewBackground(viewGroup: ViewGroup, resourceId: Int?) {
 fun setStrikeByPaymentDates(materialTextView: MaterialTextView, payments: List<PaymentAmountModel?>) {
     if (payments.mapNotNull { it?.paymentDate }.all { (it toDateWith Constants.GENERAL_DATE_FORMAT)?.isBiggerThanCurrent == true })
         materialTextView.paintFlags = materialTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+    else
+        materialTextView.paintFlags = materialTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
 }

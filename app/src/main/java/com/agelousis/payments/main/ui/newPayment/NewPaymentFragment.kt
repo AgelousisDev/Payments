@@ -22,9 +22,11 @@ import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.models.PersonModel
+import com.agelousis.payments.utils.extensions.animateAlpha
 import com.agelousis.payments.utils.extensions.ifLet
 import com.agelousis.payments.utils.extensions.message
 import com.agelousis.payments.utils.extensions.showListDialog
+import com.agelousis.payments.views.detailsSwitch.interfaces.AppSwitchListener
 import kotlinx.android.synthetic.main.fragment_new_payment_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -73,6 +75,12 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     private var currentPersonModel: PersonModel? = null
     private var paymentReadyForDeletionIndexArray = arrayListOf<Int>()
     private var paymentAmountUpdateIndex: Int? = null
+    private var addPaymentButtonState = true
+        set(value) {
+            field = value
+            addPaymentButton.animateAlpha(toAlpha = if (value) 1.0f else 0.2f)
+            addPaymentButton.isEnabled = value
+        }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -120,6 +128,11 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         }
         freeAppSwitchLayout.setOnClickListener {
             freeAppSwitchLayout.isChecked = !freeAppSwitchLayout.isChecked
+        }
+        freeAppSwitchLayout.appSwitchListener = object: AppSwitchListener {
+            override fun onAppSwitchValueChanged(isChecked: Boolean) {
+                addPaymentButtonState = !isChecked
+            }
         }
         currentPersonModel?.let {
             binding?.personModel = it
@@ -176,8 +189,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             currentPersonModel?.firstName,
             currentPersonModel?.surname,
             currentPersonModel?.phone,
-            currentPersonModel?.parentName,
-            currentPersonModel?.email,
             currentPersonModel?.payments
         ) {
             checkDatabasePaymentAction()
@@ -186,8 +197,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             binding?.firstNameLayout?.errorState = binding?.firstNameLayout?.value == null
             binding?.surnameLayout?.errorState = binding?.surnameLayout?.value == null
             binding?.phoneLayout?.errorState = binding?.phoneLayout?.value == null
-            binding?.parentNameLayout?.errorState = binding?.parentNameLayout?.value == null
-            binding?.emailLayout?.errorState = binding?.emailLayout?.value == null
             if (availablePayments.isEmpty())
                 context?.message(
                     message = resources.getString(R.string.key_add_payment_message)

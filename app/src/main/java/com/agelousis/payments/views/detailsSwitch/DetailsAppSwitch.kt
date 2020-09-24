@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.details_app_switch_layout.view.*
 
 class DetailsAppSwitch(context: Context, attributeSet: AttributeSet?): FrameLayout(context, attributeSet) {
 
-    private var appSwitchListener: AppSwitchListener? = null
+    var appSwitchListener: AppSwitchListener? = null
     var isChecked: Boolean = false
         set(value) {
             field = value

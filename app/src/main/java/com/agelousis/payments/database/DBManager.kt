@@ -141,18 +141,18 @@ class DBManager(context: Context) {
         withContext(Dispatchers.Default) {
             database?.update(
                 SQLiteHelper.USERS_TABLE_NAME,
-                ContentValues().also {
-                    it.put(SQLiteHelper.USERNAME, userModel.username)
-                    it.put(SQLiteHelper.PASSWORD, userModel.password)
-                    it.put(SQLiteHelper.PROFILE_IMAGE, userModel.profileImage)
-                    it.put(SQLiteHelper.BIOMETRICS, userModel.biometrics)
-                    it.put(SQLiteHelper.ADDRESS, userModel.address)
-                    it.put(SQLiteHelper.ID_CARD_NUMBER, userModel.idCardNumber)
-                    it.put(SQLiteHelper.SOCIAL_INSURANCE_NUMBER, userModel.socialInsuranceNumber)
-                    it.put(SQLiteHelper.FIRST_NAME, userModel.firstName)
-                    it.put(SQLiteHelper.SURNAME, userModel.lastName)
-                    it.put(SQLiteHelper.PROFILE_IMAGE_DATA, userModel.profileImageData)
-                    it.put(SQLiteHelper.VAT, userModel.vat)
+                ContentValues().also { contentValues ->
+                    contentValues.put(SQLiteHelper.USERNAME, userModel.username)
+                    contentValues.put(SQLiteHelper.PASSWORD, userModel.password)
+                    contentValues.put(SQLiteHelper.PROFILE_IMAGE, userModel.profileImage)
+                    contentValues.put(SQLiteHelper.BIOMETRICS, userModel.biometrics)
+                    contentValues.put(SQLiteHelper.ADDRESS, userModel.address)
+                    contentValues.put(SQLiteHelper.ID_CARD_NUMBER, userModel.idCardNumber)
+                    contentValues.put(SQLiteHelper.SOCIAL_INSURANCE_NUMBER, userModel.socialInsuranceNumber)
+                    contentValues.put(SQLiteHelper.FIRST_NAME, userModel.firstName)
+                    contentValues.put(SQLiteHelper.SURNAME, userModel.lastName)
+                    userModel.profileImageData?.let { contentValues.put(SQLiteHelper.PROFILE_IMAGE_DATA, it) }
+                    contentValues.put(SQLiteHelper.VAT, userModel.vat)
                 },
                 "${SQLiteHelper.ID}=?",
                 arrayOf(userModel.id?.toString())

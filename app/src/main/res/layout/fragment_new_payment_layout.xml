@@ -110,7 +110,7 @@
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 app:appSwitchLabel="@string/key_is_active_label"
                 app:appSwitchShowLine="true"
-                appSwitchIsChecked="@{personModel.active == true}"/>
+                appSwitchIsChecked="@{personModel.active != null ? personModel.active : true}"/>
 
             <com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
                 android:id="@+id/freeAppSwitchLayout"
@@ -134,6 +134,7 @@
 
             <com.google.android.material.button.MaterialButton
                 style="@style/BasicMaterialButton"
+                android:id="@+id/addPaymentButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

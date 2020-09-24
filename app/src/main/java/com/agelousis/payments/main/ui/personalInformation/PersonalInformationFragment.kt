@@ -69,7 +69,6 @@ class PersonalInformationFragment: Fragment(), OptionPresenter {
     }
 
     override fun onVatChange(newVat: Int) {
-        if (newVat.isZero) return
         newUserModel?.vat = newVat
     }
 

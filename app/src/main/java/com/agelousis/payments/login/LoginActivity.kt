@@ -69,6 +69,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                     userModel.username = usernameField.text?.toString()
                     userModel.password = passwordField.text?.toString()
                     userModel.biometrics = biometricsState
+                    userModel.vat = 0
                     dbManager?.userModel = userModel
                     uiScope.launch {
                         dbManager?.searchUser(

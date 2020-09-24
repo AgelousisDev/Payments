@@ -7,9 +7,10 @@ import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 
 class PaymentAmountViewHolder(private val binding: PaymentAmountRowLayoutBinding): RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(paymentAmountModel: PaymentAmountModel, vat: Int?, presenter: NewPaymentPresenter) {
+    fun bind(paymentAmountModel: PaymentAmountModel, vat: Int?, title: String?, presenter: NewPaymentPresenter) {
         binding.paymentAmountModel = paymentAmountModel
         binding.vat = vat
+        binding.title = title
         binding.presenter = presenter
         itemView.setOnLongClickListener {
             presenter.onPaymentAmountLongPressed(

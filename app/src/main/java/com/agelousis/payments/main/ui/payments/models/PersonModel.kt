@@ -27,6 +27,8 @@ data class PersonModel(val personId: Int? = null,
     val totalPaymentAmount: Double?
         get() = payments?.mapNotNull { it.paymentAmount }?.sum()
 
+
+
     val fullName: String
         get() = String.format("%s %s", firstName ?: "", surname ?: "")
 
@@ -59,8 +61,11 @@ data class PaymentAmountModel(val paymentId: Int? = null,
         ).euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label)
 
     fun getVatAmount(context: Context, vat: Int?) =
-        paymentAmount.getVatAmount(
+        vat.takeIf { !it.isZero }?.let { paymentAmount.getVatAmount(
             vat = vat
-        ).euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label)
+        ).euroFormattedString } ?: String.format(
+            context.resources.getString(R.string.key_euro_value),
+            "0.00"
+        )
 
 }
