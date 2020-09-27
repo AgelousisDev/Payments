@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.net.Uri
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -63,7 +62,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
             SignInState.SIGN_UP ->
                 showBiometricsAlert(
                     predicate = {
-                        hasBiometrics && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
+                        hasBiometrics
                     }
                 ) { biometricsState ->
                     userModel.username = usernameField.text?.toString()
@@ -197,7 +196,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
     }
 
     private fun showBiometrics(biometrics: Boolean = false) {
-        if (biometrics && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && Date().isValidProductDate)
+        if (biometrics && Date().isValidProductDate)
             BiometricsHelper(
                 biometricsListener = this
             ).showBiometricsPrompt(

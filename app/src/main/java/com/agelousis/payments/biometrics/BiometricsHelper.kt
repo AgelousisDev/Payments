@@ -1,15 +1,12 @@
 package com.agelousis.payments.biometrics
 
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import com.agelousis.payments.R
 
-@RequiresApi(Build.VERSION_CODES.P)
 class BiometricsHelper(private val biometricsListener: BiometricsListener): BiometricPrompt.AuthenticationCallback() {
 
     override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
