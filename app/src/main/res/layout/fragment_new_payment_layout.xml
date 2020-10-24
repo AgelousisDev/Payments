@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:label="@string/key_first_name_label"
-                personDetails="@{personModel.firstName}"
+                personDetails='@{personModel.firstName != null ? personModel.firstName : ""}'
                 app:showLine="true"
                 app:imeOptionType="actionNext"
                 app:fieldType="TEXT" />
@@ -46,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:label="@string/key_surname_label"
-                personDetails="@{personModel.surname}"
+                personDetails='@{personModel.surname != null ? personModel.surname : ""}'
                 app:showLine="true"
                 app:imeOptionType="actionNext"
                 app:fieldType="TEXT" />
@@ -56,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:label="@string/key_phone_label"
-                personDetails="@{personModel.phone}"
+                personDetails='@{personModel.phone != null ? personModel.phone : ""}'
                 app:showLine="true"
                 app:imeOptionType="actionNext"
                 app:fieldType="NUMBER" />
@@ -66,7 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:label="@string/key_parent_name_label"
-                personDetails="@{personModel.parentName}"
+                personDetails='@{personModel.parentName != null ? personModel.parentName : ""}'
                 app:showLine="true"
                 app:imeOptionType="actionNext"
                 app:fieldType="TEXT" />
@@ -76,7 +76,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:label="@string/key_parent_phone_label"
-                personDetails="@{personModel.parentPhone}"
+                personDetails='@{personModel.parentPhone != null ? personModel.parentPhone : ""}'
                 app:showLine="true"
                 app:imeOptionType="actionNext"
                 app:fieldType="NUMBER" />
@@ -86,7 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:label="@string/key_email_label"
-                personDetails="@{personModel.email}"
+                personDetails='@{personModel.email != null ? personModel.email : ""}'
                 app:showLine="true"
                 app:imeOptionType="actionDone"
                 app:fieldType="EMAIL" />
@@ -122,6 +122,26 @@
                 app:appSwitchLabel="@string/key_is_free_label"
                 app:appSwitchShowLine="true"
                 appSwitchIsChecked="@{personModel.free == true}"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/messageTemplateInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:hint="@string/key_share_message_template_hint"
+                app:hintEnabled="true"
+                app:endIconMode="clear_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/messageTemplateField"
+                    style="@style/TextViewTitleLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textLongMessage"
+                    android:text="@{personModel.messageTemplate}"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/paymentAmountRecyclerView"

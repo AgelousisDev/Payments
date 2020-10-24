@@ -22,6 +22,7 @@ import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.models.PersonModel
+import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.animateAlpha
 import com.agelousis.payments.utils.extensions.ifLet
 import com.agelousis.payments.utils.extensions.message
@@ -82,6 +83,13 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             addPaymentButton.isEnabled = value
         }
 
+    override fun onResume() {
+        super.onResume()
+        currentPersonModel?.let {
+            binding?.personModel = it
+        }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         configureObservers()
@@ -133,9 +141,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             override fun onAppSwitchValueChanged(isChecked: Boolean) {
                 addPaymentButtonState = !isChecked
             }
-        }
-        currentPersonModel?.let {
-            binding?.personModel = it
         }
     }
 
@@ -224,18 +229,28 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     }
 
     private fun fillCurrentPersonModel() {
+        var phone = binding?.phoneLayout?.value
+        Constants.CountryCodes.getCountryZipCode(context = context ?: return)?.let {
+            if (binding?.phoneLayout?.value?.contains(it) == false)
+                phone = String.format(
+                    "%s%s",
+                    it,
+                    binding?.phoneLayout?.value
+                )
+        }
         currentPersonModel = PersonModel(
             personId = args.personDataModel?.personId,
             groupId = availableGroups.firstOrNull { it.groupName?.toLowerCase(Locale.getDefault()) == binding?.groupDetailsLayout?.value?.toLowerCase(Locale.getDefault()) }?.groupId,
             groupName = binding?.groupDetailsLayout?.value,
             firstName = binding?.firstNameLayout?.value,
             surname = binding?.surnameLayout?.value,
-            phone = binding?.phoneLayout?.value,
+            phone = phone,
             parentName = binding?.parentNameLayout?.value,
             parentPhone = binding?.parentPhoneLayout?.value,
             email = binding?.emailLayout?.value,
             active = binding?.activeAppSwitchLayout?.isChecked,
             free = binding?.freeAppSwitchLayout?.isChecked,
+            messageTemplate = binding?.messageTemplateField?.text?.toString(),
             payments = availablePayments
         )
     }

@@ -1,6 +1,11 @@
 package com.agelousis.payments.utils.constants
 
+import android.content.Context
 import android.graphics.Color
+import android.telephony.TelephonyManager
+import com.agelousis.payments.R
+import com.agelousis.payments.utils.extensions.second
+import java.util.*
 
 object Constants {
     const val IMAGE_MIME_TYPE = "image/*"
@@ -20,9 +25,9 @@ object Constants {
     const val GROUP_IMAGE_NAME = "group_image"
     const val SHARE_MESSAGE_FRAGMENT_TAG = "shareMessageFragmentTag"
     const val WHATS_APP_PACKAGE_NAME = "com.whatsapp"
-    const val WHATS_APP_SCHEME_URL = "https://wa.me/357%s?text=%s"
+    const val WHATS_APP_SCHEME_URL = "https://wa.me/%s%s?text=%s"
     const val VIBER_PACKAGE_NAME = "com.viber.voip"
-    const val VIBER_SCHEME_URL = "viber://add?number=357%s"
+    const val VIBER_SCHEME_URL = "viber://add?number=%s%s"
 
     object Colors {
         val colorPickerColors = intArrayOf(
@@ -38,6 +43,17 @@ object Constants {
             Color.parseColor("#E2F587"),
             Color.parseColor("#D9BCAD")
         )
+    }
+
+    object CountryCodes {
+
+         fun getCountryZipCode(context: Context): String? {
+             val manager =  context.getSystemService(Context.TELEPHONY_SERVICE) as? TelephonyManager
+             val countryID = manager?.simCountryIso?.toUpperCase(Locale.getDefault())
+             return context.resources.getStringArray(R.array.CountryCodes)
+                 .firstOrNull { it.contains(countryID ?: "") }?.split(",")?.firstOrNull()
+         }
+
     }
 
 }

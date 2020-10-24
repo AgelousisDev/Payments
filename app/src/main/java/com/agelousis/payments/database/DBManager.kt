@@ -217,6 +217,7 @@ class DBManager(context: Context) {
                     it.put(SQLiteHelper.EMAIL, personModel.email)
                     it.put(SQLiteHelper.ACTIVE, personModel.active)
                     it.put(SQLiteHelper.FREE, personModel.free)
+                    it.put(SQLiteHelper.MESSAGE_TEMPLATE, personModel.messageTemplate)
                 }
             )
             personModel.payments?.forEach { paymentAmountModel ->
@@ -254,6 +255,7 @@ class DBManager(context: Context) {
                     it.put(SQLiteHelper.EMAIL, personModel.email)
                     it.put(SQLiteHelper.ACTIVE, personModel.active)
                     it.put(SQLiteHelper.FREE, personModel.free)
+                    it.put(SQLiteHelper.MESSAGE_TEMPLATE, personModel.messageTemplate)
                 },
                 "${SQLiteHelper.ID}=?",
                 arrayOf(personModel.personId?.toString())
@@ -364,9 +366,10 @@ class DBManager(context: Context) {
                             email = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.EMAIL)),
                             active = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.ACTIVE)) ?: 0 > 0,
                             free = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.FREE)) ?: 0 > 0,
+                            messageTemplate = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.MESSAGE_TEMPLATE)),
                             payments = payments,
                             groupColor = groups.firstOrNull { it.groupId == personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)) }?.color,
-                            groupImage = groups.firstOrNull { it.groupId == personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)) }?.groupImage
+                            groupImage = groups.firstOrNull { it.groupId == personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)) }?.groupImage,
                         )
                     )
                     genericList.removeAll {
@@ -444,6 +447,7 @@ class DBManager(context: Context) {
                             email = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.EMAIL)),
                             active = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.ACTIVE)) ?: 0 > 0,
                             free = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.FREE)) ?: 0 > 0,
+                            messageTemplate = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.MESSAGE_TEMPLATE)),
                             payments = payments,
                             groupColor = groupCursor?.getIntOrNull(groupCursor.getColumnIndex(SQLiteHelper.COLOR)),
                             groupImage = groupCursor?.getStringOrNull(groupCursor.getColumnIndex(SQLiteHelper.GROUP_IMAGE))

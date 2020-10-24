@@ -45,6 +45,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         const val EMAIL = "email"
         const val ACTIVE = "active"
         const val FREE = "free"
+        const val MESSAGE_TEMPLATE = "message_template"
 
         // Payments Table Columns
         const val PERSON_ID = "person_id"
@@ -78,7 +79,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         //Creating persons table query
         private const val PERSONS_TABLE_CREATION_QUERY = "CREATE TABLE $PERSONS_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "$USER_ID INTEGER, $GROUP_ID INTEGER, $FIRST_NAME TEXT, $SURNAME TEXT, $PHONE TEXT, $PARENT_NAME TEXT, $PARENT_PHONE TEXT, $EMAIL TEXT," +
-                "$ACTIVE BOOLEAN, $FREE BOOLEAN);"
+                "$ACTIVE BOOLEAN, $FREE BOOLEAN, $MESSAGE_TEMPLATE TEXT);"
 
         //Creating payments table query
         private const val PAYMENTS_TABLE_CREATION_QUERY = "CREATE TABLE $PAYMENTS_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT," +

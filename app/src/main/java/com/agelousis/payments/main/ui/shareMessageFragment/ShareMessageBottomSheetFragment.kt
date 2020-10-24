@@ -97,20 +97,20 @@ class ShareMessageBottomSheetFragment: BottomSheetDialogFragment(), ShareMessage
             ShareMessageType.SMS ->
                 context?.sendSMSMessage(
                     mobileNumber = personModel?.phone ?: return,
-                    message = "Hello, How are you?"
+                    message = personModel?.messageTemplate ?: ""
                 )
             ShareMessageType.WHATS_APP, ShareMessageType.VIBER ->
                 context?.shareMessage(
                     schemeUrl = String.format(
                         shareMessageType.schemeUrl ?: return,
                         personModel?.phone,
-                        "Hello World"
+                        personModel?.messageTemplate ?: ""
                     )
                 )
             ShareMessageType.EMAIL ->
                 context?.textEmail(
                     email = personModel?.email ?: return,
-                    content = "Hello World"
+                    content = personModel?.messageTemplate ?: ""
                 )
 
         }

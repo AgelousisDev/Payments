@@ -11,6 +11,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:clickable="@{shareMessageType.enabled}"
+    android:focusable="@{shareMessageType.enabled}"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:onClick="@{() -> presenter.onShareMessageTypeSelected(shareMessageType)}"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -21,10 +25,6 @@
         tools:srcCompat="@drawable/ic_whatsapp"
         srcCompat="@{shareMessageType.icon}"
         android:alpha="@{shareMessageType.enabled ? 1.0f : 0.2f}"
-        android:clickable="@{shareMessageType.enabled}"
-        android:focusable="@{shareMessageType.enabled}"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:onClick="@{() -> presenter.onShareMessageTypeSelected(shareMessageType)}"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
