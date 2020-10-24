@@ -563,6 +563,25 @@ fun View.animateAlpha(toAlpha: Float) {
     animate().alpha(toAlpha).interpolator = LinearInterpolator()
 }
 
+fun PackageManager.isPackageInstalled(packageName: String) =
+    try {
+        this.getPackageInfo(packageName, 0)
+        true
+    }
+    catch (e: PackageManager.NameNotFoundException) {
+        false
+    }
+
+fun Context.sendSMSMessage(mobileNumber: String, message: String) {
+    startActivity(Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:$mobileNumber")).also { intent ->
+        intent.putExtra("sms_body", message)
+    })
+}
+
+fun Context.shareMessage(schemeUrl: String) {
+    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(schemeUrl)))
+}
+
 @BindingAdapter("picassoImagePath")
 fun AppCompatImageView.loadImagePath(fileName: String?) {
     fileName?.let {

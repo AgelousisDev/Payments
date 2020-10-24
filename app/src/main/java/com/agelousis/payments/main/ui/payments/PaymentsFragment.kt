@@ -27,6 +27,7 @@ import com.agelousis.payments.main.ui.payments.presenters.PaymentPresenter
 import com.agelousis.payments.main.ui.payments.viewHolders.GroupViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.PaymentViewHolder
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
+import com.agelousis.payments.main.ui.shareMessageFragment.ShareMessageBottomSheetFragment
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.PDFHelper
 import kotlinx.android.synthetic.main.activity_main.*
@@ -53,26 +54,10 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
     }
 
     override fun onPaymentLongPressed(personModel: PersonModel) {
-        ifLet(
-            personModel.phone,
-            personModel.email
-        ) { args ->
-            context?.showListDialog(
-                title = resources.getString(R.string.key_select_option_label),
-                items = resources.getStringArray(R.array.key_payment_action_array).toList()
-            ) { position ->
-                when(position) {
-                    0 ->
-                        (activity as? MainActivity)?.configureCallAction(
-                            phone = args.first()
-                        )
-                    1 ->
-                        (activity as? MainActivity)?.configureEmailAction(
-                            email = args.second()
-                        )
-                }
-            }
-        }
+        ShareMessageBottomSheetFragment.show(
+            supportFragmentManager = activity?.supportFragmentManager ?: return,
+            personModel = personModel
+        )
     }
 
     override fun onPersonAdd(groupModel: GroupModel) {
