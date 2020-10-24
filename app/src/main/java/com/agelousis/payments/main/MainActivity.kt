@@ -175,6 +175,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setupToolbar()
         setupNavigationView()
         setupUI()
+        addInactiveGroup()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -204,6 +205,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setupUI() {
         floatingButton.setOnClickListener(this)
+    }
+
+    private fun addInactiveGroup() {
+        uiScope.launch {
+            dbManager.insertGroup(
+                userId = userModel?.id,
+                groupModel = GroupModel(
+                    groupName = resources.getString(R.string.key_inactive_label),
+                    color = ContextCompat.getColor(this@MainActivity, R.color.grey)
+                )
+            ) {}
+        }
     }
 
     private fun configureGroup(groupModel: GroupModel, successBlock: () -> Unit) {
@@ -274,12 +287,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 CALL_PHONE_PERMISSION_REQUEST_CODE
             )
         }
-    }
-
-    fun configureEmailAction(email: String) {
-        textEmail(
-            email = email,
-        )
     }
 
     fun startGroupActivity(groupModel: GroupModel? = null) =

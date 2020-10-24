@@ -96,14 +96,14 @@ class ShareMessageBottomSheetFragment: BottomSheetDialogFragment(), ShareMessage
         when(shareMessageType) {
             ShareMessageType.SMS ->
                 context?.sendSMSMessage(
-                    mobileNumber = personModel?.phone ?: return,
+                    mobileNumber = personModel?.phone?.toRawMobileNumber ?: return,
                     message = personModel?.messageTemplate ?: ""
                 )
             ShareMessageType.WHATS_APP, ShareMessageType.VIBER ->
                 context?.shareMessage(
                     schemeUrl = String.format(
                         shareMessageType.schemeUrl ?: return,
-                        personModel?.phone,
+                        personModel?.phone?.toRawMobileNumber,
                         personModel?.messageTemplate ?: ""
                     )
                 )

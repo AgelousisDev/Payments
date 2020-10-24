@@ -12,4 +12,7 @@
     <color name="green">#31AD31</color>
     <color name="black">#000000</color>
     <color name="nativeBackgroundColor">#121212</color>
+
+    <color name="fateBlue">#801E88E5</color>
+
 </resources>

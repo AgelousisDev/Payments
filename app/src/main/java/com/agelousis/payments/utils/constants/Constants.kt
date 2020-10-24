@@ -25,9 +25,9 @@ object Constants {
     const val GROUP_IMAGE_NAME = "group_image"
     const val SHARE_MESSAGE_FRAGMENT_TAG = "shareMessageFragmentTag"
     const val WHATS_APP_PACKAGE_NAME = "com.whatsapp"
-    const val WHATS_APP_SCHEME_URL = "https://wa.me/%s%s?text=%s"
+    const val WHATS_APP_SCHEME_URL = "https://wa.me/%s?text=%s"
     const val VIBER_PACKAGE_NAME = "com.viber.voip"
-    const val VIBER_SCHEME_URL = "viber://add?number=%s%s"
+    const val VIBER_SCHEME_URL = "viber://add?number=%s"
 
     object Colors {
         val colorPickerColors = intArrayOf(

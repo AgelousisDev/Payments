@@ -95,6 +95,8 @@
     <string name="key_euro_value">€%s</string>
     <string name="key_share_message_label">Share Message</string>
     <string name="key_share_message_template_hint">Message template to share</string>
+    <string name="key_free_label">FREE</string>
+    <string name="key_inactive_label">Inactive</string>
 
     <string-array name="key_payment_action_array">
         <item>Call</item>

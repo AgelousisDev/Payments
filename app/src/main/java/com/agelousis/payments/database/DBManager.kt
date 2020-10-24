@@ -165,17 +165,29 @@ class DBManager(context: Context) {
 
     suspend fun insertGroup(userId: Int?, groupModel: GroupModel, insertionSuccessBlock: InsertionSuccessBlock) {
         withContext(Dispatchers.Default) {
-            database?.insert(
+            val cursor = database?.query(
                 SQLiteHelper.GROUPS_TABLE_NAME,
+                arrayOf(SQLiteHelper.ID),
+                "${SQLiteHelper.GROUP_NAME}=?",
+                arrayOf(groupModel.groupName),
                 null,
-                ContentValues().also {
-                    it.put(SQLiteHelper.USER_ID, userId ?: return@withContext)
-                    it.put(SQLiteHelper.GROUP_NAME, groupModel.groupName)
-                    it.put(SQLiteHelper.COLOR, groupModel.color)
-                    it.put(SQLiteHelper.GROUP_IMAGE, groupModel.groupImage)
-                    it.put(SQLiteHelper.GROUP_IMAGE_DATA, groupModel.groupImageData)
-                }
+                null,
+                null,
+                null
             )
+            if (cursor?.count ?: 0 == 0)
+                database?.insert(
+                    SQLiteHelper.GROUPS_TABLE_NAME,
+                    null,
+                    ContentValues().also {
+                        it.put(SQLiteHelper.USER_ID, userId ?: return@withContext)
+                        it.put(SQLiteHelper.GROUP_NAME, groupModel.groupName)
+                        it.put(SQLiteHelper.COLOR, groupModel.color)
+                        it.put(SQLiteHelper.GROUP_IMAGE, groupModel.groupImage)
+                        it.put(SQLiteHelper.GROUP_IMAGE_DATA, groupModel.groupImageData)
+                    }
+                )
+            cursor?.close()
             withContext(Dispatchers.Main) {
                 insertionSuccessBlock()
             }

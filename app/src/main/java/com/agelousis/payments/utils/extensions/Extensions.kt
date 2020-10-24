@@ -546,6 +546,9 @@ fun AppCompatImageView.loadImageUri(imageUri: Uri?) {
 val Int?.isZero
     get() = this == 0
 
+val Double?.isZero
+    get() = this == 0.0
+
 fun Double?.getAmountWithoutVat(vat: Int?) =
     ifLet(this, vat) {
         it.first().toDouble() - (it.first().toDouble() * it.second().toInt()) / 100
@@ -581,6 +584,9 @@ fun Context.sendSMSMessage(mobileNumber: String, message: String) {
 fun Context.shareMessage(schemeUrl: String) {
     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(schemeUrl)))
 }
+
+val String.toRawMobileNumber
+    get() = this.replace("\\s".toRegex(), "").replace("+", "")
 
 @BindingAdapter("picassoImagePath")
 fun AppCompatImageView.loadImagePath(fileName: String?) {
@@ -665,8 +671,8 @@ fun setViewBackground(viewGroup: ViewGroup, resourceId: Int?) {
 }
 
 @BindingAdapter("textViewStrikeByPaymentDates")
-fun setStrikeByPaymentDates(materialTextView: MaterialTextView, payments: List<PaymentAmountModel?>) {
-    if (payments.mapNotNull { it?.paymentDate }.all { (it toDateWith Constants.GENERAL_DATE_FORMAT)?.isBiggerThanCurrent == true })
+fun setStrikeByPaymentDates(materialTextView: MaterialTextView, payments: List<PaymentAmountModel?>?) {
+    if (payments?.mapNotNull { it?.paymentDate }?.all { (it toDateWith Constants.GENERAL_DATE_FORMAT)?.isBiggerThanCurrent == true } == true)
         materialTextView.paintFlags = materialTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
     else
         materialTextView.paintFlags = materialTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()

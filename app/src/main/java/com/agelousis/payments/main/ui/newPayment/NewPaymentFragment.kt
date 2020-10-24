@@ -134,6 +134,12 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         activeAppSwitchLayout.setOnClickListener {
             activeAppSwitchLayout.isChecked = !activeAppSwitchLayout.isChecked
         }
+        activeAppSwitchLayout.appSwitchListener = object: AppSwitchListener {
+            override fun onAppSwitchValueChanged(isChecked: Boolean) {
+                if (!isChecked)
+                    binding?.groupDetailsLayout?.value = resources.getString(R.string.key_inactive_label)
+            }
+        }
         freeAppSwitchLayout.setOnClickListener {
             freeAppSwitchLayout.isChecked = !freeAppSwitchLayout.isChecked
         }
@@ -234,7 +240,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             if (binding?.phoneLayout?.value?.contains(it) == false)
                 phone = String.format(
                     "%s%s",
-                    it,
+                    "+$it ",
                     binding?.phoneLayout?.value
                 )
         }

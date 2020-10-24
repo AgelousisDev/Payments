@@ -294,12 +294,14 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
                                 }
                             }
                         )
-                        filteredList.add(
-                            PaymentAmountSumModel(
-                                sum = filteredByQueryPayments.mapNotNull { it.totalPaymentAmount }.sum(),
-                                color = filteredByQueryPayments.firstOrNull()?.groupColor
+                        filteredByQueryPayments.mapNotNull { it.totalPaymentAmount }.sum().takeIf { !it.isZero }?.let { sum ->
+                            filteredList.add(
+                                PaymentAmountSumModel(
+                                    sum = sum,
+                                    color = filteredByQueryPayments.firstOrNull()?.groupColor
+                                )
                             )
-                        )
+                        }
                     }
             }
         }
