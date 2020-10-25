@@ -393,7 +393,7 @@ val Date.isSameYearAndMonthWithCurrentDate: Boolean
     }
 
 val Date.isDatePassed
-    get() = this.after(Date())
+    get() = Date().after(this)
 
 val Date.pdfFormattedCurrentDate: String
     get() = SimpleDateFormat(Constants.FILE_DATE_FORMAT, Locale.getDefault()).format(this)
@@ -420,17 +420,6 @@ val Date.isValidProductDate: Boolean
         return firstCalendar.get(Calendar.YEAR) <= secondCalendar.get(Calendar.YEAR) &&
                 firstCalendar.get(Calendar.MONTH) <= secondCalendar.get(Calendar.MONTH) &&
                 firstCalendar.get(Calendar.DAY_OF_YEAR) < secondCalendar.get(Calendar.DAY_OF_YEAR)
-    }
-
-val Date.isBiggerThanCurrent: Boolean
-    get() {
-        val firstCalendar = Calendar.getInstance()
-        firstCalendar.time = Date()
-        val secondCalendar = Calendar.getInstance()
-        secondCalendar.time = this
-        return firstCalendar.get(Calendar.YEAR) >= secondCalendar.get(Calendar.YEAR) &&
-                firstCalendar.get(Calendar.MONTH) >= secondCalendar.get(Calendar.MONTH) &&
-                firstCalendar.get(Calendar.DAY_OF_YEAR) > secondCalendar.get(Calendar.DAY_OF_YEAR)
     }
 
 infix fun Date.formattedDateWith(pattern: String): String? =
@@ -673,10 +662,12 @@ fun setViewBackground(viewGroup: ViewGroup, resourceId: Int?) {
     }
 }
 
-@BindingAdapter("textViewStrikeByPaymentDates")
-fun setStrikeByPaymentDates(materialTextView: MaterialTextView, payments: List<PaymentAmountModel?>?) {
-    if (payments?.mapNotNull { it?.paymentDate }?.all { (it toDateWith Constants.GENERAL_DATE_FORMAT)?.isBiggerThanCurrent == true } == true)
-        materialTextView.paintFlags = materialTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-    else
-        materialTextView.paintFlags = materialTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+@BindingAdapter("textViewColorByPaymentDate")
+fun setTextViewColorByPaymentDate(materialTextView: MaterialTextView, payments: List<PaymentAmountModel?>?) {
+    if (payments?.mapNotNull { it?.paymentDate }?.all { (it toDateWith Constants.GENERAL_DATE_FORMAT)?.isDatePassed == true } == true)
+        materialTextView.setTextColor(
+            ContextCompat.getColor(materialTextView.context,
+                 R.color.red
+            )
+        )
 }
