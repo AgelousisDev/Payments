@@ -182,6 +182,8 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             vat = (activity as? MainActivity)?.userModel?.vat,
             presenter = this
         )
+        paymentAmountRecyclerView.scheduleLayoutAnimation()
+        (paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
     }
 
     private fun initializeGroups() {

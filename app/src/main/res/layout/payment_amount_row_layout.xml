@@ -5,6 +5,7 @@
     <data>
         <import type="com.agelousis.payments.utils.extensions.ExtensionsKt" />
         <import type="android.view.View" />
+        <import type="com.agelousis.payments.main.ui.newPayment.enumerations.PaymentAmountRowState" />
         <variable
             name="paymentAmountModel"
             type="com.agelousis.payments.main.ui.payments.models.PaymentAmountModel" />
@@ -19,7 +20,7 @@
             type="com.agelousis.payments.main.ui.newPayment.presenters.NewPaymentPresenter" />
     </data>
  <com.google.android.material.card.MaterialCardView
-     android:layout_width="wrap_content"
+     android:layout_width="match_parent"
      android:layout_height="wrap_content"
      android:onClick="@{() -> presenter.onPaymentAmount(paymentAmountModel)}"
      app:elevation="16dp"
@@ -29,14 +30,14 @@
      app:cardPreventCornerOverlap="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <View
-            android:id="@+id/paymentAmountRowLineSeparator"
+            android:id="@+id/paymentAmountRowLeftLineSeparator"
             android:layout_width="6dp"
             android:layout_height="0dp"
-            backgroundViewColor="@{paymentAmountModel.paymentAmountRowState.backgroundTint}"
+            backgroundViewColor="@{paymentAmountModel.paymentColor}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -47,11 +48,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/nav_header_vertical_spacing"
-            android:text="@{title != null ? title : paymentAmountModel.paymentMonth != null ? paymentAmountModel.paymentMonth : @string/key_summary_label}"
+            android:text="@{title != null ? title : paymentAmountModel.paymentYearMonthFormatted != null ? paymentAmountModel.paymentYearMonthFormatted : @string/key_summary_label}"
             android:singleLine="true"
             android:maxLines="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/paymentAmountRowLineSeparator"
+            app:layout_constraintEnd_toStartOf="@+id/paymentAmountRowRightLineSeparator"
+            app:layout_constraintStart_toEndOf="@+id/paymentAmountRowLeftLineSeparator"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -66,8 +67,8 @@
             android:singleLine="true"
             android:maxLines="1"
             android:visibility="@{vat != null ? View.VISIBLE : View.GONE}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/paymentAmountRowLineSeparator"
+            app:layout_constraintEnd_toStartOf="@+id/paymentAmountRowRightLineSeparator"
+            app:layout_constraintStart_toEndOf="@+id/paymentAmountRowLeftLineSeparator"
             app:layout_constraintTop_toBottomOf="@+id/paymentAmountRowHeader"
             tools:text="March payment\t$960,00" />
 
@@ -83,8 +84,8 @@
             android:singleLine="true"
             android:maxLines="1"
             android:visibility="@{vat != null ? View.VISIBLE : View.GONE}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/paymentAmountRowLineSeparator"
+            app:layout_constraintEnd_toStartOf="@+id/paymentAmountRowRightLineSeparator"
+            app:layout_constraintStart_toEndOf="@+id/paymentAmountRowLeftLineSeparator"
             app:layout_constraintTop_toBottomOf="@+id/paymentAmountRowWithoutVatAmount"
             tools:text="VAT (4%)\t$40,00" />
 
@@ -94,9 +95,9 @@
             android:layout_height="4dp"
             android:layout_marginTop="@dimen/nav_header_vertical_spacing"
             android:background="@drawable/line_background"
-            backgroundViewTintColor="@{paymentAmountModel.paymentAmountRowState.backgroundTint}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/paymentAmountRowLineSeparator"
+            backgroundViewTintColor="@{paymentAmountModel.paymentColor}"
+            app:layout_constraintEnd_toStartOf="@+id/paymentAmountRowRightLineSeparator"
+            app:layout_constraintStart_toEndOf="@+id/paymentAmountRowLeftLineSeparator"
             app:layout_constraintTop_toBottomOf="@+id/paymentAmountRowVatAmount" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -112,11 +113,20 @@
             android:gravity="center"
             android:singleLine="true"
             android:maxLines="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/paymentAmountRowLineSeparator"
+            app:layout_constraintEnd_toStartOf="@+id/paymentAmountRowRightLineSeparator"
+            app:layout_constraintStart_toEndOf="@+id/paymentAmountRowLeftLineSeparator"
             app:layout_constraintTop_toBottomOf="@+id/paymentAmountRowDateLineSeparator"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="Total:\t$1000,00" />
+
+        <View
+            android:id="@+id/paymentAmountRowRightLineSeparator"
+            android:layout_width="6dp"
+            android:layout_height="0dp"
+            backgroundViewColor="@{paymentAmountModel.paymentColor}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Parcelable
 import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.newPayment.enumerations.PaymentAmountRowState
+import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
@@ -69,4 +70,22 @@ data class PaymentAmountModel(val paymentId: Int? = null,
             "0.00"
         )
 
+    val paymentYearMonthFormatted
+        get() = ifLet(paymentMonth, paymentDate) {
+            String.format(
+                "%s ⤳ %s",
+                it.first(),
+                it.second().split("/").lastOrNull() ?: ""
+            )
+        }
+
+    val paymentColor: Int
+        get() {
+            return if (paymentAmountRowState == PaymentAmountRowState.NORMAL)
+                if (paymentDate?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.isDatePassed == true)
+                    R.color.orange
+                else paymentAmountRowState.backgroundTint
+            else
+                paymentAmountRowState.backgroundTint
+        }
 }

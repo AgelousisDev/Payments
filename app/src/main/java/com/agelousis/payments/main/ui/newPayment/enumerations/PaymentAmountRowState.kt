@@ -7,7 +7,7 @@ enum class PaymentAmountRowState {
 
     val backgroundTint
         get() = when(this) {
-            NORMAL -> R.color.colorAccent
+            NORMAL -> R.color.green
             CAN_BE_DISMISSED -> R.color.red
         }
 
