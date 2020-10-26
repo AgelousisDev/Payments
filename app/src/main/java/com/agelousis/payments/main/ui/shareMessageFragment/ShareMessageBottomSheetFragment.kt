@@ -50,18 +50,23 @@ class ShareMessageBottomSheetFragment: BottomSheetDialogFragment(), ShareMessage
     private val shareMessageTypeList by lazy {
         val array = arrayListOf<ShareMessageType>()
         array.add(
+            ShareMessageType.CALL.also {
+                it.isEnabled = personModel?.phone.isNullOrEmpty() == false
+            }
+        )
+        array.add(
             ShareMessageType.SMS.also {
                 it.isEnabled = personModel?.phone.isNullOrEmpty() == false
             }
         )
         array.add(
             ShareMessageType.WHATS_APP.also {
-                it.isEnabled = personModel?.phone.isNullOrEmpty() == false && context?.packageManager?.isPackageInstalled(packageName = Constants.WHATS_APP_PACKAGE_NAME) == true
+                it.isEnabled = personModel?.phone.isNullOrEmpty() == false && context?.packageManager?.isPackageInstalled(packageName = it.packageName ?: return@also) == true
             }
         )
         array.add(
             ShareMessageType.VIBER.also {
-                it.isEnabled = personModel?.phone.isNullOrEmpty() == false && context?.packageManager?.isPackageInstalled(packageName = Constants.VIBER_PACKAGE_NAME) == true
+                it.isEnabled = personModel?.phone.isNullOrEmpty() == false && context?.packageManager?.isPackageInstalled(packageName = it.packageName ?: return@also) == true
             }
         )
         array.add(
@@ -94,6 +99,10 @@ class ShareMessageBottomSheetFragment: BottomSheetDialogFragment(), ShareMessage
 
     private fun configureShareMethod(shareMessageType: ShareMessageType) {
         when(shareMessageType) {
+            ShareMessageType.CALL ->
+                context?.call(
+                    phone = personModel?.phone ?: return
+                )
             ShareMessageType.SMS ->
                 context?.sendSMSMessage(
                     mobileNumber = personModel?.phone?.toRawMobileNumber ?: return,

@@ -1,7 +1,6 @@
 package com.agelousis.payments.utils.extensions
 
 import android.animation.Animator
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -483,8 +482,7 @@ fun Context.hasPermissions(vararg permissions: String): Boolean {
     return true
 }
 
-@SuppressLint("MissingPermission")
-fun Context.call(phone: String) = startActivity(Intent(Intent.ACTION_CALL, Uri.parse("tel:$phone")))
+fun Context.call(phone: String) = startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phone")))
 
 fun Context.textEmail(email: String, content: String? = null) {
     startActivity(Intent(Intent.ACTION_SEND).also {
