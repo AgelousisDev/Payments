@@ -42,7 +42,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:label="@string/key_payment_month_label"
-                personDetailsPicker="@{paymentAmountModel.paymentMonth != null ? paymentAmountModel.paymentMonth : @string/key_empty_field_label}"
                 app:showLine="true"
                 app:imeOptionType="actionDone"
                 app:fieldType="TEXT" />

@@ -43,6 +43,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         findNavController().navigate(
             NewPaymentFragmentDirections.actionNewPaymentFragmentToNewPaymentAmountFragment(
                 paymentAmountDataModel = paymentAmountModel,
+                lastPaymentMonthIndex = resources.getStringArray(R.array.key_months_array).indexOf(availablePayments.firstOrNull()?.paymentMonth)
             )
         )
     }

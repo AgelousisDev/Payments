@@ -65,12 +65,15 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
                 paymentMonthDetailsLayout.value = resources.getStringArray(R.array.key_months_array).getOrNull(index = position)
             }
         }
-        dateDetailsLayout.dateSelectionClosure = { dateString ->
-            (dateString toDateWith Constants.GENERAL_DATE_FORMAT)?.toCalendar?.let { calendar ->
-                if (paymentMonthDetailsLayout.value.isNullOrEmpty() || paymentMonthDetailsLayout.value == resources.getString(R.string.key_empty_field_label))
-                    paymentMonthDetailsLayout.value = resources.getStringArray(R.array.key_months_array).getOrNull(index = calendar.get(Calendar.MONTH) + 1)
+        if (args.lastPaymentMonthIndex > -1)
+            paymentMonthDetailsLayout.value = resources.getStringArray(R.array.key_months_array).getOrNull(index = args.lastPaymentMonthIndex + 1)
+        else
+            dateDetailsLayout.dateSelectionClosure = { dateString ->
+                (dateString toDateWith Constants.GENERAL_DATE_FORMAT)?.toCalendar?.let { calendar ->
+                    if (paymentMonthDetailsLayout.value.isNullOrEmpty() || paymentMonthDetailsLayout.value == resources.getString(R.string.key_empty_field_label))
+                        paymentMonthDetailsLayout.value = resources.getStringArray(R.array.key_months_array).getOrNull(index = calendar.get(Calendar.MONTH) + 1)
+                }
             }
-        }
         if (dateDetailsLayout.dateValue.isNullOrEmpty() && args.paymentAmountDataModel?.paymentDate.isNullOrEmpty())
             after(
                 millis = 600
