@@ -136,7 +136,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     @DrawableRes private var floatingButtonImage: Int = R.drawable.ic_add
         set(value) {
             field = value
+            floatingButton.hide()
             floatingButton.setImageResource(value)
+            floatingButton.show()
         }
     private var floatingButtonState: Boolean = true
         set(value) {
