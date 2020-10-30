@@ -14,6 +14,7 @@ import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
+import com.agelousis.payments.utils.helpers.YearMonthsList
 import com.agelousis.payments.views.currencyEditText.interfaces.AmountListener
 import kotlinx.android.synthetic.main.fragment_new_payment_amount_layout.*
 import java.util.*
@@ -35,6 +36,7 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
     }
 
     private val args: NewPaymentAmountFragmentArgs by navArgs()
+    private val formattedMonths by lazy { context?.let { YearMonthsList(context = it).formattedMonths } }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,18 +62,18 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
         paymentMonthDetailsLayout.setOnDetailsPressed {
             context?.showListDialog(
                 title = resources.getString(R.string.key_select_option_label),
-                items = resources.getStringArray(R.array.key_months_array).toList()
+                items = formattedMonths ?: return@setOnDetailsPressed
             ) { position ->
-                paymentMonthDetailsLayout.value = resources.getStringArray(R.array.key_months_array).getOrNull(index = position)
+                paymentMonthDetailsLayout.value = formattedMonths?.getOrNull(index = position)
             }
         }
         if (args.lastPaymentMonthIndex > -1)
-            paymentMonthDetailsLayout.value = resources.getStringArray(R.array.key_months_array).getOrNull(index = args.lastPaymentMonthIndex + 1)
+            paymentMonthDetailsLayout.value = formattedMonths?.getOrNull(index = args.lastPaymentMonthIndex + 1)
         else
             dateDetailsLayout.dateSelectionClosure = { dateString ->
-                (dateString toDateWith Constants.GENERAL_DATE_FORMAT)?.toCalendar?.let { calendar ->
+                (dateString.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT))?.toCalendar?.let { calendar ->
                     if (paymentMonthDetailsLayout.value.isNullOrEmpty() || paymentMonthDetailsLayout.value == resources.getString(R.string.key_empty_field_label))
-                        paymentMonthDetailsLayout.value = resources.getStringArray(R.array.key_months_array).getOrNull(index = calendar.get(Calendar.MONTH) + 1)
+                        paymentMonthDetailsLayout.value = formattedMonths?.getOrNull(index = calendar.get(Calendar.MONTH) + 1)
                 }
             }
         if (dateDetailsLayout.dateValue.isNullOrEmpty() && args.paymentAmountDataModel?.paymentDate.isNullOrEmpty())

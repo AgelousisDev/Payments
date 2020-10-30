@@ -424,8 +424,8 @@ val Date.isValidProductDate: Boolean
 infix fun Date.formattedDateWith(pattern: String): String? =
     SimpleDateFormat(pattern, Locale.getDefault()).format(this)
 
-infix fun String.toDateWith(pattern: String): Date? =
-    SimpleDateFormat(pattern, Locale.getDefault()).parse(this)
+fun String.toDateWith(pattern: String, locale: Locale? = null): Date? =
+    SimpleDateFormat(pattern, locale ?: Locale.getDefault()).parse(this)
 
 val Date.toCalendar: Calendar
     get() = Calendar.getInstance().also {
@@ -662,7 +662,7 @@ fun setViewBackground(viewGroup: ViewGroup, resourceId: Int?) {
 
 @BindingAdapter("textViewColorByPaymentDate")
 fun setTextViewColorByPaymentDate(materialTextView: MaterialTextView, payments: List<PaymentAmountModel?>?) {
-    if (payments?.mapNotNull { it?.paymentDate }?.all { (it toDateWith Constants.GENERAL_DATE_FORMAT)?.isDatePassed == true } == true)
+    if (payments?.mapNotNull { it?.paymentMonthDate }?.all { it.isDatePassed } == true)
         materialTextView.setTextColor(
             ContextCompat.getColor(materialTextView.context,
                  R.color.red

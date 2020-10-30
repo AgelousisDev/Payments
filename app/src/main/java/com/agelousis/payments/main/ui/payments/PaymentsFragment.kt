@@ -306,7 +306,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
             }
         }
         filteredList.addAll(
-            list.filterIsInstance<GroupModel>().filter { it.groupName?.toLowerCase(Locale.getDefault())?.contains(query?.toLowerCase(Locale.getDefault()) ?: "") == true }
+            list.filterIsInstance<GroupModel>().filter { it.groupName?.toLowerCase(Locale.getDefault())?.contains(query?.toLowerCase(Locale.getDefault()) ?: "") == true  && it.groupName != resources.getString(R.string.key_inactive_label) }
         )
 
         if (filteredList.isEmpty())
