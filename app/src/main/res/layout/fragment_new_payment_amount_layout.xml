@@ -43,7 +43,8 @@
                 android:layout_height="wrap_content"
                 monthYearValue="@{paymentAmountModel.paymentMonth}"
                 app:label="@string/key_payment_month_label"
-                app:showLine="true" />
+                app:showLine="true"
+                app:iconResource="@drawable/ic_payment_month"/>
 
             <com.agelousis.payments.views.dateLayout.DateFieldLayout
                 android:id="@+id/dateDetailsLayout"
@@ -51,7 +52,8 @@
                 android:layout_height="wrap_content"
                 dateValue="@{paymentAmountModel.paymentDate}"
                 app:label="@string/key_execution_date_label"
-                app:showLine="true"/>
+                app:showLine="true"
+                app:iconResource="@drawable/ic_payment_day"/>
 
             <com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
                 android:id="@+id/skipPaymentAppSwitchLayout"

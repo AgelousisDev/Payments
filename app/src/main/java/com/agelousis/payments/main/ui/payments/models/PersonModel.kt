@@ -91,6 +91,6 @@ data class PaymentAmountModel(val paymentId: Int? = null,
         }
 
     val paymentMonthDate
-        get() = paymentMonth?.toDateWith(pattern = Constants.GENERAL_MONTH_DATE_FORMAT, locale = Locale.US)
+        get() = paymentMonth?.toDateWith(pattern = Constants.MONTH_DATE_FORMAT, locale = Locale.US)
 
 }

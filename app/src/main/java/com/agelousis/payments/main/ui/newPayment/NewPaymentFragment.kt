@@ -42,7 +42,8 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         paymentAmountUpdateIndex = paymentAmountModel?.let { availablePayments.indexOf(it) }
         findNavController().navigate(
             NewPaymentFragmentDirections.actionNewPaymentFragmentToNewPaymentAmountFragment(
-                paymentAmountDataModel = paymentAmountModel
+                paymentAmountDataModel = paymentAmountModel,
+                lastPaymentMonthDate = availablePayments.firstOrNull()?.paymentMonthDate
             )
         )
     }

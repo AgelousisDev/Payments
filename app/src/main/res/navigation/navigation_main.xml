@@ -56,6 +56,11 @@
             android:defaultValue="@null"
             app:argType="com.agelousis.payments.main.ui.payments.models.PaymentAmountModel"
             app:nullable="true" />
+        <argument
+            android:name="lastPaymentMonthDate"
+            app:argType="java.util.Date"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 
     <fragment

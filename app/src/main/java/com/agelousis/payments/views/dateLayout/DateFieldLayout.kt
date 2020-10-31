@@ -3,7 +3,6 @@ package com.agelousis.payments.views.dateLayout
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
-import android.content.res.ColorStateList
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
@@ -33,9 +32,9 @@ class DateFieldLayout(context: Context, attributeSet: AttributeSet?): FrameLayou
         set(value) {
             field = value
             lineSeparator.setBackgroundColor(ContextCompat.getColor(context, if (value) R.color.red else R.color.grey))
-            dateIcon.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(context, if (value) R.color.red else R.color.dayNightTextOnBackground))
+            //dateIcon.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(context, if (value) R.color.red else R.color.dayNightTextOnBackground))
         }
-    var dateSelectionClosure: DateSelectionClosure? = null
+    private var dateSelectionClosure: DateSelectionClosure? = null
 
     override fun onDatePickerShow() {
         val c = Calendar.getInstance()
@@ -60,7 +59,8 @@ class DateFieldLayout(context: Context, attributeSet: AttributeSet?): FrameLayou
             binding.dataModel = PersonDetailsViewDataModel(
                 label = attributes.getString(R.styleable.PersonDetailsLayout_label),
                 value = attributes.getString(R.styleable.PersonDetailsLayout_value),
-                showLine = attributes.getBoolean(R.styleable.PersonDetailsLayout_showLine, true)
+                showLine = attributes.getBoolean(R.styleable.PersonDetailsLayout_showLine, true),
+                icon = attributes.getResourceId(R.styleable.PersonDetailsLayout_iconResource, 0)
             )
             binding.presenter = this
             attributes.recycle()

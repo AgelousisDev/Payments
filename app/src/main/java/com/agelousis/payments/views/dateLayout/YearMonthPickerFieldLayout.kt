@@ -1,16 +1,13 @@
 package com.agelousis.payments.views.dateLayout
 
 import android.annotation.SuppressLint
-import android.app.DatePickerDialog
 import android.content.Context
-import android.content.res.ColorStateList
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import com.agelousis.payments.R
 import com.agelousis.payments.databinding.DateFieldLayoutBinding
-import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.views.dateLayout.interfaces.DatePickerPresenter
 import com.agelousis.payments.views.personDetailsLayout.models.PersonDetailsViewDataModel
 import com.whiteelephant.monthpicker.MonthPickerDialog
@@ -32,7 +29,7 @@ class YearMonthPickerFieldLayout(context: Context, attributeSet: AttributeSet?):
         set(value) {
             field = value
             lineSeparator.setBackgroundColor(ContextCompat.getColor(context, if (value) R.color.red else R.color.grey))
-            dateIcon.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(context, if (value) R.color.red else R.color.dayNightTextOnBackground))
+            //dateIcon.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(context, if (value) R.color.red else R.color.dayNightTextOnBackground))
         }
 
     override fun onDateSet(selectedMonth: Int, selectedYear: Int) {
@@ -65,7 +62,8 @@ class YearMonthPickerFieldLayout(context: Context, attributeSet: AttributeSet?):
             binding.dataModel = PersonDetailsViewDataModel(
                 label = attributes.getString(R.styleable.PersonDetailsLayout_label),
                 value = attributes.getString(R.styleable.PersonDetailsLayout_value),
-                showLine = attributes.getBoolean(R.styleable.PersonDetailsLayout_showLine, true)
+                showLine = attributes.getBoolean(R.styleable.PersonDetailsLayout_showLine, true),
+                icon = attributes.getResourceId(R.styleable.PersonDetailsLayout_iconResource, 0)
             )
             binding.presenter = this
             attributes.recycle()

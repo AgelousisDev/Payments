@@ -53,7 +53,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_date" />
+        app:srcCompat="@{dataModel.icon}"
+        tools:srcCompat="@drawable/ic_payment_day" />
 
     <View
         android:id="@+id/lineSeparator"

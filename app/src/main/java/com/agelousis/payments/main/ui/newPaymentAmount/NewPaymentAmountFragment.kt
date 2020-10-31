@@ -16,7 +16,6 @@ import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.views.currencyEditText.interfaces.AmountListener
 import kotlinx.android.synthetic.main.fragment_new_payment_amount_layout.*
-import org.w3c.dom.DOMImplementation
 import java.util.*
 
 class NewPaymentAmountFragment: Fragment(), AmountListener {
@@ -58,32 +57,24 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
 
     private fun setupUI() {
         amountLayout.amountListener = this
-        args.paymentAmountDataModel?.let {
-            TODO(reason = "Needs implementation")
-            val paymentMonthCalendar = it.paymentMonthDate?.toCalendar(plusMonths = 1) ?: return@let
+        args.lastPaymentMonthDate?.let { lastPaymentMonthDate ->
+            val paymentMonthCalendar = lastPaymentMonthDate.toCalendar(plusMonths = 1)
             paymentMonthDetailsLayout.dateValue = String.format(
                 "%s %s",
                 resources.getStringArray(R.array.key_months_array).getOrNull(index = paymentMonthCalendar.get(Calendar.MONTH)) ?: "",
                 paymentMonthCalendar.get(Calendar.YEAR)
             )
-        } ?: run {
-            dateDetailsLayout.dateSelectionClosure = { dateString ->
-                (dateString.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT))?.toCalendar?.let { calendar ->
-                    if (paymentMonthDetailsLayout.dateValue.isNullOrEmpty())
-                        paymentMonthDetailsLayout.dateValue = String.format(
-                            "%s %s",
-                            resources.getStringArray(R.array.key_months_array).getOrNull(index = calendar.get(Calendar.MONTH) + 1) ?: "",
-                            calendar.get(Calendar.YEAR)
-                        )
-                }
-            }
         }
         if (dateDetailsLayout.dateValue.isNullOrEmpty() && args.paymentAmountDataModel?.paymentDate.isNullOrEmpty())
-            after(
-                millis = 600
-            ) {
-                dateDetailsLayout.dateValue = Date() formattedDateWith Constants.GENERAL_DATE_FORMAT
-            }
+            dateDetailsLayout.dateValue = Date() formattedDateWith Constants.GENERAL_DATE_FORMAT
+        if (paymentMonthDetailsLayout.dateValue == null && args.paymentAmountDataModel?.paymentMonth == null) {
+            val paymentMonthCalendar = Date().toCalendar
+            paymentMonthDetailsLayout.dateValue = String.format(
+                "%s %s",
+                resources.getStringArray(R.array.key_months_array).getOrNull(index = paymentMonthCalendar.get(Calendar.MONTH)) ?: "",
+                paymentMonthCalendar.get(Calendar.YEAR)
+            )
+        }
         skipPaymentAppSwitchLayout.setOnClickListener {
             skipPaymentAppSwitchLayout.isChecked = !skipPaymentAppSwitchLayout.isChecked
         }
