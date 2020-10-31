@@ -20,7 +20,7 @@ class BiometricsHelper(private val biometricsListener: BiometricsListener): Biom
             .setTitle(context.resources.getString(R.string.key_biometric_authentication_title))
             .setSubtitle(context.resources.getString(R.string.key_biometric_authentication_message))
             .setNegativeButtonText(context.resources.getString(R.string.key_cancel_label))
-            .setConfirmationRequired(true)
+            .setConfirmationRequired(false)
             .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK)
             .build()
         val biometricPrompt = BiometricPrompt(context as? AppCompatActivity ?: return, executor, this)
