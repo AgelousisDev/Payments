@@ -27,7 +27,6 @@ import com.agelousis.payments.utils.extensions.animateAlpha
 import com.agelousis.payments.utils.extensions.ifLet
 import com.agelousis.payments.utils.extensions.message
 import com.agelousis.payments.utils.extensions.showListDialog
-import com.agelousis.payments.utils.helpers.YearMonthsList
 import com.agelousis.payments.views.detailsSwitch.interfaces.AppSwitchListener
 import kotlinx.android.synthetic.main.fragment_new_payment_layout.*
 import kotlinx.coroutines.CoroutineScope
@@ -43,8 +42,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         paymentAmountUpdateIndex = paymentAmountModel?.let { availablePayments.indexOf(it) }
         findNavController().navigate(
             NewPaymentFragmentDirections.actionNewPaymentFragmentToNewPaymentAmountFragment(
-                paymentAmountDataModel = paymentAmountModel,
-                lastPaymentMonthIndex = formattedMonths?.indexOf(availablePayments.firstOrNull()?.paymentMonth) ?: -1
+                paymentAmountDataModel = paymentAmountModel
             )
         )
     }
@@ -84,7 +82,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             addPaymentButton.animateAlpha(toAlpha = if (value) 1.0f else 0.2f)
             addPaymentButton.isEnabled = value
         }
-    private val formattedMonths by lazy { context?.let { YearMonthsList(context = it).formattedMonths } }
 
     override fun onResume() {
         super.onResume()

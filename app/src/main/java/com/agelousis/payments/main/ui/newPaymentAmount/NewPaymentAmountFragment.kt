@@ -14,9 +14,9 @@ import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
-import com.agelousis.payments.utils.helpers.YearMonthsList
 import com.agelousis.payments.views.currencyEditText.interfaces.AmountListener
 import kotlinx.android.synthetic.main.fragment_new_payment_amount_layout.*
+import org.w3c.dom.DOMImplementation
 import java.util.*
 
 class NewPaymentAmountFragment: Fragment(), AmountListener {
@@ -36,7 +36,6 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
     }
 
     private val args: NewPaymentAmountFragmentArgs by navArgs()
-    private val formattedMonths by lazy { context?.let { YearMonthsList(context = it).formattedMonths } }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,23 +58,26 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
 
     private fun setupUI() {
         amountLayout.amountListener = this
-        paymentMonthDetailsLayout.setOnDetailsPressed {
-            context?.showListDialog(
-                title = resources.getString(R.string.key_select_option_label),
-                items = formattedMonths ?: return@setOnDetailsPressed
-            ) { position ->
-                paymentMonthDetailsLayout.value = formattedMonths?.getOrNull(index = position)
-            }
-        }
-        if (args.lastPaymentMonthIndex > -1)
-            paymentMonthDetailsLayout.value = formattedMonths?.getOrNull(index = args.lastPaymentMonthIndex + 1)
-        else
+        args.paymentAmountDataModel?.let {
+            TODO(reason = "Needs implementation")
+            val paymentMonthCalendar = it.paymentMonthDate?.toCalendar(plusMonths = 1) ?: return@let
+            paymentMonthDetailsLayout.dateValue = String.format(
+                "%s %s",
+                resources.getStringArray(R.array.key_months_array).getOrNull(index = paymentMonthCalendar.get(Calendar.MONTH)) ?: "",
+                paymentMonthCalendar.get(Calendar.YEAR)
+            )
+        } ?: run {
             dateDetailsLayout.dateSelectionClosure = { dateString ->
                 (dateString.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT))?.toCalendar?.let { calendar ->
-                    if (paymentMonthDetailsLayout.value.isNullOrEmpty() || paymentMonthDetailsLayout.value == resources.getString(R.string.key_empty_field_label))
-                        paymentMonthDetailsLayout.value = formattedMonths?.getOrNull(index = calendar.get(Calendar.MONTH) + 1)
+                    if (paymentMonthDetailsLayout.dateValue.isNullOrEmpty())
+                        paymentMonthDetailsLayout.dateValue = String.format(
+                            "%s %s",
+                            resources.getStringArray(R.array.key_months_array).getOrNull(index = calendar.get(Calendar.MONTH) + 1) ?: "",
+                            calendar.get(Calendar.YEAR)
+                        )
                 }
             }
+        }
         if (dateDetailsLayout.dateValue.isNullOrEmpty() && args.paymentAmountDataModel?.paymentDate.isNullOrEmpty())
             after(
                 millis = 600
@@ -91,12 +93,13 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
         ifLet(
             amountLayout.doubleValue,
             dateDetailsLayout.dateValue,
+            paymentMonthDetailsLayout.dateValue
         ) {
             findNavController().previousBackStackEntry?.savedStateHandle?.set(
                 PAYMENT_AMOUNT_DATA_EXTRA,
                 PaymentAmountModel(
                     paymentAmount = it.first().toString().toDouble(),
-                    paymentMonth = paymentMonthDetailsLayout.value,
+                    paymentMonth = paymentMonthDetailsLayout.dateValue,
                     paymentDate = it.second().toString(),
                     skipPayment = skipPaymentAppSwitchLayout.isChecked,
                     paymentNote = notesField.text?.toString()
@@ -106,6 +109,7 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
         } ?: run {
             amountLayout.errorState = amountLayout.doubleValue == null
             dateDetailsLayout.errorState = dateDetailsLayout.dateValue == null
+            paymentMonthDetailsLayout.errorState = paymentMonthDetailsLayout.dateValue == null
         }
     }
 

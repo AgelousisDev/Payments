@@ -3,6 +3,7 @@ package com.agelousis.payments.views.extensions
 import androidx.databinding.BindingAdapter
 import com.agelousis.payments.views.currencyEditText.CurrencyFieldLayout
 import com.agelousis.payments.views.dateLayout.DateFieldLayout
+import com.agelousis.payments.views.dateLayout.YearMonthPickerFieldLayout
 import com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
 import com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
 import com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
@@ -33,6 +34,13 @@ fun setCurrencyAmount(currencyFieldLayout: CurrencyFieldLayout, amount: Double?)
 fun setDateValue(dateFieldLayout: DateFieldLayout, date: String?) {
     date?.let {
         dateFieldLayout.dateValue = it
+    }
+}
+
+@BindingAdapter("monthYearValue")
+fun setMonthYearValue(monthYearMonthPickerFieldLayout: YearMonthPickerFieldLayout, date: String?) {
+    date?.let {
+        monthYearMonthPickerFieldLayout.dateValue = it
     }
 }
 

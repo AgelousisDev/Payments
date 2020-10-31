@@ -2,6 +2,7 @@ package com.agelousis.payments.main.ui.payments.models
 
 import android.content.Context
 import android.os.Parcelable
+import android.text.format.DateUtils
 import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.newPayment.enumerations.PaymentAmountRowState
 import com.agelousis.payments.utils.constants.Constants
@@ -80,8 +81,9 @@ data class PaymentAmountModel(val paymentId: Int? = null,
 
     val paymentColor: Int
         get() {
+            val paymentMonthCalendar = paymentMonthDate?.toCalendar(plusMonths = 1) ?: return paymentAmountRowState.backgroundTint
             return if (paymentAmountRowState == PaymentAmountRowState.NORMAL)
-                if (paymentMonthDate?.isDatePassed == true)
+                if (paymentMonthCalendar.time.isDatePassed)
                     R.color.orange
                 else paymentAmountRowState.backgroundTint
             else

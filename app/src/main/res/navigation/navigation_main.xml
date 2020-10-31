@@ -56,10 +56,6 @@
             android:defaultValue="@null"
             app:argType="com.agelousis.payments.main.ui.payments.models.PaymentAmountModel"
             app:nullable="true" />
-        <argument
-            android:name="lastPaymentMonthIndex"
-            app:argType="integer"
-            android:defaultValue="-1" />
     </fragment>
 
     <fragment

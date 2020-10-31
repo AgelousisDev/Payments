@@ -37,14 +37,13 @@
                 app:label="@string/key_amount_label"
                 app:showLine="true"/>
 
-            <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
+            <com.agelousis.payments.views.dateLayout.YearMonthPickerFieldLayout
                 android:id="@+id/paymentMonthDetailsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                monthYearValue="@{paymentAmountModel.paymentMonth}"
                 app:label="@string/key_payment_month_label"
-                app:showLine="true"
-                app:imeOptionType="actionDone"
-                app:fieldType="TEXT" />
+                app:showLine="true" />
 
             <com.agelousis.payments.views.dateLayout.DateFieldLayout
                 android:id="@+id/dateDetailsLayout"

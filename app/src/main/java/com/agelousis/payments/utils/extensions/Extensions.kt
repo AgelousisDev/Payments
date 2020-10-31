@@ -578,6 +578,14 @@ fun Context.shareMessage(schemeUrl: String) {
 val String.toRawMobileNumber
     get() = this.replace("\\s".toRegex(), "").replace("+", "")
 
+fun Date.toCalendar(plusMonths: Int? = null): Calendar {
+    val calendar = Calendar.getInstance()
+    calendar.time = this
+    calendar.set(Calendar.YEAR, if (calendar.get(Calendar.MONTH) == 11) calendar.get(Calendar.YEAR) + 1 else calendar.get(Calendar.YEAR))
+    calendar.set(Calendar.MONTH, if (calendar.get(Calendar.MONTH) == 11) 0 else calendar.get(Calendar.MONTH) + (plusMonths ?: 0))
+    return calendar
+}
+
 @BindingAdapter("picassoImagePath")
 fun AppCompatImageView.loadImagePath(fileName: String?) {
     fileName?.let {
@@ -662,7 +670,12 @@ fun setViewBackground(viewGroup: ViewGroup, resourceId: Int?) {
 
 @BindingAdapter("textViewColorByPaymentDate")
 fun setTextViewColorByPaymentDate(materialTextView: MaterialTextView, payments: List<PaymentAmountModel?>?) {
-    if (payments?.mapNotNull { it?.paymentMonthDate }?.all { it.isDatePassed } == true)
+    if (payments?.mapNotNull {
+            it?.paymentMonthDate
+        }?.all {
+            val paymentMonthDate = it.toCalendar(plusMonths = 1)
+            paymentMonthDate.time.isDatePassed
+        } == true)
         materialTextView.setTextColor(
             ContextCompat.getColor(materialTextView.context,
                  R.color.red
