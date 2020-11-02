@@ -572,6 +572,19 @@ class DBManager(context: Context) {
         }
     }
 
+    suspend fun clearPayments(userId: Int?, deletionSuccessBlock: DeletionSuccessBlock) {
+        withContext(Dispatchers.Default) {
+            database?.delete(
+                SQLiteHelper.PERSONS_TABLE_NAME,
+                "${SQLiteHelper.USER_ID}=?",
+                arrayOf(userId?.toString() ?: return@withContext)
+            )
+            withContext(Dispatchers.Main) {
+                deletionSuccessBlock()
+            }
+        }
+    }
+
     suspend fun insertFile(userId: Int?, fileDataModel: FileDataModel, insertionSuccessBlock: InsertionSuccessBlock? = null) {
         withContext(Dispatchers.Default) {
             database?.insert(

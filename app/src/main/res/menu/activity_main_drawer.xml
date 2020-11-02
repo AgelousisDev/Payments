@@ -29,6 +29,10 @@
                     android:id="@+id/navigationExport"
                     android:icon="@drawable/ic_export"
                     android:title="@string/key_export_label"/>
+                <item
+                    android:id="@+id/navigationClearPayments"
+                    android:icon="@drawable/ic_clear_all"
+                    android:title="@string/key_clear_all_payments_payments_label"/>
             </group>
         </menu>
     </item>

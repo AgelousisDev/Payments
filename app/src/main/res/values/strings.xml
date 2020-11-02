@@ -97,6 +97,9 @@
     <string name="key_share_message_template_hint">Message template to share</string>
     <string name="key_free_label">FREE</string>
     <string name="key_inactive_label">Inactive</string>
+    <string name="key_clear_all_payments_payments_label">Clear Payments</string>
+    <string name="key_clear_all_payments_message">This operation will delete all the payments you have registered except the groups. Do you want to proceed?</string>
+    <string name="key_clear_label">Clear</string>
 
     <string-array name="key_payment_action_array">
         <item>Call</item>

@@ -62,9 +62,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 navHostFragmentContainerView.findNavController().popBackStack(R.id.filesFragment, true)
                 navHostFragmentContainerView.findNavController().navigate(R.id.action_global_filesFragment)
             }
-            R.id.navigationExport -> {
+            R.id.navigationExport ->
                 initializeDatabaseExport()
-            }
+            R.id.navigationClearPayments ->
+                triggerPaymentsClearance()
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
@@ -76,25 +77,30 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 appBarTitle = resources.getString(R.string.key_profile_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
+                clearPaymentsMenuItemIsVisible = false
             }
             in PaymentsFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.app_name)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_add
+                clearPaymentsMenuItemIsVisible = true
             }
             in NewPaymentFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_person_info_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
+                clearPaymentsMenuItemIsVisible = false
             }
             in NewPaymentAmountFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_add_payment_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
+                clearPaymentsMenuItemIsVisible = false
             }
             in FilesFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_files_label)
                 floatingButtonState = false
+                clearPaymentsMenuItemIsVisible = false
             }
         }
     }
@@ -148,6 +154,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             else floatingButton.hide()
         }
     var floatingButtonType = FloatingButtonType.NORMAL
+    private var clearPaymentsMenuItemIsVisible = false
+        set(value) {
+            field = value
+            navigationView?.menu?.findItem(R.id.navigationClearPayments)?.isVisible = value
+        }
 
     override fun onBackPressed() {
         unCheckAllMenuItems(
@@ -244,6 +255,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     fileName = SQLiteHelper.DB_NAME,
                     mimeType = Constants.GENERAL_MIME_TYPE
                 )
+            }
+        )
+    }
+
+    private fun triggerPaymentsClearance() {
+        showTwoButtonsDialog(
+            title = resources.getString(R.string.key_warning_label),
+            message = resources.getString(R.string.key_clear_all_payments_message),
+            positiveButtonText = resources.getString(R.string.key_clear_label),
+            positiveButtonBlock = {
+                uiScope.launch {
+                    dbManager.clearPayments(
+                        userId = userModel?.id
+                    ) {
+                        (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
+                    }
+                }
             }
         )
     }
