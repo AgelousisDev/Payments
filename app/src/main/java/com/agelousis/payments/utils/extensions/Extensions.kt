@@ -682,3 +682,10 @@ fun setTextViewColorByPaymentDate(materialTextView: MaterialTextView, payments: 
             )
         )
 }
+
+@BindingAdapter("layoutWidth")
+fun setLayoutWidth(view: View, width: Float) {
+    view.layoutParams.apply {
+        this.width = width.toInt()
+    }
+}

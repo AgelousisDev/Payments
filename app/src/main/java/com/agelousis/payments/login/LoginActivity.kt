@@ -160,6 +160,17 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
         }
     }
 
+    override fun onBackPressed() {
+        when(signInState) {
+            SignInState.SIGN_UP -> {
+                signInState = SignInState.LOGIN
+                binding?.signInState = signInState
+            }
+            else ->
+                super.onBackPressed()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(

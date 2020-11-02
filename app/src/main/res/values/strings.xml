@@ -100,6 +100,7 @@
     <string name="key_clear_all_payments_payments_label">Clear Payments</string>
     <string name="key_clear_all_payments_message">This operation will delete all the payments you have registered except the groups. Do you want to proceed?</string>
     <string name="key_clear_label">Clear</string>
+    <string name="key_saved_users_label">Saved Users</string>
 
     <string-array name="key_payment_action_array">
         <item>Call</item>
