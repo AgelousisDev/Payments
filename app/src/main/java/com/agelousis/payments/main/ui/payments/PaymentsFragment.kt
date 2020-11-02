@@ -331,6 +331,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
             }
         paymentListRecyclerView.scheduleLayoutAnimation()
         (paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
+        (activity as? MainActivity)?.clearPaymentsMenuItemIsVisible = filteredList.filterIsInstance<PersonModel>().isNotEmpty()
     }
 
 }

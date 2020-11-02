@@ -154,7 +154,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             else floatingButton.hide()
         }
     var floatingButtonType = FloatingButtonType.NORMAL
-    private var clearPaymentsMenuItemIsVisible = false
+    var clearPaymentsMenuItemIsVisible = false
         set(value) {
             field = value
             navigationView?.menu?.findItem(R.id.navigationClearPayments)?.isVisible = value
