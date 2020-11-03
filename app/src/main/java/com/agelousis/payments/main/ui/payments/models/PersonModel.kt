@@ -2,7 +2,6 @@ package com.agelousis.payments.main.ui.payments.models
 
 import android.content.Context
 import android.os.Parcelable
-import android.text.format.DateUtils
 import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.newPayment.enumerations.PaymentAmountRowState
 import com.agelousis.payments.utils.constants.Constants

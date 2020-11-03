@@ -48,6 +48,7 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
             false
         ).also {
             it.paymentAmountModel = args.paymentAmountDataModel
+            it.defaultPaymentAmount = (activity as? MainActivity)?.userModel?.defaultPaymentAmount
         }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

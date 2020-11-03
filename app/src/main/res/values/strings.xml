@@ -20,7 +20,7 @@
     <string name="key_logout_label">Logout</string>
     <string name="key_logout_message">Do you want to logout?</string>
     <string name="key_home_label">Home</string>
-    <string name="key_view_edit_profile_label">View and edit profile</string>
+    <string name="key_view_edit_profile_label">View, edit profile &amp; payment settings</string>
     <string name="key_change_profile_picture_label">Profile Picture</string>
     <string name="key_no_changes_message">You have not made any changes…</string>
     <string name="key_add_label">Add</string>
@@ -101,6 +101,8 @@
     <string name="key_clear_all_payments_message">This operation will delete all the payments you have registered except the groups. Do you want to proceed?</string>
     <string name="key_clear_label">Clear</string>
     <string name="key_saved_users_label">Saved Users</string>
+    <string name="key_payment_setting_label">Payment Settings</string>
+    <string name="key_default_payment_amount_label">Default payment amount</string>
 
     <string-array name="key_payment_action_array">
         <item>Call</item>

@@ -33,6 +33,9 @@ fun setPersonalInformation(appCompatEditText: AppCompatEditText, optionType: Opt
             OptionType.VAT ->
                 it.userModel?.vat?.toString()
                     ?: "0"
+            OptionType.DEFAULT_PAYMENT_AMOUNT ->
+                it.userModel?.defaultPaymentAmount?.toString()
+                    ?: "0"
             else -> null
         })
     }

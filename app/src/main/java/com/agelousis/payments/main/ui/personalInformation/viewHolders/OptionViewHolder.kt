@@ -45,6 +45,11 @@ class OptionViewHolder(private val binding: OptionTypeRowLayoutBinding): Recycle
                     optionPresenter.onVatChange(
                         newVat = it?.toString()?.toIntOrNull() ?: return@doAfterTextChanged
                     )
+                OptionType.DEFAULT_PAYMENT_AMOUNT ->
+                    optionPresenter.onPaymentAmountChange(
+                        newPaymentAmount = it?.toString()?.toDoubleOrNull() ?: return@doAfterTextChanged
+                    )
+
                 else -> {}
             }
         }

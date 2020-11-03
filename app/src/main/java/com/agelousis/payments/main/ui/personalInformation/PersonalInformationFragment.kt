@@ -15,6 +15,7 @@ import com.agelousis.payments.databinding.FragmentPersonalInformationLayoutBindi
 import com.agelousis.payments.login.LoginActivity
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.MainActivity
+import com.agelousis.payments.main.ui.files.models.HeaderModel
 import com.agelousis.payments.main.ui.personalInformation.adapters.OptionTypesAdapter
 import com.agelousis.payments.main.ui.personalInformation.models.OptionType
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
@@ -72,9 +73,13 @@ class PersonalInformationFragment: Fragment(), OptionPresenter {
         newUserModel?.vat = newVat
     }
 
+    override fun onPaymentAmountChange(newPaymentAmount: Double) {
+        newUserModel?.defaultPaymentAmount = newPaymentAmount
+    }
+
     private val dbManager by lazy { context?.let { DBManager(context = it) } }
     private val newUserModel by lazy { (activity as? MainActivity)?.userModel?.copy() }
-    private val optionTypes by lazy {
+    private val optionList by lazy {
         arrayListOf(
             OptionType.CHANGE_FIRST_NAME.also {
                 it.userModel = newUserModel
@@ -104,7 +109,14 @@ class PersonalInformationFragment: Fragment(), OptionPresenter {
             OptionType.CHANGE_SOCIAL_INSURANCE_NUMBER.also {
                 it.userModel = newUserModel
             },
+            HeaderModel(
+                dateTime = null,
+                header = resources.getString(R.string.key_payment_setting_label)
+            ),
             OptionType.VAT.also {
+                it.userModel = newUserModel
+            },
+            OptionType.DEFAULT_PAYMENT_AMOUNT.also {
                 it.userModel = newUserModel
             }
         )
@@ -126,13 +138,15 @@ class PersonalInformationFragment: Fragment(), OptionPresenter {
 
     private fun configureRecyclerView() {
         optionRecyclerView.adapter = OptionTypesAdapter(
-            optionTypes = optionTypes,
+            list = optionList,
             optionPresenter = this
         )
         optionRecyclerView.addItemDecoration(DividerItemRecyclerViewDecorator(
             context = context ?: return,
             margin = resources.getDimension(R.dimen.activity_horizontal_margin).toInt()
-        ))
+        ) {
+            optionList.getOrNull(index = it) !is HeaderModel
+        })
     }
 
     suspend fun updateUser(successBlock: (UserModel?) -> Unit) {
@@ -169,7 +183,13 @@ class PersonalInformationFragment: Fragment(), OptionPresenter {
                             bitmap = bitmap
                         )
                         newUserModel?.profileImageData = bitmap?.byteArray
-                        optionTypes.firstOrNull { it == OptionType.CHANGE_PROFILE_IMAGE }?.userModel?.profileImage = newUserModel?.profileImage
+                        optionList.firstOrNullWithType(
+                            typeBlock = {
+                                it as OptionType
+                            }
+                        ) {
+                            it is OptionType
+                        }?.userModel?.profileImage = newUserModel?.profileImage
                         optionRecyclerView.scheduleLayoutAnimation()
                         (optionRecyclerView.adapter as? OptionTypesAdapter)?.reloadData()
                     }
