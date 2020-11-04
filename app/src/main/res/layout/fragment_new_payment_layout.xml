@@ -2,6 +2,7 @@
 <layout>
     <data>
         <import type="com.agelousis.payments.main.ui.payments.models.PaymentAmountModel" />
+        <import type="com.agelousis.payments.main.ui.payments.enumerations.PaymentType" />
         <variable
             name="personModel"
             type="com.agelousis.payments.main.ui.payments.models.PersonModel" />
@@ -30,6 +31,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:animateLayoutChanges="true">
+
+            <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
+                android:id="@+id/paymentTypeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:label="@string/key_payment_type_label"
+                personDetailsPicker="@{personModel.paymentType != null ? personModel.paymentType.getLocalizedTitle(context.resources) : PaymentType.CASH_PAYMENT.getLocalizedTitle(context.resources)}"
+                app:showLine="true"
+                app:imeOptionType="actionDone"
+                app:fieldType="TEXT"/>
 
             <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
                 android:id="@+id/firstNameLayout"

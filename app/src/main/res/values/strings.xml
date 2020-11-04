@@ -103,6 +103,10 @@
     <string name="key_saved_users_label">Saved Users</string>
     <string name="key_payment_setting_label">Payment Settings</string>
     <string name="key_default_payment_amount_label">Default payment amount</string>
+    <string name="key_payment_type_label">Payment Type</string>
+    <string name="key_cash_payment_label">💶 Cash Payment</string>
+    <string name="key_online_payment_label">📱 Online Payment</string>
+    <string name="key_check_payment_label">🧾 Check Payment</string>
 
     <string-array name="key_payment_action_array">
         <item>Call</item>

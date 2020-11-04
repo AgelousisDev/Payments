@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
 import com.agelousis.payments.R
 import com.agelousis.payments.databinding.PersonDetailsFieldLayoutBinding
+import com.agelousis.payments.utils.extensions.showKeyboard
 import com.agelousis.payments.views.personDetailsLayout.enumerations.ImeOptionsType
 import com.agelousis.payments.views.personDetailsLayout.enumerations.PersonDetailFieldType
 import com.agelousis.payments.views.personDetailsLayout.models.PersonDetailsViewDataModel
@@ -56,6 +57,12 @@ class PersonDetailsLayout(context: Context, attributeSet: AttributeSet?): FrameL
     private fun setupUI() {
         personDetailsLayout.setOnClickListener {
             personDetailField.requestFocus()
+            personDetailField.text?.toString()?.takeIf { it.isNotEmpty() }?.length?.let {
+                personDetailField.setSelection(it)
+            }
+            context?.showKeyboard(
+                view = personDetailField
+            )
         }
         personDetailField.doOnTextChanged { _, _, _, _ ->
             errorState = false

@@ -1,6 +1,7 @@
 package com.agelousis.payments.utils.extensions
 
 import android.animation.Animator
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -586,6 +587,14 @@ fun Date.toCalendar(plusMonths: Int? = null): Calendar {
     return calendar
 }
 
+inline fun <reified T : Enum<*>> valueEnumOrNull(name: String?): T? =
+    T::class.java.enumConstants?.firstOrNull { it.name == name }
+
+fun Context.showKeyboard(view: View) {
+    val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+}
+
 @BindingAdapter("picassoImagePath")
 fun AppCompatImageView.loadImagePath(fileName: String?) {
     fileName?.let {
@@ -670,12 +679,13 @@ fun setViewBackground(viewGroup: ViewGroup, resourceId: Int?) {
 
 @BindingAdapter("textViewColorByPaymentDate")
 fun setTextViewColorByPaymentDate(materialTextView: MaterialTextView, payments: List<PaymentAmountModel?>?) {
-    if (payments?.mapNotNull {
+    payments?.takeIf { it.isNotEmpty() } ?: return
+    if (payments.mapNotNull {
             it?.paymentMonthDate
-        }?.all {
+        }.all {
             val paymentMonthDate = it.toCalendar(plusMonths = 1)
             paymentMonthDate.time.isDatePassed
-        } == true)
+        })
         materialTextView.setTextColor(
             ContextCompat.getColor(materialTextView.context,
                  R.color.red

@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Parcelable
 import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.newPayment.enumerations.PaymentAmountRowState
+import com.agelousis.payments.main.ui.payments.enumerations.PaymentType
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import kotlinx.android.parcel.IgnoredOnParcel
@@ -25,10 +26,11 @@ data class PersonModel(val personId: Int? = null,
                        val payments: List<PaymentAmountModel>?,
                        val groupColor: Int? = null,
                        val groupImage: String? = null,
-                       val messageTemplate: String?
+                       val messageTemplate: String?,
+                       val paymentType: PaymentType?
 ): Parcelable {
     val totalPaymentAmount: Double?
-        get() = payments?.mapNotNull { it.paymentAmount }?.sum()
+        get() = payments?.mapNotNull { it.paymentAmount }?.takeIf { it.isNotEmpty() }?.sum()
 
 
 

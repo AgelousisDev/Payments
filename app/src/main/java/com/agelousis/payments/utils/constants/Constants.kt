@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Color
 import android.telephony.TelephonyManager
 import com.agelousis.payments.R
-import com.agelousis.payments.utils.extensions.second
 import java.util.*
 
 object Constants {

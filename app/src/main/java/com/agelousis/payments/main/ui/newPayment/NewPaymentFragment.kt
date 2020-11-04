@@ -19,14 +19,13 @@ import com.agelousis.payments.main.ui.newPayment.enumerations.PaymentAmountRowSt
 import com.agelousis.payments.main.ui.newPayment.presenters.NewPaymentPresenter
 import com.agelousis.payments.main.ui.newPayment.viewModels.NewPaymentViewModel
 import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
+import com.agelousis.payments.main.ui.payments.enumerations.PaymentType
+import com.agelousis.payments.main.ui.payments.extensions.showPaymentsTypeMenu
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.models.PersonModel
 import com.agelousis.payments.utils.constants.Constants
-import com.agelousis.payments.utils.extensions.animateAlpha
-import com.agelousis.payments.utils.extensions.ifLet
-import com.agelousis.payments.utils.extensions.message
-import com.agelousis.payments.utils.extensions.showListDialog
+import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.views.detailsSwitch.interfaces.AppSwitchListener
 import kotlinx.android.synthetic.main.fragment_new_payment_layout.*
 import kotlinx.coroutines.CoroutineScope
@@ -83,6 +82,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             addPaymentButton.animateAlpha(toAlpha = if (value) 1.0f else 0.2f)
             addPaymentButton.isEnabled = value
         }
+    private var selectedPaymentType = PaymentType.CASH_PAYMENT
 
     override fun onResume() {
         super.onResume()
@@ -123,17 +123,27 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     }
 
     private fun setupUI() {
+        paymentTypeLayout.setOnDetailsPressed {
+            context?.showPaymentsTypeMenu(
+                anchor = it
+            ) { paymentType ->
+                selectedPaymentType = paymentType
+                binding?.paymentTypeLayout?.value = paymentType.getLocalizedTitle(
+                    resources = resources
+                )
+            }
+        }
         groupDetailsLayout.setOnDetailsPressed {
             context?.showListDialog(
                 title = resources.getString(R.string.key_select_group_label),
                 items = availableGroups.mapNotNull { it.groupName }
             ) {
-                groupDetailsLayout.errorState = false
-                groupDetailsLayout.value = availableGroups.getOrNull(index = it)?.groupName
+                binding?.groupDetailsLayout?.errorState = false
+                binding?.groupDetailsLayout?.value = availableGroups.getOrNull(index = it)?.groupName
             }
         }
         activeAppSwitchLayout.setOnClickListener {
-            activeAppSwitchLayout.isChecked = !activeAppSwitchLayout.isChecked
+            binding?.activeAppSwitchLayout?.isChecked = !activeAppSwitchLayout.isChecked
         }
         activeAppSwitchLayout.appSwitchListener = object: AppSwitchListener {
             override fun onAppSwitchValueChanged(isChecked: Boolean) {
@@ -142,7 +152,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             }
         }
         freeAppSwitchLayout.setOnClickListener {
-            freeAppSwitchLayout.isChecked = !freeAppSwitchLayout.isChecked
+            binding?.freeAppSwitchLayout?.isChecked = !freeAppSwitchLayout.isChecked
         }
         freeAppSwitchLayout.appSwitchListener = object: AppSwitchListener {
             override fun onAppSwitchValueChanged(isChecked: Boolean) {
@@ -158,10 +168,19 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         }
         viewModel.paymentInsertionStateLiveData.observe(viewLifecycleOwner) { paymentInsertionState ->
             if (paymentInsertionState) {
+                redirectToSMSApp()
                 currentPersonModel = null
                 findNavController().popBackStack()
             }
         }
+    }
+
+    private fun redirectToSMSApp() {
+        if (binding?.phoneLayout?.value != null && databaseTriggeringType == DatabaseTriggeringType.INSERT)
+            context?.sendSMSMessage(
+                mobileNumber = binding?.phoneLayout?.value ?: "",
+                message = binding?.messageTemplateField?.text?.toString() ?: ""
+            )
     }
 
     private fun initializeNewPayments() {
@@ -240,7 +259,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     private fun fillCurrentPersonModel() {
         var phone = binding?.phoneLayout?.value
         Constants.CountryCodes.getCountryZipCode(context = context ?: return)?.let {
-            if (binding?.phoneLayout?.value?.contains(it) == false)
+            if (binding?.phoneLayout?.value?.startsWith("+$it") == false)
                 phone = String.format(
                     "%s%s",
                     "+$it ",
@@ -260,7 +279,8 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             active = binding?.activeAppSwitchLayout?.isChecked,
             free = binding?.freeAppSwitchLayout?.isChecked,
             messageTemplate = binding?.messageTemplateField?.text?.toString(),
-            payments = availablePayments
+            payments = availablePayments,
+            paymentType = selectedPaymentType
         )
     }
 

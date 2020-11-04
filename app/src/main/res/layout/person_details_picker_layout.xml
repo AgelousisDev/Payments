@@ -48,8 +48,9 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/arrow"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginEnd="@dimen/nav_header_vertical_spacing"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
