@@ -27,6 +27,7 @@ import com.agelousis.payments.main.ui.payments.presenters.PaymentPresenter
 import com.agelousis.payments.main.ui.payments.viewHolders.GroupViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.PaymentViewHolder
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
+import com.agelousis.payments.main.ui.periodFilter.models.PeriodFilterDataModel
 import com.agelousis.payments.main.ui.shareMessageFragment.ShareMessageBottomSheetFragment
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.PDFHelper
@@ -332,6 +333,21 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
         paymentListRecyclerView.scheduleLayoutAnimation()
         (paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
         (activity as? MainActivity)?.clearPaymentsMenuItemIsVisible = filteredList.filterIsInstance<PersonModel>().isNotEmpty()
+        (activity as? MainActivity)?.exportToExcelMenuItemIsVisible = filteredList.filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten().isNotEmpty()
+    }
+
+    fun navigateToPeriodFilterFragment() {
+        val payments = filteredList.filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten()
+        findNavController().popBackStack(R.id.periodFilterFragment, true)
+        findNavController().navigate(
+            PaymentsFragmentDirections.actionPaymentsFragmentToPeriodFilterFragment(
+                periodFilterData = PeriodFilterDataModel(
+                    minimumMonthDate = payments.mapNotNull { it.paymentMonthDate }.minOrNull(),
+                    maximumMonthDate = payments.mapNotNull { it.paymentMonthDate }.maxOrNull()
+                ),
+                paymentListData = payments.toTypedArray()
+            )
+        )
     }
 
 }

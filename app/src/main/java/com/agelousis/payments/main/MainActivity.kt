@@ -29,6 +29,7 @@ import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
 import com.agelousis.payments.main.ui.payments.PaymentsFragment
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
+import com.agelousis.payments.main.ui.periodFilter.PeriodFilterFragment
 import com.agelousis.payments.main.ui.personalInformation.PersonalInformationFragment
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
@@ -66,6 +67,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 initializeDatabaseExport()
             R.id.navigationClearPayments ->
                 triggerPaymentsClearance()
+            R.id.navigationExcelExport ->
+                (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.navigateToPeriodFilterFragment()
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
@@ -78,29 +81,41 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
                 clearPaymentsMenuItemIsVisible = false
+                exportToExcelMenuItemIsVisible = false
             }
             in PaymentsFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.app_name)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_add
                 clearPaymentsMenuItemIsVisible = true
+                exportToExcelMenuItemIsVisible = true
             }
             in NewPaymentFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_person_info_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
                 clearPaymentsMenuItemIsVisible = false
+                exportToExcelMenuItemIsVisible = false
             }
             in NewPaymentAmountFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_add_payment_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
                 clearPaymentsMenuItemIsVisible = false
+                exportToExcelMenuItemIsVisible = false
             }
             in FilesFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_files_label)
                 floatingButtonState = false
                 clearPaymentsMenuItemIsVisible = false
+                exportToExcelMenuItemIsVisible = false
+            }
+            in PeriodFilterFragment::class.java.name -> {
+                appBarTitle = resources.getString(R.string.key_filter_period_label)
+                floatingButtonState = true
+                floatingButtonImage = R.drawable.ic_check
+                clearPaymentsMenuItemIsVisible = false
+                exportToExcelMenuItemIsVisible = false
             }
         }
     }
@@ -126,6 +141,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             R.id.newPaymentAmountFragment ->
                 (supportFragmentManager.currentNavigationFragment as? NewPaymentAmountFragment)?.checkInputFields()
+            R.id.periodFilterFragment ->
+                (supportFragmentManager.currentNavigationFragment as? PeriodFilterFragment)?.initializeExportToExcelOperation()
         }
     }
 
@@ -158,6 +175,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         set(value) {
             field = value
             navigationView?.menu?.findItem(R.id.navigationClearPayments)?.isVisible = value
+        }
+    var exportToExcelMenuItemIsVisible = false
+        set(value) {
+            field = value
+            navigationView?.menu?.findItem(R.id.navigationExcelExport)?.isVisible = value
         }
 
     override fun onBackPressed() {

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="periodFilterDataModel"
+            type="com.agelousis.payments.main.ui.periodFilter.models.PeriodFilterDataModel" />
+    </data>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.agelousis.payments.views.dateLayout.YearMonthPickerFieldLayout
+        android:id="@+id/periodFilterMinimumPaymentMonthLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        monthYearValue="@{periodFilterDataModel.minimumMonthDateValue}"
+        app:label="@string/key_minimum_payment_month_label"
+        app:showLine="true"
+        app:iconResource="@drawable/ic_payment_month"/>
+
+    <com.agelousis.payments.views.dateLayout.YearMonthPickerFieldLayout
+        android:id="@+id/periodFilterMaximumPaymentMonthLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        monthYearValue="@{periodFilterDataModel.maximumMonthDateValue}"
+        app:label="@string/key_maximum_payment_month_label"
+        app:showLine="true"
+        app:iconResource="@drawable/ic_payment_month"/>
+
+</LinearLayout>
+</layout>

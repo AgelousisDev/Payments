@@ -107,6 +107,11 @@
     <string name="key_cash_payment_label">💶 Cash Payment</string>
     <string name="key_online_payment_label">📱 Online Payment</string>
     <string name="key_check_payment_label">🧾 Check Payment</string>
+    <string name="key_export_payments_to_excel_label">Export to Excel</string>
+    <string name="key_filter_period_label">Period Filter</string>
+    <string name="key_minimum_payment_month_label">Start Date</string>
+    <string name="key_maximum_payment_month_label">End Date</string>
+    <string name="key_scv_created_successfully">File saved successfully!</string>
 
     <string-array name="key_payment_action_array">
         <item>Call</item>

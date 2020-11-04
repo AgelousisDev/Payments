@@ -595,6 +595,19 @@ fun Context.showKeyboard(view: View) {
     inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
 }
 
+fun Fragment.createFile(requestCode: Int, fileName: String) {
+    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+        // Filter to only show results that can be "opened", such as
+        // a file (as opposed to a list of contacts or timezones).
+        addCategory(Intent.CATEGORY_OPENABLE)
+
+        // Create a file with the requested MIME type.
+        type = Constants.CSV_MIME_TYPE
+        putExtra(Intent.EXTRA_TITLE, fileName)
+    }
+    startActivityForResult(intent, requestCode)
+}
+
 @BindingAdapter("picassoImagePath")
 fun AppCompatImageView.loadImagePath(fileName: String?) {
     fileName?.let {

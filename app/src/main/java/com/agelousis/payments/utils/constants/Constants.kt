@@ -27,6 +27,8 @@ object Constants {
     const val WHATS_APP_SCHEME_URL = "https://wa.me/%s?text=%s"
     const val VIBER_PACKAGE_NAME = "com.viber.voip"
     const val VIBER_SCHEME_URL = "viber://add?number=%s"
+    const val PAYMENTS_CSV_FILE = "payments.csv"
+    const val CSV_MIME_TYPE = "text/csv"
 
     object Colors {
         val colorPickerColors = intArrayOf(
