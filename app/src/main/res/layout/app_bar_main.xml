@@ -42,4 +42,19 @@
         app:tint="@color/white"
         app:elevation="8dp"/>
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/exportDatabaseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/nav_header_vertical_spacing"
+        android:text="@string/key_export_database_label"
+        android:textAllCaps="false"
+        android:fontFamily="@font/ubuntu"
+        app:icon="@drawable/ic_export"
+        app:iconSize="24dp"
+        app:layout_anchor="@+id/bottomAppBar"
+        app:layout_anchorGravity="center_vertical|start"
+        app:backgroundTint="@color/red"
+        app:cornerRadius="12dp"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -57,7 +57,7 @@
     <string name="key_delete_group_message_value">Do you want to delete %s and its payments?</string>
     <string name="key_delete_label">Delete</string>
     <string name="key_import_label">Import</string>
-    <string name="key_export_label">Export</string>
+    <string name="key_export_database_label">Export Database</string>
     <string name="key_main_label">Main</string>
     <string name="key_options_label">Options</string>
     <string name="key_export_message">This operation will export your database and save it where you want. Do you want to proceed?</string>
@@ -107,11 +107,13 @@
     <string name="key_cash_payment_label">💶 Cash Payment</string>
     <string name="key_online_payment_label">📱 Online Payment</string>
     <string name="key_check_payment_label">🧾 Check Payment</string>
-    <string name="key_export_payments_to_excel_label">Export to Excel</string>
+    <string name="key_export_payments_to_csv_label">Export to CSV</string>
     <string name="key_filter_period_label">Period Filter</string>
     <string name="key_minimum_payment_month_label">Start Date</string>
     <string name="key_maximum_payment_month_label">End Date</string>
     <string name="key_scv_created_successfully">File saved successfully!</string>
+    <string name="key_from_label">From</string>
+    <string name="key_to_label">To</string>
 
     <string-array name="key_payment_action_array">
         <item>Call</item>

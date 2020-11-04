@@ -63,8 +63,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 navHostFragmentContainerView.findNavController().popBackStack(R.id.filesFragment, true)
                 navHostFragmentContainerView.findNavController().navigate(R.id.action_global_filesFragment)
             }
-            R.id.navigationExport ->
-                initializeDatabaseExport()
             R.id.navigationClearPayments ->
                 triggerPaymentsClearance()
             R.id.navigationExcelExport ->
@@ -82,6 +80,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 floatingButtonImage = R.drawable.ic_check
                 clearPaymentsMenuItemIsVisible = false
                 exportToExcelMenuItemIsVisible = false
+                exportDatabaseButtonIsVisible = true
             }
             in PaymentsFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.app_name)
@@ -89,6 +88,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 floatingButtonImage = R.drawable.ic_add
                 clearPaymentsMenuItemIsVisible = true
                 exportToExcelMenuItemIsVisible = true
+                exportDatabaseButtonIsVisible = false
             }
             in NewPaymentFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_person_info_label)
@@ -96,6 +96,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 floatingButtonImage = R.drawable.ic_check
                 clearPaymentsMenuItemIsVisible = false
                 exportToExcelMenuItemIsVisible = false
+                exportDatabaseButtonIsVisible = false
             }
             in NewPaymentAmountFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_add_payment_label)
@@ -103,46 +104,55 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 floatingButtonImage = R.drawable.ic_check
                 clearPaymentsMenuItemIsVisible = false
                 exportToExcelMenuItemIsVisible = false
+                exportDatabaseButtonIsVisible = false
             }
             in FilesFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_files_label)
                 floatingButtonState = false
                 clearPaymentsMenuItemIsVisible = false
                 exportToExcelMenuItemIsVisible = false
+                exportDatabaseButtonIsVisible = false
             }
             in PeriodFilterFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_filter_period_label)
                 floatingButtonState = true
-                floatingButtonImage = R.drawable.ic_check
+                floatingButtonImage = R.drawable.ic_table
                 clearPaymentsMenuItemIsVisible = false
                 exportToExcelMenuItemIsVisible = false
+                exportDatabaseButtonIsVisible = false
             }
         }
     }
 
     override fun onClick(p0: View?) {
-        when(navHostFragmentContainerView.findNavController().currentDestination?.id) {
-            R.id.personalInformationFragment ->
-                uiScope.launch {
-                    (supportFragmentManager.currentNavigationFragment as? PersonalInformationFragment)?.updateUser {
-                        startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-                        finish()
-                    }
+        when(p0?.id) {
+            R.id.exportDatabaseButton ->
+                initializeDatabaseExport()
+            R.id.floatingButton -> {
+                when(navHostFragmentContainerView.findNavController().currentDestination?.id) {
+                    R.id.personalInformationFragment ->
+                        uiScope.launch {
+                            (supportFragmentManager.currentNavigationFragment as? PersonalInformationFragment)?.updateUser {
+                                startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                                finish()
+                            }
+                        }
+                    R.id.paymentsFragment -> startGroupActivity()
+                    R.id.newPaymentFragment ->
+                        when(floatingButtonType) {
+                            FloatingButtonType.NORMAL ->
+                                (supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.checkInputFields()
+                            FloatingButtonType.NEGATIVE -> {
+                                (supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.dismissPayment()
+                                returnFloatingButtonBackToNormal()
+                            }
+                        }
+                    R.id.newPaymentAmountFragment ->
+                        (supportFragmentManager.currentNavigationFragment as? NewPaymentAmountFragment)?.checkInputFields()
+                    R.id.periodFilterFragment ->
+                        (supportFragmentManager.currentNavigationFragment as? PeriodFilterFragment)?.initializeExportToExcelOperation()
                 }
-            R.id.paymentsFragment -> startGroupActivity()
-            R.id.newPaymentFragment ->
-                when(floatingButtonType) {
-                    FloatingButtonType.NORMAL ->
-                        (supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.checkInputFields()
-                    FloatingButtonType.NEGATIVE -> {
-                        (supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.dismissPayment()
-                        returnFloatingButtonBackToNormal()
-                    }
-                }
-            R.id.newPaymentAmountFragment ->
-                (supportFragmentManager.currentNavigationFragment as? NewPaymentAmountFragment)?.checkInputFields()
-            R.id.periodFilterFragment ->
-                (supportFragmentManager.currentNavigationFragment as? PeriodFilterFragment)?.initializeExportToExcelOperation()
+            }
         }
     }
 
@@ -163,7 +173,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             floatingButton.setImageResource(value)
             floatingButton.show()
         }
-    private var floatingButtonState: Boolean = true
+    var floatingButtonState: Boolean = true
         set(value) {
             field = value
             if (value)
@@ -180,6 +190,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         set(value) {
             field = value
             navigationView?.menu?.findItem(R.id.navigationExcelExport)?.isVisible = value
+        }
+    private var exportDatabaseButtonIsVisible = false
+        set(value) {
+            field = value
+            exportDatabaseButton.visibility = if (value) View.VISIBLE else View.GONE
         }
 
     override fun onBackPressed() {
@@ -236,6 +251,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setupUI() {
         floatingButton.setOnClickListener(this)
+        exportDatabaseButton.setOnClickListener(this)
     }
 
     private fun addInactiveGroup() {
@@ -268,7 +284,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun initializeDatabaseExport() {
         showTwoButtonsDialog(
-            title = resources.getString(R.string.key_export_label),
+            title = resources.getString(R.string.key_export_database_label),
             message = resources.getString(R.string.key_export_message),
             positiveButtonText = resources.getString(R.string.key_proceed_label),
             positiveButtonBlock = {

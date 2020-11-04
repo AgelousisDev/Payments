@@ -11,6 +11,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="date_animation.json"
+        app:lottie_loop="true"
+        app:lottie_speed="1" />
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextViewTitleLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:textColor="@color/grey"
+        android:text="@string/key_from_label"/>
+
     <com.agelousis.payments.views.dateLayout.YearMonthPickerFieldLayout
         android:id="@+id/periodFilterMinimumPaymentMonthLayout"
         android:layout_width="match_parent"
@@ -19,6 +35,14 @@
         app:label="@string/key_minimum_payment_month_label"
         app:showLine="true"
         app:iconResource="@drawable/ic_payment_month"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextViewTitleLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:textColor="@color/grey"
+        android:text="@string/key_to_label"/>
 
     <com.agelousis.payments.views.dateLayout.YearMonthPickerFieldLayout
         android:id="@+id/periodFilterMaximumPaymentMonthLayout"

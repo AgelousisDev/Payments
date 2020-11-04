@@ -147,6 +147,9 @@ class PersonalInformationFragment: Fragment(), OptionPresenter {
         ) {
             optionList.getOrNull(index = it) !is HeaderModel
         })
+        optionRecyclerView.setOnScrollChangeListener { _, _, _, _, _ ->
+            (activity as? MainActivity)?.floatingButtonState = optionRecyclerView.canScrollVertically(1)
+        }
     }
 
     suspend fun updateUser(successBlock: (UserModel?) -> Unit) {
