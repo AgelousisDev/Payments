@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <import type="android.view.View" />
         <variable
             name="periodFilterDataModel"
             type="com.agelousis.payments.main.ui.periodFilter.models.PeriodFilterDataModel" />
+        <variable
+            name="isLoading"
+            type="Boolean" />
     </data>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:animateLayoutChanges="true">
 
     <com.airbnb.lottie.LottieAnimationView
         android:layout_width="match_parent"
         android:layout_height="170dp"
+        android:visibility="@{isLoading ? View.GONE : View.VISIBLE}"
         app:lottie_autoPlay="true"
         app:lottie_fileName="date_animation.json"
         app:lottie_loop="true"
@@ -25,7 +31,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:textColor="@color/grey"
-        android:text="@string/key_from_label"/>
+        android:text="@string/key_from_label"
+        android:visibility="@{isLoading ? View.GONE : View.VISIBLE}"/>
 
     <com.agelousis.payments.views.dateLayout.YearMonthPickerFieldLayout
         android:id="@+id/periodFilterMinimumPaymentMonthLayout"
@@ -34,7 +41,8 @@
         monthYearValue="@{periodFilterDataModel.minimumMonthDateValue}"
         app:label="@string/key_minimum_payment_month_label"
         app:showLine="true"
-        app:iconResource="@drawable/ic_payment_month"/>
+        app:iconResource="@drawable/ic_payment_month"
+        android:visibility="@{isLoading ? View.GONE : View.VISIBLE}"/>
 
     <com.google.android.material.textview.MaterialTextView
         style="@style/TextViewTitleLabel"
@@ -42,16 +50,27 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:textColor="@color/grey"
-        android:text="@string/key_to_label"/>
+        android:text="@string/key_to_label"
+        android:visibility="@{isLoading ? View.GONE : View.VISIBLE}"/>
 
     <com.agelousis.payments.views.dateLayout.YearMonthPickerFieldLayout
         android:id="@+id/periodFilterMaximumPaymentMonthLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="@{isLoading ? View.GONE : View.VISIBLE}"
         monthYearValue="@{periodFilterDataModel.maximumMonthDateValue}"
         app:label="@string/key_maximum_payment_month_label"
         app:showLine="true"
         app:iconResource="@drawable/ic_payment_month"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="@{isLoading ? View.VISIBLE : View.GONE}"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="loading_animation.json"
+        app:lottie_loop="true"
+        app:lottie_speed="1" />
 
 </LinearLayout>
 </layout>

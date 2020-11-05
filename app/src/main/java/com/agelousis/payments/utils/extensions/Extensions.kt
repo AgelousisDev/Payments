@@ -39,6 +39,7 @@ import com.agelousis.payments.database.SQLiteHelper
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.payments.utils.constants.Constants
+import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textview.MaterialTextView
@@ -710,5 +711,12 @@ fun setTextViewColorByPaymentDate(materialTextView: MaterialTextView, payments: 
 fun setLayoutWidth(view: View, width: Float) {
     view.layoutParams.apply {
         this.width = width.toInt()
+    }
+}
+
+@BindingAdapter("lottieAnimation")
+fun setLottieAnimation(lottieAnimationView: LottieAnimationView, animatedJsonFile: String?) {
+    animatedJsonFile?.let {
+        lottieAnimationView.setAnimation(it)
     }
 }

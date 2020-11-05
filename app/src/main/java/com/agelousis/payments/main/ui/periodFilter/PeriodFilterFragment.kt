@@ -13,7 +13,9 @@ import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import com.agelousis.payments.R
 import com.agelousis.payments.databinding.PeriodFilterFragmentLayoutBinding
+import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.utils.constants.Constants
+import com.agelousis.payments.utils.extensions.after
 import com.agelousis.payments.utils.extensions.createFile
 import com.agelousis.payments.utils.extensions.toDateWith
 import com.agelousis.payments.utils.extensions.toast
@@ -24,6 +26,7 @@ class PeriodFilterFragment: Fragment() {
 
     companion object {
         private const val CREATE_CSV_FILE_REQUEST_CODE = 7
+        private const val LOADING_TIME = 5000L
     }
 
     private val args: PeriodFilterFragmentArgs by navArgs()
@@ -41,15 +44,22 @@ class PeriodFilterFragment: Fragment() {
             false
         ).also {
             it.periodFilterDataModel = args.periodFilterData
+            it.isLoading = false
         }
         return binding?.root
     }
 
     fun initializeExportToExcelOperation() {
-        createFile(
-            requestCode = CREATE_CSV_FILE_REQUEST_CODE,
-            fileName = Constants.PAYMENTS_CSV_FILE
-        )
+        (activity as? MainActivity)?.floatingButtonState = false
+        binding?.isLoading = true
+        after(
+            millis = LOADING_TIME
+        ) {
+            createFile(
+                requestCode = CREATE_CSV_FILE_REQUEST_CODE,
+                fileName = Constants.PAYMENTS_CSV_FILE
+            )
+        }
     }
 
     private fun triggerCsvCreation(uri: Uri) {

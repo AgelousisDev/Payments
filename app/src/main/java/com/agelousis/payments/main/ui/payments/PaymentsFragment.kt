@@ -316,7 +316,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
                     EmptyModel(
                         title = resources.getString(R.string.key_no_persons_title_message),
                         message = resources.getString(R.string.key_no_persons_message),
-                        imageIconResource = R.drawable.ic_invoice
+                        animationJsonIcon = "empty_animation.json"
                     )
                 )
             }?.let {
