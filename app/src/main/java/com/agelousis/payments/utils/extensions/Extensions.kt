@@ -609,6 +609,14 @@ fun Fragment.createFile(requestCode: Int, fileName: String) {
     startActivityForResult(intent, requestCode)
 }
 
+val Context.greetingLabel
+    get() = when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
+        in 3 until 13 -> R.string.key_good_morning_label
+        in 13 until 19 -> R.string.key_good_afternoon_label
+        in 19 until 24, in 0 until 3 -> R.string.key_good_evening_label
+        else -> R.string.key_good_morning_label
+    }
+
 @BindingAdapter("picassoImagePath")
 fun AppCompatImageView.loadImagePath(fileName: String?) {
     fileName?.let {

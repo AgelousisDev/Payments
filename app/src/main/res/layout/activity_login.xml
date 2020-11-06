@@ -5,6 +5,7 @@
     <data>
         <import type="android.view.View" />
         <import type="com.agelousis.payments.login.SignInState" />
+        <import type="com.agelousis.payments.utils.extensions.ExtensionsKt" />
         <variable
             name="userModel"
             type="com.agelousis.payments.login.models.UserModel" />
@@ -24,6 +25,32 @@
     android:background="@color/whiteTwo"
     android:animateLayoutChanges="true"
     tools:context=".login.LoginActivity">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{ExtensionsKt.getGreetingLabel(context)}"
+            tools:text="@string/key_good_morning_label"/>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="payment_animation.json"
+            app:lottie_loop="true"
+            app:lottie_speed="1" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
