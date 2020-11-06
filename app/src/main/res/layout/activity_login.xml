@@ -27,6 +27,7 @@
     tools:context=".login.LoginActivity">
 
     <LinearLayout
+        android:id="@+id/headerLayout"
         android:layout_width="wrap_content"
         android:layout_height="100dp"
         android:orientation="horizontal"
@@ -39,8 +40,7 @@
             style="@style/TextViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{ExtensionsKt.getGreetingLabel(context)}"
-            tools:text="@string/key_good_morning_label"/>
+            android:text="@string/key_manage_payments_label"/>
 
         <com.airbnb.lottie.LottieAnimationView
             android:layout_width="100dp"
@@ -52,72 +52,92 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextViewTitle"
+        android:id="@+id/greetingLabel"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@{ExtensionsKt.getGreetingLabel(context)}"
+        android:fontFamily="@font/ubuntu_light"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/headerLayout"
+        tools:text="@string/key_good_morning_label" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/usersSelectLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/greetingLabel">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true">
 
-            <com.google.android.material.textview.MaterialTextView
-                style="@style/TextViewTitle"
-                android:id="@+id/signUpLabel"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:textColor="@color/colorAccent"
-                android:text="@{signInState.getTitle(context)}"
-                tools:text="@string/key_sign_up_label"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent">
 
-            <View
-                android:layout_width="40dp"
-                android:layout_height="4dp"
-                layoutWidth="@{signInState == SignInState.SIGN_UP ? @dimen/dp_40 : @dimen/dp_30}"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="32dp"
-                android:background="@drawable/line_background"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/signUpLabel"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/signUpLabel"
+                    style="@style/TextViewTitle"
+                    animatedText="@{signInState.getTitle(context)}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorAccent"
+                    tools:text="@string/key_sign_up_label" />
+
+                <View
+                    layoutWidth="@{signInState == SignInState.SIGN_UP ? @dimen/dp_40 : @dimen/dp_30}"
+                    android:layout_width="0dp"
+                    android:layout_height="4dp"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/line_background" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/importLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginEnd="32dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:onClick="@{() -> presenter.onImport()}"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textview.MaterialTextView
-                    style="@style/TextViewTitle"
                     android:id="@+id/importLabel"
+                    style="@style/TextViewTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:textColor="@color/grey"
-                    android:text="@string/key_import_label"/>
+                    android:text="@string/key_import_label"
+                    android:textColor="@color/grey" />
 
                 <View
                     android:id="@+id/importLine"
                     android:layout_width="35dp"
                     android:layout_height="4dp"
-                    android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:layout_gravity="end"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:background="@drawable/line_background"
-                    android:backgroundTint="@color/grey"/>
+                    android:backgroundTint="@color/grey" />
 
             </LinearLayout>
 
@@ -127,10 +147,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_horizontal_margin"
-            app:cardUseCompatPadding="true"
+            app:cardCornerRadius="8dp"
             app:cardElevation="8dp"
-            app:contentPadding="@dimen/activity_horizontal_margin"
-            app:cardCornerRadius="8dp">
+            app:cardUseCompatPadding="true"
+            app:contentPadding="@dimen/activity_horizontal_margin">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -138,25 +158,25 @@
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/profileImageView"
+                    picassoImageFromInternalFiles="@{userModel.profileImage}"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:background="@{signInState == SignInState.SIGN_UP ? @drawable/profile_background : null}"
-                    android:onClick="@{() -> presenter.onProfileSelect()}"
                     android:enabled="@{signInState == SignInState.SIGN_UP}"
+                    android:onClick="@{() -> presenter.onProfileSelect()}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_person"
-                    picassoImageFromInternalFiles="@{userModel.profileImage}"/>
+                    app:srcCompat="@drawable/ic_person" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:id="@+id/usernameTextInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:hint="@string/key_username_label"
-                    app:hintEnabled="true"
                     app:endIconMode="clear_text"
+                    app:hintEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/profileImageView">
@@ -166,22 +186,22 @@
                         style="@style/TextViewTitleLabel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:maxLines="1"
                         android:imeOptions="actionNext"
-                        android:text="@{userModel.username}"/>
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="@{userModel.username}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:id="@+id/passwordTextInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:hint="@string/key_password_label"
-                    app:hintEnabled="true"
                     app:endIconMode="clear_text"
+                    app:hintEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/usernameTextInputLayout">
@@ -191,11 +211,11 @@
                         style="@style/TextViewTitleLabel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:maxLines="1"
                         android:imeOptions="actionNext"
                         android:inputType="textPassword"
-                        android:text="@{userModel.password}"/>
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="@{userModel.password}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -206,6 +226,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/usersSelectLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"

@@ -114,6 +114,7 @@
     <string name="key_scv_created_successfully">File saved successfully!</string>
     <string name="key_from_label">From</string>
     <string name="key_to_label">To</string>
+    <string name="key_manage_payments_label">Manage Payments</string>
     <string name="key_good_morning_label">Good Morning!</string>
     <string name="key_good_afternoon_label">Good Afternoon!</string>
     <string name="key_good_evening_label">Good Evening!</string>

@@ -1,6 +1,7 @@
 package com.agelousis.payments.utils.extensions
 
 import android.animation.Animator
+import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -16,6 +17,7 @@ import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.webkit.MimeTypeMap
@@ -718,13 +720,40 @@ fun setTextViewColorByPaymentDate(materialTextView: MaterialTextView, payments: 
 @BindingAdapter("layoutWidth")
 fun setLayoutWidth(view: View, width: Float) {
     view.layoutParams.apply {
-        this.width = width.toInt()
+        this.width = 0
     }
+    val valueAnimator = ValueAnimator.ofInt(0, width.toInt())
+    valueAnimator.addUpdateListener {
+        view.layoutParams.apply {
+            this.width = it.animatedValue as? Int ?: return@apply
+        }
+        view.requestLayout()
+    }
+    valueAnimator.duration = 1000L
+    valueAnimator.start()
 }
 
 @BindingAdapter("lottieAnimation")
 fun setLottieAnimation(lottieAnimationView: LottieAnimationView, animatedJsonFile: String?) {
     animatedJsonFile?.let {
         lottieAnimationView.setAnimation(it)
+    }
+}
+
+@BindingAdapter("animatedText")
+fun setAnimatedText(materialTextView: MaterialTextView, text: String?) {
+    text?.let {
+        val anim = AlphaAnimation(1.0f, 0.0f)
+        anim.duration = 200
+        anim.repeatCount = 1
+        anim.repeatMode = Animation.REVERSE
+        anim.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationEnd(animation: Animation?) { }
+            override fun onAnimationStart(animation: Animation?) { }
+            override fun onAnimationRepeat(animation: Animation?) {
+                materialTextView.text = it
+            }
+        })
+        materialTextView.startAnimation(anim)
     }
 }
