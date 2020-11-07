@@ -9,7 +9,17 @@
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/headerConstraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/nativeBackgroundColor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/materialTextViewTitle"
@@ -30,35 +40,48 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/nav_header_vertical_spacing"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="32dp"
         android:text="@string/key_view_edit_profile_label"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialTextViewTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/materialTextViewTitle"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/profileAnimationView"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        app:lottie_autoPlay="true"
+        android:visibility="gone"
+        app:lottie_autoPlay="false"
         app:lottie_fileName="profile_animation.json"
-        app:lottie_loop="true"
+        app:lottie_loop="false"
         app:lottie_speed="1"
-        app:layout_constraintBottom_toBottomOf="@+id/materialTextViewTitleLabel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/materialTextViewTitle"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/profileImageView"
+        picassoImagePath="@{userModel.profileImage}"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/materialTextViewTitle"
+        app:srcCompat="@drawable/ic_person" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/optionRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="32dp"
         android:layoutAnimation="@anim/layout_animation_fall_down"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileAnimationView" />
+        app:layout_constraintTop_toBottomOf="@+id/headerConstraintLayout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

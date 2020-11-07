@@ -26,7 +26,6 @@
      app:elevation="16dp"
      app:cardBackgroundColor="@color/whiteTwo"
      app:cardCornerRadius="8dp"
-     app:cardUseCompatPadding="true"
      app:cardPreventCornerOverlap="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -118,6 +117,21 @@
             app:layout_constraintTop_toBottomOf="@+id/paymentAmountRowDateLineSeparator"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="Total:\t$1000,00" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="@{() -> presenter.onCalendarEvent(paymentAmountModel)}"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="date_animation.json"
+            app:lottie_loop="true"
+            app:lottie_speed="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <View
             android:id="@+id/paymentAmountRowRightLineSeparator"

@@ -24,6 +24,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -67,6 +71,7 @@
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 app:appSwitchLabel="@string/key_payment_date_notification_label"
                 app:appSwitchShowLine="true"
+                appSwitchIsEnabled="@{paymentAmountModel.paymentDateNotification == false}"
                 appSwitchIsChecked="@{paymentAmountModel.paymentDateNotification == true}"/>
 
             <com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
@@ -100,7 +105,18 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/TextViewLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:text="@string/key_payment_date_notification_not_able_to_cancel_message"/>
+
         </LinearLayout>
+
+        </ScrollView>
 
     </com.google.android.material.card.MaterialCardView>
 

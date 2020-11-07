@@ -85,7 +85,7 @@
     <string name="key_license_expired_message">Your license has been expired. Please contact with the developers…</string>
     <string name="key_payment_month_label">Payment Month</string>
     <string name="key_total_amount_value_label">💶 Total %s</string>
-    <string name="key_vat_label">VAT</string>
+    <string name="key_vat_label">VAT(%)</string>
     <string name="key_vat_value_count_message">%s VAT should be counted here</string>
     <string name="key_payment_month_amount_value_label">%s payment %s</string>
     <string name="key_vat_amount_value_label">🧾 VAT %s %s</string>
@@ -101,6 +101,7 @@
     <string name="key_clear_all_payments_message">This operation will delete all the payments you have registered except the groups. Do you want to proceed?</string>
     <string name="key_clear_label">Clear</string>
     <string name="key_saved_users_label">Saved Users</string>
+    <string name="key_personal_information_label">Personal Information</string>
     <string name="key_payment_setting_label">Payment Settings</string>
     <string name="key_default_payment_amount_label">Default payment amount</string>
     <string name="key_payment_type_label">Payment Type</string>
@@ -120,6 +121,9 @@
     <string name="key_good_evening_label">Good Evening!</string>
     <string name="key_payment_date_notification_label">Notify me on Payment Date</string>
     <string name="key_payments_notifications_channel">Payments Notifications</string>
+    <string name="key_payment_date_notification_not_able_to_cancel_message">*Please note that you cannot cancel the notification for the current payment if you have already enabled it, unless you don\'t save it.</string>
+    <string name="key_notification_amount_value">💶 %s</string>
+    <string name="key_calendar_event_name_amount_value">%s - 💶 %s</string>
 
     <string-array name="key_payment_action_array">
         <item>Call</item>

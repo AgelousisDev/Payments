@@ -1,6 +1,8 @@
 package com.agelousis.payments.login.models
 
 import android.os.Parcelable
+import com.agelousis.payments.utils.extensions.ifLet
+import com.agelousis.payments.utils.extensions.second
 import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 
@@ -20,5 +22,8 @@ data class UserModel(var id: Int? = null,
 ): Parcelable {
 
     @IgnoredOnParcel var profileImageData: ByteArray? = null
+
+    val fullName
+        get() = ifLet(firstName, lastName) { String.format("%s %s", it.first(), it.second()) } ?: username
 
 }

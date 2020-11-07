@@ -126,6 +126,9 @@ fun Fragment.openGallery(requestCode: Int) =
 val Int.px: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
+val Int.inPixel: Float
+    get() = (this * Resources.getSystem().displayMetrics.density)
+
 fun Context.saveProfileImage(byteArray: ByteArray?) =
     byteArray?.let { bytes ->
         val newFile = File(filesDir, "${Constants.PROFILE_IMAGE_NAME}_${System.currentTimeMillis()}")
@@ -644,6 +647,26 @@ val fakePlus1MinuteTime: Long
         calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE) + 1)
         return calendar.time.time
     }
+
+val fakePlus1DayDate: Date
+    get() {
+        val calendar = Calendar.getInstance()
+        calendar.time = Date()
+        calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 1)
+        return calendar.time
+    }
+
+fun Context.createCalendarEventWith(date: Date, event: String) {
+    startActivity(
+        Intent(Intent.ACTION_EDIT).also {
+            it.type = "vnd.android.cursor.item/event"
+            it.putExtra("beginTime", date.time)
+            it.putExtra("allDay", true)
+            it.putExtra("rule", "FREQ=NEVER")
+            it.putExtra("title", event)
+        }
+    )
+}
 
 @BindingAdapter("picassoImagePath")
 fun AppCompatImageView.loadImagePath(fileName: String?) {

@@ -1,5 +1,6 @@
 package com.agelousis.payments.main.ui.personalInformation
 
+import android.animation.Animator
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -10,10 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.agelousis.payments.R
 import com.agelousis.payments.custom.itemDecoration.DividerItemRecyclerViewDecorator
+import com.agelousis.payments.custom.itemDecoration.HeaderItemDecoration
 import com.agelousis.payments.database.DBManager
 import com.agelousis.payments.databinding.FragmentPersonalInformationLayoutBinding
 import com.agelousis.payments.login.LoginActivity
-import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.files.models.HeaderModel
 import com.agelousis.payments.main.ui.personalInformation.adapters.OptionTypesAdapter
@@ -21,8 +22,19 @@ import com.agelousis.payments.main.ui.personalInformation.models.OptionType
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.payments.utils.extensions.*
 import kotlinx.android.synthetic.main.fragment_personal_information_layout.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class PersonalInformationFragment: Fragment(), OptionPresenter {
+class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.AnimatorListener {
+
+    override fun onAnimationCancel(animation: Animator?) {}
+    override fun onAnimationRepeat(animation: Animator?) {}
+    override fun onAnimationStart(animation: Animator?) {}
+
+    override fun onAnimationEnd(animation: Animator?) {
+        updateUser()
+    }
 
     override fun onChangeProfilePicture() {
         openGallery(
@@ -77,10 +89,15 @@ class PersonalInformationFragment: Fragment(), OptionPresenter {
         newUserModel?.defaultPaymentAmount = newPaymentAmount
     }
 
+    private val uiScope = CoroutineScope(Dispatchers.Main)
     private val dbManager by lazy { context?.let { DBManager(context = it) } }
     private val newUserModel by lazy { (activity as? MainActivity)?.userModel?.copy() }
     private val optionList by lazy {
         arrayListOf(
+            HeaderModel(
+                dateTime = null,
+                header = resources.getString(R.string.key_personal_information_label)
+            ),
             OptionType.CHANGE_FIRST_NAME.also {
                 it.userModel = newUserModel
             },
@@ -147,17 +164,36 @@ class PersonalInformationFragment: Fragment(), OptionPresenter {
         ) {
             optionList.getOrNull(index = it) !is HeaderModel
         })
+        optionRecyclerView.addItemDecoration(
+            HeaderItemDecoration(
+                parent = optionRecyclerView
+            ) {
+                optionList.getOrNull(index = it) is HeaderModel
+            }
+        )
         optionRecyclerView.setOnScrollChangeListener { _, _, _, _, _ ->
+            headerConstraintLayout.elevation = if (optionRecyclerView.canScrollVertically(-1)) 8.inPixel else 0.0f
             (activity as? MainActivity)?.floatingButtonState = optionRecyclerView.canScrollVertically(1)
         }
     }
 
-    suspend fun updateUser(successBlock: (UserModel?) -> Unit) {
+    fun playProfileSuccessAnimation() {
+        profileImageView.visibility = View.GONE
+        profileAnimationView.visibility = View.VISIBLE
+        profileAnimationView.playAnimation()
+        profileAnimationView.addAnimatorListener(this)
+    }
+
+    private fun updateUser() {
         if ((activity as? MainActivity)?.userModel != newUserModel) {
-            dbManager?.updateUser(
-                userModel = newUserModel ?: return,
-                userBlock = successBlock
-            )
+            uiScope.launch {
+                dbManager?.updateUser(
+                    userModel = newUserModel ?: return@launch
+                ) {
+                    startActivity(Intent(context, LoginActivity::class.java))
+                    activity?.finish()
+                }
+            }
         }
         else {
             context?.toast(

@@ -21,6 +21,12 @@ class DetailsAppSwitch(context: Context, attributeSet: AttributeSet?): FrameLayo
         }
         get() = detailsAppSwitch.isChecked
 
+    var appSwitchIsEnabled = true
+        set(value) {
+            field = value
+            detailsAppSwitch.isEnabled = value
+        }
+
     init {
         initAttributesAndView(attributeSet = attributeSet)
     }
@@ -37,7 +43,7 @@ class DetailsAppSwitch(context: Context, attributeSet: AttributeSet?): FrameLayo
             )
             binding.detailsAppSwitchDataModel = DetailsAppSwitchDataModel(
                 label = attributes.getString(R.styleable.DetailsAppSwitch_appSwitchLabel),
-                showLine = attributes.getBoolean(R.styleable.DetailsAppSwitch_appSwitchShowLine, false)
+                showLine = attributes.getBoolean(R.styleable.DetailsAppSwitch_appSwitchShowLine, false),
             )
             attributes.recycle()
             addView(binding.root)

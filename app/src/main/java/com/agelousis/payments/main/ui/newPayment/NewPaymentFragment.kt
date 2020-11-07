@@ -65,6 +65,24 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             paymentReadyForDeletionIndexArray.remove(adapterPosition)
     }
 
+    override fun onCalendarEvent(paymentAmountModel: PaymentAmountModel?) {
+        context?.createCalendarEventWith(
+            date = paymentAmountModel?.paymentDate?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT) ?: return,
+            event = String.format(
+                resources.getString(R.string.key_calendar_event_name_amount_value),
+                String.format(
+                    "%s %s",
+                    binding?.firstNameLayout?.value ?: return,
+                    binding?.surnameLayout?.value ?: return
+                ),
+                paymentAmountModel.getAmountWithoutVat(
+                    context = context ?: return,
+                    vat = (activity as? MainActivity)?.userModel?.vat ?: return
+                )
+            )
+        )
+    }
+
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(NewPaymentViewModel::class.java) }
     private val args: NewPaymentFragmentArgs by navArgs()
@@ -193,9 +211,12 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                     notificationDataModel = NotificationDataModel(
                         notificationId = index,
                         title = currentPersonModel?.fullName,
-                        body = paymentAmountModel.getVatAmount(
-                            context = context ?: return@forEachIndexed,
-                            vat = (activity as? MainActivity)?.userModel?.vat ?: return@forEachIndexed
+                        body = String.format(
+                            resources.getString(R.string.key_notification_amount_value),
+                            paymentAmountModel.getAmountWithoutVat(
+                                context = context ?: return@forEachIndexed,
+                                vat = (activity as? MainActivity)?.userModel?.vat ?: return@forEachIndexed
+                            )
                         )
                     )
                 )

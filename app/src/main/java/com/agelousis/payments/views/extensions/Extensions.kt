@@ -57,3 +57,8 @@ fun setAppSwitchChecked(detailsAppSwitch: DetailsAppSwitch, isChecked: Boolean?)
         detailsAppSwitch.isChecked = it
     }
 }
+
+@BindingAdapter("appSwitchIsEnabled")
+fun setAppSwitchEnabled(detailsAppSwitch: DetailsAppSwitch, isEnabled: Boolean) {
+    detailsAppSwitch.appSwitchIsEnabled = isEnabled
+}

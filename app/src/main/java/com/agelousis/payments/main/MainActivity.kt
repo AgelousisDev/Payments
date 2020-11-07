@@ -131,12 +131,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.floatingButton -> {
                 when(navHostFragmentContainerView.findNavController().currentDestination?.id) {
                     R.id.personalInformationFragment ->
-                        uiScope.launch {
-                            (supportFragmentManager.currentNavigationFragment as? PersonalInformationFragment)?.updateUser {
-                                startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-                                finish()
-                            }
-                        }
+                        (supportFragmentManager.currentNavigationFragment as? PersonalInformationFragment)?.playProfileSuccessAnimation()
                     R.id.paymentsFragment -> startGroupActivity()
                     R.id.newPaymentFragment ->
                         when(floatingButtonType) {
@@ -246,7 +241,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navigationView.getHeaderView(0).navigationViewProfileImageView.loadImagePath(
             fileName = userModel?.profileImage
         )
-        navigationView.getHeaderView(0).navigationViewProfileUsername.text = userModel?.username ?: resources.getString(R.string.key_empty_field_label)
+        navigationView.getHeaderView(0).navigationViewProfileUsername.text = userModel?.fullName ?: resources.getString(R.string.key_empty_field_label)
     }
 
     private fun setupUI() {
