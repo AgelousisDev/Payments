@@ -94,7 +94,8 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
                     paymentMonth = paymentMonthDetailsLayout.dateValue,
                     paymentDate = it.second().toString(),
                     skipPayment = skipPaymentAppSwitchLayout.isChecked,
-                    paymentNote = notesField.text?.toString()
+                    paymentNote = notesField.text?.toString(),
+                    paymentDateNotification = paymentDateNotificationSwitchLayout.isChecked
                 )
             )
             findNavController().popBackStack()

@@ -56,6 +56,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         const val PAYMENT_DATE = "payment_date"
         const val SKIP_PAYMENT = "skip_payment"
         const val PAYMENT_NOTE = "payment_note"
+        const val PAYMENT_DATE_NOTIFICATION = "payment_date_notification"
 
         // Files Table Columns
         const val DESCRIPTION = "description"
@@ -87,7 +88,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         //Creating payments table query
         private const val PAYMENTS_TABLE_CREATION_QUERY = "CREATE TABLE $PAYMENTS_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "$PERSON_ID INTEGER, $PAYMENT_AMOUNT DOUBLE, $PAYMENT_MONTH TEXT, $PAYMENT_DATE TEXT, $SKIP_PAYMENT BOOLEAN," +
-                "$PAYMENT_NOTE TEXT);"
+                "$PAYMENT_NOTE TEXT, $PAYMENT_DATE_NOTIFICATION BOOLEAN);"
 
         //Creating files table query
         private const val FILES_TABLE_CREATION_QUERY = "CREATE TABLE $FILES_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT," +

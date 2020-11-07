@@ -26,6 +26,7 @@ import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.models.PersonModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
+import com.agelousis.payments.utils.models.NotificationDataModel
 import com.agelousis.payments.views.detailsSwitch.interfaces.AppSwitchListener
 import kotlinx.android.synthetic.main.fragment_new_payment_layout.*
 import kotlinx.coroutines.CoroutineScope
@@ -169,6 +170,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         viewModel.paymentInsertionStateLiveData.observe(viewLifecycleOwner) { paymentInsertionState ->
             if (paymentInsertionState) {
                 redirectToSMSApp()
+                scheduleNotification()
                 currentPersonModel = null
                 findNavController().popBackStack()
             }
@@ -181,6 +183,23 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                 mobileNumber = binding?.phoneLayout?.value ?: "",
                 message = binding?.messageTemplateField?.text?.toString() ?: ""
             )
+    }
+
+    private fun scheduleNotification() {
+        if (databaseTriggeringType == DatabaseTriggeringType.INSERT)
+            availablePayments.filter { it.paymentDateNotification == true }.forEachIndexed { index, paymentAmountModel ->
+                context?.scheduleNotification(
+                    onTime = paymentAmountModel.paymentDate?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.time ?: return@forEachIndexed,
+                    notificationDataModel = NotificationDataModel(
+                        notificationId = index,
+                        title = currentPersonModel?.fullName,
+                        body = paymentAmountModel.getVatAmount(
+                            context = context ?: return@forEachIndexed,
+                            vat = (activity as? MainActivity)?.userModel?.vat ?: return@forEachIndexed
+                        )
+                    )
+                )
+            }
     }
 
     private fun initializeNewPayments() {

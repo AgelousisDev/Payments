@@ -3,6 +3,8 @@ package com.agelousis.payments.utils.extensions
 import android.animation.Animator
 import android.animation.ValueAnimator
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -10,6 +12,7 @@ import android.content.res.Resources
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
@@ -41,6 +44,8 @@ import com.agelousis.payments.database.SQLiteHelper
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.payments.utils.constants.Constants
+import com.agelousis.payments.utils.models.NotificationDataModel
+import com.agelousis.payments.utils.receivers.NotificationReceiver
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -617,6 +622,27 @@ val Context.greetingLabel
         in 13 until 19 -> R.string.key_good_afternoon_label
         in 19 until 24, in 0 until 3 -> R.string.key_good_evening_label
         else -> R.string.key_good_morning_label
+    }
+
+fun Context.scheduleNotification(onTime: Long, notificationDataModel: NotificationDataModel) {
+    val notificationIntent = Intent(this, NotificationReceiver::class.java)
+    notificationIntent.putExtra(
+        "bundle" ,
+        Bundle().also {
+            it.putParcelable(NotificationReceiver.NOTIFICATION_DATA_MODEL_EXTRA, notificationDataModel)
+        }
+    )
+    val pendingIntent = PendingIntent.getBroadcast(this,10, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+    val alarmManager = getSystemService(Context. ALARM_SERVICE) as? AlarmManager
+    alarmManager?.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, onTime, pendingIntent)
+}
+
+val fakePlus1MinuteTime: Long
+    get() {
+        val calendar = Calendar.getInstance()
+        calendar.time = Date()
+        calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE) + 1)
+        return calendar.time.time
     }
 
 @BindingAdapter("picassoImagePath")

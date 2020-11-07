@@ -118,6 +118,8 @@
     <string name="key_good_morning_label">Good Morning!</string>
     <string name="key_good_afternoon_label">Good Afternoon!</string>
     <string name="key_good_evening_label">Good Evening!</string>
+    <string name="key_payment_date_notification_label">Notify me on Payment Date</string>
+    <string name="key_payments_notifications_channel">Payments Notifications</string>
 
     <string-array name="key_payment_action_array">
         <item>Call</item>

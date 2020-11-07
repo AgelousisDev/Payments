@@ -59,6 +59,17 @@
                 app:iconResource="@drawable/ic_payment_day"/>
 
             <com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
+                android:id="@+id/paymentDateNotificationSwitchLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                app:appSwitchLabel="@string/key_payment_date_notification_label"
+                app:appSwitchShowLine="true"
+                appSwitchIsChecked="@{paymentAmountModel.paymentDateNotification == true}"/>
+
+            <com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
                 android:id="@+id/skipPaymentAppSwitchLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

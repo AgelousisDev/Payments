@@ -55,7 +55,8 @@ data class PaymentAmountModel(val paymentId: Int? = null,
                               val paymentMonth: String?,
                               val paymentDate: String?,
                               val skipPayment: Boolean?,
-                              val paymentNote: String?
+                              val paymentNote: String?,
+                              val paymentDateNotification: Boolean?
 ): Parcelable {
 
     @IgnoredOnParcel var paymentAmountRowState = PaymentAmountRowState.NORMAL
