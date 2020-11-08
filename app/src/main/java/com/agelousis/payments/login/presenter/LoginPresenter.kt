@@ -6,4 +6,5 @@ interface LoginPresenter {
     fun onSignUp()
     fun onImport()
     fun onUsersSelect()
+    fun onBiometrics()
 }

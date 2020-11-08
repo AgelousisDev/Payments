@@ -18,6 +18,9 @@
         <variable
             name="loginButtonState"
             type="Boolean" />
+        <variable
+            name="biometricsActive"
+            type="Boolean" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -144,6 +147,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_horizontal_margin"
@@ -196,7 +200,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/passwordTextInputLayout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:hint="@string/key_password_label"
@@ -215,7 +219,7 @@
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="@{userModel.password}" />
+                        android:text="@{userModel.biometrics == true &amp;&amp; biometricsActive == true ? userModel.password : null}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -224,6 +228,22 @@
         </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/biometricsIcon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{() -> presenter.onBiometrics()}"
+        android:visibility="@{userModel.biometrics == true ? View.VISIBLE : View.GONE}"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/usersSelectLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_fingerprint" />
 
     <LinearLayout
         android:id="@+id/usersSelectLayout"

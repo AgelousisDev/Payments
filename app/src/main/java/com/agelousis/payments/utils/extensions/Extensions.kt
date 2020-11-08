@@ -1,10 +1,12 @@
 package com.agelousis.payments.utils.extensions
 
 import android.animation.Animator
+import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -15,6 +17,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.CalendarContract
+import android.telephony.TelephonyManager
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
@@ -30,6 +34,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.biometric.BiometricManager
+import androidx.cardview.widget.CardView
 import androidx.core.animation.addListener
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -44,6 +49,7 @@ import com.agelousis.payments.database.SQLiteHelper
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.payments.utils.constants.Constants
+import com.agelousis.payments.utils.models.CalendarDataModel
 import com.agelousis.payments.utils.models.NotificationDataModel
 import com.agelousis.payments.utils.receivers.NotificationReceiver
 import com.airbnb.lottie.LottieAnimationView
@@ -439,7 +445,7 @@ infix fun Date.formattedDateWith(pattern: String): String? =
 fun String.toDateWith(pattern: String, locale: Locale? = null): Date? =
     SimpleDateFormat(pattern, locale ?: Locale.getDefault()).parse(this)
 
-val Date.toCalendar: Calendar
+val Date.calendar: Calendar
     get() = Calendar.getInstance().also {
         it.time = this
     }
@@ -640,32 +646,28 @@ fun Context.scheduleNotification(onTime: Long, notificationDataModel: Notificati
     alarmManager?.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, onTime, pendingIntent)
 }
 
-val fakePlus1MinuteTime: Long
-    get() {
-        val calendar = Calendar.getInstance()
-        calendar.time = Date()
-        calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE) + 1)
-        return calendar.time.time
-    }
+infix fun Context.createCalendarEventWith(calendarDataModel: CalendarDataModel) {
+    calendarDataModel.calendar.set(Calendar.HOUR_OF_DAY, 10)
+    val insertCalendarIntent = Intent(Intent.ACTION_INSERT)
+        .setData(CalendarContract.Events.CONTENT_URI)
+        .putExtra(CalendarContract.Events.TITLE, calendarDataModel.title) // Simple title
+        .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true)
+        .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, calendarDataModel.calendar.timeInMillis) // Only date part is considered when ALL_DAY is true; Same as DTSTART
+        .putExtra(CalendarContract.Events.EVENT_LOCATION, (getSystemService(Service.TELEPHONY_SERVICE) as? TelephonyManager)?.networkCountryIso?.toUpperCase(Locale.getDefault()))
+        .putExtra(CalendarContract.Events.DESCRIPTION, calendarDataModel.description) // Description
+        .putExtra(Intent.EXTRA_EMAIL, calendarDataModel.email)
+    startActivity(insertCalendarIntent)
+}
 
-val fakePlus1DayDate: Date
-    get() {
-        val calendar = Calendar.getInstance()
-        calendar.time = Date()
-        calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 1)
-        return calendar.time
+infix fun CardView.animateBackgroundColor(endColor: Int) {
+    val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), ContextCompat.getColor(this.context, R.color.white), endColor)
+    colorAnimation.duration = 750
+    colorAnimation.repeatCount = 1
+    colorAnimation.repeatMode = ValueAnimator.REVERSE
+    colorAnimation.addUpdateListener {
+        setCardBackgroundColor(it.animatedValue as? Int ?: return@addUpdateListener)
     }
-
-fun Context.createCalendarEventWith(date: Date, event: String) {
-    startActivity(
-        Intent(Intent.ACTION_EDIT).also {
-            it.type = "vnd.android.cursor.item/event"
-            it.putExtra("beginTime", date.time)
-            it.putExtra("allDay", true)
-            it.putExtra("rule", "FREQ=NEVER")
-            it.putExtra("title", event)
-        }
-    )
+    colorAnimation.start()
 }
 
 @BindingAdapter("picassoImagePath")

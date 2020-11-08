@@ -8,11 +8,8 @@ import android.graphics.PorterDuffColorFilter
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.widget.doAfterTextChanged
@@ -90,11 +87,12 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                         )
                     ) { userModel ->
                         if (userModel == null)
-                            Toast.makeText(
+                            cardView animateBackgroundColor ContextCompat.getColor(this@LoginActivity, R.color.red)
+                            /*Toast.makeText(
                                 this@LoginActivity,
                                 resources.getString(R.string.key_wrong_credentials_message),
                                 Toast.LENGTH_SHORT
-                            ).show()
+                            ).show()*/
                         else {
                             showMainActivity(
                                 userModel = userModel
@@ -116,36 +114,45 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
         initializeDatabaseImport()
     }
 
-    override fun onBiometricsSucceed() {
-        Handler(Looper.getMainLooper()).postDelayed({
-            uiScope.launch {
-                dbManager?.searchUser(
-                    userModel = UserModel(
-                        username = usernameField.text?.toString(),
-                        password = passwordField.text?.toString()
-                    )
-                ) { userModel ->
-                    if (userModel == null)
-                        Toast.makeText(
-                            this@LoginActivity,
-                            resources.getString(R.string.key_wrong_credentials_message),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    else
-                        showMainActivity(
-                            userModel = userModel
-                        )
-                }
-            }
-        },
-            500
+    override fun onBiometrics() {
+        binding?.biometricsActive = true
+        showBiometrics(
+            biometrics = true
         )
+    }
+
+    override fun onBiometricsSucceed() {
+        uiScope.launch {
+            dbManager?.searchUser(
+                userModel = UserModel(
+                    username = usernameField.text?.toString(),
+                    password = passwordField.text?.toString()
+                )
+            ) { userModel ->
+                if (userModel == null)
+                    cardView animateBackgroundColor ContextCompat.getColor(this@LoginActivity, R.color.red)
+                    /*Toast.makeText(
+                        this@LoginActivity,
+                        resources.getString(R.string.key_wrong_credentials_message),
+                        Toast.LENGTH_SHORT
+                    ).show()*/
+                else
+                    showMainActivity(
+                        userModel = userModel
+                    )
+            }
+        }
+    }
+
+    override fun onBiometricsCancelled() {
+        binding?.biometricsActive = false
     }
 
     override fun onUserSelected(userModel: UserModel) {
         signInState = SignInState.LOGIN
         binding?.signInState = signInState
         binding?.userModel = userModel
+        binding?.biometricsActive = userModel.biometrics == true
         binding?.loginButtonState = userModel.username?.isNotEmpty() == true && userModel.password?.isNotEmpty() == true
         showBiometrics(
             biometrics = userModel.biometrics == true

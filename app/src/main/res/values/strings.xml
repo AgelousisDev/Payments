@@ -123,7 +123,7 @@
     <string name="key_payments_notifications_channel">Payments Notifications</string>
     <string name="key_payment_date_notification_not_able_to_cancel_message">*Please note that you cannot cancel the notification for the current payment if you have already enabled it, unless you don\'t save it.</string>
     <string name="key_notification_amount_value">💶 %s</string>
-    <string name="key_calendar_event_name_amount_value">%s - 💶 %s</string>
+    <string name="key_calendar_event_amount_value"> 💶 %s</string>
 
     <string-array name="key_payment_action_array">
         <item>Call</item>

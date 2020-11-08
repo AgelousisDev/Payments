@@ -26,6 +26,7 @@ import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.models.PersonModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
+import com.agelousis.payments.utils.models.CalendarDataModel
 import com.agelousis.payments.utils.models.NotificationDataModel
 import com.agelousis.payments.views.detailsSwitch.interfaces.AppSwitchListener
 import kotlinx.android.synthetic.main.fragment_new_payment_layout.*
@@ -66,20 +67,21 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     }
 
     override fun onCalendarEvent(paymentAmountModel: PaymentAmountModel?) {
-        context?.createCalendarEventWith(
-            date = paymentAmountModel?.paymentDate?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT) ?: return,
-            event = String.format(
-                resources.getString(R.string.key_calendar_event_name_amount_value),
-                String.format(
-                    "%s %s",
-                    binding?.firstNameLayout?.value ?: return,
-                    binding?.surnameLayout?.value ?: return
-                ),
+        (context ?: return) createCalendarEventWith CalendarDataModel(
+            calendar = paymentAmountModel?.paymentDate?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.calendar ?: return,
+            title = String.format(
+                "%s %s",
+                binding?.firstNameLayout?.value ?: return,
+                binding?.surnameLayout?.value ?: return
+            ),
+            description = String.format(
+                resources.getString(R.string.key_calendar_event_amount_value),
                 paymentAmountModel.getAmountWithoutVat(
                     context = context ?: return,
                     vat = (activity as? MainActivity)?.userModel?.vat ?: return
                 )
-            )
+            ),
+            email = emailLayout.value ?: return
         )
     }
 

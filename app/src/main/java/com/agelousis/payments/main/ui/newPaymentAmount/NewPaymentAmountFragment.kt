@@ -69,7 +69,7 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
         if (dateDetailsLayout.dateValue.isNullOrEmpty() && args.paymentAmountDataModel?.paymentDate.isNullOrEmpty())
             dateDetailsLayout.dateValue = Date() formattedDateWith Constants.GENERAL_DATE_FORMAT
         if (paymentMonthDetailsLayout.dateValue == null && args.paymentAmountDataModel?.paymentMonth == null) {
-            val paymentMonthCalendar = Date().toCalendar
+            val paymentMonthCalendar = Date().calendar
             paymentMonthDetailsLayout.dateValue = String.format(
                 "%s %s",
                 resources.getStringArray(R.array.key_months_array).getOrNull(index = paymentMonthCalendar.get(Calendar.MONTH)) ?: "",
