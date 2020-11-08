@@ -178,7 +178,6 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
     }
 
     fun playProfileSuccessAnimation() {
-        profileImageView.visibility = View.GONE
         profileAnimationView.visibility = View.VISIBLE
         profileAnimationView.playAnimation()
         profileAnimationView.addAnimatorListener(this)

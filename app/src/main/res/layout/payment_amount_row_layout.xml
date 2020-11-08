@@ -24,6 +24,7 @@
      android:layout_height="wrap_content"
      android:onClick="@{() -> presenter.onPaymentAmount(paymentAmountModel)}"
      app:elevation="16dp"
+     app:cardUseCompatPadding="true"
      app:cardBackgroundColor="@color/whiteTwo"
      app:cardCornerRadius="8dp"
      app:cardPreventCornerOverlap="true">

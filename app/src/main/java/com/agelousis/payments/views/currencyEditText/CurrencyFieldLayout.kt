@@ -12,6 +12,7 @@ import androidx.core.widget.doOnTextChanged
 import com.agelousis.payments.R
 import com.agelousis.payments.databinding.CurrencyEditTextLayoutBinding
 import com.agelousis.payments.utils.constants.Constants
+import com.agelousis.payments.utils.extensions.showKeyboard
 import com.agelousis.payments.views.currencyEditText.interfaces.AmountListener
 import com.agelousis.payments.views.personDetailsLayout.enumerations.ImeOptionsType
 import com.agelousis.payments.views.personDetailsLayout.enumerations.PersonDetailFieldType
@@ -73,6 +74,15 @@ class CurrencyFieldLayout(context: Context, attrs: AttributeSet?): FrameLayout(c
     }
 
     private fun setupUI() {
+        binding?.currencyLayout?.setOnClickListener {
+            binding?.currencyField?.requestFocus()
+            binding?.currencyField?.text?.toString()?.takeIf { it.isNotEmpty() }?.length?.let {
+                binding?.currencyField?.setSelection(it)
+            }
+            context?.showKeyboard(
+                view = binding?.currencyField ?: return@setOnClickListener
+            )
+        }
         binding?.currencyField?.doOnTextChanged { text, _, _, _ ->
             errorState = false
             if (text?.isEmpty() == true) {

@@ -11,8 +11,12 @@
             type="com.agelousis.payments.views.personDetailsLayout.models.PersonDetailsViewDataModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/currencyLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"
         android:animateLayoutChanges="true">
 
         <com.google.android.material.textview.MaterialTextView
