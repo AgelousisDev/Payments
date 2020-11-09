@@ -9,6 +9,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.*
@@ -39,6 +40,7 @@ import androidx.core.animation.addListener
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.content.edit
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -450,6 +452,12 @@ val Date.calendar: Calendar
         it.time = this
     }
 
+val Date.defaultTimeCalendar: Calendar
+    get() = Calendar.getInstance().also {
+        it.time = this
+        it.set(Calendar.HOUR_OF_DAY, 10)
+    }
+
 inline fun <reified J> Any.asIs(block: (J) -> Unit) {
     if (this is J)
         block(this)
@@ -641,9 +649,9 @@ infix fun Context.scheduleNotification(notificationDataModel: NotificationDataMo
             it.putParcelable(NotificationReceiver.NOTIFICATION_DATA_MODEL_EXTRA, notificationDataModel)
         }
     )
-    val pendingIntent = PendingIntent.getBroadcast(this,10, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+    val pendingIntent = PendingIntent.getBroadcast(this, getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE).notificationRequestCode, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
     val alarmManager = getSystemService(Context. ALARM_SERVICE) as? AlarmManager
-    alarmManager?.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, notificationDataModel.calendar.timeInMillis, pendingIntent)
+    alarmManager?.setAlarmClock(AlarmManager.AlarmClockInfo(notificationDataModel.calendar.timeInMillis, pendingIntent), pendingIntent)
 }
 
 infix fun Context.createCalendarEventWith(calendarDataModel: CalendarDataModel) {
@@ -660,15 +668,37 @@ infix fun Context.createCalendarEventWith(calendarDataModel: CalendarDataModel) 
 }
 
 infix fun CardView.animateBackgroundColor(endColor: Int) {
-    val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), ContextCompat.getColor(this.context, R.color.white), endColor)
+    if ((tag as? Pair<*, *>)?.second as? Boolean == true) return
+    val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), cardBackgroundColor.defaultColor, endColor)
     colorAnimation.duration = 750
     colorAnimation.repeatCount = 1
     colorAnimation.repeatMode = ValueAnimator.REVERSE
     colorAnimation.addUpdateListener {
         setCardBackgroundColor(it.animatedValue as? Int ?: return@addUpdateListener)
     }
+    colorAnimation.addListener(object: Animator.AnimatorListener {
+        override fun onAnimationCancel(animation: Animator?) {}
+        override fun onAnimationRepeat(animation: Animator?) {}
+        override fun onAnimationStart(animation: Animator?) {
+            tag = "isAnimating" to true
+        }
+        override fun onAnimationEnd(animation: Animator?) {
+            tag = "isAnimating" to false
+        }
+    })
     colorAnimation.start()
 }
+
+val SharedPreferences.notificationRequestCode: Int
+    get() {
+        val requestCode = getInt(Constants.SHARED_PREFERENCES_NOTIFICATION_REQUEST_CODE_KEY, 0)
+        edit(
+            commit = true
+        ) {
+            putInt(Constants.SHARED_PREFERENCES_NOTIFICATION_REQUEST_CODE_KEY, requestCode + 1)
+        }
+        return requestCode
+    }
 
 @BindingAdapter("picassoImagePath")
 fun AppCompatImageView.loadImagePath(fileName: String?) {

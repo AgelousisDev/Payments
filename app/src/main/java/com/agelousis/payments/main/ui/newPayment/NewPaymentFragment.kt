@@ -209,7 +209,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         if (databaseTriggeringType == DatabaseTriggeringType.INSERT)
             availablePayments.filter { it.paymentDateNotification == true }.forEachIndexed { index, paymentAmountModel ->
                 (context ?: return@forEachIndexed) scheduleNotification NotificationDataModel(
-                    calendar = paymentAmountModel.paymentDate?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.calendar ?: return@forEachIndexed,
+                    calendar = paymentAmountModel.paymentDate?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.defaultTimeCalendar ?: return@forEachIndexed,
                     notificationId = index,
                     title = currentPersonModel?.fullName,
                     body = String.format(

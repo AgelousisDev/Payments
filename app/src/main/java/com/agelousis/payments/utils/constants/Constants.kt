@@ -29,6 +29,8 @@ object Constants {
     const val VIBER_SCHEME_URL = "viber://add?number=%s"
     const val PAYMENTS_CSV_FILE = "payments.csv"
     const val CSV_MIME_TYPE = "text/csv"
+    const val SHARED_PREFERENCES_NAME = "preferences"
+    const val SHARED_PREFERENCES_NOTIFICATION_REQUEST_CODE_KEY = "notification_request_code"
 
     object Colors {
         val colorPickerColors = intArrayOf(
