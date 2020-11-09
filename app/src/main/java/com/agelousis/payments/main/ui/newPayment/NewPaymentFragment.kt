@@ -208,17 +208,15 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     private fun scheduleNotification() {
         if (databaseTriggeringType == DatabaseTriggeringType.INSERT)
             availablePayments.filter { it.paymentDateNotification == true }.forEachIndexed { index, paymentAmountModel ->
-                context?.scheduleNotification(
-                    onTime = paymentAmountModel.paymentDate?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.time ?: return@forEachIndexed,
-                    notificationDataModel = NotificationDataModel(
-                        notificationId = index,
-                        title = currentPersonModel?.fullName,
-                        body = String.format(
-                            resources.getString(R.string.key_notification_amount_value),
-                            paymentAmountModel.getAmountWithoutVat(
-                                context = context ?: return@forEachIndexed,
-                                vat = (activity as? MainActivity)?.userModel?.vat ?: return@forEachIndexed
-                            )
+                (context ?: return@forEachIndexed) scheduleNotification NotificationDataModel(
+                    calendar = paymentAmountModel.paymentDate?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.calendar ?: return@forEachIndexed,
+                    notificationId = index,
+                    title = currentPersonModel?.fullName,
+                    body = String.format(
+                        resources.getString(R.string.key_notification_amount_value),
+                        paymentAmountModel.getAmountWithoutVat(
+                            context = context ?: return@forEachIndexed,
+                            vat = (activity as? MainActivity)?.userModel?.vat ?: return@forEachIndexed
                         )
                     )
                 )

@@ -89,11 +89,6 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                     ) { userModel ->
                         if (userModel == null)
                             cardView animateBackgroundColor ContextCompat.getColor(this@LoginActivity, R.color.red)
-                            /*Toast.makeText(
-                                this@LoginActivity,
-                                resources.getString(R.string.key_wrong_credentials_message),
-                                Toast.LENGTH_SHORT
-                            ).show()*/
                         else {
                             showMainActivity(
                                 userModel = userModel
@@ -132,11 +127,6 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
             ) { userModel ->
                 if (userModel == null)
                     cardView animateBackgroundColor ContextCompat.getColor(this@LoginActivity, R.color.red)
-                    /*Toast.makeText(
-                        this@LoginActivity,
-                        resources.getString(R.string.key_wrong_credentials_message),
-                        Toast.LENGTH_SHORT
-                    ).show()*/
                 else
                     showMainActivity(
                         userModel = userModel

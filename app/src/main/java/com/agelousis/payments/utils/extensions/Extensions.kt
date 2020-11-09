@@ -633,7 +633,7 @@ val Context.greetingLabel
         else -> R.string.key_good_morning_label
     }
 
-fun Context.scheduleNotification(onTime: Long, notificationDataModel: NotificationDataModel) {
+infix fun Context.scheduleNotification(notificationDataModel: NotificationDataModel) {
     val notificationIntent = Intent(this, NotificationReceiver::class.java)
     notificationIntent.putExtra(
         "bundle" ,
@@ -643,7 +643,7 @@ fun Context.scheduleNotification(onTime: Long, notificationDataModel: Notificati
     )
     val pendingIntent = PendingIntent.getBroadcast(this,10, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
     val alarmManager = getSystemService(Context. ALARM_SERVICE) as? AlarmManager
-    alarmManager?.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, onTime, pendingIntent)
+    alarmManager?.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, notificationDataModel.calendar.timeInMillis, pendingIntent)
 }
 
 infix fun Context.createCalendarEventWith(calendarDataModel: CalendarDataModel) {
