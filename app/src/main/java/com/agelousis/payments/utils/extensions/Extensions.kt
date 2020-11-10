@@ -98,6 +98,9 @@ inline fun <T, J> Iterable<T>.firstOrNullWithType(typeBlock: (T) -> J?, predicat
     return null
 }
 
+infix fun <T> Iterable<T>.isLastAt(position: Int) =
+    this.count() - 1 == position
+
 fun <T> List<T>.second(): T {
     if (isEmpty())
         throw NoSuchElementException("List is empty.")

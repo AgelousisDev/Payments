@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="android.view.View" />
         <import type="com.agelousis.payments.main.ui.payments.models.PaymentAmountModel" />
         <import type="com.agelousis.payments.main.ui.payments.enumerations.PaymentType" />
         <variable
@@ -31,6 +32,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:animateLayoutChanges="true">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:visibility="@{personModel.groupImage != null ? View.VISIBLE : View.GONE}"
+                picassoGroupImageFromInternalFiles="@{personModel.groupImage}" />
 
             <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
                 android:id="@+id/paymentTypeLayout"

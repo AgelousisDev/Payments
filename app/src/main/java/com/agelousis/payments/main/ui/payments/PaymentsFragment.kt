@@ -132,11 +132,14 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
                         is PersonModel -> {
                             outRect.left = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
                             outRect.right = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
-                            if (adapterPosition == filteredList.size - 1)
+                            if (filteredList isLastAt adapterPosition)
                                 outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
                         }
-                        is PaymentAmountSumModel ->
+                        is PaymentAmountSumModel -> {
                             outRect.top = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
+                            if (filteredList isLastAt adapterPosition)
+                                outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
+                        }
                     }
                 }
             }
