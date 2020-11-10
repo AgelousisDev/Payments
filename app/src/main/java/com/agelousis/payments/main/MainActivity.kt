@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             in PaymentsFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.app_name)
                 floatingButtonState = true
-                floatingButtonImage = R.drawable.ic_add
+                floatingButtonImage = R.drawable.ic_add_group
                 clearPaymentsMenuItemIsVisible = true
                 exportToExcelMenuItemIsVisible = true
                 exportDatabaseButtonIsVisible = false
