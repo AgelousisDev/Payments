@@ -87,6 +87,8 @@ class PeriodFilterFragment: Fragment() {
                         uri = data?.data ?: return
                     )
             }
+        else
+            findNavController().popBackStack()
     }
 
 }

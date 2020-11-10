@@ -6,7 +6,6 @@ import com.agelousis.payments.R
 import com.agelousis.payments.database.SQLiteHelper
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.utils.extensions.euroFormattedString
-import java.io.File
 import java.io.FileWriter
 
 typealias CsvClosure = () -> Unit
@@ -31,13 +30,13 @@ object PaymentCsvHelper {
             payments.forEachIndexed { index, payment ->
                 fileWriter.append((index + 1).toString())
                 fileWriter.append(",")
-                fileWriter.append(payment.paymentAmount?.euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label))
+                fileWriter.append(payment.paymentAmount?.euroFormattedString?.replace(",", ".") ?: context.resources.getString(R.string.key_empty_field_label))
                 fileWriter.append(",")
                 fileWriter.append(payment.paymentMonth ?: context.resources.getString(R.string.key_empty_field_label))
                 fileWriter.append(",")
                 fileWriter.append(payment.paymentDate ?: context.resources.getString(R.string.key_empty_field_label))
                 fileWriter.append(",")
-                fileWriter.append(payment.paymentNote ?: context.resources.getString(R.string.key_empty_field_label))
+                fileWriter.append(payment.paymentNote?.replace(",", ".") ?: context.resources.getString(R.string.key_empty_field_label))
                 fileWriter.append("\n")
             }
 
