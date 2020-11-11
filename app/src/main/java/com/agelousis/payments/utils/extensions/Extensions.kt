@@ -703,6 +703,12 @@ val SharedPreferences.notificationRequestCode: Int
         return requestCode
     }
 
+val fakeCalendar: Calendar
+    get() = Calendar.getInstance().also {
+        it.time = Date()
+        it.add(Calendar.MINUTE, 1)
+    }
+
 @BindingAdapter("picassoImagePath")
 fun AppCompatImageView.loadImagePath(fileName: String?) {
     fileName?.let {

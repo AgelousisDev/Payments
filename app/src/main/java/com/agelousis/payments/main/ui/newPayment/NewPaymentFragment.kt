@@ -218,7 +218,11 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                             context = context ?: return@forEachIndexed,
                             vat = (activity as? MainActivity)?.userModel?.vat ?: return@forEachIndexed
                         )
-                    )
+                    ),
+                    date = paymentAmountModel.paymentDate.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.formattedDateWith(pattern = Constants.VIEWING_DATE_FORMAT),
+                    groupName = currentPersonModel?.groupName,
+                    groupImage = currentPersonModel?.groupImage,
+                    groupTint = currentPersonModel?.groupColor
                 )
             }
     }

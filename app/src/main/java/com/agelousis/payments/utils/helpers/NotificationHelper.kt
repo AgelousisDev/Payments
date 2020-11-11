@@ -1,17 +1,15 @@
 package com.agelousis.payments.utils.helpers
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.provider.Settings
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.agelousis.payments.R
-import com.agelousis.payments.login.LoginActivity
+import com.agelousis.payments.notificationActivity.NotificationActivity
 import com.agelousis.payments.utils.models.NotificationDataModel
 
 object NotificationHelper {
@@ -39,14 +37,29 @@ object NotificationHelper {
         mBuilder.setContentText(notificationDataModel.body)
         mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
         mBuilder.setSmallIcon(R.drawable.ic_payment)
+        createBitmapFrom(
+            context = context,
+            fileName = notificationDataModel.groupImage
+        )?.let {
+            mBuilder.setLargeIcon(it)
+        }
         mBuilder.color = ContextCompat.getColor(context, R.color.colorAccent)
         mBuilder.setDefaults(Notification.DEFAULT_ALL)
         mBuilder.setAutoCancel(true)
         mBuilder.setLights(-0x1450dd, 2000, 2000)
-        val intent = Intent(context, LoginActivity::class.java)
-        val resultPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val resultPendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            Intent(context, NotificationActivity::class.java).also {
+                it.putExtra(NotificationActivity.BUBBLE_NOTIFICATION_EXTRA, notificationDataModel)
+            },
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
         mBuilder.setContentIntent(resultPendingIntent)
         return mBuilder
     }
+
+    private fun createBitmapFrom(context: Context, fileName: String?) =
+        fileName?.let { BitmapFactory.decodeFile("${context.filesDir.absolutePath}/$fileName") }
 
 }

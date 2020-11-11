@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="notificationDataModel"
+            type="com.agelousis.payments.utils.models.NotificationDataModel" />
+    </data>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".notificationActivity.NotificationActivity">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="@dimen/activity_vertical_margin"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextViewTitleLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{notificationDataModel.getFormattedDate(context)}"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:background="@color/grey"/>
+
+    <FrameLayout
+        android:id="@+id/paymentRowHeaderFrameLayout"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:background="@{notificationDataModel.groupImage == null ? @drawable/oval_background : null}"
+        backgroundDrawableTintColor="@{notificationDataModel.groupImage == null ? notificationDataModel.groupTint : null}"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextViewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@{notificationDataModel.capitalizedGroupName}"
+            android:visibility="@{notificationDataModel.groupImage == null ? View.VISIBLE : View.GONE}"
+            android:textColor="@color/white"
+            android:textStyle="normal" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/userRowImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{notificationDataModel.groupImage != null ? View.VISIBLE : View.GONE}"
+            picassoGroupImageFromInternalFiles="@{notificationDataModel.groupImage}"
+            android:scaleType="centerCrop"/>
+
+    </FrameLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextViewTitleLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:text="@{notificationDataModel.title}"
+        tools:text="Cars Sale"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextViewLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+        android:text="@{notificationDataModel.body}"
+        tools:text="Mitsubishi Colt CZ3"/>
+
+</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

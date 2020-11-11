@@ -1,6 +1,8 @@
 package com.agelousis.payments.utils.models
 
+import android.content.Context
 import android.os.Parcelable
+import com.agelousis.payments.R
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
@@ -8,5 +10,21 @@ import java.util.*
 data class NotificationDataModel(val calendar: Calendar,
                                  val notificationId: Int,
                                  val title: String?,
-                                 val body: String?
-): Parcelable
+                                 val body: String?,
+                                 val date: String?,
+                                 val groupName: String?,
+                                 val groupImage: String?,
+                                 val groupTint: Int?
+): Parcelable {
+
+    val capitalizedGroupName
+        get() = groupName?.capitalize(Locale.getDefault())
+
+    fun getFormattedDate(context: Context) =
+        String.format(
+            "%s - %s",
+            context.resources.getString(R.string.key_execution_date_label),
+            date
+        )
+
+}
