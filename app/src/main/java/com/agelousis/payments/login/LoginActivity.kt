@@ -355,7 +355,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
         when(requestCode) {
             PROFILE_SELECT_REQUEST_CODE ->
                 data?.data?.let { imageUri ->
-                    profileImageView.loadImageBitmap(
+                    loadImageBitmap(
                         imageUri = imageUri
                     ) { bitmap ->
                         userModel.profileImage?.let {

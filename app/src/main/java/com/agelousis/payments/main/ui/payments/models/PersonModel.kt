@@ -32,10 +32,11 @@ data class PersonModel(val personId: Int? = null,
     val totalPaymentAmount: Double?
         get() = payments?.mapNotNull { it.paymentAmount }?.takeIf { it.isNotEmpty() }?.sum()
 
-
-
     val fullName: String
         get() = String.format("%s %s", firstName ?: "", surname ?: "")
+
+    val capitalizedGroupName
+        get() = groupName?.capitalize(Locale.getDefault())
 
     fun getCommunicationData(context: Context): String {
         return ifLet(phone, email) {

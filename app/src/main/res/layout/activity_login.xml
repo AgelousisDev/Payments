@@ -60,7 +60,7 @@
         android:id="@+id/greetingLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@{ExtensionsKt.getGreetingLabel(context)}"
+        android:text="@{ExtensionsKt.getGreetingLabel()}"
         android:fontFamily="@font/ubuntu_light"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"

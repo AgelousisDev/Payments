@@ -20,10 +20,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.CalendarContract
 import android.telephony.TelephonyManager
-import android.view.View
-import android.view.ViewAnimationUtils
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import android.view.*
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
@@ -522,20 +519,6 @@ fun Context.textEmail(email: String, content: String? = null) {
     })
 }
 
-fun AppCompatImageView.loadImageBitmap(imageUri: Uri?, bitmapBlock: BitmapBlock) {
-    imageUri?.let {
-        Picasso.get().load(it).resize(200, 200).transform(CircleTransformation()).centerCrop().into(object: Target {
-            override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-                println(e)
-            }
-            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
-            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                bitmapBlock(bitmap)
-            }
-        })
-    }
-}
-
 fun loadImageBitmap(imageUri: Uri?, bitmapBlock: BitmapBlock) {
     imageUri?.let {
         Picasso.get().load(it).resize(200.px, 200.px).transform(CircleTransformation()).centerCrop().into(object: Target {
@@ -636,7 +619,7 @@ fun Fragment.createFile(requestCode: Int, fileName: String) {
     startActivityForResult(intent, requestCode)
 }
 
-val Context.greetingLabel
+val greetingLabel
     get() = when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
         in 3 until 13 -> R.string.key_good_morning_label
         in 13 until 19 -> R.string.key_good_afternoon_label
@@ -701,12 +684,6 @@ val SharedPreferences.notificationRequestCode: Int
             putInt(Constants.SHARED_PREFERENCES_NOTIFICATION_REQUEST_CODE_KEY, requestCode + 1)
         }
         return requestCode
-    }
-
-val fakeCalendar: Calendar
-    get() = Calendar.getInstance().also {
-        it.time = Date()
-        it.add(Calendar.MINUTE, 1)
     }
 
 @BindingAdapter("picassoImagePath")

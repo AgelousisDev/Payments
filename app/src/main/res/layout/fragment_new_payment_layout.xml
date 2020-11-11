@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools">
+<layout>
     <data>
         <import type="android.view.View" />
         <import type="com.agelousis.payments.main.ui.payments.models.PaymentAmountModel" />
@@ -33,14 +33,45 @@
             android:orientation="vertical"
             android:animateLayoutChanges="true">
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <FrameLayout
+                android:id="@+id/paymentRowHeaderFrameLayout"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:layout_margin="@dimen/activity_horizontal_margin"
-                android:visibility="@{personModel.groupImage != null ? View.VISIBLE : View.GONE}"
-                picassoGroupImageFromInternalFiles="@{personModel.groupImage}" />
+                android:layout_gravity="center_horizontal"
+                android:background="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? @drawable/oval_background : null}"
+                backgroundDrawableTintColor="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? groupModel.color != null ? groupModel.color : personModel.groupColor : null}"
+                android:elevation="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextViewTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@{groupModel.groupName != null ? groupModel.groupName : personModel.groupName}"
+                    android:visibility="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? View.VISIBLE : View.GONE}"
+                    android:textColor="@color/white"
+                    android:textStyle="normal" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/userRowImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="@{groupModel.groupImage != null || personModel.groupImage != null ? View.VISIBLE : View.GONE}"
+                    picassoGroupImageFromInternalFiles="@{groupModel.groupImage != null ? groupModel.groupImage : personModel.groupImage}"
+                    android:scaleType="centerCrop"/>
+
+            </FrameLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:background="@color/grey" />
 
             <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
                 android:id="@+id/paymentTypeLayout"
