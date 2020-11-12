@@ -16,7 +16,7 @@
         android:background="@color/whiteTwo">
 
         <com.google.android.material.textview.MaterialTextView
-            style="@style/TextViewTitleLabel"
+            style="@style/TextViewLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/nav_header_vertical_spacing"
