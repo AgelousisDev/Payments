@@ -223,7 +223,7 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
                         newUserModel?.profileImageData = bitmap?.byteArray
                         optionList.firstOrNullWithType(
                             typeBlock = {
-                                it as OptionType
+                                it as? OptionType
                             }
                         ) {
                             it is OptionType

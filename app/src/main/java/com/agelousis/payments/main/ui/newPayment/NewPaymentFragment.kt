@@ -39,6 +39,7 @@ import kotlin.collections.ArrayList
 class NewPaymentFragment: Fragment(), NewPaymentPresenter {
 
     override fun onPaymentAmount(paymentAmountModel: PaymentAmountModel?) {
+        restorePaymentsToNormalState()
         fillCurrentPersonModel()
         paymentAmountUpdateIndex = paymentAmountModel?.let { availablePayments.indexOf(it) }
         findNavController().navigate(
@@ -300,6 +301,17 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         }
     }
 
+    private fun restorePaymentsToNormalState() {
+        if (availablePayments.any { it.paymentAmountRowState == PaymentAmountRowState.CAN_BE_DISMISSED }) {
+            availablePayments.forEach {
+                it.paymentAmountRowState = PaymentAmountRowState.NORMAL
+            }
+            (paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
+            paymentReadyForDeletionIndexArray.clear()
+            (activity as? MainActivity)?.returnFloatingButtonBackToNormal()
+        }
+    }
+
     private fun fillCurrentPersonModel() {
         var phone = binding?.phoneLayout?.value
         Constants.CountryCodes.getCountryZipCode(context = context ?: return)?.let {
@@ -329,12 +341,14 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     }
 
     fun dismissPayment() {
+        paymentReadyForDeletionIndexArray.sortDescending()
         paymentReadyForDeletionIndexArray.forEach { paymentReadyForDeletionIndex ->
             (paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.removeItem(
                 position = paymentReadyForDeletionIndex
             )
             (activity as? MainActivity)?.returnFloatingButtonBackToNormal()
         }
+        paymentReadyForDeletionIndexArray.clear()
     }
 
 }
