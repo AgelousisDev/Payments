@@ -89,6 +89,10 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
         newUserModel?.defaultPaymentAmount = newPaymentAmount
     }
 
+    override fun onMessageTemplateChange(newMessageTemplate: String) {
+        newUserModel?.defaultMessageTemplate = newMessageTemplate
+    }
+
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val dbManager by lazy { context?.let { DBManager(context = it) } }
     private val newUserModel by lazy { (activity as? MainActivity)?.userModel?.copy() }
@@ -134,6 +138,9 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
                 it.userModel = newUserModel
             },
             OptionType.DEFAULT_PAYMENT_AMOUNT.also {
+                it.userModel = newUserModel
+            },
+            OptionType.DEFAULT_MESSAGE_TEMPLATE.also {
                 it.userModel = newUserModel
             }
         )

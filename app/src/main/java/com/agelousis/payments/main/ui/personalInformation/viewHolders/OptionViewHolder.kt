@@ -1,12 +1,15 @@
 package com.agelousis.payments.main.ui.personalInformation.viewHolders
 
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.databinding.OptionTypeRowLayoutBinding
-import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.payments.main.ui.personalInformation.models.OptionType
+import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
 
-class OptionViewHolder(private val binding: OptionTypeRowLayoutBinding): RecyclerView.ViewHolder(binding.root) {
+class OptionViewHolder(private val binding: OptionTypeRowLayoutBinding): RecyclerView.ViewHolder(
+    binding.root
+) {
 
     fun bind(optionType: OptionType, optionPresenter: OptionPresenter) {
         binding.optionType = optionType
@@ -47,13 +50,36 @@ class OptionViewHolder(private val binding: OptionTypeRowLayoutBinding): Recycle
                     )
                 OptionType.DEFAULT_PAYMENT_AMOUNT ->
                     optionPresenter.onPaymentAmountChange(
-                        newPaymentAmount = it?.toString()?.toDoubleOrNull() ?: return@doAfterTextChanged
+                        newPaymentAmount = it?.toString()?.toDoubleOrNull()
+                            ?: return@doAfterTextChanged
                     )
-
                 else -> {}
             }
         }
+        binding.footerOptionField.doAfterTextChanged {
+            when(binding.optionType) {
+                OptionType.DEFAULT_MESSAGE_TEMPLATE ->
+                    optionPresenter.onMessageTemplateChange(
+                        newMessageTemplate = it?.toString() ?: return@doAfterTextChanged
+                    )
+                else -> {}
+            }
+        }
+        configureConstraints()
         binding.executePendingBindings()
+    }
+
+    private fun configureConstraints() {
+        val set = ConstraintSet()
+        set.clone(binding.constraintLayout)
+        if (binding.optionType == OptionType.DEFAULT_MESSAGE_TEMPLATE) {
+            set.clear(binding.materialTextView.id, ConstraintSet.BOTTOM)
+            set.applyTo(binding.constraintLayout)
+        }
+        else {
+            set.connect(binding.materialTextView.id, ConstraintSet.BOTTOM, binding.constraintLayout.id, ConstraintSet.BOTTOM, 0)
+            set.applyTo(binding.constraintLayout)
+        }
     }
 
 }

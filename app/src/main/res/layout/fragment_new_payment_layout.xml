@@ -11,6 +11,9 @@
             name="groupModel"
             type="com.agelousis.payments.main.ui.payments.models.GroupModel" />
         <variable
+            name="userModel"
+            type="com.agelousis.payments.login.models.UserModel" />
+        <variable
             name="presenter"
             type="com.agelousis.payments.main.ui.newPayment.presenters.NewPaymentPresenter" />
     </data>
@@ -191,7 +194,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textLongMessage"
-                    android:text="@{personModel.messageTemplate}"/>
+                    android:text="@{personModel.messageTemplate != null &amp;&amp; personModel.messageTemplate.empty == false ? personModel.messageTemplate : userModel.defaultMessageTemplate}"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 

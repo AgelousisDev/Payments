@@ -13,8 +13,10 @@
             type="com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
-    android:layout_height="65dp"
+    android:layout_height="wrap_content"
+    android:minHeight="65dp"
     android:padding="@dimen/activity_horizontal_margin"
     android:alpha="@{optionType == OptionType.CHANGE_BIOMETRICS_STATE ? optionType.biometricAvailability ? 1.0f : 0.5f : 1.0f}"
     android:onClick="@{() -> presenter.onChangeProfilePicture()}"
@@ -46,13 +48,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatEditText
-        style="@style/TextViewLabel"
+        style="@style/TextViewValueLabel"
         android:id="@+id/optionField"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="end"
         android:background="@null"
-        android:visibility="@{optionType == OptionType.CHANGE_FIRST_NAME || optionType == OptionType.CHANGE_LAST_NAME || optionType == OptionType.CHANGE_USERNAME || optionType == OptionType.CHANGE_PASSWORD || optionType == OptionType.CHANGE_ADDRESS || optionType == OptionType.CHANGE_ADDRESS || optionType == OptionType.CHANGE_ID_CARD_NUMBER || optionType == OptionType.CHANGE_SOCIAL_INSURANCE_NUMBER || optionType == OptionType.VAT || optionType == OptionType.DEFAULT_PAYMENT_AMOUNT ? View.VISIBLE : View.GONE}"
+        android:visibility="@{optionType != OptionType.CHANGE_PROFILE_IMAGE &amp;&amp; optionType != OptionType.CHANGE_BIOMETRICS_STATE &amp;&amp; optionType != OptionType.DEFAULT_MESSAGE_TEMPLATE ? View.VISIBLE : View.GONE}"
         android:inputType="@{optionType == OptionType.CHANGE_PASSWORD ? 0x00000081 : optionType == OptionType.VAT ? 0x00000002 : optionType == OptionType.DEFAULT_PAYMENT_AMOUNT ? 0x00002002 : 0x00000001}"
         personalInformation="@{optionType}"
         app:layout_constraintHorizontal_bias="1.0"
@@ -62,6 +64,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/appCompatImageView"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:visibility="@{optionType == OptionType.CHANGE_PROFILE_IMAGE ? View.VISIBLE : View.GONE}"
@@ -69,6 +72,23 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        style="@style/TextViewValueLabel"
+        android:id="@+id/footerOptionField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+        android:gravity="start"
+        android:background="@null"
+        android:visibility="@{optionType == OptionType.DEFAULT_MESSAGE_TEMPLATE ? View.VISIBLE : View.GONE}"
+        android:inputType="@{optionType == OptionType.CHANGE_PASSWORD ? 0x00000081 : optionType == OptionType.VAT ? 0x00000002 : optionType == OptionType.DEFAULT_PAYMENT_AMOUNT ? 0x00002002 : 0x00000001}"
+        personalInformation="@{optionType}"
+        tools:visibility="visible"
+        tools:text="Custom Field"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialTextView"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

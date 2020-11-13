@@ -131,6 +131,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         ).also {
             it.groupModel = args.groupDataModel
             it.personModel = args.personDataModel
+            it.userModel = (activity as? MainActivity)?.userModel
             it.presenter = this
         }
         return binding?.root
@@ -190,7 +191,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         }
         viewModel.paymentInsertionStateLiveData.observe(viewLifecycleOwner) { paymentInsertionState ->
             if (paymentInsertionState) {
-                redirectToSMSApp()
                 scheduleNotification()
                 currentPersonModel = null
                 findNavController().popBackStack()
@@ -198,11 +198,19 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         }
     }
 
-    private fun redirectToSMSApp() {
-        if (binding?.phoneLayout?.value != null && databaseTriggeringType == DatabaseTriggeringType.INSERT)
-            context?.sendSMSMessage(
-                mobileNumber = binding?.phoneLayout?.value ?: "",
-                message = binding?.messageTemplateField?.text?.toString() ?: ""
+    private fun redirectToSMSAppIf(predicate: () -> Boolean) {
+        if (predicate())
+            context?.showTwoButtonsDialog(
+                title = resources.getString(R.string.key_sms_label),
+                message = resources.getString(R.string.key_send_sms_message),
+                positiveButtonText = resources.getString(R.string.key_send_label),
+                positiveButtonBlock = {
+                    context?.sendSMSMessage(
+                        mobileNumber = binding?.phoneLayout?.value ?: "",
+                        message = binding?.messageTemplateField?.text?.toString() ?: ""
+                    )
+                },
+                isCancellable = false
             )
     }
 
@@ -236,7 +244,12 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                         index = index,
                         paymentAmountModel
                     )
-                } ?: availablePayments.add(paymentAmountModel)
+                } ?: run {
+                    availablePayments.add(paymentAmountModel)
+                    redirectToSMSAppIf {
+                        !binding?.phoneLayout?.value.isNullOrEmpty()
+                    }
+                }
                 (paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
             })
     }

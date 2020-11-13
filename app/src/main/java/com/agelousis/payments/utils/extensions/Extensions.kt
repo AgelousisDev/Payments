@@ -208,12 +208,12 @@ fun Context.showTwoButtonsDialog(title: String, message: String, isCancellable: 
     materialDialog.getButton(AlertDialog.BUTTON_POSITIVE).isAllCaps = false
 }
 
-fun Context.showSimpleDialog(title: String, message: String, isCancellable: Boolean = true, positiveButtonBlock: PositiveButtonBlock? = null) {
+fun Context.showSimpleDialog(title: String, message: String, isCancellable: Boolean = true, positiveButtonText: String? = null, positiveButtonBlock: PositiveButtonBlock? = null) {
     val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog)
         .setTitle(title)
         .setCancelable(isCancellable)
         .setMessage(message)
-        .setPositiveButton(resources.getString(R.string.key_ok_label)) { dialogInterface, _ ->
+        .setPositiveButton(positiveButtonText ?: resources.getString(R.string.key_ok_label)) { dialogInterface, _ ->
             dialogInterface.dismiss()
             positiveButtonBlock?.invoke()
         }

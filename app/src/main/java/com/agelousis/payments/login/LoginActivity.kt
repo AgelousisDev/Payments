@@ -67,6 +67,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                     userModel.biometrics = biometricsState
                     userModel.vat = 0
                     userModel.defaultPaymentAmount = 0.0
+                    userModel.defaultMessageTemplate = resources.getString(R.string.key_default_message_template_value)
                     dbManager?.userModel = userModel
                     uiScope.launch {
                         dbManager?.searchUser(

@@ -15,7 +15,9 @@ enum class OptionType {
     CHANGE_ID_CARD_NUMBER,
     CHANGE_SOCIAL_INSURANCE_NUMBER,
     VAT,
-    DEFAULT_PAYMENT_AMOUNT;
+    DEFAULT_PAYMENT_AMOUNT,
+    DEFAULT_MESSAGE_TEMPLATE;
+
 
     fun getLocalizedTitle(context: Context) =
         when(this) {
@@ -30,6 +32,7 @@ enum class OptionType {
             CHANGE_SOCIAL_INSURANCE_NUMBER -> context.resources.getString(R.string.key_social_insurance_number_label)
             VAT -> context.resources.getString(R.string.key_vat_label)
             DEFAULT_PAYMENT_AMOUNT -> context.resources.getString(R.string.key_default_payment_amount_label)
+            DEFAULT_MESSAGE_TEMPLATE -> context.resources.getString(R.string.key_default_message_template_label)
         }
 
     var userModel: UserModel? = null

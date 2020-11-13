@@ -36,6 +36,9 @@ fun setPersonalInformation(appCompatEditText: AppCompatEditText, optionType: Opt
             OptionType.DEFAULT_PAYMENT_AMOUNT ->
                 it.userModel?.defaultPaymentAmount?.toString()
                     ?: "0"
+            OptionType.DEFAULT_MESSAGE_TEMPLATE ->
+                it.userModel?.defaultMessageTemplate
+                    ?: appCompatEditText.context.resources.getString(R.string.key_empty_field_label)
             else -> null
         })
     }
