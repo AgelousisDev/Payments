@@ -7,13 +7,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.agelousis.payments.R
 import com.agelousis.payments.main.MainActivity
+import com.agelousis.payments.main.ui.history.listeners.PaymentLineChartGestureListener
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.models.PersonModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
-import com.agelousis.payments.utils.constants.Constants
-import com.agelousis.payments.utils.extensions.calendar
-import com.agelousis.payments.utils.extensions.toDateWith
+import com.agelousis.payments.utils.extensions.euroFormattedString
+import com.agelousis.payments.utils.extensions.toast
 import com.github.mikephil.charting.components.Description
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -44,7 +45,7 @@ class HistoryFragment: Fragment(R.layout.history_fragment_layout) {
     private fun addObservers() {
         viewModel.paymentsLiveData.observe(viewLifecycleOwner) { payments ->
             configureLineChart(
-                payments = payments.filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten().sortedByDescending { it.paymentMonthDate }
+                payments = payments.filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten().sortedBy { it.paymentMonthDate }
             )
         }
     }
@@ -59,49 +60,64 @@ class HistoryFragment: Fragment(R.layout.history_fragment_layout) {
     }
 
     private fun configureLineChart(payments: List<PaymentAmountModel>) {
-
         val desc = Description()
-        desc.text = resources.getString(R.string.key_payments_label)
-        desc.textSize = 20.0f
+        desc.text = ""
         lineChart.description = desc
 
+        lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         lineChart.xAxis.valueFormatter = object: ValueFormatter() {
-            val simpleDateFormat = SimpleDateFormat("dd MMM", Locale.ENGLISH)
-
             override fun getFormattedValue(value: Float) =
-                simpleDateFormat.format(Date(value.toLong() * 1000L))
+                SimpleDateFormat("dd MMM", Locale.US).format(value.toLong())
         }
-
+        lineChart.xAxis.isGranularityEnabled = true
+        lineChart.xAxis.setDrawLimitLinesBehindData(true)
+        lineChart.axisLeft.valueFormatter = object: ValueFormatter() {
+            override fun getFormattedValue(value: Float) =
+                value.toDouble().euroFormattedString
+        }
+        lineChart.axisRight.isEnabled = false
+        lineChart.onChartGestureListener = object: PaymentLineChartGestureListener(chart = lineChart) {
+            override fun onAmountSelected(amount: String) {
+                context?.toast(
+                    message = amount
+                )
+            }
+        }
         val entries = arrayListOf<Entry>()
         payments.forEach {
             entries.add(
                 Entry(
-                    it.paymentMonthDate?.calendar?.timeInMillis?.toFloat() ?: 0.0f,
+                    it.paymentMonthDate?.time?.toFloat() ?: 0.0f,
                     it.paymentAmount?.toFloat() ?: 0.0f
                 )
             )
         }
+        lineChart.xAxis.setLabelCount(entries.size, true)
         setLineChartData(
             entries = entries
         )
     }
 
     private fun setLineChartData(entries: List<Entry>) {
-       val dataSets = arrayListOf<ILineDataSet>()
-
-        val highLineDataSet = LineDataSet(entries, resources.getString(R.string.key_amount_label))
-        highLineDataSet.setDrawCircles(true)
-        highLineDataSet.circleRadius = 4.0f
-        highLineDataSet.setDrawValues(false)
-        highLineDataSet.lineWidth = 3.0f
-        highLineDataSet.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
-        highLineDataSet.color = ContextCompat.getColor(context ?: return, R.color.colorAccent)
-        highLineDataSet.setCircleColor(ContextCompat.getColor(context ?: return, R.color.colorAccent))
-        highLineDataSet.highLightColor = ContextCompat.getColor(context ?: return, R.color.green)
-        dataSets.add(highLineDataSet)
-
-        val lineData = LineData(dataSets)
-        lineChart.data = lineData
+        val dataSets = arrayListOf<ILineDataSet>()
+        dataSets.add(
+            LineDataSet(
+                entries,
+                resources.getString(R.string.key_amount_label)
+            ).also {
+                it.setDrawFilled(true)
+                it.fillDrawable = ContextCompat.getDrawable(context ?: return, R.drawable.graph_draw_gradient_background)
+                it.setDrawCircles(true)
+                it.circleRadius = 4.0f
+                it.setDrawValues(false)
+                it.lineWidth = 3.0f
+                it.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
+                it.color = ContextCompat.getColor(context ?: return, R.color.colorAccent)
+                it.setCircleColor(ContextCompat.getColor(context ?: return, R.color.colorAccent))
+                it.highLightColor = ContextCompat.getColor(context ?: return, R.color.green)
+            }
+        )
+        lineChart.data = LineData(dataSets)
         lineChart.invalidate()
     }
 
