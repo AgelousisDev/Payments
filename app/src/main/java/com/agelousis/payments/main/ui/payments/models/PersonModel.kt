@@ -36,7 +36,13 @@ data class PersonModel(val personId: Int? = null,
         get() = String.format("%s %s", firstName ?: "", surname ?: "")
 
     val capitalizedGroupName
-        get() = groupName?.capitalize(Locale.getDefault())
+        get() = if (groupName?.length ?: 0 > 4)
+                    String.format(
+                        "%s.",
+                        groupName?.capitalize(Locale.getDefault())?.take(n = 3)
+                    )
+                else
+                    groupName?.capitalize(Locale.getDefault())?.take(n = 4)
 
     fun getCommunicationData(context: Context): String {
         return ifLet(phone, email) {
@@ -57,7 +63,8 @@ data class PaymentAmountModel(val paymentId: Int? = null,
                               val paymentDate: String?,
                               val skipPayment: Boolean?,
                               val paymentNote: String?,
-                              val paymentDateNotification: Boolean?
+                              val paymentDateNotification: Boolean?,
+                              val singlePayment: Boolean?
 ): Parcelable {
 
     @IgnoredOnParcel var paymentAmountRowState = PaymentAmountRowState.NORMAL

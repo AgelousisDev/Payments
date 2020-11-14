@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.agelousis.payments.R
 import com.agelousis.payments.custom.enumerations.SwipeAction
+import com.agelousis.payments.custom.itemDecoration.DividerItemRecyclerViewDecorator
 import com.agelousis.payments.custom.itemDecoration.HeaderItemDecoration
 import com.agelousis.payments.custom.itemTouchHelper.SwipeItemTouchHelper
 import com.agelousis.payments.databinding.FragmentFilesLayoutBinding
@@ -95,6 +96,12 @@ class FilesFragment: Fragment(), FilePresenter {
             list = filteredList,
             presenter = this
         )
+        filesListRecyclerView.addItemDecoration(DividerItemRecyclerViewDecorator(
+            context = context ?: return,
+            margin = resources.getDimension(R.dimen.activity_horizontal_margin).toInt()
+        ) {
+            filteredList.getOrNull(index = it) !is HeaderModel
+        })
         filesListRecyclerView.addItemDecoration(
             HeaderItemDecoration(
                 parent = filesListRecyclerView

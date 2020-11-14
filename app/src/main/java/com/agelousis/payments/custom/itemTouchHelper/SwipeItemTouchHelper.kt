@@ -27,7 +27,7 @@ class SwipeItemTouchHelper(private val context: Context, private val swipeItemTy
             val itemView = viewHolder.itemView
             val height = itemView.bottom.toFloat() - itemView.top.toFloat()
             val width = height / 3
-            if (dX > 0) {
+            if (dX > 10) {
                 paint.color = ContextCompat.getColor(context, R.color.nativeBackgroundColor)
                 val background =
                     RectF(itemView.left.toFloat(), itemView.top.toFloat(), dX + (marginStart ?: 0.0f), itemView.bottom.toFloat())
@@ -35,7 +35,7 @@ class SwipeItemTouchHelper(private val context: Context, private val swipeItemTy
                 icon = swipeItemType.getIcons(context = context).getOrNull(index = 0) ?: return
                 val iconDest = RectF(itemView.left.toFloat() + width, itemView.top.toFloat() + width, itemView.left.toFloat() + 2 * width, itemView.bottom.toFloat() - width)
                 c.drawBitmap(icon, null, iconDest, paint)
-            } else {
+            } else if (dX < -10) {
                 paint.color = ContextCompat.getColor(context, R.color.nativeBackgroundColor)
                 val background = RectF(
                     itemView.right.toFloat() + dX,

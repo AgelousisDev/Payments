@@ -30,7 +30,7 @@ enum class OptionType {
             CHANGE_ADDRESS -> context.resources.getString(R.string.key_address_label)
             CHANGE_ID_CARD_NUMBER -> context.resources.getString(R.string.key_id_card_number_label)
             CHANGE_SOCIAL_INSURANCE_NUMBER -> context.resources.getString(R.string.key_social_insurance_number_label)
-            VAT -> context.resources.getString(R.string.key_vat_label)
+            VAT -> context.resources.getString(R.string.key_vat_percent_label)
             DEFAULT_PAYMENT_AMOUNT -> context.resources.getString(R.string.key_default_payment_amount_label)
             DEFAULT_MESSAGE_TEMPLATE -> context.resources.getString(R.string.key_default_message_template_label)
         }

@@ -16,7 +16,7 @@ class DividerItemRecyclerViewDecorator(context: Context, private val margin: Int
         styledAttributes.recycle()
     }
 
-    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+    override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         super.onDraw(c, parent, state)
         val right = parent.width - margin
         val itemCount = parent.adapter?.itemCount ?: return

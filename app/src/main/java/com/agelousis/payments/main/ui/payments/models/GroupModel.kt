@@ -15,6 +15,12 @@ data class GroupModel(val groupId: Int? = null,
     @IgnoredOnParcel var groupImageData: ByteArray? = null
 
     val capitalizedGroupName
-        get() = groupName?.capitalize(Locale.getDefault())
+        get() = if (groupName?.length ?: 0 > 4)
+            String.format(
+                "%s.",
+                groupName?.capitalize(Locale.getDefault())?.take(n = 3)
+            )
+        else
+            groupName?.capitalize(Locale.getDefault())?.take(n = 4)
 
 }

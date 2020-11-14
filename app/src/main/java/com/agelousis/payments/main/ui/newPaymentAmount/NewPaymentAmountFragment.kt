@@ -15,6 +15,7 @@ import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.views.currencyEditText.interfaces.AmountListener
+import com.agelousis.payments.views.detailsSwitch.interfaces.AppSwitchListener
 import kotlinx.android.synthetic.main.fragment_new_payment_amount_layout.*
 import java.util.*
 
@@ -67,7 +68,7 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
             )
         }
         if (dateDetailsLayout.dateValue.isNullOrEmpty() && args.paymentAmountDataModel?.paymentDate.isNullOrEmpty())
-            dateDetailsLayout.dateValue = Date() formattedDateWith Constants.GENERAL_DATE_FORMAT
+            dateDetailsLayout.dateValue = (args.lastPaymentMonthDate?.toCalendar(plusMonths = 1)?.time ?: Date()) formattedDateWith Constants.GENERAL_DATE_FORMAT
         if (paymentMonthDetailsLayout.dateValue == null && args.paymentAmountDataModel?.paymentMonth == null) {
             val paymentMonthCalendar = Date().calendar
             paymentMonthDetailsLayout.dateValue = String.format(
@@ -79,13 +80,17 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
         skipPaymentAppSwitchLayout.setOnClickListener {
             skipPaymentAppSwitchLayout.isChecked = !skipPaymentAppSwitchLayout.isChecked
         }
+        singlePaymentAppSwitchLayout.appSwitchListener = object: AppSwitchListener {
+            override fun onAppSwitchValueChanged(isChecked: Boolean) {
+                paymentMonthDetailsLayout.visibility = if (isChecked) View.GONE else View.VISIBLE
+            }
+        }
     }
 
     fun checkInputFields() {
         ifLet(
             amountLayout.doubleValue,
-            dateDetailsLayout.dateValue,
-            paymentMonthDetailsLayout.dateValue
+            dateDetailsLayout.dateValue
         ) {
             findNavController().previousBackStackEntry?.savedStateHandle?.set(
                 PAYMENT_AMOUNT_DATA_EXTRA,
@@ -95,14 +100,14 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
                     paymentDate = it.second().toString(),
                     skipPayment = skipPaymentAppSwitchLayout.isChecked,
                     paymentNote = notesField.text?.toString(),
-                    paymentDateNotification = paymentDateNotificationSwitchLayout.isChecked
+                    paymentDateNotification = paymentDateNotificationSwitchLayout.isChecked,
+                    singlePayment = singlePaymentAppSwitchLayout.isChecked
                 )
             )
             findNavController().popBackStack()
         } ?: run {
             amountLayout.errorState = amountLayout.doubleValue == null
             dateDetailsLayout.errorState = dateDetailsLayout.dateValue == null
-            paymentMonthDetailsLayout.errorState = paymentMonthDetailsLayout.dateValue == null
         }
     }
 

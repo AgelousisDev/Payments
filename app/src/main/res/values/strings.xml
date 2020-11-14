@@ -79,13 +79,13 @@
     <string name="key_address_label">Address</string>
     <string name="key_id_card_number_label">ID Number</string>
     <string name="key_social_insurance_number_label">Social Insurance Number</string>
-    <string name="key_invoice_number_label">Invoice Number</string>
+    <string name="key_invoice_number_label">Invoice No.</string>
     <string name="key_select_option_label">Select an option</string>
     <string name="key_select_user_from_backup_label">Select a User</string>
     <string name="key_license_expired_message">Your license has been expired. Please contact with the developers…</string>
     <string name="key_payment_month_label">Payment Month</string>
     <string name="key_total_amount_value_label">💶 Total %s</string>
-    <string name="key_vat_label">VAT(%)</string>
+    <string name="key_vat_percent_label">VAT(%)</string>
     <string name="key_vat_value_count_message">%s VAT should be counted here</string>
     <string name="key_payment_month_amount_value_label">%s payment %s</string>
     <string name="key_vat_amount_value_label">🧾 VAT %s %s</string>
@@ -129,6 +129,10 @@
     <string name="key_sms_label">SMS</string>
     <string name="key_send_sms_message">Do you want to send your message to the client?</string>
     <string name="key_send_label">Send</string>
+    <string name="key_invoice_label">Invoice</string>
+    <string name="key_total_price_label">Total Price</string>
+    <string name="key_subtotal_label">Subtotal</string>
+    <string name="key_vat_label">Vat</string>
 
     <string-array name="key_payment_action_array">
         <item>Call</item>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
     <data>
+        <import type="android.view.View" />
         <variable
             name="paymentAmountModel"
             type="com.agelousis.payments.main.ui.payments.models.PaymentAmountModel" />
@@ -48,6 +49,7 @@
                 android:id="@+id/paymentMonthDetailsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="@{paymentAmountModel.singlePayment == true ? View.GONE : View.VISIBLE}"
                 monthYearValue="@{paymentAmountModel.paymentMonth}"
                 app:label="@string/key_payment_month_label"
                 app:showLine="true"
@@ -83,6 +85,17 @@
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 appSwitchIsChecked="@{paymentAmountModel.skipPayment}"
                 app:appSwitchLabel="@string/key_skip_payment_label"
+                app:appSwitchShowLine="true" />
+
+            <com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
+                android:id="@+id/singlePaymentAppSwitchLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                appSwitchIsChecked="@{paymentAmountModel.singlePayment}"
+                app:appSwitchLabel="@string/key_single_payment_label"
                 app:appSwitchShowLine="true" />
 
             <com.google.android.material.textfield.TextInputLayout

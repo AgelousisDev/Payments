@@ -14,7 +14,13 @@ enum class SwipeItemType {
             ContextCompat.getDrawable(context, R.drawable.ic_delete)?.also {
                 it.setTint(ContextCompat.getColor(context, R.color.red))
             }?.fromVector(padding = 0),
-            ContextCompat.getDrawable(context, R.drawable.ic_pdf)?.also {
+            ContextCompat.getDrawable(
+                context,
+                when(this) {
+                    PERSON_ITEM -> R.drawable.ic_pdf
+                    PDF_ITEM -> R.drawable.ic_share
+                }
+            )?.also {
                 it.setTint(ContextCompat.getColor(context, R.color.colorAccent))
             }?.fromVector(padding = 0)
         )

@@ -54,7 +54,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@{groupModel.groupName != null ? groupModel.groupName : personModel.groupName}"
+                    android:text="@{groupModel.capitalizedGroupName != null ? groupModel.capitalizedGroupName : personModel.capitalizedGroupName}"
                     android:visibility="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? View.VISIBLE : View.GONE}"
                     android:textColor="@color/white"
                     android:textStyle="normal" />

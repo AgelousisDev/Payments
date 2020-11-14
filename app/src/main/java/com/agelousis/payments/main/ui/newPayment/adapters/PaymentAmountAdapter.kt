@@ -8,9 +8,7 @@ import com.agelousis.payments.databinding.PaymentAmountRowLayoutBinding
 import com.agelousis.payments.main.ui.newPayment.presenters.NewPaymentPresenter
 import com.agelousis.payments.main.ui.newPayment.viewHolders.PaymentAmountViewHolder
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
-import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.isSizeOne
-import com.agelousis.payments.utils.extensions.toDateWith
 
 class PaymentAmountAdapter(private val paymentModelList: ArrayList<PaymentAmountModel>, private val vat: Int?, private val presenter: NewPaymentPresenter): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -50,7 +48,7 @@ class PaymentAmountAdapter(private val paymentModelList: ArrayList<PaymentAmount
         )
         paymentModelList.clear()
         paymentModelList.addAll(
-            tempList.sortedByDescending { it.paymentDate?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT) }
+            tempList.sortedByDescending { it.paymentMonthDate }
         )
     }
 

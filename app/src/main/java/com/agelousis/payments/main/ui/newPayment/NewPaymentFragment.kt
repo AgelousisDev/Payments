@@ -198,7 +198,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         }
     }
 
-    private fun redirectToSMSAppIf(predicate: () -> Boolean) {
+    private fun redirectToSMSAppIf(payment: PaymentAmountModel, predicate: () -> Boolean) {
         if (predicate())
             context?.showTwoButtonsDialog(
                 title = resources.getString(R.string.key_sms_label),
@@ -207,7 +207,11 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                 positiveButtonBlock = {
                     context?.sendSMSMessage(
                         mobileNumber = binding?.phoneLayout?.value ?: "",
-                        message = binding?.messageTemplateField?.text?.toString() ?: ""
+                        message = String.format(
+                            "%s\n%s",
+                            binding?.messageTemplateField?.text?.toString() ?: "",
+                            payment.paymentMonth ?: payment.paymentDate ?: ""
+                        )
                     )
                 },
                 isCancellable = false
@@ -246,7 +250,9 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                     )
                 } ?: run {
                     availablePayments.add(paymentAmountModel)
-                    redirectToSMSAppIf {
+                    redirectToSMSAppIf(
+                        payment = paymentAmountModel
+                    ) {
                         !binding?.phoneLayout?.value.isNullOrEmpty()
                     }
                 }
