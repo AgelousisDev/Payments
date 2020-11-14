@@ -111,5 +111,17 @@
             android:name="paymentListData"
             app:argType="com.agelousis.payments.main.ui.payments.models.PaymentAmountModel[]" />
     </fragment>
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.agelousis.payments.main.ui.history.HistoryFragment"
+        android:label="HistoryFragment"
+        tools:layout="@layout/history_fragment_layout"/>
+    <action
+        android:id="@+id/action_global_historyFragment"
+        app:destination="@id/historyFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
 </navigation>

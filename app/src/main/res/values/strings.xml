@@ -133,6 +133,7 @@
     <string name="key_total_price_label">Total Price</string>
     <string name="key_subtotal_label">Subtotal</string>
     <string name="key_vat_label">Vat</string>
+    <string name="key_history_label">History</string>
 
     <string-array name="key_payment_action_array">
         <item>Call</item>

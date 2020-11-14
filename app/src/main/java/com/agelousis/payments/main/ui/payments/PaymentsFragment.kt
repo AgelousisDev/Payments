@@ -336,7 +336,10 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
         paymentListRecyclerView.scheduleLayoutAnimation()
         (paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
         (activity as? MainActivity)?.clearPaymentsMenuItemIsVisible = filteredList.filterIsInstance<PersonModel>().isNotEmpty()
-        (activity as? MainActivity)?.exportToExcelMenuItemIsVisible = filteredList.filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten().isNotEmpty()
+        filteredList.filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten().isNotEmpty().let {
+            (activity as? MainActivity)?.exportToExcelMenuItemIsVisible = it
+            (activity as? MainActivity)?.historyButtonIsVisible = it
+        }
     }
 
     fun navigateToPeriodFilterFragment() {

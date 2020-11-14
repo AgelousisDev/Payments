@@ -23,6 +23,7 @@ import com.agelousis.payments.group.GroupActivity
 import com.agelousis.payments.login.LoginActivity
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.enumerations.FloatingButtonType
+import com.agelousis.payments.main.ui.history.HistoryFragment
 import com.agelousis.payments.main.ui.files.FilesFragment
 import com.agelousis.payments.main.ui.newPayment.NewPaymentFragment
 import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
@@ -63,6 +64,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 navHostFragmentContainerView.findNavController().popBackStack(R.id.filesFragment, true)
                 navHostFragmentContainerView.findNavController().navigate(R.id.action_global_filesFragment)
             }
+            R.id.navigationGraph -> {
+                navHostFragmentContainerView.findNavController().popBackStack(R.id.historyFragment, true)
+                navHostFragmentContainerView.findNavController().navigate(R.id.action_global_historyFragment)
+            }
             R.id.navigationClearPayments ->
                 triggerPaymentsClearance()
             R.id.navigationExcelExport ->
@@ -81,6 +86,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 clearPaymentsMenuItemIsVisible = false
                 exportToExcelMenuItemIsVisible = false
                 exportDatabaseButtonIsVisible = true
+                historyButtonIsVisible = false
             }
             in PaymentsFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.app_name)
@@ -89,6 +95,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 clearPaymentsMenuItemIsVisible = true
                 exportToExcelMenuItemIsVisible = true
                 exportDatabaseButtonIsVisible = false
+                historyButtonIsVisible = true
             }
             in NewPaymentFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_person_info_label)
@@ -97,6 +104,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 clearPaymentsMenuItemIsVisible = false
                 exportToExcelMenuItemIsVisible = false
                 exportDatabaseButtonIsVisible = false
+                historyButtonIsVisible = false
             }
             in NewPaymentAmountFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_add_payment_label)
@@ -105,6 +113,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 clearPaymentsMenuItemIsVisible = false
                 exportToExcelMenuItemIsVisible = false
                 exportDatabaseButtonIsVisible = false
+                historyButtonIsVisible = false
             }
             in FilesFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_files_label)
@@ -112,6 +121,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 clearPaymentsMenuItemIsVisible = false
                 exportToExcelMenuItemIsVisible = false
                 exportDatabaseButtonIsVisible = false
+                historyButtonIsVisible = false
             }
             in PeriodFilterFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_filter_period_label)
@@ -120,6 +130,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 clearPaymentsMenuItemIsVisible = false
                 exportToExcelMenuItemIsVisible = false
                 exportDatabaseButtonIsVisible = false
+                historyButtonIsVisible = false
+            }
+            in HistoryFragment::class.java.name -> {
+                appBarTitle = resources.getString(R.string.key_history_label)
+                floatingButtonState = false
+                clearPaymentsMenuItemIsVisible = false
+                exportToExcelMenuItemIsVisible = false
+                exportDatabaseButtonIsVisible = false
+                historyButtonIsVisible = false
             }
         }
     }
@@ -190,6 +209,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         set(value) {
             field = value
             exportDatabaseButton.visibility = if (value) View.VISIBLE else View.GONE
+        }
+    var historyButtonIsVisible = false
+        set(value) {
+            field = value
+            navigationView?.menu?.findItem(R.id.navigationGraph)?.isVisible = value
         }
 
     override fun onBackPressed() {

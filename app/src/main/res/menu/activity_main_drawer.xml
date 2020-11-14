@@ -18,6 +18,10 @@
                     android:id="@+id/navigationFiles"
                     android:icon="@drawable/ic_pdf"
                     android:title="@string/key_files_label"/>
+                <item
+                    android:id="@+id/navigationGraph"
+                    android:icon="@drawable/ic_diagram"
+                    android:title="@string/key_history_label" />
             </group>
         </menu>
     </item>
