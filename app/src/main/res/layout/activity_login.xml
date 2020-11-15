@@ -6,6 +6,8 @@
         <import type="android.view.View" />
         <import type="com.agelousis.payments.login.SignInState" />
         <import type="com.agelousis.payments.utils.extensions.ExtensionsKt" />
+        <import type="com.agelousis.payments.utils.constants.Constants" />
+        <import type="android.content.Context" />
         <variable
             name="userModel"
             type="com.agelousis.payments.login.models.UserModel" />
@@ -110,6 +112,19 @@
                     android:background="@drawable/line_background" />
 
             </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="@{() -> presenter.onUIModeChanged(ExtensionsKt.getUiMode(context).theOther)}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@{ExtensionsKt.getUiMode(context).icon}"
+                tools:srcCompat="@drawable/ic_moon" />
 
             <LinearLayout
                 android:id="@+id/importLayout"

@@ -1,5 +1,7 @@
 package com.agelousis.payments.login.presenter
 
+import com.agelousis.payments.login.enumerations.UIMode
+
 interface LoginPresenter {
     fun onProfileSelect()
     fun onSignIn()
@@ -7,4 +9,5 @@ interface LoginPresenter {
     fun onImport()
     fun onUsersSelect()
     fun onBiometrics()
+    fun onUIModeChanged(uiMode: UIMode)
 }

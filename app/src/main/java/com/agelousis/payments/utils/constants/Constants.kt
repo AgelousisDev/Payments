@@ -18,6 +18,7 @@ object Constants {
     const val GENERAL_DATE_FORMAT = "dd/MM/yyyy"
     const val FILE_DATE_FORMAT = "yyyy_MM_dd_HH_mm_ss"
     const val MONTH_DATE_FORMAT = "MMMM yyyy"
+    const val GRAPH_DATE_FORMAT = "MMM yyyy"
     const val PDF_FILE_NAME_FORMAT_VALUE = "sample_%s.pdf"
     const val PDF_MIME_TYPE = "application/pdf"
     const val GOOGLE_DRIVE_URI = "content://com.google.android.apps.docs.storage"
@@ -32,6 +33,7 @@ object Constants {
     const val CSV_MIME_TYPE = "text/csv"
     const val SHARED_PREFERENCES_NAME = "preferences"
     const val SHARED_PREFERENCES_NOTIFICATION_REQUEST_CODE_KEY = "notification_request_code"
+    const val DARK_MODE_KEY = "dark_mode"
 
     object Colors {
         val colorPickerColors = intArrayOf(

@@ -19,6 +19,7 @@ import com.agelousis.payments.biometrics.BiometricsHelper
 import com.agelousis.payments.biometrics.BiometricsListener
 import com.agelousis.payments.database.DBManager
 import com.agelousis.payments.databinding.ActivityLoginBinding
+import com.agelousis.payments.login.enumerations.UIMode
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.login.presenter.LoginPresenter
 import com.agelousis.payments.login.viewModel.LoginViewModel
@@ -159,6 +160,10 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
         }
     }
 
+    override fun onUIModeChanged(uiMode: UIMode) {
+        isNightMode = uiMode == UIMode.DARK_MODE
+    }
+
     override fun onBackPressed() {
         when(signInState) {
             SignInState.SIGN_UP -> {
@@ -237,11 +242,13 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
         }
     }
 
-    private fun showUserSelectionFragment(users: List<UserModel>) =
-        UserSelectionFragment.show(
-            supportFragmentManager = supportFragmentManager,
-            users = ArrayList(users),
-        )
+    private fun showUserSelectionFragment(users: List<UserModel>) {
+        if (supportFragmentManager.findFragmentByTag(Constants.USER_SELECTION_FRAGMENT_TAG) == null)
+            UserSelectionFragment.show(
+                supportFragmentManager = supportFragmentManager,
+                users = ArrayList(users),
+            )
+    }
 
     private fun configureLoginState() {
         uiScope.launch {

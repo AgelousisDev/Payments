@@ -11,6 +11,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.*
 import android.graphics.drawable.Drawable
@@ -29,6 +30,7 @@ import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.biometric.BiometricManager
@@ -45,6 +47,7 @@ import com.agelousis.payments.BuildConfig
 import com.agelousis.payments.R
 import com.agelousis.payments.custom.picasso.CircleTransformation
 import com.agelousis.payments.database.SQLiteHelper
+import com.agelousis.payments.login.enumerations.UIMode
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.payments.utils.constants.Constants
@@ -684,6 +687,34 @@ val SharedPreferences.notificationRequestCode: Int
             putInt(Constants.SHARED_PREFERENCES_NOTIFICATION_REQUEST_CODE_KEY, requestCode + 1)
         }
         return requestCode
+    }
+
+val Context?.uiMode: UIMode
+    get() = when(this?.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)) {
+        Configuration.UI_MODE_NIGHT_NO -> UIMode.LIGHT_MODE
+        Configuration.UI_MODE_NIGHT_YES -> UIMode.DARK_MODE
+        else -> UIMode.LIGHT_MODE
+    }
+
+var SharedPreferences.isNightMode: Boolean
+    set(value) {
+        edit(
+            commit = true
+        ) {
+            putBoolean(Constants.DARK_MODE_KEY, value)
+        }
+    }
+    get() = getBoolean(Constants.DARK_MODE_KEY, false)
+
+var isNightMode: Boolean = false
+    set(value) {
+        field = value
+        AppCompatDelegate.setDefaultNightMode(
+            when(value) {
+                true -> AppCompatDelegate.MODE_NIGHT_YES
+                false -> AppCompatDelegate.MODE_NIGHT_NO
+            }
+        )
     }
 
 @BindingAdapter("picassoImagePath")

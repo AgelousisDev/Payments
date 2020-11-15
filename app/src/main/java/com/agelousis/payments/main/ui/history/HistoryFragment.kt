@@ -11,6 +11,7 @@ import com.agelousis.payments.main.ui.history.listeners.PaymentLineChartGestureL
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.models.PersonModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
+import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.euroFormattedString
 import com.agelousis.payments.utils.extensions.toast
 import com.github.mikephil.charting.components.Description
@@ -63,18 +64,21 @@ class HistoryFragment: Fragment(R.layout.history_fragment_layout) {
         val desc = Description()
         desc.text = ""
         lineChart.description = desc
-
+        lineChart.legend.isEnabled = false
+        lineChart.xAxis.textColor = ContextCompat.getColor(context ?: return, R.color.dayNightTextOnBackground)
         lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         lineChart.xAxis.valueFormatter = object: ValueFormatter() {
             override fun getFormattedValue(value: Float) =
-                SimpleDateFormat("dd MMM", Locale.US).format(value.toLong())
+                SimpleDateFormat(Constants.GRAPH_DATE_FORMAT, Locale.US).format(value.toLong())
         }
+        lineChart.xAxis.setAvoidFirstLastClipping(true)
         lineChart.xAxis.isGranularityEnabled = true
         lineChart.xAxis.setDrawLimitLinesBehindData(true)
         lineChart.axisLeft.valueFormatter = object: ValueFormatter() {
             override fun getFormattedValue(value: Float) =
                 value.toDouble().euroFormattedString
         }
+        lineChart.axisLeft.textColor = ContextCompat.getColor(context ?: return, R.color.dayNightTextOnBackground)
         lineChart.axisRight.isEnabled = false
         lineChart.onChartGestureListener = object: PaymentLineChartGestureListener(chart = lineChart) {
             override fun onAmountSelected(amount: String) {
