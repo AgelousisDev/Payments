@@ -71,12 +71,15 @@ class HistoryFragment: Fragment(R.layout.history_fragment_layout) {
             override fun getFormattedValue(value: Float) =
                 SimpleDateFormat(Constants.GRAPH_DATE_FORMAT, Locale.US).format(value.toLong())
         }
-        lineChart.xAxis.setAvoidFirstLastClipping(true)
+        //lineChart.xAxis.setAvoidFirstLastClipping(true)
         lineChart.xAxis.isGranularityEnabled = true
         lineChart.xAxis.setDrawLimitLinesBehindData(true)
         lineChart.axisLeft.valueFormatter = object: ValueFormatter() {
             override fun getFormattedValue(value: Float) =
-                value.toDouble().euroFormattedString
+                if (value == 0f)
+                    "0"
+                else
+                    value.toDouble().euroFormattedString
         }
         lineChart.axisLeft.textColor = ContextCompat.getColor(context ?: return, R.color.dayNightTextOnBackground)
         lineChart.axisRight.isEnabled = false
@@ -96,7 +99,9 @@ class HistoryFragment: Fragment(R.layout.history_fragment_layout) {
                 )
             )
         }
-        lineChart.xAxis.setLabelCount(entries.size, true)
+        //lineChart.xAxis.setLabelCount(entries.size, true)
+        lineChart.xAxis.granularity = 1f
+        //lineChart.setMaxVisibleValueCount(4)
         setLineChartData(
             entries = entries
         )
