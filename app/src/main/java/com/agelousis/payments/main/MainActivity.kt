@@ -223,7 +223,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (supportFragmentManager.currentNavigationFragment is PaymentsFragment)
             showSimpleDialog(
                 title = resources.getString(R.string.key_logout_label),
-                message = resources.getString(R.string.key_logout_message)
+                message = resources.getString(R.string.key_logout_message),
+                icon = R.drawable.ic_logout
             ) {
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
@@ -305,6 +306,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         showTwoButtonsDialog(
             title = resources.getString(R.string.key_export_database_label),
             message = resources.getString(R.string.key_export_message),
+            icon = R.drawable.ic_export,
             positiveButtonText = resources.getString(R.string.key_proceed_label),
             positiveButtonBlock = {
                 saveFile(
@@ -320,6 +322,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         showTwoButtonsDialog(
             title = resources.getString(R.string.key_warning_label),
             message = resources.getString(R.string.key_clear_all_payments_message),
+            icon = R.drawable.ic_clear_all,
             positiveButtonText = resources.getString(R.string.key_clear_label),
             positiveButtonBlock = {
                 uiScope.launch {

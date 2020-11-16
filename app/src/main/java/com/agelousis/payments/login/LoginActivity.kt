@@ -200,6 +200,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
             showTwoButtonsDialog(
                 title = resources.getString(R.string.key_biometrics_label),
                 message = resources.getString(R.string.key_enable_biometrics_label),
+                icon = R.drawable.ic_fingerprint,
                 negativeButtonBlock = {
                     closure(false)
                 },
@@ -303,6 +304,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
         showTwoButtonsDialog(
             title = resources.getString(R.string.key_import_label),
             message = resources.getString(R.string.key_import_message),
+            icon = R.drawable.ic_import,
             positiveButtonText = resources.getString(R.string.key_proceed_label),
             positiveButtonBlock = {
                 searchFile(
@@ -350,7 +352,8 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
             showSimpleDialog(
                 isCancellable = false,
                 title = resources.getString(R.string.key_warning_label),
-                message = resources.getString(R.string.key_license_expired_message)
+                message = resources.getString(R.string.key_license_expired_message),
+                icon = R.drawable.ic_license
             ) {
                 this@LoginActivity.finish()
             }

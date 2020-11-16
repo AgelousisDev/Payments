@@ -159,6 +159,8 @@ class FilesFragment: Fragment(), FilePresenter {
         context?.showTwoButtonsDialog(
             title = resources.getString(R.string.key_warning_label),
             message = resources.getString(R.string.key_delete_file_message),
+            icon = R.drawable.ic_delete,
+            isCancellable = false,
             negativeButtonBlock = {
                 (filesListRecyclerView.adapter as? FilesAdapter)?.restoreItem(
                     position = position

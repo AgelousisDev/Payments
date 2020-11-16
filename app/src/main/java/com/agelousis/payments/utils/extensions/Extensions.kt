@@ -192,11 +192,12 @@ infix fun Context.byteArrayFromInternalImage(imageName: String?) =
         bytesArray
     }
 
-fun Context.showTwoButtonsDialog(title: String, message: String, isCancellable: Boolean? = null, negativeButtonBlock: PositiveButtonBlock? = null,
+fun Context.showTwoButtonsDialog(title: String, message: String, icon: Int? = null, isCancellable: Boolean? = null, negativeButtonBlock: PositiveButtonBlock? = null,
                                  positiveButtonText: String? = null, positiveButtonBlock: PositiveButtonBlock) {
     val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog)
         .setTitle(title)
         .setMessage(message)
+        .setIcon(icon ?: 0)
         .setCancelable(isCancellable ?: true)
         .setNegativeButton(resources.getString(R.string.key_cancel_label)) { dialogInterface, _ ->
             dialogInterface.dismiss()
@@ -211,11 +212,12 @@ fun Context.showTwoButtonsDialog(title: String, message: String, isCancellable: 
     materialDialog.getButton(AlertDialog.BUTTON_POSITIVE).isAllCaps = false
 }
 
-fun Context.showSimpleDialog(title: String, message: String, isCancellable: Boolean = true, positiveButtonText: String? = null, positiveButtonBlock: PositiveButtonBlock? = null) {
+fun Context.showSimpleDialog(title: String, message: String, icon: Int? = null, isCancellable: Boolean = true, positiveButtonText: String? = null, positiveButtonBlock: PositiveButtonBlock? = null) {
     val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog)
         .setTitle(title)
         .setCancelable(isCancellable)
         .setMessage(message)
+        .setIcon(icon ?: 0)
         .setPositiveButton(positiveButtonText ?: resources.getString(R.string.key_ok_label)) { dialogInterface, _ ->
             dialogInterface.dismiss()
             positiveButtonBlock?.invoke()
