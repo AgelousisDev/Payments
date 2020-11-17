@@ -144,6 +144,22 @@ class DBManager(context: Context) {
         }
     }
 
+    suspend fun updateUserPassword(userId: Int, newPassword: String, updateSuccessBlock: UpdateSuccessBlock) {
+        withContext(Dispatchers.Default) {
+            database?.update(
+                SQLiteHelper.USERS_TABLE_NAME,
+                ContentValues().also { contentValues ->
+                    contentValues.put(SQLiteHelper.PASSWORD, newPassword)
+                },
+                "${SQLiteHelper.ID}=?",
+                arrayOf(userId.toString())
+            )
+            withContext(Dispatchers.Main) {
+                updateSuccessBlock()
+            }
+        }
+    }
+
     suspend fun updateUser(userModel: UserModel, userBlock: UserBlock) {
         withContext(Dispatchers.Default) {
             database?.update(

@@ -238,6 +238,20 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                    android:text="@string/key_forgot_password_label"
+                    android:textSize="10sp"
+                    android:onClick="@{() -> presenter.onForgotPassword(userModel.id)}"
+                    android:visibility="@{signInState == SignInState.LOGIN &amp;&amp; userModel != null ? View.VISIBLE : View.GONE}"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/passwordTextInputLayout"/>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>

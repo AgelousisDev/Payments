@@ -10,4 +10,5 @@ interface LoginPresenter {
     fun onUsersSelect()
     fun onBiometrics()
     fun onUIModeChanged(uiMode: UIMode)
+    fun onForgotPassword(userId: Int)
 }

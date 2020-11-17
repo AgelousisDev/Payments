@@ -134,6 +134,10 @@
     <string name="key_subtotal_label">Subtotal</string>
     <string name="key_vat_label">Vat</string>
     <string name="key_history_label">History</string>
+    <string name="key_forgot_password_label">Forgot password?</string>
+    <string name="key_new_password_hint">New password</string>
+    <string name="key_repeat_new_password_hint">Repeat new password</string>
+    <string name="key_change_password_label">Change Password</string>
 
     <string-array name="key_payment_action_array">
         <item>Call</item>
