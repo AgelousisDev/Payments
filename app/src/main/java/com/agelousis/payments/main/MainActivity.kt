@@ -144,6 +144,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onClick(p0: View?) {
+        currentFocus?.let {
+            hideKeyboard(
+                view = it
+            )
+        }
         when(p0?.id) {
             R.id.exportDatabaseButton ->
                 initializeDatabaseExport()

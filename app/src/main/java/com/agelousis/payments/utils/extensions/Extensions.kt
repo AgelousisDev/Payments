@@ -611,6 +611,11 @@ fun Context.showKeyboard(view: View) {
     inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
 }
 
+fun Context.hideKeyboard(view: View) {
+    val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
 fun Fragment.createFile(requestCode: Int, fileName: String) {
     val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
         // Filter to only show results that can be "opened", such as
