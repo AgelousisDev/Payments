@@ -21,6 +21,9 @@ fun setPersonalInformation(appCompatEditText: AppCompatEditText, optionType: Opt
             OptionType.CHANGE_PASSWORD ->
                 it.userModel?.password
                     ?: appCompatEditText.context.resources.getString(R.string.key_empty_field_label)
+            OptionType.CHANGE_PASSWORD_PIN ->
+                it.userModel?.passwordPin
+                    ?: appCompatEditText.context.resources.getString(R.string.key_empty_field_label)
             OptionType.CHANGE_ADDRESS ->
                 it.userModel?.address
                     ?: appCompatEditText.context.resources.getString(R.string.key_empty_field_label)

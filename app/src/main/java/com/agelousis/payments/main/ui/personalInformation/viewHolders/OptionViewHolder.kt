@@ -32,6 +32,10 @@ class OptionViewHolder(private val binding: OptionTypeRowLayoutBinding): Recycle
                     optionPresenter.onPasswordChange(
                         newPassword = it?.toString() ?: return@doAfterTextChanged
                     )
+                OptionType.CHANGE_PASSWORD_PIN ->
+                    optionPresenter.onPasswordPinChange(
+                        newPasswordPin = it?.toString() ?: return@doAfterTextChanged
+                    )
                 OptionType.CHANGE_ADDRESS ->
                     optionPresenter.onAddressChange(
                         newAddress = it?.toString() ?: return@doAfterTextChanged

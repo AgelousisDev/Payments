@@ -5,6 +5,13 @@ import androidx.databinding.BindingAdapter
 import com.agelousis.payments.forgotPassword.viewModels.ForgotPasswordViewModel
 import com.google.android.material.textfield.TextInputEditText
 
+@BindingAdapter("pinAfterTextChanged")
+fun setPinAfterTextChanged(textInputEditText: TextInputEditText, forgotPasswordViewModel: ForgotPasswordViewModel) {
+    textInputEditText.doAfterTextChanged {
+        forgotPasswordViewModel.pinLiveData.value = it?.toString() ?: return@doAfterTextChanged
+    }
+}
+
 @BindingAdapter("newPasswordAfterTextChanged")
 fun setNewPasswordAfterTextChanged(textInputEditText: TextInputEditText, forgotPasswordViewModel: ForgotPasswordViewModel) {
     textInputEditText.doAfterTextChanged {

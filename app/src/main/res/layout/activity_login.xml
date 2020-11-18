@@ -245,7 +245,7 @@
                     android:text="@string/key_forgot_password_label"
                     android:textSize="10sp"
                     android:onClick="@{() -> presenter.onForgotPassword(userModel.id)}"
-                    android:visibility="@{signInState == SignInState.LOGIN &amp;&amp; userModel != null ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{signInState == SignInState.LOGIN &amp;&amp; userModel != null &amp;&amp; userModel.passwordPin != null ? View.VISIBLE : View.GONE}"
                     android:clickable="true"
                     android:focusable="true"
                     android:background="?attr/selectableItemBackground"

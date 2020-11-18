@@ -20,6 +20,7 @@ typealias UserBlock = (UserModel?) -> Unit
 typealias UsersBlock = (List<UserModel>) -> Unit
 typealias InsertionSuccessBlock = () -> Unit
 typealias UpdateSuccessBlock = () -> Unit
+typealias UpdateSuccessClosure = (Boolean) -> Unit
 typealias PaymentsClosure = (List<Any>) -> Unit
 typealias PersonsClosure = (List<PersonModel>) -> Unit
 typealias DeletionSuccessBlock = () -> Unit
@@ -60,6 +61,7 @@ class DBManager(context: Context) {
                     contentValue.put(SQLiteHelper.VAT, userModel.vat)
                     contentValue.put(SQLiteHelper.DEFAULT_PAYMENT_AMOUNT, userModel.defaultPaymentAmount)
                     contentValue.put(SQLiteHelper.DEFAULT_MESSAGE_TEMPLATE, userModel.defaultMessageTemplate)
+                    contentValue.put(SQLiteHelper.PASSWORD_PIN, userModel.passwordPin)
                     database?.insert(SQLiteHelper.USERS_TABLE_NAME, null, contentValue)
                 }
                 cursor?.close()
@@ -75,7 +77,7 @@ class DBManager(context: Context) {
         withContext(Dispatchers.Default) {
             val cursor = database?.query(
                 SQLiteHelper.USERS_TABLE_NAME,
-                arrayOf(SQLiteHelper.ID, SQLiteHelper.USERNAME, SQLiteHelper.PASSWORD, SQLiteHelper.BIOMETRICS, SQLiteHelper.PROFILE_IMAGE, SQLiteHelper.ADDRESS, SQLiteHelper.ID_CARD_NUMBER, SQLiteHelper.SOCIAL_INSURANCE_NUMBER, SQLiteHelper.FIRST_NAME, SQLiteHelper.SURNAME, SQLiteHelper.PROFILE_IMAGE_DATA, SQLiteHelper.VAT, SQLiteHelper.DEFAULT_PAYMENT_AMOUNT, SQLiteHelper.DEFAULT_MESSAGE_TEMPLATE),
+                arrayOf(SQLiteHelper.ID, SQLiteHelper.USERNAME, SQLiteHelper.PASSWORD, SQLiteHelper.BIOMETRICS, SQLiteHelper.PROFILE_IMAGE, SQLiteHelper.ADDRESS, SQLiteHelper.ID_CARD_NUMBER, SQLiteHelper.SOCIAL_INSURANCE_NUMBER, SQLiteHelper.FIRST_NAME, SQLiteHelper.SURNAME, SQLiteHelper.PROFILE_IMAGE_DATA, SQLiteHelper.VAT, SQLiteHelper.DEFAULT_PAYMENT_AMOUNT, SQLiteHelper.DEFAULT_MESSAGE_TEMPLATE, SQLiteHelper.PASSWORD_PIN),
                 "${SQLiteHelper.USERNAME}=? AND ${SQLiteHelper.PASSWORD}=?",
                 arrayOf(userModel.username, userModel.password),
                 null,
@@ -98,7 +100,8 @@ class DBManager(context: Context) {
                     lastName = cursor?.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.SURNAME)),
                     vat = cursor?.getIntOrNull(cursor.getColumnIndex(SQLiteHelper.VAT)),
                     defaultPaymentAmount = cursor?.getDoubleOrNull(cursor.getColumnIndex(SQLiteHelper.DEFAULT_PAYMENT_AMOUNT)),
-                    defaultMessageTemplate = cursor?.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.DEFAULT_MESSAGE_TEMPLATE))
+                    defaultMessageTemplate = cursor?.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.DEFAULT_MESSAGE_TEMPLATE)),
+                    passwordPin = cursor?.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.PASSWORD_PIN))
                 ).also {
                     it.profileImageData = cursor?.getBlobOrNull(cursor.getColumnIndex(SQLiteHelper.PROFILE_IMAGE_DATA))
                 }
@@ -114,7 +117,7 @@ class DBManager(context: Context) {
     suspend fun checkUsers(usersBlock: UsersBlock) {
         withContext(Dispatchers.Default) {
             val usersList = arrayListOf<UserModel>()
-            val cursor = database?.query(SQLiteHelper.USERS_TABLE_NAME, arrayOf(SQLiteHelper.ID, SQLiteHelper.USERNAME, SQLiteHelper.PASSWORD, SQLiteHelper.BIOMETRICS, SQLiteHelper.PROFILE_IMAGE, SQLiteHelper.ADDRESS, SQLiteHelper.ID_CARD_NUMBER, SQLiteHelper.SOCIAL_INSURANCE_NUMBER, SQLiteHelper.FIRST_NAME, SQLiteHelper.SURNAME, SQLiteHelper.PROFILE_IMAGE_DATA, SQLiteHelper.VAT, SQLiteHelper.DEFAULT_PAYMENT_AMOUNT, SQLiteHelper.DEFAULT_MESSAGE_TEMPLATE), null, null, null, null, null)
+            val cursor = database?.query(SQLiteHelper.USERS_TABLE_NAME, arrayOf(SQLiteHelper.ID, SQLiteHelper.USERNAME, SQLiteHelper.PASSWORD, SQLiteHelper.BIOMETRICS, SQLiteHelper.PROFILE_IMAGE, SQLiteHelper.ADDRESS, SQLiteHelper.ID_CARD_NUMBER, SQLiteHelper.SOCIAL_INSURANCE_NUMBER, SQLiteHelper.FIRST_NAME, SQLiteHelper.SURNAME, SQLiteHelper.PROFILE_IMAGE_DATA, SQLiteHelper.VAT, SQLiteHelper.DEFAULT_PAYMENT_AMOUNT, SQLiteHelper.DEFAULT_MESSAGE_TEMPLATE, SQLiteHelper.PASSWORD_PIN), null, null, null, null, null)
             if (cursor?.moveToFirst() == true)
                 do {
                     usersList.add(
@@ -131,7 +134,8 @@ class DBManager(context: Context) {
                             lastName = cursor.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.SURNAME)),
                             vat = cursor.getIntOrNull(cursor.getColumnIndex(SQLiteHelper.VAT)),
                             defaultPaymentAmount = cursor.getDoubleOrNull(cursor.getColumnIndex(SQLiteHelper.DEFAULT_PAYMENT_AMOUNT)),
-                            defaultMessageTemplate = cursor.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.DEFAULT_MESSAGE_TEMPLATE))
+                            defaultMessageTemplate = cursor.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.DEFAULT_MESSAGE_TEMPLATE)),
+                            passwordPin = cursor.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.PASSWORD_PIN))
                         ).also {
                             it.profileImageData = cursor.getBlobOrNull(cursor.getColumnIndex(SQLiteHelper.PROFILE_IMAGE_DATA))
                         }
@@ -144,18 +148,18 @@ class DBManager(context: Context) {
         }
     }
 
-    suspend fun updateUserPassword(userId: Int, newPassword: String, updateSuccessBlock: UpdateSuccessBlock) {
+    suspend fun updateUserPassword(userId: Int, pin: String, newPassword: String, updateSuccessClosure: UpdateSuccessClosure) {
         withContext(Dispatchers.Default) {
-            database?.update(
+            val status = database?.update(
                 SQLiteHelper.USERS_TABLE_NAME,
                 ContentValues().also { contentValues ->
                     contentValues.put(SQLiteHelper.PASSWORD, newPassword)
                 },
-                "${SQLiteHelper.ID}=?",
-                arrayOf(userId.toString())
+                "${SQLiteHelper.ID}=? AND ${SQLiteHelper.PASSWORD_PIN}=?",
+                arrayOf(userId.toString(), pin)
             )
             withContext(Dispatchers.Main) {
-                updateSuccessBlock()
+                updateSuccessClosure(status ?: 0 > 0)
             }
         }
     }
@@ -178,6 +182,7 @@ class DBManager(context: Context) {
                     contentValues.put(SQLiteHelper.VAT, userModel.vat)
                     contentValues.put(SQLiteHelper.DEFAULT_PAYMENT_AMOUNT, userModel.defaultPaymentAmount)
                     contentValues.put(SQLiteHelper.DEFAULT_MESSAGE_TEMPLATE, userModel.defaultMessageTemplate)
+                    contentValues.put(SQLiteHelper.PASSWORD_PIN, userModel.passwordPin)
                 },
                 "${SQLiteHelper.ID}=?",
                 arrayOf(userModel.id?.toString())

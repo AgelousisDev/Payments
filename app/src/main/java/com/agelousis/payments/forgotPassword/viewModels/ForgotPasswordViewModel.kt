@@ -7,17 +7,19 @@ import com.agelousis.payments.database.DBManager
 
 class ForgotPasswordViewModel: ViewModel() {
 
+    val pinLiveData by lazy { MutableLiveData<String>() }
     val newPasswordLiveData by lazy { MutableLiveData<String>() }
     val repeatNewPasswordLiveData by lazy { MutableLiveData<String>() }
     val updatePasswordLiveData by lazy { MutableLiveData<Boolean>() }
 
-    suspend fun updatePassword(context: Context, userId: Int) {
+    suspend fun updatePassword(context: Context, userId: Int, pin: String) {
         val dbManager = DBManager(context = context)
         dbManager.updateUserPassword(
             userId = userId,
-            newPassword = repeatNewPasswordLiveData.value ?: return
+            pin = pin,
+            newPassword = repeatNewPasswordLiveData.value ?: return,
         ) {
-            updatePasswordLiveData.value = true
+            updatePasswordLiveData.value = it
         }
     }
 

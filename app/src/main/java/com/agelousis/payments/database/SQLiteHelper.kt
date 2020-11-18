@@ -30,6 +30,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         const val VAT = "vat"
         const val DEFAULT_PAYMENT_AMOUNT = "default_payment_amount"
         const val DEFAULT_MESSAGE_TEMPLATE = "default_message_template"
+        const val PASSWORD_PIN = "password_pin"
 
         // Groups Table Columns
         const val GROUP_NAME = "group_name"
@@ -76,7 +77,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         private const val USERS_TABLE_CREATION_QUERY = "CREATE TABLE $USERS_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "$USERNAME TEXT, $PASSWORD TEXT, $BIOMETRICS BOOLEAN, $PROFILE_IMAGE TEXT, $ADDRESS TEXT, $ID_CARD_NUMBER TEXT, " +
                 "$SOCIAL_INSURANCE_NUMBER TEXT, $FIRST_NAME TEXT, $SURNAME TEXT, $PROFILE_IMAGE_DATA BLOB, $VAT INTEGER," +
-                "$DEFAULT_PAYMENT_AMOUNT DOUBLE, $DEFAULT_MESSAGE_TEMPLATE TEXT);"
+                "$DEFAULT_PAYMENT_AMOUNT DOUBLE, $DEFAULT_MESSAGE_TEMPLATE TEXT, $PASSWORD_PIN TEXT);"
 
         //Creating groups table query
         private const val GROUPS_TABLE_CREATION_QUERY = "CREATE TABLE $GROUPS_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT, " +

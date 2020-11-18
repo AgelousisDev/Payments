@@ -62,6 +62,11 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
         newUserModel?.password = newPassword
     }
 
+    override fun onPasswordPinChange(newPasswordPin: String) {
+        if (newPasswordPin == resources.getString(R.string.key_empty_field_label)) return
+        newUserModel?.passwordPin = newPasswordPin
+    }
+
     override fun onBiometricsState(state: Boolean) {
         newUserModel?.biometrics = state
     }
@@ -112,6 +117,9 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
                 it.userModel = newUserModel
             },
             OptionType.CHANGE_PASSWORD.also {
+                it.userModel = newUserModel
+            },
+            OptionType.CHANGE_PASSWORD_PIN.also {
                 it.userModel = newUserModel
             },
             OptionType.CHANGE_PROFILE_IMAGE.also {

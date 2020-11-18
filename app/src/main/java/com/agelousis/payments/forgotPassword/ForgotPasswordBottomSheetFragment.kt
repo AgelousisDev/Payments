@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
+import com.agelousis.payments.R
 import com.agelousis.payments.databinding.ForgotPasswordFragmentLayoutBinding
 import com.agelousis.payments.forgotPassword.viewModels.ForgotPasswordViewModel
 import com.agelousis.payments.utils.constants.Constants
+import com.agelousis.payments.utils.extensions.toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +39,8 @@ class ForgotPasswordBottomSheetFragment: BottomSheetDialogFragment(), ForgotPass
         uiScope.launch {
             viewModel.updatePassword(
                 context = context ?: return@launch,
-                userId = userId ?: return@launch
+                userId = userId ?: return@launch,
+                pin = viewModel.pinLiveData.value ?: return@launch
             )
         }
     }
@@ -65,14 +68,28 @@ class ForgotPasswordBottomSheetFragment: BottomSheetDialogFragment(), ForgotPass
     }
 
     private fun addObservers() {
+        viewModel.pinLiveData.observe(viewLifecycleOwner) {
+            binding?.buttonState = !it.isNullOrEmpty() &&
+                    !viewModel.newPasswordLiveData.value.isNullOrEmpty() &&
+                    !viewModel.repeatNewPasswordLiveData.value.isNullOrEmpty()
+        }
         viewModel.newPasswordLiveData.observe(viewLifecycleOwner) {
-            binding?.buttonState = it == viewModel.repeatNewPasswordLiveData.value
+            binding?.buttonState = it == viewModel.repeatNewPasswordLiveData.value && !viewModel.pinLiveData.value.isNullOrEmpty()
         }
         viewModel.repeatNewPasswordLiveData.observe(viewLifecycleOwner) {
-            binding?.buttonState = it == viewModel.newPasswordLiveData.value
+            binding?.buttonState = it == viewModel.newPasswordLiveData.value && !viewModel.pinLiveData.value.isNullOrEmpty()
         }
         viewModel.updatePasswordLiveData.observe(viewLifecycleOwner) {
-            dismiss()
+            if (it) {
+                context?.toast(
+                    message = resources.getString(R.string.key_password_changed_successfully_message)
+                )
+                dismiss()
+            }
+            else
+                context?.toast(
+                    message = resources.getString(R.string.key_invalid_pin_message)
+                )
         }
     }
 

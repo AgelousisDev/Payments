@@ -9,6 +9,7 @@ enum class OptionType {
     CHANGE_LAST_NAME,
     CHANGE_USERNAME,
     CHANGE_PASSWORD,
+    CHANGE_PASSWORD_PIN,
     CHANGE_PROFILE_IMAGE,
     CHANGE_BIOMETRICS_STATE,
     CHANGE_ADDRESS,
@@ -25,6 +26,7 @@ enum class OptionType {
             CHANGE_LAST_NAME -> context.resources.getString(R.string.key_surname_label)
             CHANGE_USERNAME -> context.resources.getString(R.string.key_username_label)
             CHANGE_PASSWORD -> context.resources.getString(R.string.key_password_label)
+            CHANGE_PASSWORD_PIN -> context.resources.getString(R.string.key_forgot_password_pin_hint)
             CHANGE_PROFILE_IMAGE -> context.resources.getString(R.string.key_change_profile_picture_label)
             CHANGE_BIOMETRICS_STATE -> context.resources.getString(R.string.key_biometrics_label)
             CHANGE_ADDRESS -> context.resources.getString(R.string.key_address_label)
