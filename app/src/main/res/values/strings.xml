@@ -105,9 +105,6 @@
     <string name="key_payment_setting_label">Payment Settings</string>
     <string name="key_default_payment_amount_label">Default payment amount</string>
     <string name="key_payment_type_label">Payment Type</string>
-    <string name="key_cash_payment_label">💶 Cash Payment</string>
-    <string name="key_online_payment_label">📱 Online Payment</string>
-    <string name="key_check_payment_label">🧾 Check Payment</string>
     <string name="key_export_payments_to_csv_label">Export to CSV</string>
     <string name="key_filter_period_label">Period Filter</string>
     <string name="key_minimum_payment_month_label">Start Date</string>
@@ -138,6 +135,12 @@
     <string name="key_new_password_hint">New password</string>
     <string name="key_repeat_new_password_hint">Repeat new password</string>
     <string name="key_change_password_label">Change Password</string>
+
+    <string-array name="key_payment_type_array">
+        <item>Cash Payment</item>
+        <item>Online Payment</item>
+        <item>Check Payment</item>
+    </string-array>
 
     <string-array name="key_payment_action_array">
         <item>Call</item>

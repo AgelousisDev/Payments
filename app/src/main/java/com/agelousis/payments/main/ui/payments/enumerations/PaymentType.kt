@@ -10,9 +10,9 @@ enum class PaymentType {
 
     fun getLocalizedTitle(resources: Resources) =
         when(this) {
-            CASH_PAYMENT -> resources.getString(R.string.key_cash_payment_label)
-            ONLINE_PAYMENT -> resources.getString(R.string.key_online_payment_label)
-            CHECK_PAYMENT -> resources.getString(R.string.key_check_payment_label)
+            CASH_PAYMENT -> resources.getStringArray(R.array.key_payment_type_array)[0]
+            ONLINE_PAYMENT -> resources.getStringArray(R.array.key_payment_type_array)[1]
+            CHECK_PAYMENT -> resources.getStringArray(R.array.key_payment_type_array)[2]
         }
 
 }

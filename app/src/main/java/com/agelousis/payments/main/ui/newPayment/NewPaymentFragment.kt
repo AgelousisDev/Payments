@@ -20,7 +20,6 @@ import com.agelousis.payments.main.ui.newPayment.presenters.NewPaymentPresenter
 import com.agelousis.payments.main.ui.newPayment.viewModels.NewPaymentViewModel
 import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
 import com.agelousis.payments.main.ui.payments.enumerations.PaymentType
-import com.agelousis.payments.main.ui.payments.extensions.showPaymentsTypeMenu
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.models.PersonModel
@@ -147,9 +146,11 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
 
     private fun setupUI() {
         paymentTypeLayout.setOnDetailsPressed {
-            context?.showPaymentsTypeMenu(
-                anchor = it
-            ) { paymentType ->
+            context?.showListDialog(
+                title = resources.getString(R.string.key_payment_type_label),
+                items = resources.getStringArray(R.array.key_payment_type_array).toList()
+            ) {
+                val paymentType = PaymentType.values().getOrNull(index = it) ?: return@showListDialog
                 selectedPaymentType = paymentType
                 binding?.paymentTypeLayout?.value = paymentType.getLocalizedTitle(
                     resources = resources
@@ -254,7 +255,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                     redirectToSMSAppIf(
                         payment = paymentAmountModel
                     ) {
-                        !binding?.phoneLayout?.value.isNullOrEmpty()
+                        !currentPersonModel?.phone.isNullOrEmpty()
                     }
                 }
                 (paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
