@@ -19,7 +19,7 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:background="@color/whiteTwo"
+        android:background="@color/nativeBackgroundColor"
         android:onClick="@{() -> presenter.onGroupSelected(groupModel)}">
 
         <com.google.android.material.textview.MaterialTextView
