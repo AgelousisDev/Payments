@@ -3,6 +3,7 @@ package com.agelousis.payments.main.ui.personalInformation
 import android.animation.Animator
 import android.app.Activity
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,13 +21,14 @@ import com.agelousis.payments.main.ui.files.models.HeaderModel
 import com.agelousis.payments.main.ui.personalInformation.adapters.OptionTypesAdapter
 import com.agelousis.payments.main.ui.personalInformation.models.OptionType
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
+import com.agelousis.payments.main.ui.personalInformation.presenter.PersonalInformationPresenter
 import com.agelousis.payments.utils.extensions.*
 import kotlinx.android.synthetic.main.fragment_personal_information_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.AnimatorListener {
+class PersonalInformationFragment: Fragment(), OptionPresenter, PersonalInformationPresenter, Animator.AnimatorListener {
 
     override fun onAnimationCancel(animation: Animator?) {}
     override fun onAnimationRepeat(animation: Animator?) {}
@@ -98,6 +100,14 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
         newUserModel?.defaultMessageTemplate = newMessageTemplate
     }
 
+    override fun onDatabaseExport() {
+        (activity as? MainActivity)?.initializeDatabaseExport()
+    }
+
+    override fun onDeleteUser() {
+        initializeUserDeletion()
+    }
+
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val dbManager by lazy { context?.let { DBManager(context = it) } }
     private val newUserModel by lazy { (activity as? MainActivity)?.userModel?.copy() }
@@ -161,6 +171,7 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
             false
         ).also {
             it.userModel = (activity as? MainActivity)?.userModel
+            it.presenter = this
         }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -189,6 +200,7 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
         optionRecyclerView.setOnScrollChangeListener { _, _, _, _, _ ->
             headerConstraintLayout.elevation = if (optionRecyclerView.canScrollVertically(-1)) 8.inPixel else 0.0f
             (activity as? MainActivity)?.floatingButtonState = optionRecyclerView.canScrollVertically(1)
+            footerActionLayout.visibility = if (!optionRecyclerView.canScrollVertically(1) && footerActionLayout.visibility == View.GONE) View.VISIBLE else View.GONE
         }
     }
 
@@ -214,6 +226,26 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
                 message = resources.getString(R.string.key_no_changes_message)
             )
             findNavController().popBackStack()
+        }
+    }
+
+    private fun initializeUserDeletion() {
+        context?.showTwoButtonsDialog(
+            title = resources.getString(R.string.key_delete_label),
+            message = resources.getString(R.string.key_delete_user_message),
+            positiveButtonText = resources.getString(R.string.key_delete_label),
+            positiveButtonBlock = this::deleteUser
+        )
+    }
+
+    private fun deleteUser() {
+        uiScope.launch {
+            dbManager?.deleteUser(
+                userId = (activity as? MainActivity)?.userModel?.id ?: return@launch
+            ) {
+                startActivity(Intent(context, LoginActivity::class.java))
+                activity?.finish()
+            }
         }
     }
 

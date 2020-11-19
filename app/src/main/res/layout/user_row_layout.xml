@@ -12,7 +12,7 @@
             type="com.agelousis.payments.userSelection.presenters.UserSelectionPresenter" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="wrap_content"
+    android:layout_width="100dp"
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
@@ -53,11 +53,14 @@
 
     <com.google.android.material.textview.MaterialTextView
         style="@style/TextViewTitleLabel"
-        android:layout_width="wrap_content"
+        android:id="@+id/usernameTextView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_margin="@dimen/nav_header_vertical_spacing"
         android:singleLine="true"
-        android:maxLines="1"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
         android:text="@{userModel.username}"
         tools:text="vAgelousis"
         app:layout_constraintEnd_toEndOf="parent"

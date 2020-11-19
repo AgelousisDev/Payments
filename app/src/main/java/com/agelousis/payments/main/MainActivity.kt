@@ -85,7 +85,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 floatingButtonImage = R.drawable.ic_check
                 clearPaymentsMenuItemIsVisible = false
                 exportToExcelMenuItemIsVisible = false
-                exportDatabaseButtonIsVisible = true
                 historyButtonIsVisible = false
             }
             in PaymentsFragment::class.java.name -> {
@@ -94,7 +93,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 floatingButtonImage = R.drawable.ic_add_group
                 clearPaymentsMenuItemIsVisible = true
                 exportToExcelMenuItemIsVisible = true
-                exportDatabaseButtonIsVisible = false
                 historyButtonIsVisible = true
             }
             in NewPaymentFragment::class.java.name -> {
@@ -103,7 +101,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 floatingButtonImage = R.drawable.ic_check
                 clearPaymentsMenuItemIsVisible = false
                 exportToExcelMenuItemIsVisible = false
-                exportDatabaseButtonIsVisible = false
                 historyButtonIsVisible = false
             }
             in NewPaymentAmountFragment::class.java.name -> {
@@ -112,7 +109,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 floatingButtonImage = R.drawable.ic_check
                 clearPaymentsMenuItemIsVisible = false
                 exportToExcelMenuItemIsVisible = false
-                exportDatabaseButtonIsVisible = false
                 historyButtonIsVisible = false
             }
             in FilesFragment::class.java.name -> {
@@ -120,7 +116,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 floatingButtonState = false
                 clearPaymentsMenuItemIsVisible = false
                 exportToExcelMenuItemIsVisible = false
-                exportDatabaseButtonIsVisible = false
                 historyButtonIsVisible = false
             }
             in PeriodFilterFragment::class.java.name -> {
@@ -129,7 +124,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 floatingButtonImage = R.drawable.ic_table
                 clearPaymentsMenuItemIsVisible = false
                 exportToExcelMenuItemIsVisible = false
-                exportDatabaseButtonIsVisible = false
                 historyButtonIsVisible = false
             }
             in HistoryFragment::class.java.name -> {
@@ -137,7 +131,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 floatingButtonState = false
                 clearPaymentsMenuItemIsVisible = false
                 exportToExcelMenuItemIsVisible = false
-                exportDatabaseButtonIsVisible = false
                 historyButtonIsVisible = false
             }
         }
@@ -149,29 +142,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 view = it
             )
         }
-        when(p0?.id) {
-            R.id.exportDatabaseButton ->
-                initializeDatabaseExport()
-            R.id.floatingButton -> {
-                when(navHostFragmentContainerView.findNavController().currentDestination?.id) {
-                    R.id.personalInformationFragment ->
-                        (supportFragmentManager.currentNavigationFragment as? PersonalInformationFragment)?.playProfileSuccessAnimation()
-                    R.id.paymentsFragment -> startGroupActivity()
-                    R.id.newPaymentFragment ->
-                        when(floatingButtonType) {
-                            FloatingButtonType.NORMAL ->
-                                (supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.checkInputFields()
-                            FloatingButtonType.NEGATIVE -> {
-                                (supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.dismissPayment()
-                                returnFloatingButtonBackToNormal()
-                            }
-                        }
-                    R.id.newPaymentAmountFragment ->
-                        (supportFragmentManager.currentNavigationFragment as? NewPaymentAmountFragment)?.checkInputFields()
-                    R.id.periodFilterFragment ->
-                        (supportFragmentManager.currentNavigationFragment as? PeriodFilterFragment)?.initializeExportToExcelOperation()
+        when(navHostFragmentContainerView.findNavController().currentDestination?.id) {
+            R.id.personalInformationFragment ->
+                (supportFragmentManager.currentNavigationFragment as? PersonalInformationFragment)?.playProfileSuccessAnimation()
+            R.id.paymentsFragment -> startGroupActivity()
+            R.id.newPaymentFragment ->
+                when(floatingButtonType) {
+                    FloatingButtonType.NORMAL ->
+                        (supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.checkInputFields()
+                    FloatingButtonType.NEGATIVE -> {
+                        (supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.dismissPayment()
+                        returnFloatingButtonBackToNormal()
+                    }
                 }
-            }
+            R.id.newPaymentAmountFragment ->
+                (supportFragmentManager.currentNavigationFragment as? NewPaymentAmountFragment)?.checkInputFields()
+            R.id.periodFilterFragment ->
+                (supportFragmentManager.currentNavigationFragment as? PeriodFilterFragment)?.initializeExportToExcelOperation()
         }
     }
 
@@ -209,11 +196,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         set(value) {
             field = value
             navigationView?.menu?.findItem(R.id.navigationExcelExport)?.isVisible = value
-        }
-    private var exportDatabaseButtonIsVisible = false
-        set(value) {
-            field = value
-            exportDatabaseButton.visibility = if (value) View.VISIBLE else View.GONE
         }
     var historyButtonIsVisible = false
         set(value) {
@@ -276,7 +258,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setupUI() {
         floatingButton.setOnClickListener(this)
-        exportDatabaseButton.setOnClickListener(this)
     }
 
     private fun addInactiveGroup() {
@@ -307,7 +288,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private fun initializeDatabaseExport() {
+    fun initializeDatabaseExport() {
         showTwoButtonsDialog(
             title = resources.getString(R.string.key_export_database_label),
             message = resources.getString(R.string.key_export_message),

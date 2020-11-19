@@ -6,6 +6,9 @@
         <variable
             name="userModel"
             type="com.agelousis.payments.login.models.UserModel" />
+        <variable
+            name="presenter"
+            type="com.agelousis.payments.main.ui.personalInformation.presenter.PersonalInformationPresenter" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -65,7 +68,7 @@
         android:layoutAnimation="@anim/layout_animation_fall_down"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/footerActionLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/headerConstraintLayout" />
@@ -84,6 +87,48 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <LinearLayout
+        android:id="@+id/footerActionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/optionRecyclerView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/exportDatabaseButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:text="@string/key_export_database_label"
+            android:textAllCaps="false"
+            android:fontFamily="@font/ubuntu_light"
+            android:onClick="@{() -> presenter.onDatabaseExport()}"
+            app:cornerRadius="12dp"
+            app:icon="@drawable/ic_export"
+            app:iconSize="24dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/deleteUserButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:text="@string/key_delete_user_label"
+            android:textAllCaps="false"
+            android:fontFamily="@font/ubuntu_light"
+            android:onClick="@{() -> presenter.onDeleteUser()}"
+            app:cornerRadius="12dp"
+            app:icon="@drawable/ic_delete"
+            app:iconSize="24dp"
+            app:backgroundTint="@color/red" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

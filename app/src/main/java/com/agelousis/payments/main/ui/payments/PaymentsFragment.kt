@@ -229,7 +229,6 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
                     String.format(resources.getString(R.string.key_delete_group_message_value), (filteredList.getOrNull(index = position) as? GroupModel)?.groupName)
                 else
                     resources.getString(R.string.key_delete_payment_message),
-            icon = R.drawable.ic_delete,
             negativeButtonBlock = {
                 (paymentListRecyclerView.adapter as? PaymentsAdapter)?.restoreItem(
                     position = position

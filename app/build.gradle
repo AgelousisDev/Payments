@@ -25,12 +25,12 @@ android {
         develop {
             signingConfig signingConfigs.debug
             debuggable true
-            buildConfigField("String", "VALID_PRODUCT_DATE", '"2020_11_24_10_00_00"')
+            buildConfigField("String", "VALID_PRODUCT_DATE", '""')
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "VALID_PRODUCT_DATE", "")
+            buildConfigField("String", "VALID_PRODUCT_DATE", '""')
         }
     }
     buildFeatures {
@@ -44,6 +44,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
+// 2020_11_24_10_00_00
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])

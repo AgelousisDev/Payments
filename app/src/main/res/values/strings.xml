@@ -139,6 +139,8 @@
     <string name="key_change_password_label">Change Password</string>
     <string name="key_invalid_pin_message">Invalid PIN</string>
     <string name="key_password_changed_successfully_message">Your password has been changed!</string>
+    <string name="key_delete_user_label">Delete User</string>
+    <string name="key_delete_user_message">This operation will remove all data are saved in the current user. Do you want to proceed?</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>

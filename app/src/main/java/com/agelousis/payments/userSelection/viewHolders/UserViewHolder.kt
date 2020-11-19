@@ -10,6 +10,7 @@ class UserViewHolder(private val binding: UserRowLayoutBinding): RecyclerView.Vi
     fun bind(userModel: UserModel, presenter: UserSelectionPresenter) {
         binding.userModel = userModel
         binding.presenter = presenter
+        binding.usernameTextView.isSelected = true
         binding.executePendingBindings()
     }
 

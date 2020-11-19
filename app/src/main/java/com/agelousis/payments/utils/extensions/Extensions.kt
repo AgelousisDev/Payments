@@ -192,14 +192,14 @@ infix fun Context.byteArrayFromInternalImage(imageName: String?) =
         bytesArray
     }
 
-fun Context.showTwoButtonsDialog(title: String, message: String, icon: Int? = null, isCancellable: Boolean? = null, negativeButtonBlock: PositiveButtonBlock? = null,
+fun Context.showTwoButtonsDialog(title: String, message: String, icon: Int? = null, isCancellable: Boolean? = null, negativeButtonText: String? = null, negativeButtonBlock: PositiveButtonBlock? = null,
                                  positiveButtonText: String? = null, positiveButtonBlock: PositiveButtonBlock) {
     val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog)
         .setTitle(title)
         .setMessage(message)
         .setIcon(icon ?: 0)
         .setCancelable(isCancellable ?: true)
-        .setNegativeButton(resources.getString(R.string.key_cancel_label)) { dialogInterface, _ ->
+        .setNegativeButton(negativeButtonText ?: resources.getString(R.string.key_cancel_label)) { dialogInterface, _ ->
             dialogInterface.dismiss()
             negativeButtonBlock?.invoke()
         }

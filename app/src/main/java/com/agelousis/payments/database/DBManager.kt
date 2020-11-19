@@ -193,6 +193,45 @@ class DBManager(context: Context) {
         }
     }
 
+    suspend fun deleteUser(userId: Int, deletionSuccessBlock: DeletionSuccessBlock) {
+        withContext(Dispatchers.Default) {
+            val personsCursor = database?.query(
+                SQLiteHelper.PERSONS_TABLE_NAME,
+                null,
+                "${SQLiteHelper.USER_ID}=?",
+                arrayOf(userId.toString()),
+                null,
+                null,
+                null
+            )
+            if (personsCursor?.moveToFirst() == true && personsCursor.count > 0) {
+                do {
+                    database?.delete(
+                        SQLiteHelper.PAYMENTS_TABLE_NAME,
+                        "${SQLiteHelper.PERSON_ID}=?",
+                        arrayOf(personsCursor.getIntOrNull(index = personsCursor.getColumnIndex(SQLiteHelper.ID))?.toString() ?: continue)
+                    )
+                    database?.delete(
+                        SQLiteHelper.PERSONS_TABLE_NAME,
+                        "${SQLiteHelper.ID}=?",
+                        arrayOf(personsCursor.getIntOrNull(index = personsCursor.getColumnIndex(SQLiteHelper.ID))?.toString() ?: continue)
+                    )
+                }
+                while(personsCursor.moveToNext())
+            }
+            personsCursor?.close()
+
+            database?.delete(
+                SQLiteHelper.USERS_TABLE_NAME,
+                "${SQLiteHelper.ID}=?",
+                arrayOf(userId.toString())
+            )
+            withContext(Dispatchers.Main) {
+                deletionSuccessBlock()
+            }
+        }
+    }
+
     suspend fun insertGroup(userId: Int?, groupModel: GroupModel, insertionSuccessBlock: InsertionSuccessBlock) {
         withContext(Dispatchers.Default) {
             val cursor = database?.query(
@@ -372,7 +411,8 @@ class DBManager(context: Context) {
                 arrayOf(userId?.toString() ?: return@withContext),
                 null,
                 null,
-                null)
+                null
+            )
             if (personsCursor?.moveToFirst() == true && personsCursor.count > 0)
                 do {
                     val paymentsCursor = database?.query(
