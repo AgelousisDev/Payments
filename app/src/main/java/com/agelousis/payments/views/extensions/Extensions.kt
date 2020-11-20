@@ -1,6 +1,8 @@
 package com.agelousis.payments.views.extensions
 
 import androidx.databinding.BindingAdapter
+import com.agelousis.payments.utils.constants.Constants
+import com.agelousis.payments.utils.extensions.formattedDateWith
 import com.agelousis.payments.views.currencyEditText.CurrencyFieldLayout
 import com.agelousis.payments.views.dateLayout.DateFieldLayout
 import com.agelousis.payments.views.dateLayout.YearMonthPickerFieldLayout
@@ -8,6 +10,7 @@ import com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
 import com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
 import com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
 import com.agelousis.payments.views.searchLayout.MaterialSearchView
+import java.util.*
 
 @BindingAdapter("personDetails")
 fun setPersonDetails(personDetailsLayout: PersonDetailsLayout, details: String?) {
@@ -29,6 +32,9 @@ fun setCurrencyAmount(currencyFieldLayout: CurrencyFieldLayout, amount: Double?)
         currencyFieldLayout.doubleValue = it
     }
 }
+
+val showingCurrentDate
+    get() = Date() formattedDateWith Constants.GENERAL_DATE_FORMAT
 
 @BindingAdapter("dateValue")
 fun setDateValue(dateFieldLayout: DateFieldLayout, date: String?) {

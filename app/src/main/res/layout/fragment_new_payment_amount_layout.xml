@@ -2,6 +2,7 @@
 <layout>
     <data>
         <import type="android.view.View" />
+        <import type="com.agelousis.payments.views.extensions.ExtensionsKt" />
         <variable
             name="paymentAmountModel"
             type="com.agelousis.payments.main.ui.payments.models.PaymentAmountModel" />
@@ -59,7 +60,7 @@
                 android:id="@+id/dateDetailsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                dateValue="@{paymentAmountModel.paymentDate}"
+                dateValue="@{paymentAmountModel.paymentDate != null ? paymentAmountModel.paymentDate : ExtensionsKt.getShowingCurrentDate()}"
                 app:label="@string/key_execution_date_label"
                 app:showLine="true"
                 app:iconResource="@drawable/ic_payment_day"/>
