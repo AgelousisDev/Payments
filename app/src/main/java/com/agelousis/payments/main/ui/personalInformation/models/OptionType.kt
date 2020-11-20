@@ -17,8 +17,9 @@ enum class OptionType {
     CHANGE_SOCIAL_INSURANCE_NUMBER,
     VAT,
     DEFAULT_PAYMENT_AMOUNT,
-    DEFAULT_MESSAGE_TEMPLATE;
-
+    DEFAULT_MESSAGE_TEMPLATE,
+    EXPORT_DATABASE,
+    DELETE_USER;
 
     fun getLocalizedTitle(context: Context) =
         when(this) {
@@ -35,6 +36,8 @@ enum class OptionType {
             VAT -> context.resources.getString(R.string.key_vat_percent_label)
             DEFAULT_PAYMENT_AMOUNT -> context.resources.getString(R.string.key_default_payment_amount_label)
             DEFAULT_MESSAGE_TEMPLATE -> context.resources.getString(R.string.key_default_message_template_label)
+            EXPORT_DATABASE -> context.resources.getString(R.string.key_export_database_label)
+            DELETE_USER -> context.resources.getString(R.string.key_delete_user_label)
         }
 
     var userModel: UserModel? = null

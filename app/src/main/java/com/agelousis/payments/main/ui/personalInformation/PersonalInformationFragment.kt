@@ -3,7 +3,6 @@ package com.agelousis.payments.main.ui.personalInformation
 import android.animation.Animator
 import android.app.Activity
 import android.content.Intent
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,14 +20,13 @@ import com.agelousis.payments.main.ui.files.models.HeaderModel
 import com.agelousis.payments.main.ui.personalInformation.adapters.OptionTypesAdapter
 import com.agelousis.payments.main.ui.personalInformation.models.OptionType
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
-import com.agelousis.payments.main.ui.personalInformation.presenter.PersonalInformationPresenter
 import com.agelousis.payments.utils.extensions.*
 import kotlinx.android.synthetic.main.fragment_personal_information_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PersonalInformationFragment: Fragment(), OptionPresenter, PersonalInformationPresenter, Animator.AnimatorListener {
+class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.AnimatorListener {
 
     override fun onAnimationCancel(animation: Animator?) {}
     override fun onAnimationRepeat(animation: Animator?) {}
@@ -100,12 +98,12 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, PersonalInformat
         newUserModel?.defaultMessageTemplate = newMessageTemplate
     }
 
-    override fun onDatabaseExport() {
-        (activity as? MainActivity)?.initializeDatabaseExport()
-    }
-
     override fun onDeleteUser() {
         initializeUserDeletion()
+    }
+
+    override fun onExportDatabase() {
+        (activity as? MainActivity)?.initializeDatabaseExport()
     }
 
     private val uiScope = CoroutineScope(Dispatchers.Main)
@@ -160,7 +158,9 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, PersonalInformat
             },
             OptionType.DEFAULT_MESSAGE_TEMPLATE.also {
                 it.userModel = newUserModel
-            }
+            },
+            OptionType.EXPORT_DATABASE,
+            OptionType.DELETE_USER
         )
     }
 
@@ -171,12 +171,16 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, PersonalInformat
             false
         ).also {
             it.userModel = (activity as? MainActivity)?.userModel
-            it.presenter = this
         }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupUI()
         configureRecyclerView()
+    }
+
+    private fun setupUI() {
+        materialTextViewTitle.isSelected = true
     }
 
     private fun configureRecyclerView() {
@@ -200,7 +204,6 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, PersonalInformat
         optionRecyclerView.setOnScrollChangeListener { _, _, _, _, _ ->
             headerConstraintLayout.elevation = if (optionRecyclerView.canScrollVertically(-1)) 8.inPixel else 0.0f
             (activity as? MainActivity)?.floatingButtonState = optionRecyclerView.canScrollVertically(1)
-            footerActionLayout.visibility = if (!optionRecyclerView.canScrollVertically(1) && footerActionLayout.visibility == View.GONE) View.VISIBLE else View.GONE
         }
     }
 

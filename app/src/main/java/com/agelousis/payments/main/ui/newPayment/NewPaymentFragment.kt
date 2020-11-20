@@ -1,5 +1,6 @@
 package com.agelousis.payments.main.ui.newPayment
 
+import android.animation.Animator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -194,9 +195,25 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             if (paymentInsertionState) {
                 scheduleNotification()
                 currentPersonModel = null
-                findNavController().popBackStack()
+                playSuccessAnimation {
+                    findNavController().popBackStack()
+                }
             }
         }
+    }
+
+    private fun playSuccessAnimation(block: () -> Unit) {
+        linearLayout.visibility = View.GONE
+        successAnimationLottieView.visibility = View.VISIBLE
+        successAnimationLottieView.playAnimation()
+        successAnimationLottieView.addAnimatorListener(object: Animator.AnimatorListener {
+            override fun onAnimationCancel(animation: Animator?) {}
+            override fun onAnimationRepeat(animation: Animator?) {}
+            override fun onAnimationStart(animation: Animator?) {}
+            override fun onAnimationEnd(animation: Animator?) {
+                block()
+            }
+        })
     }
 
     private fun redirectToSMSAppIf(payment: PaymentAmountModel, predicate: () -> Boolean) {
@@ -357,7 +374,9 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             free = binding?.freeAppSwitchLayout?.isChecked,
             messageTemplate = binding?.messageTemplateField?.text?.toString(),
             payments = availablePayments,
-            paymentType = selectedPaymentType
+            paymentType = selectedPaymentType,
+            groupColor = args.personDataModel?.groupColor,
+            groupImage = args.personDataModel?.groupImage
         )
     }
 

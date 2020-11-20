@@ -14,4 +14,6 @@ interface OptionPresenter {
     fun onVatChange(newVat: Int)
     fun onPaymentAmountChange(newPaymentAmount: Double)
     fun onMessageTemplateChange(newMessageTemplate: String)
+    fun onDeleteUser()
+    fun onExportDatabase()
 }

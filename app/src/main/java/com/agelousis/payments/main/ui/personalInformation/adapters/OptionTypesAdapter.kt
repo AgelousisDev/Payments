@@ -4,12 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.databinding.HeaderRowLayoutBinding
+import com.agelousis.payments.databinding.OptionActionRowLayoutBinding
 import com.agelousis.payments.databinding.OptionTypeRowLayoutBinding
 import com.agelousis.payments.main.ui.files.models.HeaderModel
 import com.agelousis.payments.main.ui.files.viewHolders.HeaderViewHolder
 import com.agelousis.payments.main.ui.personalInformation.enumerations.OptionTypeAdapterType
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.payments.main.ui.personalInformation.models.OptionType
+import com.agelousis.payments.main.ui.personalInformation.viewHolders.OptionActionViewHolder
 import com.agelousis.payments.main.ui.personalInformation.viewHolders.OptionViewHolder
 
 class OptionTypesAdapter(private val list: List<Any>, private val optionPresenter: OptionPresenter): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -33,6 +35,14 @@ class OptionTypesAdapter(private val list: List<Any>, private val optionPresente
                         false
                     )
                 )
+            OptionTypeAdapterType.OPTION_ACTION_VIEW.type ->
+                OptionActionViewHolder(
+                    binding = OptionActionRowLayoutBinding.inflate(
+                        layoutInflater,
+                        parent,
+                        false
+                    )
+                )
             else ->
                 HeaderViewHolder(
                     binding = HeaderRowLayoutBinding.inflate(
@@ -51,7 +61,10 @@ class OptionTypesAdapter(private val list: List<Any>, private val optionPresente
             return OptionTypeAdapterType.HEADER_VIEW.type
         }
         (list.getOrNull(index = position) as? OptionType)?.let {
-            return OptionTypeAdapterType.OPTION_VIEW.type
+            return when(it) {
+                OptionType.DELETE_USER, OptionType.EXPORT_DATABASE -> OptionTypeAdapterType.OPTION_ACTION_VIEW.type
+                else -> OptionTypeAdapterType.OPTION_VIEW.type
+            }
         }
         return super.getItemViewType(position)
     }
@@ -63,6 +76,12 @@ class OptionTypesAdapter(private val list: List<Any>, private val optionPresente
             ) as? HeaderModel ?: return
         )
         (holder as? OptionViewHolder)?.bind(
+            optionType = list.getOrNull(
+                index = position
+            ) as? OptionType ?: return,
+            optionPresenter = optionPresenter
+        )
+        (holder as? OptionActionViewHolder)?.bind(
             optionType = list.getOrNull(
                 index = position
             ) as? OptionType ?: return,
