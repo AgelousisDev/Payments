@@ -16,6 +16,8 @@ class PaymentViewHolder(private val binding: PaymentRowLayoutBinding): RecyclerV
             )
             true
         }
+        binding.entryCustomerNameTextView.isSelected = true
+        binding.entryDateTextView.isSelected = true
         binding.executePendingBindings()
     }
 
