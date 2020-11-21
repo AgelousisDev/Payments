@@ -146,6 +146,8 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
             OptionType.CHANGE_SOCIAL_INSURANCE_NUMBER.also {
                 it.userModel = newUserModel
             },
+            OptionType.EXPORT_DATABASE,
+            OptionType.DELETE_USER,
             HeaderModel(
                 dateTime = null,
                 header = resources.getString(R.string.key_payment_setting_label)
@@ -158,9 +160,7 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
             },
             OptionType.DEFAULT_MESSAGE_TEMPLATE.also {
                 it.userModel = newUserModel
-            },
-            OptionType.EXPORT_DATABASE,
-            OptionType.DELETE_USER
+            }
         )
     }
 
@@ -192,7 +192,7 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
             context = context ?: return,
             margin = resources.getDimension(R.dimen.activity_horizontal_margin).toInt()
         ) {
-            optionList.getOrNull(index = it) !is HeaderModel
+            optionList.getOrNull(index = it) !is HeaderModel && optionList.getOrNull(index = it) != OptionType.DELETE_USER
         })
         optionRecyclerView.addItemDecoration(
             HeaderItemDecoration(
