@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <import type="com.agelousis.payments.main.menuOptions.enumerations.PaymentsMenuOptionType" />
+        <variable
+            name="menuOption"
+            type="com.agelousis.payments.main.menuOptions.enumerations.PaymentsMenuOptionType" />
+        <variable
+            name="presenter"
+            type="com.agelousis.payments.main.menuOptions.presenters.PaymentsMenuOptionPresenter" />
+    </data>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/activity_horizontal_margin"
+    android:clickable="@{menuOption.enabled}"
+    android:focusable="@{menuOption.enabled}"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
+    android:alpha="@{menuOption.enabled ? 1.0f : 0.5f}"
+    android:onClick="@{() -> menuOption == PaymentsMenuOptionType.CLEAR_PAYMENTS ? presenter.onClearPayments() : menuOption == PaymentsMenuOptionType.CSV_EXPORT ? presenter.onCsvExport() : null}">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/appCompatImageView2"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@{menuOption.icon}"
+        app:tint="@color/colorAccent"
+        tools:srcCompat="@drawable/ic_clear_all" />
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextViewTitleLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:text="@{menuOption.title}"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/appCompatImageView2"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Clear Payments" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -35,6 +35,7 @@ object Constants {
     const val SHARED_PREFERENCES_NOTIFICATION_REQUEST_CODE_KEY = "notification_request_code"
     const val DARK_MODE_KEY = "dark_mode"
     const val FORGOT_PASSWORD_FRAGMENT_TAG = "forgotPasswordFragmentTag"
+    const val PAYMENTS_MENU_OPTIONS_FRAGMENT_TAG = "paymentMenuOptionsFragmentTag"
 
     object Colors {
         val colorPickerColors = intArrayOf(
