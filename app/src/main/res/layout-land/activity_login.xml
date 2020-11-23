@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View" />
+        <import type="com.agelousis.payments.login.SignInState" />
+        <import type="com.agelousis.payments.utils.extensions.ExtensionsKt" />
+        <import type="com.agelousis.payments.utils.constants.Constants" />
+        <import type="android.content.Context" />
+        <variable
+            name="userModel"
+            type="com.agelousis.payments.login.models.UserModel" />
+        <variable
+            name="signInState"
+            type="com.agelousis.payments.login.SignInState" />
+        <variable
+            name="presenter"
+            type="com.agelousis.payments.login.presenter.LoginPresenter" />
+        <variable
+            name="loginButtonState"
+            type="Boolean" />
+        <variable
+            name="biometricsActive"
+            type="Boolean" />
+    </data>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:weightSum="1"
+    android:background="@color/whiteTwo"
+    android:animateLayoutChanges="true"
+    android:baselineAligned="true"
+    tools:context=".login.LoginActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@drawable/login_landscape_header_background">
+
+        <LinearLayout
+            android:id="@+id/headerLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/TextViewTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="@string/key_manage_payments_label" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="payment_animation.json"
+                app:lottie_loop="true"
+                app:lottie_speed="1" />
+
+        </LinearLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/greetingLabel"
+            style="@style/TextViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_light"
+            android:text="@{ExtensionsKt.getGreetingLabel()}"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headerLayout"
+            tools:text="@string/key_good_morning_label" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/uiModeImageView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="@{() -> presenter.onUIModeChanged(ExtensionsKt.getUiMode(context).theOther)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/greetingLabel"
+            app:srcCompat="@{ExtensionsKt.getUiMode(context).icon}"
+            tools:srcCompat="@drawable/ic_moon" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            app:layout_constraintBottom_toTopOf="@+id/biometricsIcon"
+            app:layout_constraintTop_toBottomOf="@+id/uiModeImageView">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/signUpLabel"
+                    style="@style/TextViewTitle"
+                    animatedText="@{signInState.getTitle(context)}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorAccent"
+                    tools:text="@string/key_sign_up_label" />
+
+                <View
+                    layoutWidth="@{signInState == SignInState.SIGN_UP ? @dimen/dp_40 : @dimen/dp_30}"
+                    android:layout_width="0dp"
+                    android:layout_height="4dp"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/line_background" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/importLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="@{() -> presenter.onImport()}"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/importLabel"
+                    style="@style/TextViewTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="@string/key_import_label"
+                    android:textColor="@color/grey" />
+
+                <View
+                    android:id="@+id/importLine"
+                    android:layout_width="35dp"
+                    android:layout_height="4dp"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/line_background"
+                    android:backgroundTint="@color/grey" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/biometricsIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="@{() -> presenter.onBiometrics()}"
+            android:visibility="@{userModel.biometrics == true ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toTopOf="@+id/usersSelectLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/ic_fingerprint" />
+
+        <LinearLayout
+            android:id="@+id/usersSelectLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:onClick="@{() -> presenter.onUsersSelect()}"
+            android:orientation="vertical"
+            android:visibility="@{signInState == SignInState.LOGIN ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:srcCompat="@drawable/ic_up_arrow"
+                app:tint="@color/grey" />
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/TextViewLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:text="@string/key_saved_users_label" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp"
+            app:cardUseCompatPadding="true"
+            app:contentPadding="@dimen/activity_horizontal_margin"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/profileImageView"
+                    picassoImageFromInternalFiles="@{userModel.profileImage}"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@{signInState == SignInState.SIGN_UP ? @drawable/profile_background : null}"
+                    android:enabled="@{signInState == SignInState.SIGN_UP}"
+                    android:onClick="@{() -> presenter.onProfileSelect()}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_person" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/usernameTextInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:hint="@string/key_username_label"
+                    app:endIconMode="clear_text"
+                    app:hintEnabled="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/profileImageView">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/usernameField"
+                        style="@style/TextViewTitleLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionNext"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="@{userModel.username}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/passwordTextInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:hint="@string/key_password_label"
+                    app:endIconMode="clear_text"
+                    app:hintEnabled="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/usernameTextInputLayout">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/passwordField"
+                        style="@style/TextViewTitleLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionNext"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="@{userModel.biometrics == true &amp;&amp; biometricsActive == true ? userModel.password : null}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                    android:text="@string/key_forgot_password_label"
+                    android:textSize="10sp"
+                    android:onClick="@{() -> presenter.onForgotPassword(userModel.id)}"
+                    android:visibility="@{signInState == SignInState.LOGIN &amp;&amp; userModel != null &amp;&amp; userModel.passwordPin != null ? View.VISIBLE : View.GONE}"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/passwordTextInputLayout"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/loginButton"
+            style="@style/BasicMaterialButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:alpha="@{loginButtonState ? 1.0f : 0.5f}"
+            android:enabled="@{loginButtonState}"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:onClick="@{() -> presenter.onSignIn()}"
+            android:text="@{signInState.getTitle(context)}"
+            app:backgroundTint="@color/colorAccent"
+            app:cornerRadius="0dp"
+            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/signUnButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView"
+            tools:text="@string/key_login_label" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/signUnButton"
+            style="@style/BasicMaterialButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:onClick="@{() -> presenter.onSignUp()}"
+            android:text="@string/key_sign_up_label"
+            android:visibility="@{signInState == SignInState.LOGIN ? View.VISIBLE : View.GONE}"
+            app:backgroundTint="@color/grey"
+            app:cornerRadius="0dp"
+            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/loginButton"
+            app:layout_constraintTop_toBottomOf="@+id/cardView"
+            tools:text="@string/key_sign_up_label" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
+</layout>
