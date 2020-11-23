@@ -7,14 +7,12 @@ import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
-import android.database.Cursor
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -359,15 +357,18 @@ fun AppCompatActivity.searchFile(requestCode: Int, mimeType: String) =
 fun Context.isDBFile(uri: Uri?) =
     uri?.let {
         MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(it)) == Constants.BIN_FILE_EXTENSION ||
-                this getMimeType it == SQLiteHelper.DB_NAME
+                this getDisplayName it == Constants.EXPORT_DATABASE_FILE_NAME ||
+                this getDisplayName it == SQLiteHelper.DB_NAME
     } ?: false
 
-infix fun Context.getMimeType(uri: Uri): String? {
+infix fun Context.getDisplayName(uri: Uri): String? {
     val cursor = contentResolver.query(uri, null, null, null, null)
-    cursor?.moveToFirst()
-    val fileExtension = cursor?.getStringOrNull(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-    cursor?.close()
-    return fileExtension
+    return if (cursor?.moveToFirst() == true && cursor.count > 0) {
+        val fileExtension = cursor.getStringOrNull(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+        cursor.close()
+        fileExtension
+    }
+    else null
 }
 
 val Uri.isGoogleDrive: Boolean
@@ -387,7 +388,7 @@ fun View.circularReveal(circularAnimationCompletionBlock: CircularAnimationCompl
             override fun onGlobalLayout() {
                 val finalRadius: Float = max(width.toFloat(), height.toFloat())
                 // create the animator for this view (the start radius is zero)
-                val circularReveal = ViewAnimationUtils.createCircularReveal(this@circularReveal, width - (width / 4), height - (height / 5), 0f, finalRadius)
+                val circularReveal = ViewAnimationUtils.createCircularReveal(this@circularReveal, width / 2, height - (height / 5), 0f, finalRadius)
                 circularReveal.duration = 500
                 // make the view visible and start the animation
                 visibility = View.VISIBLE

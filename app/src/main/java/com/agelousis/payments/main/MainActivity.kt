@@ -293,7 +293,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             positiveButtonBlock = {
                 saveFile(
                     requestCode = EXPORT_FILE_REQUEST_CODE,
-                    fileName = SQLiteHelper.DB_NAME,
+                    fileName = Constants.EXPORT_DATABASE_FILE_NAME,
                     mimeType = Constants.GENERAL_MIME_TYPE
                 )
             }
