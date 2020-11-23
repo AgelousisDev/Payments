@@ -289,7 +289,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
                             )
                         )
                         filteredList.addAll(
-                            filteredByQueryPayments.also { personModelList ->
+                            filteredByQueryPayments.sortedBy { it.firstName }.also { personModelList ->
                                 if (personModelList.isSizeOne)
                                     personModelList.firstOrNull()?.backgroundDrawable = R.drawable.payment_row_radius_background
                                 else {

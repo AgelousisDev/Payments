@@ -12,13 +12,26 @@ import androidx.core.widget.doOnTextChanged
 import com.agelousis.payments.R
 import com.agelousis.payments.databinding.CurrencyEditTextLayoutBinding
 import com.agelousis.payments.utils.constants.Constants
+import com.agelousis.payments.utils.extensions.isZero
 import com.agelousis.payments.utils.extensions.showKeyboard
 import com.agelousis.payments.views.currencyEditText.interfaces.AmountListener
+import com.agelousis.payments.views.currencyEditText.presenters.CurrencyLayoutPresenter
 import com.agelousis.payments.views.personDetailsLayout.enumerations.ImeOptionsType
 import com.agelousis.payments.views.personDetailsLayout.enumerations.PersonDetailFieldType
 import com.agelousis.payments.views.personDetailsLayout.models.PersonDetailsViewDataModel
 
-class CurrencyFieldLayout(context: Context, attrs: AttributeSet?): FrameLayout(context, attrs) {
+class CurrencyFieldLayout(context: Context, attrs: AttributeSet?): FrameLayout(context, attrs), CurrencyLayoutPresenter {
+
+    override fun onIncrease() {
+        doubleValue = (doubleValue ?: 0.0) + 10.0
+    }
+
+    override fun onDecrease() {
+        if (!doubleValue.isZero)
+            doubleValue?.takeIf { it - 10 >= 0 }?.let {
+                doubleValue = it - 10
+            }
+    }
 
     private var binding: CurrencyEditTextLayoutBinding? = null
     var amountListener: AmountListener? = null
@@ -63,6 +76,7 @@ class CurrencyFieldLayout(context: Context, attrs: AttributeSet?): FrameLayout(c
                 imeOptionsType = ImeOptionsType.values()[attributes.getInt(R.styleable.PersonDetailsLayout_imeOptionType, 0)],
                 type = PersonDetailFieldType.values()[attributes.getInt(R.styleable.PersonDetailsLayout_fieldType, 0)]
             )
+            binding?.presenter = this
             attributes.recycle()
             addView(binding?.root)
         }

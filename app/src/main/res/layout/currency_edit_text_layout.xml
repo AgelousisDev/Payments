@@ -9,6 +9,9 @@
         <variable
             name="dataModel"
             type="com.agelousis.payments.views.personDetailsLayout.models.PersonDetailsViewDataModel" />
+        <variable
+            name="presenter"
+            type="com.agelousis.payments.views.currencyEditText.presenters.CurrencyLayoutPresenter" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/currencyLayout"
@@ -26,6 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:text="@{dataModel.label}"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Amount" />
@@ -49,26 +53,71 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_horizontal_margin"
-            android:gravity="end"
             android:background="@null"
+            android:gravity="end"
             android:imeOptions="@{dataModel.imeOptionsType == ImeOptionsType.ACTION_NEXT ? 0x00000005 : 0x00000006}"
             android:inputType="@{dataModel.type == PersonDetailFieldType.NUMBER_INPUT_TYPE ? 0x00002002 : dataModel.type == PersonDetailFieldType.TEXT_ALL_CAPS_INPUT_TYPE ? 0x00001001 : dataModel.type == PersonDetailFieldType.EMAIL ? 0x00000021 : 0x00000001}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/increaseAmountLayout"
             app:layout_constraintStart_toEndOf="@id/label"
+            app:layout_constraintTop_toTopOf="parent"
             tools:hint="$ 100 $" />
+
+        <LinearLayout
+            android:id="@+id/increaseAmountLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/increaseButton"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="@{() -> presenter.onIncrease()}"
+                app:srcCompat="@drawable/ic_add"
+                app:tint="@color/colorAccent" />
+
+            <View
+                android:layout_width="15dp"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                android:background="@color/grey" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="@{() -> presenter.onDecrease()}"
+                app:srcCompat="@drawable/ic_minus_sign"
+                app:tint="@color/colorAccent" />
+
+        </LinearLayout>
 
         <View
             android:id="@+id/lineSeparator"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:background="@color/grey"
             android:visibility="@{dataModel.showLine ? View.VISIBLE : View.INVISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/label" />
+            app:layout_constraintTop_toBottomOf="@+id/increaseAmountLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

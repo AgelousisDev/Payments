@@ -13,6 +13,7 @@ import com.agelousis.payments.main.ui.payments.models.PersonModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.euroFormattedString
+import com.agelousis.payments.utils.extensions.isSizeOne
 import com.agelousis.payments.utils.extensions.toast
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.XAxis
@@ -45,8 +46,21 @@ class HistoryFragment: Fragment(R.layout.history_fragment_layout) {
 
     private fun addObservers() {
         viewModel.paymentsLiveData.observe(viewLifecycleOwner) { payments ->
+            val filteredPayments = arrayListOf<PaymentAmountModel>()
+            payments.asSequence().filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten().sortedBy { it.paymentMonthDate }.groupBy { it.paymentMonthDate }.forEach { (_, list) ->
+                if (list.isSizeOne)
+                    filteredPayments.addAll(
+                        list
+                    )
+                else
+                    list.maxByOrNull { it.paymentAmount ?: 0.0 }?.let {
+                        filteredPayments.add(
+                            it
+                        )
+                    }
+            }
             configureLineChart(
-                payments = payments.filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten().sortedBy { it.paymentMonthDate }
+                payments = filteredPayments
             )
         }
     }
