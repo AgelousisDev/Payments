@@ -26,19 +26,4 @@
         </menu>
     </item>
 
-    <item android:title="@string/key_options_label">
-        <menu>
-            <group android:checkableBehavior="all">
-                <item
-                    android:id="@+id/navigationExcelExport"
-                    android:icon="@drawable/ic_excel"
-                    android:title="@string/key_export_payments_to_csv_label"/>
-                <item
-                    android:id="@+id/navigationClearPayments"
-                    android:icon="@drawable/ic_clear_all"
-                    android:title="@string/key_clear_all_payments_payments_label"/>
-            </group>
-        </menu>
-    </item>
-
 </menu>

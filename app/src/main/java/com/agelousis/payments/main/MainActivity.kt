@@ -22,7 +22,9 @@ import com.agelousis.payments.database.SQLiteHelper
 import com.agelousis.payments.group.GroupActivity
 import com.agelousis.payments.login.LoginActivity
 import com.agelousis.payments.login.models.UserModel
+import com.agelousis.payments.main.enumerations.FloatingButtonPosition
 import com.agelousis.payments.main.enumerations.FloatingButtonType
+import com.agelousis.payments.main.menuOptions.PaymentsMenuOptionsBottomSheetFragment
 import com.agelousis.payments.main.ui.history.HistoryFragment
 import com.agelousis.payments.main.ui.files.FilesFragment
 import com.agelousis.payments.main.ui.newPayment.NewPaymentFragment
@@ -34,6 +36,7 @@ import com.agelousis.payments.main.ui.periodFilter.PeriodFilterFragment
 import com.agelousis.payments.main.ui.personalInformation.PersonalInformationFragment
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
+import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -68,10 +71,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 navHostFragmentContainerView.findNavController().popBackStack(R.id.historyFragment, true)
                 navHostFragmentContainerView.findNavController().navigate(R.id.action_global_historyFragment)
             }
-            R.id.navigationClearPayments ->
-                triggerPaymentsClearance()
-            R.id.navigationExcelExport ->
-                (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.navigateToPeriodFilterFragment()
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
@@ -83,55 +82,46 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 appBarTitle = resources.getString(R.string.key_profile_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
-                clearPaymentsMenuItemIsVisible = false
-                exportToExcelMenuItemIsVisible = false
-                historyButtonIsVisible = false
+                floatingButtonPosition = FloatingButtonPosition.END
+                menuOptionsIsVisible = false
             }
             in PaymentsFragment::class.java.name -> {
-                appBarTitle = resources.getString(R.string.app_name)
+                appBarTitle = ""
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_add_group
-                clearPaymentsMenuItemIsVisible = true
-                exportToExcelMenuItemIsVisible = true
-                historyButtonIsVisible = true
+                floatingButtonPosition = FloatingButtonPosition.CENTER
+                menuOptionsIsVisible = true
             }
             in NewPaymentFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_person_info_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
-                clearPaymentsMenuItemIsVisible = false
-                exportToExcelMenuItemIsVisible = false
-                historyButtonIsVisible = false
+                floatingButtonPosition = FloatingButtonPosition.END
+                menuOptionsIsVisible = false
             }
             in NewPaymentAmountFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_add_payment_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
-                clearPaymentsMenuItemIsVisible = false
-                exportToExcelMenuItemIsVisible = false
-                historyButtonIsVisible = false
+                floatingButtonPosition = FloatingButtonPosition.END
+                menuOptionsIsVisible = false
             }
             in FilesFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_files_label)
                 floatingButtonState = false
-                clearPaymentsMenuItemIsVisible = false
-                exportToExcelMenuItemIsVisible = false
-                historyButtonIsVisible = false
+                menuOptionsIsVisible = false
             }
             in PeriodFilterFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_filter_period_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_table
-                clearPaymentsMenuItemIsVisible = false
-                exportToExcelMenuItemIsVisible = false
-                historyButtonIsVisible = false
+                floatingButtonPosition = FloatingButtonPosition.END
+                menuOptionsIsVisible = false
             }
             in HistoryFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_history_label)
                 floatingButtonState = false
-                clearPaymentsMenuItemIsVisible = false
-                exportToExcelMenuItemIsVisible = false
-                historyButtonIsVisible = false
+                menuOptionsIsVisible = false
             }
         }
     }
@@ -187,15 +177,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             else floatingButton.hide()
         }
     var floatingButtonType = FloatingButtonType.NORMAL
-    var clearPaymentsMenuItemIsVisible = false
+    private var floatingButtonPosition = FloatingButtonPosition.END
         set(value) {
             field = value
-            navigationView?.menu?.findItem(R.id.navigationClearPayments)?.isVisible = value
+            when(value) {
+                FloatingButtonPosition.CENTER ->
+                    bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
+                FloatingButtonPosition.END ->
+                    bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_END
+            }
         }
-    var exportToExcelMenuItemIsVisible = false
+    private var menuOptionsIsVisible = false
         set(value) {
             field = value
-            navigationView?.menu?.findItem(R.id.navigationExcelExport)?.isVisible = value
+            bottomAppBar.menu?.findItem(R.id.menuSettings)?.isVisible = value
         }
     var historyButtonIsVisible = false
         set(value) {
@@ -244,6 +239,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setupToolbar() {
         setSupportActionBar(bottomAppBar)
+        bottomAppBar.replaceMenu(R.menu.activity_menu_main)
     }
 
     private fun setupNavigationView() {
@@ -297,14 +293,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             positiveButtonBlock = {
                 saveFile(
                     requestCode = EXPORT_FILE_REQUEST_CODE,
-                    fileName = SQLiteHelper.DB_NAME,
+                    fileName = Constants.EXPORT_DATABASE_FILE_NAME,
                     mimeType = Constants.GENERAL_MIME_TYPE
                 )
             }
         )
     }
 
-    private fun triggerPaymentsClearance() {
+    fun triggerPaymentsClearance() {
         showTwoButtonsDialog(
             title = resources.getString(R.string.key_warning_label),
             message = resources.getString(R.string.key_clear_all_payments_message),
@@ -368,6 +364,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
                     }
             }
+    }
+
+    private fun showPaymentsMenuOptionsFragment() {
+        PaymentsMenuOptionsBottomSheetFragment.show(
+            supportFragmentManager = supportFragmentManager
+        )
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.activity_menu_main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.menuSettings ->
+                showPaymentsMenuOptionsFragment()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }

@@ -7,6 +7,7 @@
             type="com.agelousis.payments.main.ui.payments.models.PaymentAmountSumModel" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -14,12 +15,13 @@
         style="@style/TextViewTitleLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:text="@{paymentAmountSumModel.getFormattedPaymentsSum(context)}"
         android:textColor="@{(paymentAmountSumModel.color != null) ? paymentAmountSumModel.color : @color/grey}"
         android:singleLine="true"
         android:maxLines="1"
+        tools:text="$500,00"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
