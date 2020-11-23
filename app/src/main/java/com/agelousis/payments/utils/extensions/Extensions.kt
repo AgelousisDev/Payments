@@ -7,12 +7,14 @@ import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.database.Cursor
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -20,6 +22,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.CalendarContract
+import android.provider.OpenableColumns
 import android.telephony.TelephonyManager
 import android.view.*
 import android.view.animation.AlphaAnimation
@@ -40,6 +43,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.edit
+import androidx.core.database.getStringOrNull
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -354,8 +358,17 @@ fun AppCompatActivity.searchFile(requestCode: Int, mimeType: String) =
 
 fun Context.isDBFile(uri: Uri?) =
     uri?.let {
-        MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(it)) == Constants.BIN_FILE_EXTENSION
+        MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(it)) == Constants.BIN_FILE_EXTENSION ||
+                this getMimeType it == SQLiteHelper.DB_NAME
     } ?: false
+
+infix fun Context.getMimeType(uri: Uri): String? {
+    val cursor = contentResolver.query(uri, null, null, null, null)
+    cursor?.moveToFirst()
+    val fileExtension = cursor?.getStringOrNull(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+    cursor?.close()
+    return fileExtension
+}
 
 val Uri.isGoogleDrive: Boolean
     get() = toString().contains(Constants.GOOGLE_DRIVE_URI)
