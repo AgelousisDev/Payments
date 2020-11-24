@@ -111,7 +111,7 @@ class PaymentsMenuOptionsBottomSheetFragment: BottomSheetDialogFragment(), Payme
         menuOptionsRecyclerView.addItemDecoration(
             DividerItemRecyclerViewDecorator(
                 context = context ?: return,
-                margin = resources.getDimension(R.dimen.activity_horizontal_margin).toInt()
+                margin = resources.getDimension(R.dimen.activity_general_horizontal_margin).toInt()
             ) {
                 optionList.getOrNull(index = it) !is HeaderModel && optionList.getOrNull(index = it) != PaymentsMenuOptionType.CSV_EXPORT
             }

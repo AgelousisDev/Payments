@@ -14,7 +14,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/activity_horizontal_margin"
+    android:padding="@dimen/activity_general_horizontal_margin"
     android:clickable="@{menuOption.enabled}"
     android:focusable="@{menuOption.enabled}"
     android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -36,7 +36,7 @@
         style="@style/TextViewTitleLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_general_horizontal_margin"
         android:text="@{menuOption.title}"
         android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"

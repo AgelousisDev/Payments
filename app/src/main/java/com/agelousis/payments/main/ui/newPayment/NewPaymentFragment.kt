@@ -193,6 +193,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         }
         viewModel.paymentInsertionStateLiveData.observe(viewLifecycleOwner) { paymentInsertionState ->
             if (paymentInsertionState) {
+                (activity as? MainActivity)?.floatingButtonState = false
                 scheduleNotification()
                 currentPersonModel = null
                 playSuccessAnimation {
@@ -362,7 +363,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         }
         currentPersonModel = PersonModel(
             personId = args.personDataModel?.personId,
-            groupId = availableGroups.firstOrNull { it.groupName?.toLowerCase(Locale.getDefault()) == binding?.groupDetailsLayout?.value?.toLowerCase(Locale.getDefault()) }?.groupId,
+            groupId = availableGroups.firstOrNull { it.groupName.equals(binding?.groupDetailsLayout?.value, ignoreCase = true) }?.groupId,
             groupName = binding?.groupDetailsLayout?.value,
             firstName = binding?.firstNameLayout?.value,
             surname = binding?.surnameLayout?.value,

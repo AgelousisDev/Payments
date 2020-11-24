@@ -33,14 +33,14 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_general_horizontal_margin"
         android:background="@color/grey"/>
 
     <FrameLayout
         android:id="@+id/paymentRowHeaderFrameLayout"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_general_horizontal_margin"
         android:background="@{notificationDataModel.groupImage == null ? @drawable/oval_background : null}"
         backgroundDrawableTintColor="@{notificationDataModel.groupImage == null ? notificationDataModel.groupTint : null}"
         android:elevation="8dp"
@@ -72,7 +72,7 @@
         style="@style/TextViewTitleLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_general_horizontal_margin"
         android:text="@{notificationDataModel.title}"
         tools:text="Cars Sale"/>
 

@@ -190,7 +190,7 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
         )
         optionRecyclerView.addItemDecoration(DividerItemRecyclerViewDecorator(
             context = context ?: return,
-            margin = resources.getDimension(R.dimen.activity_horizontal_margin).toInt()
+            margin = resources.getDimension(R.dimen.activity_general_horizontal_margin).toInt()
         ) {
             optionList.getOrNull(index = it) !is HeaderModel && optionList.getOrNull(index = it) != OptionType.DELETE_USER
         })

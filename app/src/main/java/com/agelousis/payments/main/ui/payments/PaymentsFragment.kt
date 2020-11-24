@@ -126,19 +126,19 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
                     when(filteredList.getOrNull(adapterPosition)) {
                         is GroupModel -> {
                             if (adapterPosition > 0)
-                                outRect.top = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
-                            outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
+                                outRect.top = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
+                            outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
                         }
                         is PersonModel -> {
-                            outRect.left = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
-                            outRect.right = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
+                            outRect.left = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
+                            outRect.right = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
                             if (filteredList isLastAt adapterPosition)
-                                outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
+                                outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
                         }
                         is PaymentAmountSumModel -> {
-                            outRect.top = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
+                            outRect.top = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
                             if (filteredList isLastAt adapterPosition)
-                                outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
+                                outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
                         }
                     }
                 }
@@ -152,7 +152,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
             SwipeItemTouchHelper(
                 context = context ?: return,
                 swipeItemType = SwipeItemType.PERSON_ITEM,
-                marginStart = resources.getDimension(R.dimen.activity_horizontal_margin),
+                marginStart = resources.getDimension(R.dimen.activity_general_horizontal_margin),
                 swipePredicateBlock = {
                     it is GroupViewHolder || it is PaymentViewHolder
                 }

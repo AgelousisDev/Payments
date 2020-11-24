@@ -98,7 +98,7 @@ class FilesFragment: Fragment(), FilePresenter {
         )
         filesListRecyclerView.addItemDecoration(DividerItemRecyclerViewDecorator(
             context = context ?: return,
-            margin = resources.getDimension(R.dimen.activity_horizontal_margin).toInt()
+            margin = resources.getDimension(R.dimen.activity_general_horizontal_margin).toInt()
         ) {
             filteredList.getOrNull(index = it) !is HeaderModel
         })

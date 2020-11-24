@@ -104,7 +104,7 @@
                 android:id="@+id/notesTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:layout_margin="@dimen/activity_general_horizontal_margin"
                 android:hint="@string/key_note_label"
                 app:hintEnabled="true"
                 app:endIconMode="clear_text">
@@ -123,9 +123,9 @@
                 style="@style/TextViewLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+                android:layout_marginBottom="@dimen/activity_general_horizontal_margin"
                 android:text="@string/key_payment_date_notification_not_able_to_cancel_message"/>
 
         </LinearLayout>

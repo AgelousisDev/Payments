@@ -86,7 +86,7 @@
             android:id="@+id/uiModeImageView"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_general_horizontal_margin"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"
@@ -126,7 +126,7 @@
                     layoutWidth="@{signInState == SignInState.SIGN_UP ? @dimen/dp_40 : @dimen/dp_30}"
                     android:layout_width="0dp"
                     android:layout_height="4dp"
-                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_general_horizontal_margin"
                     android:background="@drawable/line_background" />
 
             </LinearLayout>
@@ -158,7 +158,7 @@
                     android:layout_width="35dp"
                     android:layout_height="4dp"
                     android:layout_gravity="end"
-                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_general_horizontal_margin"
                     android:background="@drawable/line_background"
                     android:backgroundTint="@color/grey" />
 
@@ -170,7 +170,7 @@
             android:id="@+id/biometricsIcon"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_general_horizontal_margin"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"
@@ -205,7 +205,7 @@
                 style="@style/TextViewLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:layout_marginBottom="@dimen/activity_general_horizontal_margin"
                 android:text="@string/key_saved_users_label" />
 
         </LinearLayout>
@@ -224,9 +224,9 @@
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp"
             app:cardUseCompatPadding="true"
-            app:contentPadding="@dimen/activity_horizontal_margin"
-            app:layout_constraintTop_toTopOf="parent"
+            app:contentPadding="@dimen/activity_general_horizontal_margin"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/loginButton"
             app:layout_constraintStart_toStartOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -250,7 +250,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_general_horizontal_margin"
                     android:hint="@string/key_username_label"
                     app:endIconMode="clear_text"
                     app:hintEnabled="true"
@@ -275,7 +275,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_general_horizontal_margin"
                     android:hint="@string/key_password_label"
                     app:endIconMode="clear_text"
                     app:hintEnabled="true"
@@ -330,7 +330,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/signUnButton"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView"
             tools:text="@string/key_login_label" />
 
         <com.google.android.material.button.MaterialButton
@@ -349,7 +348,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/loginButton"
-            app:layout_constraintTop_toBottomOf="@+id/cardView"
             tools:text="@string/key_sign_up_label" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

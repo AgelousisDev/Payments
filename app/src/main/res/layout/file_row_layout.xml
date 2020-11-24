@@ -17,7 +17,7 @@
     android:focusable="true"
     android:foreground="?attr/selectableItemBackgroundBorderless"
     android:onClick="@{() -> presenter.onFileSelected(fileDataModel)}"
-    android:padding="@dimen/activity_horizontal_margin">
+    android:padding="@dimen/activity_general_horizontal_margin">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/fileRowImageView"
@@ -34,7 +34,7 @@
         style="@style/TextViewTitleLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_general_horizontal_margin"
         android:gravity="center"
         android:text="@{fileDataModel.description}"
         android:singleLine="true"
@@ -48,7 +48,7 @@
         style="@style/TextViewLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_general_horizontal_margin"
         android:gravity="center"
         android:text="@{fileDataModel.showingDate}"
         android:singleLine="true"

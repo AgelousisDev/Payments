@@ -155,6 +155,8 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
 
     override fun onUsersSelect() {
         viewModel.usersLiveData.value?.takeIf { it.isNotEmpty() }?.let {
+            signInState = if (it.isNotEmpty()) SignInState.LOGIN else SignInState.SIGN_UP
+            binding?.signInState = signInState
             showUserSelectionFragment(
                 users = it
             )

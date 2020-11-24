@@ -4,6 +4,6 @@
 
     <solid android:color="@color/dayNightTextOnBackground" />
 
-    <corners android:radius="@dimen/activity_horizontal_margin" />
+    <corners android:radius="@dimen/activity_general_horizontal_margin" />
 
 </shape>
