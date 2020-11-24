@@ -37,6 +37,7 @@ object Constants {
     const val FORGOT_PASSWORD_FRAGMENT_TAG = "forgotPasswordFragmentTag"
     const val PAYMENTS_MENU_OPTIONS_FRAGMENT_TAG = "paymentMenuOptionsFragmentTag"
     const val EXPORT_DATABASE_FILE_NAME = "PAYMENTS.payments"
+    const val EXPORT_DATABASE_FILE_NAME_EXTENSION = ".payments"
 
     object Colors {
         val colorPickerColors = intArrayOf(

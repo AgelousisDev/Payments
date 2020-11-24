@@ -357,8 +357,8 @@ fun AppCompatActivity.searchFile(requestCode: Int, mimeType: String) =
 fun Context.isDBFile(uri: Uri?) =
     uri?.let {
         MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(it)) == Constants.BIN_FILE_EXTENSION ||
-                this getDisplayName it == Constants.EXPORT_DATABASE_FILE_NAME ||
-                this getDisplayName it == SQLiteHelper.DB_NAME
+                (this getDisplayName it)?.endsWith(Constants.EXPORT_DATABASE_FILE_NAME_EXTENSION) == true ||
+                (this getDisplayName it)?.endsWith(SQLiteHelper.DB_NAME_EXTENSION) == true
     } ?: false
 
 infix fun Context.getDisplayName(uri: Uri): String? {
