@@ -239,6 +239,8 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
 
     private fun addObservers() {
         viewModel.usersLiveData.observe(this) { users ->
+            signInState = SignInState.LOGIN
+            binding?.signInState = signInState
             showUserSelectionFragment(
                 users = users
             )
@@ -338,7 +340,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                             message = resources.getString(R.string.key_database_successfully_imported_message)
                         )
                         after(
-                            millis = 1000
+                            millis = 500
                         ) {
                             initializeUsers()
                             initializeGroups()

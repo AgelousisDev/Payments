@@ -3,6 +3,7 @@ package com.agelousis.payments.database
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.os.Build
 
 class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
 
@@ -98,6 +99,12 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         private const val FILES_TABLE_CREATION_QUERY = "CREATE TABLE $FILES_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "$USER_ID INTEGER, $DESCRIPTION TEXT, $FILENAME TEXT, $DATE_TIME TEXT, $FILE_DATA BLOB);"
 
+    }
+
+    override fun onConfigure(db: SQLiteDatabase?) {
+        super.onConfigure(db)
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.P)
+            db?.disableWriteAheadLogging()
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
