@@ -31,6 +31,15 @@
         <item name="android:windowBackground">@color/black</item>
     </style>
 
+    <style name="DraggableAppTheme" parent="MainAppTheme">
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/whiteTwo</item>
+    </style>
+
     <!-- Alert Dialog -->
     <style name="MaterialAlertDialog" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="android:windowAnimationStyle">@style/DialogAnimation</item>

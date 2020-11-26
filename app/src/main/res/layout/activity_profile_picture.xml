@@ -7,19 +7,34 @@
             name="userModel"
             type="com.agelousis.payments.login.models.UserModel" />
     </data>
-<androidx.constraintlayout.widget.ConstraintLayout
+<com.thefuntasty.hauler.HaulerView
+    android:id="@+id/haulerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".profilePicture.ProfilePictureActivity">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        picassoImageFromInternalFiles="@{userModel.profileImage}"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/profileImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            picassoImageFromInternalFiles="@{userModel.profileImage}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    </com.thefuntasty.hauler.HaulerView>
 </layout>

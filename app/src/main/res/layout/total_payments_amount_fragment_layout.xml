@@ -18,26 +18,28 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:orientation="vertical"
-            android:layout_weight="0.5"
+            android:orientation="horizontal"
+            android:layout_weight="0.4"
             android:gravity="center">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                app:srcCompat="@drawable/ic_income" />
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                app:srcCompat="@drawable/ic_payment"
+                app:tint="@color/white"/>
 
             <com.google.android.material.textview.MaterialTextView
                 style="@style/TextViewTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:textColor="@color/white"
                 android:text="@string/key_total_payments_label"/>
 
         </LinearLayout>
@@ -45,7 +47,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5"
+            android:layout_weight="0.6"
             android:background="@drawable/basic_dialog_footer_background">
 
             <LinearLayout
