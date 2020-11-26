@@ -20,13 +20,14 @@ import com.agelousis.payments.main.ui.files.models.HeaderModel
 import com.agelousis.payments.main.ui.personalInformation.adapters.OptionTypesAdapter
 import com.agelousis.payments.main.ui.personalInformation.models.OptionType
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
+import com.agelousis.payments.main.ui.personalInformation.presenter.PersonalInformationPresenter
 import com.agelousis.payments.utils.extensions.*
 import kotlinx.android.synthetic.main.fragment_personal_information_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.AnimatorListener {
+class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.AnimatorListener, PersonalInformationPresenter {
 
     override fun onAnimationCancel(animation: Animator?) {}
     override fun onAnimationRepeat(animation: Animator?) {}
@@ -106,6 +107,10 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
         (activity as? MainActivity)?.initializeDatabaseExport()
     }
 
+    override fun onProfilePicturePressed() {
+        (activity as? MainActivity)?.showProfilePicture()
+    }
+
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val dbManager by lazy { context?.let { DBManager(context = it) } }
     private val newUserModel by lazy { (activity as? MainActivity)?.userModel?.copy() }
@@ -171,6 +176,7 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
             false
         ).also {
             it.userModel = (activity as? MainActivity)?.userModel
+            it.presenter = this
         }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

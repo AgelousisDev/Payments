@@ -20,6 +20,9 @@
             android:id="@+id/navigationViewProfileImageView"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
             app:srcCompat="@drawable/ic_person" />
 
         <com.google.android.material.textview.MaterialTextView

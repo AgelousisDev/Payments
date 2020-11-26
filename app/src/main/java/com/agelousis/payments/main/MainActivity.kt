@@ -34,6 +34,7 @@ import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.periodFilter.PeriodFilterFragment
 import com.agelousis.payments.main.ui.personalInformation.PersonalInformationFragment
+import com.agelousis.payments.profilePicture.ProfilePictureActivity
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.google.android.material.bottomappbar.BottomAppBar
@@ -249,6 +250,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navigationView.getHeaderView(0).navigationViewProfileImageView.loadImagePath(
             fileName = userModel?.profileImage
         )
+        navigationView.getHeaderView(0).navigationViewProfileImageView.setOnClickListener {
+            showProfilePicture()
+        }
         navigationView.getHeaderView(0).navigationViewProfileUsername.text = userModel?.fullName ?: resources.getString(R.string.key_empty_field_label)
     }
 
@@ -369,6 +373,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun showPaymentsMenuOptionsFragment() {
         PaymentsMenuOptionsBottomSheetFragment.show(
             supportFragmentManager = supportFragmentManager
+        )
+    }
+
+    fun showProfilePicture() {
+        startActivity(
+            Intent(
+                this,
+                ProfilePictureActivity::class.java
+            ).also {
+                it.putExtra(USER_MODEL_EXTRA, userModel)
+            }
         )
     }
 
