@@ -5,11 +5,17 @@
         <variable
             name="paymentAmountSumModel"
             type="com.agelousis.payments.main.ui.payments.models.PaymentAmountSumModel" />
+        <variable
+            name="presenter"
+            type="com.agelousis.payments.main.ui.payments.presenters.PaymentAmountSumPresenter" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:onClick="@{() -> presenter.onPaymentAmountSumSelected(paymentAmountSumModel)}">
 
     <com.google.android.material.textview.MaterialTextView
         style="@style/TextViewTitleLabel"

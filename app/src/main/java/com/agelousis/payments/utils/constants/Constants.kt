@@ -38,6 +38,7 @@ object Constants {
     const val PAYMENTS_MENU_OPTIONS_FRAGMENT_TAG = "paymentMenuOptionsFragmentTag"
     const val EXPORT_DATABASE_FILE_NAME = "PAYMENTS.payments"
     const val EXPORT_DATABASE_FILE_NAME_EXTENSION = ".payments"
+    const val TOTAL_PAYMENTS_AMOUNT_FRAGMENT_TAG = "totalPaymentsFragmentTag"
 
     object Colors {
         val colorPickerColors = intArrayOf(

@@ -1,10 +1,8 @@
 package com.agelousis.payments.main.ui.payments.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.agelousis.payments.R
 import com.agelousis.payments.databinding.EmptyRowLayoutBinding
 import com.agelousis.payments.databinding.GroupRowLayoutBinding
 import com.agelousis.payments.databinding.PaymentAmountSumLayoutBinding
@@ -15,13 +13,14 @@ import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountSumModel
 import com.agelousis.payments.main.ui.payments.models.PersonModel
 import com.agelousis.payments.main.ui.payments.presenters.GroupPresenter
+import com.agelousis.payments.main.ui.payments.presenters.PaymentAmountSumPresenter
 import com.agelousis.payments.main.ui.payments.presenters.PaymentPresenter
 import com.agelousis.payments.main.ui.payments.viewHolders.EmptyViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.GroupViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.PaymentAmountSumViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.PaymentViewHolder
 
-class PaymentsAdapter(private val list: ArrayList<Any>, private val groupPresenter: GroupPresenter, private val paymentPresenter: PaymentPresenter): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PaymentsAdapter(private val list: ArrayList<Any>, private val groupPresenter: GroupPresenter, private val paymentPresenter: PaymentPresenter, private val paymentAmountSumPresenter: PaymentAmountSumPresenter): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -92,7 +91,8 @@ class PaymentsAdapter(private val list: ArrayList<Any>, private val groupPresent
         (holder as? PaymentAmountSumViewHolder)?.bind(
             paymentAmountSumModel = list.getOrNull(
                 index = position
-            ) as? PaymentAmountSumModel ?: return
+            ) as? PaymentAmountSumModel ?: return,
+            presenter = paymentAmountSumPresenter
         )
     }
 
@@ -108,7 +108,7 @@ class PaymentsAdapter(private val list: ArrayList<Any>, private val groupPresent
 
     fun restoreItem(position: Int) = notifyItemChanged(position)
 
-    fun removeItemAndUpdate(context: Context, position: Int): Boolean {
+    /*fun removeItemAndUpdate(context: Context, position: Int): Boolean {
         list.removeAt(position)
         notifyItemRemoved(position)
         //notifyItemRangeChanged(position, list.size)
@@ -138,6 +138,6 @@ class PaymentsAdapter(private val list: ArrayList<Any>, private val groupPresent
             notifyItemInserted(0)
             notifyItemRangeChanged(0, list.size)
         }
-    }
+    }*/
 
 }

@@ -23,12 +23,14 @@ import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountSumModel
 import com.agelousis.payments.main.ui.payments.models.PersonModel
 import com.agelousis.payments.main.ui.payments.presenters.GroupPresenter
+import com.agelousis.payments.main.ui.payments.presenters.PaymentAmountSumPresenter
 import com.agelousis.payments.main.ui.payments.presenters.PaymentPresenter
 import com.agelousis.payments.main.ui.payments.viewHolders.GroupViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.PaymentViewHolder
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
 import com.agelousis.payments.main.ui.periodFilter.models.PeriodFilterDataModel
 import com.agelousis.payments.main.ui.shareMessageFragment.ShareMessageBottomSheetFragment
+import com.agelousis.payments.main.ui.totalPaymentsAmount.TotalPaymentsAmountDialogFragment
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.PDFHelper
 import kotlinx.android.synthetic.main.activity_main.*
@@ -38,7 +40,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
-class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
+class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAmountSumPresenter {
 
     override fun onGroupSelected(groupModel: GroupModel) {
         (activity as? MainActivity)?.startGroupActivity(
@@ -66,6 +68,13 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
             PaymentsFragmentDirections.actionPaymentListFragmentToNewPaymentFragment(
                 groupDataModel = groupModel
             )
+        )
+    }
+
+    override fun onPaymentAmountSumSelected(paymentAmountSumModel: PaymentAmountSumModel) {
+        TotalPaymentsAmountDialogFragment.show(
+            supportFragmentManager = childFragmentManager,
+            paymentAmountSumModel = paymentAmountSumModel
         )
     }
 
@@ -116,7 +125,8 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter {
         paymentListRecyclerView.adapter = PaymentsAdapter(
             list = filteredList,
             groupPresenter = this,
-            paymentPresenter = this
+            paymentPresenter = this,
+            paymentAmountSumPresenter = this
         )
         paymentListRecyclerView.addItemDecoration(
             object: RecyclerView.ItemDecoration() {

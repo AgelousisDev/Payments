@@ -832,6 +832,13 @@ fun setTextViewColorByPaymentDate(materialTextView: MaterialTextView, payments: 
                  R.color.red
             )
         )
+    else
+        materialTextView.setTextColor(
+            ContextCompat.getColor(
+                materialTextView.context,
+                R.color.green
+            )
+        )
 }
 
 @BindingAdapter("layoutWidth")
