@@ -1,10 +1,12 @@
 package com.agelousis.payments.main.ui.newPayment
 
 import android.animation.Animator
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -146,6 +148,12 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     }
 
     private fun setupUI() {
+        selectFromContactLayout.setOnDetailsPressed {
+            (activity as? MainActivity)?.searchContact(
+                readContactsPermissionRequestCode = MainActivity.CONTACTS_PERMISSION_REQUEST_CODE,
+                contactsSelectorRequestCode = MainActivity.CONTACTS_SELECTOR_REQUEST_CODE
+            )
+        }
         paymentTypeLayout.setOnDetailsPressed {
             context?.showListDialog(
                 title = resources.getString(R.string.key_payment_type_label),
@@ -239,25 +247,24 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     }
 
     private fun scheduleNotification() {
-        if (databaseTriggeringType == DatabaseTriggeringType.INSERT)
-            availablePayments.filter { it.paymentDateNotification == true }.forEachIndexed { index, paymentAmountModel ->
-                (context ?: return@forEachIndexed) scheduleNotification NotificationDataModel(
-                    calendar = paymentAmountModel.paymentDate?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.defaultTimeCalendar ?: return@forEachIndexed,
-                    notificationId = index,
-                    title = currentPersonModel?.fullName,
-                    body = String.format(
-                        resources.getString(R.string.key_notification_amount_value),
-                        paymentAmountModel.getAmountWithoutVat(
-                            context = context ?: return@forEachIndexed,
-                            vat = (activity as? MainActivity)?.userModel?.vat ?: return@forEachIndexed
-                        )
-                    ),
-                    date = paymentAmountModel.paymentDate.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.formattedDateWith(pattern = Constants.VIEWING_DATE_FORMAT),
-                    groupName = currentPersonModel?.groupName,
-                    groupImage = currentPersonModel?.groupImage,
-                    groupTint = currentPersonModel?.groupColor
-                )
-            }
+        availablePayments.filter { it.paymentDateNotification == true }.forEachIndexed { index, paymentAmountModel ->
+            (context ?: return@forEachIndexed) scheduleNotification NotificationDataModel(
+                calendar = paymentAmountModel.paymentDate?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.defaultTimeCalendar ?: return@forEachIndexed,
+                notificationId = index,
+                title = currentPersonModel?.fullName,
+                body = String.format(
+                    resources.getString(R.string.key_notification_amount_value),
+                    paymentAmountModel.getAmountWithoutVat(
+                        context = context ?: return@forEachIndexed,
+                        vat = (activity as? MainActivity)?.userModel?.vat ?: return@forEachIndexed
+                    )
+                ),
+                date = paymentAmountModel.paymentDate.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.formattedDateWith(pattern = Constants.VIEWING_DATE_FORMAT),
+                groupName = currentPersonModel?.groupName,
+                groupImage = currentPersonModel?.groupImage,
+                groupTint = currentPersonModel?.groupColor
+            )
+        }
     }
 
     private fun initializeNewPayments() {
@@ -379,6 +386,25 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             groupColor = args.personDataModel?.groupColor,
             groupImage = args.personDataModel?.groupImage
         )
+    }
+
+    fun applyContact(uri: Uri?) {
+        context?.contactModelFrom(
+            uri = uri
+        )?.let { contactModel ->
+            binding?.firstNameLayout?.value = contactModel.firstName
+            binding?.surnameLayout?.value = contactModel.lastName
+            binding?.phoneLayout?.value = contactModel.phoneNumber
+            binding?.emailLayout?.value = contactModel.email
+            contactModel.photo?.let { bitmap ->
+                val roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(resources, bitmap)
+                roundedBitmapDrawable.isCircular = true
+                binding?.userRowImageView?.visibility = View.VISIBLE
+                binding?.userRowImageView?.setImageDrawable(roundedBitmapDrawable)
+            } ?: run {
+                binding?.userRowImageView?.visibility = View.GONE
+            }
+        }
     }
 
     fun dismissPayment() {

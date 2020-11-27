@@ -1,6 +1,7 @@
 package com.agelousis.payments.main.ui.payments.models
 
 import android.content.Context
+import android.net.Uri
 import android.os.Parcelable
 import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.newPayment.enumerations.PaymentAmountRowState
@@ -34,15 +35,6 @@ data class PersonModel(val personId: Int? = null,
 
     val fullName: String
         get() = String.format("%s %s", firstName ?: "", surname ?: "")
-
-    val capitalizedGroupName
-        get() = if (groupName?.length ?: 0 > 4)
-                    String.format(
-                        "%s.",
-                        groupName?.capitalize(Locale.getDefault())?.take(n = 3)
-                    )
-                else
-                    groupName?.capitalize(Locale.getDefault())?.take(n = 4)
 
     fun getCommunicationData(context: Context): String {
         return ifLet(phone, email) {

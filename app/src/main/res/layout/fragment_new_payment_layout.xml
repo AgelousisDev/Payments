@@ -58,8 +58,8 @@
             <FrameLayout
                 android:id="@+id/paymentRowHeaderFrameLayout"
                 backgroundDrawableTintColor="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? groupModel.color != null ? groupModel.color : personModel.groupColor : null}"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/activity_general_horizontal_margin"
                 android:background="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? @drawable/oval_background : null}"
@@ -73,7 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@{groupModel.capitalizedGroupName != null ? groupModel.capitalizedGroupName : personModel.capitalizedGroupName}"
+                    android:text="@{groupModel.groupName != null ? String.valueOf(groupModel.groupName.charAt(0)).toUpperCase() : String.valueOf(personModel.groupName.charAt(0)).toUpperCase()}"
                     android:textColor="@color/white"
                     android:textStyle="normal"
                     android:visibility="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? View.VISIBLE : View.GONE}" />
@@ -94,6 +94,15 @@
                 android:layout_marginTop="@dimen/activity_general_horizontal_margin"
                 android:layout_marginBottom="@dimen/activity_general_horizontal_margin"
                 android:background="@color/grey" />
+
+            <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
+                android:id="@+id/selectFromContactLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:fieldType="TEXT"
+                app:imeOptionType="actionDone"
+                app:label="@string/key_select_from_contact_label"
+                app:showLine="true" />
 
             <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
                 android:id="@+id/paymentTypeLayout"

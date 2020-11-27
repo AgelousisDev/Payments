@@ -38,8 +38,8 @@
 
     <FrameLayout
         android:id="@+id/paymentRowHeaderFrameLayout"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginTop="@dimen/activity_general_horizontal_margin"
         android:background="@{notificationDataModel.groupImage == null ? @drawable/oval_background : null}"
         backgroundDrawableTintColor="@{notificationDataModel.groupImage == null ? notificationDataModel.groupTint : null}"
@@ -53,7 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="@{notificationDataModel.capitalizedGroupName}"
+            android:text="@{String.valueOf(notificationDataModel.groupName.charAt(0)).toUpperCase()}"
             android:visibility="@{notificationDataModel.groupImage == null ? View.VISIBLE : View.GONE}"
             android:textColor="@color/white"
             android:textStyle="normal" />

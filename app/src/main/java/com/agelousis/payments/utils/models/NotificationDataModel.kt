@@ -17,9 +17,6 @@ data class NotificationDataModel(val calendar: Calendar,
                                  val groupTint: Int?
 ): Parcelable {
 
-    val capitalizedGroupName
-        get() = groupName?.capitalize(Locale.getDefault())
-
     fun getFormattedDate(context: Context) =
         String.format(
             "%s - %s",

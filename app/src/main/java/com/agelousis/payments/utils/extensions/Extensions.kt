@@ -7,6 +7,7 @@ import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -20,6 +21,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.CalendarContract
+import android.provider.ContactsContract
 import android.provider.OpenableColumns
 import android.telephony.TelephonyManager
 import android.view.*
@@ -50,6 +52,7 @@ import com.agelousis.payments.R
 import com.agelousis.payments.custom.picasso.CircleTransformation
 import com.agelousis.payments.database.SQLiteHelper
 import com.agelousis.payments.login.enumerations.UIMode
+import com.agelousis.payments.main.ui.newPayment.ContactModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.payments.utils.constants.Constants
@@ -65,6 +68,7 @@ import com.squareup.picasso.Target
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
@@ -734,6 +738,73 @@ var isNightMode: Boolean = false
                 false -> AppCompatDelegate.MODE_NIGHT_NO
             }
         )
+    }
+
+fun AppCompatActivity.searchContact(readContactsPermissionRequestCode: Int, contactsSelectorRequestCode: Int) {
+    if (hasPermissions(android.Manifest.permission.READ_CONTACTS))
+        startActivityForResult(
+            Intent(
+                Intent.ACTION_PICK
+            ).also {
+                   it.type = ContactsContract.Contacts.CONTENT_TYPE
+            },
+            contactsSelectorRequestCode
+        )
+    else
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(
+                android.Manifest.permission.READ_CONTACTS
+            ),
+            readContactsPermissionRequestCode
+        )
+}
+
+infix fun Context.contactModelFrom(uri: Uri?) =
+    uri?.let { unwrappedUri ->
+        val cursor = contentResolver.query(unwrappedUri, null, null, null, null) ?: return@let null
+        if (cursor.count <= 0)
+            return@let null
+        cursor.moveToFirst()
+        val id = cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.Contacts._ID))
+        val phoneNumber = if (cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) == "1") {
+            val contentCursor = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,"${ContactsContract.CommonDataKinds.Phone.CONTACT_ID}=?", arrayOf(id), null)
+            contentCursor?.moveToFirst()
+            val phone = contentCursor?.getStringOrNull(contentCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+            contentCursor?.close()
+            phone
+        }
+        else null
+        val emailCursor = contentResolver.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,  null,"${ContactsContract.CommonDataKinds.Email.CONTACT_ID}=?", arrayOf(id), null)
+        val email = if ((emailCursor?.count ?: 0) > 0 && emailCursor?.moveToFirst() == true) {
+            val email = emailCursor.getStringOrNull(emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA))
+            emailCursor.close()
+            email
+        }
+        else null
+
+        val contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, id?.toLong() ?: 0L)
+        val displayPhotoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.DISPLAY_PHOTO)
+        val photoBitmap = try {
+            contentResolver.openAssetFileDescriptor(displayPhotoUri, "r")?.let {
+                BitmapFactory.decodeStream(it.createInputStream())
+            }
+        } catch (e: IOException) {
+            null
+        }
+        val contactModel = ContactModel(
+            firstName = cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))?.takeIf { it.contains(" ") }?.let {
+                it.split(" ").firstOrNull()
+            } ?: cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)),
+            lastName = cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))?.takeIf { it.contains(" ") }?.let {
+                it.split(" ").second()
+            } ?: cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)),
+            phoneNumber = phoneNumber,
+            email = email,
+            photo = photoBitmap
+        )
+        cursor.close()
+        contactModel
     }
 
 @BindingAdapter("picassoImagePath")

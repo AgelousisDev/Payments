@@ -2,6 +2,7 @@ package com.agelousis.payments.main
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.Menu
@@ -52,6 +53,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     companion object {
         const val USER_MODEL_EXTRA = "MainActivity=userModelExtra"
         const val EXPORT_FILE_REQUEST_CODE = 1
+        const val CONTACTS_SELECTOR_REQUEST_CODE = 5
+        const val CONTACTS_PERMISSION_REQUEST_CODE = 11
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -367,7 +370,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     ) {
                         (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
                     }
+                CONTACTS_SELECTOR_REQUEST_CODE ->
+                    (supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.applyContact(
+                        uri = data?.data
+                    )
             }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode) {
+            CONTACTS_PERMISSION_REQUEST_CODE ->
+                if (grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED)
+                    searchContact(
+                        readContactsPermissionRequestCode = CONTACTS_PERMISSION_REQUEST_CODE,
+                        contactsSelectorRequestCode = CONTACTS_SELECTOR_REQUEST_CODE
+                    )
+        }
     }
 
     private fun showPaymentsMenuOptionsFragment() {
