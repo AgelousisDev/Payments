@@ -11,6 +11,7 @@ class LoginViewModel: ViewModel() {
 
     val usersLiveData by lazy { MutableLiveData<List<UserModel>>() }
     val groupsLiveData by lazy { MutableLiveData<List<GroupModel>>() }
+    val personsImagesLiveData by lazy { MutableLiveData<List<Pair<String?, ByteArray?>>>() }
 
     suspend fun initializeUsers(context: Context) {
         val dbManager = DBManager(context = context)
@@ -23,6 +24,13 @@ class LoginViewModel: ViewModel() {
         val dbManager = DBManager(context = context)
         dbManager.initializeGroups inner@ {
             groupsLiveData.value = it.takeIf { it.isNotEmpty() } ?: return@inner
+        }
+    }
+
+    suspend fun initializePersonsImages(context: Context) {
+        val dbManager = DBManager(context = context)
+        dbManager.initializePersonsImages {
+            personsImagesLiveData.value = it
         }
     }
 

@@ -785,9 +785,9 @@ infix fun Context.contactModelFrom(uri: Uri?) =
 
         val contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, id?.toLong() ?: 0L)
         val displayPhotoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.DISPLAY_PHOTO)
-        val photoBitmap = try {
+        val photoUri = try {
             contentResolver.openAssetFileDescriptor(displayPhotoUri, "r")?.let {
-                BitmapFactory.decodeStream(it.createInputStream())
+                displayPhotoUri
             }
         } catch (e: IOException) {
             null
@@ -801,7 +801,7 @@ infix fun Context.contactModelFrom(uri: Uri?) =
             } ?: cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)),
             phoneNumber = phoneNumber,
             email = email,
-            photo = photoBitmap
+            photoUri = photoUri
         )
         cursor.close()
         contactModel
@@ -827,6 +827,12 @@ fun setPicassoImageFromInternalFiles(appCompatImageView: AppCompatImageView, fil
 fun setPicassoGroupImageFromInternalFiles(appCompatImageView: AppCompatImageView, fileName: String?) {
     fileName?.let {
         Picasso.get().load(File(appCompatImageView.context.filesDir, it)).transform(CircleTransformation()).into(appCompatImageView)
+    }
+}
+
+fun AppCompatImageView.setPicassoGroupImageInternalFile(fileName: String?) {
+    fileName?.let {
+        Picasso.get().load(File(context.filesDir, it)).transform(CircleTransformation()).into(this)
     }
 }
 

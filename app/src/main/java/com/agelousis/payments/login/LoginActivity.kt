@@ -253,6 +253,14 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                 )
             }
         }
+        viewModel.personsImagesLiveData.observe(this) { imagePairs ->
+            imagePairs.forEach { pair ->
+                saveImage(
+                    fileName = pair.first ?: return@forEach,
+                    byteArray = pair.second ?: return@forEach
+                )
+            }
+        }
     }
 
     private fun showUserSelectionFragment(users: List<UserModel>) {
@@ -312,6 +320,13 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
             )
         }
 
+    private fun initializePersonsImages() =
+        uiScope.launch {
+            viewModel.initializePersonsImages(
+                context = this@LoginActivity
+            )
+        }
+
     private fun initializeDatabaseImport() {
         showTwoButtonsDialog(
             title = resources.getString(R.string.key_import_label),
@@ -344,6 +359,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                         ) {
                             initializeUsers()
                             initializeGroups()
+                            initializePersonsImages()
                         }
                     }
                     false ->

@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -107,6 +106,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             addPaymentButton.isEnabled = value
         }
     private var selectedPaymentType = PaymentType.CASH_PAYMENT
+    private var contactModel: ContactModel? = null
 
     override fun onResume() {
         super.onResume()
@@ -254,14 +254,11 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                 title = currentPersonModel?.fullName,
                 body = String.format(
                     resources.getString(R.string.key_notification_amount_value),
-                    paymentAmountModel.getAmountWithoutVat(
-                        context = context ?: return@forEachIndexed,
-                        vat = (activity as? MainActivity)?.userModel?.vat ?: return@forEachIndexed
-                    )
+                    paymentAmountModel.paymentAmount?.euroFormattedString ?: ""
                 ),
                 date = paymentAmountModel.paymentDate.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.formattedDateWith(pattern = Constants.VIEWING_DATE_FORMAT),
                 groupName = currentPersonModel?.groupName,
-                groupImage = currentPersonModel?.groupImage,
+                groupImage = currentPersonModel?.personImage ?: currentPersonModel?.groupImage ?: args.groupDataModel?.groupImage,
                 groupTint = currentPersonModel?.groupColor
             )
         }
@@ -384,8 +381,11 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             payments = availablePayments,
             paymentType = selectedPaymentType,
             groupColor = args.personDataModel?.groupColor,
-            groupImage = args.personDataModel?.groupImage
-        )
+            groupImage = args.personDataModel?.groupImage,
+            personImage = contactModel?.photo
+        ).also {
+            it.personImageData = contactModel?.photoImageData
+        }
     }
 
     fun applyContact(uri: Uri?) {
@@ -396,13 +396,38 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             binding?.surnameLayout?.value = contactModel.lastName
             binding?.phoneLayout?.value = contactModel.phoneNumber
             binding?.emailLayout?.value = contactModel.email
-            contactModel.photo?.let { bitmap ->
-                val roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(resources, bitmap)
-                roundedBitmapDrawable.isCircular = true
+            this.contactModel = contactModel
+            contactModel.photoUri?.let { photoUri ->
                 binding?.userRowImageView?.visibility = View.VISIBLE
-                binding?.userRowImageView?.setImageDrawable(roundedBitmapDrawable)
+                loadImageBitmap(
+                    imageUri = photoUri
+                ) { bitmap ->
+                    this.contactModel?.photo?.let {
+                        context?.deleteInternalFile(
+                            fileName = it
+                        )
+                    }
+                    this.contactModel?.photo = context?.saveProfileImage(
+                        bitmap = bitmap
+                    )
+                    this.contactModel?.photoImageData = bitmap?.byteArray
+                    binding?.userRowImageView?.loadImageUri(
+                        imageUri = photoUri
+                    )
+                }
             } ?: run {
-                binding?.userRowImageView?.visibility = View.GONE
+                if (args.groupDataModel?.groupImage == null && args.personDataModel?.groupImage == null)
+                    binding?.userRowImageView?.visibility = View.GONE
+                else
+                    args.groupDataModel?.groupImage?.let {
+                        binding?.userRowImageView?.setPicassoGroupImageInternalFile(
+                            fileName = it
+                        )
+                    } ?: args.personDataModel?.groupImage?.let {
+                        binding?.userRowImageView?.setPicassoGroupImageInternalFile(
+                            fileName = it
+                        )
+                    }
             }
         }
     }

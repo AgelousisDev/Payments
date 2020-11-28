@@ -51,6 +51,8 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         const val FREE = "free"
         const val MESSAGE_TEMPLATE = "message_template"
         const val PAYMENT_TYPE = "payment_type"
+        const val PERSON_IMAGE = "person_image"
+        const val PERSON_IMAGE_DATA = "person_image_data"
 
         // Payments Table Columns
         const val PERSON_ID = "person_id"
@@ -73,7 +75,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         const val DB_NAME_EXTENSION = ".db"
 
         // database version
-        private const val DB_VERSION = 1
+        private const val DB_VERSION = 2
 
         // Creating users table query
         private const val USERS_TABLE_CREATION_QUERY = "CREATE TABLE $USERS_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -88,7 +90,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         //Creating persons table query
         private const val PERSONS_TABLE_CREATION_QUERY = "CREATE TABLE $PERSONS_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "$USER_ID INTEGER, $GROUP_ID INTEGER, $FIRST_NAME TEXT, $SURNAME TEXT, $PHONE TEXT, $PARENT_NAME TEXT, $PARENT_PHONE TEXT, $EMAIL TEXT," +
-                "$ACTIVE BOOLEAN, $FREE BOOLEAN, $MESSAGE_TEMPLATE TEXT, $PAYMENT_TYPE TEXT);"
+                "$ACTIVE BOOLEAN, $FREE BOOLEAN, $MESSAGE_TEMPLATE TEXT, $PAYMENT_TYPE TEXT, $PERSON_IMAGE TEXT, $PERSON_IMAGE_DATA BLOB);"
 
         //Creating payments table query
         private const val PAYMENTS_TABLE_CREATION_QUERY = "CREATE TABLE $PAYMENTS_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -116,7 +118,10 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-
+        if (newVersion > oldVersion) {
+            db?.execSQL("ALTER TABLE $PERSONS_TABLE_NAME ADD COLUMN $PERSON_IMAGE INTEGER DEFAULT null")
+            db?.execSQL("ALTER TABLE $PERSONS_TABLE_NAME ADD COLUMN $PERSON_IMAGE_DATA BLOB DEFAULT null")
+        }
     }
 
 }

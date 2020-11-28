@@ -57,12 +57,12 @@
 
             <FrameLayout
                 android:id="@+id/paymentRowHeaderFrameLayout"
-                backgroundDrawableTintColor="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? groupModel.color != null ? groupModel.color : personModel.groupColor : null}"
+                backgroundDrawableTintColor="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null &amp;&amp; personModel.personImage == null ? groupModel.color != null ? groupModel.color : personModel.groupColor : null}"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/activity_general_horizontal_margin"
-                android:background="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? @drawable/oval_background : null}"
+                android:background="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null &amp;&amp; personModel.personImage == null ? @drawable/oval_background : null}"
                 android:elevation="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -76,15 +76,15 @@
                     android:text="@{groupModel.groupName != null ? String.valueOf(groupModel.groupName.charAt(0)).toUpperCase() : String.valueOf(personModel.groupName.charAt(0)).toUpperCase()}"
                     android:textColor="@color/white"
                     android:textStyle="normal"
-                    android:visibility="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? View.VISIBLE : View.GONE}" />
+                    android:visibility="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null &amp;&amp; personModel.personImage == null ? View.VISIBLE : View.GONE}" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/userRowImageView"
-                    picassoGroupImageFromInternalFiles="@{groupModel.groupImage != null ? groupModel.groupImage : personModel.groupImage}"
+                    picassoGroupImageFromInternalFiles="@{personModel.personImage != null ? personModel.personImage : groupModel.groupImage != null ? groupModel.groupImage : personModel.groupImage}"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    android:visibility="@{groupModel.groupImage != null || personModel.groupImage != null ? View.VISIBLE : View.GONE}" />
+                    android:visibility="@{groupModel.groupImage != null || personModel.groupImage != null || personModel.personImage != null ? View.VISIBLE : View.GONE}" />
 
             </FrameLayout>
 
