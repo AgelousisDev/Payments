@@ -382,9 +382,9 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             paymentType = selectedPaymentType,
             groupColor = args.personDataModel?.groupColor,
             groupImage = args.personDataModel?.groupImage,
-            personImage = contactModel?.photo
+            personImage = contactModel?.photo ?: args.personDataModel?.personImage
         ).also {
-            it.personImageData = contactModel?.photoImageData
+            it.personImageData = contactModel?.photoImageData ?: args.personDataModel?.personImageData
         }
     }
 

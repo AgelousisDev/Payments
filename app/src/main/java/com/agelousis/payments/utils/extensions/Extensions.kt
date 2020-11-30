@@ -807,6 +807,9 @@ infix fun Context.contactModelFrom(uri: Uri?) =
         contactModel
     }
 
+val Resources.isLandscape
+    get() = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
 @BindingAdapter("picassoImagePath")
 fun AppCompatImageView.loadImagePath(fileName: String?) {
     fileName?.let {

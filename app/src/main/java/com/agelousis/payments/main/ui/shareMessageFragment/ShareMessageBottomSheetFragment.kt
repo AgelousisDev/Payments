@@ -12,14 +12,14 @@ import com.agelousis.payments.main.ui.shareMessageFragment.enumerations.ShareMes
 import com.agelousis.payments.main.ui.shareMessageFragment.presenters.ShareMessagePresenter
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
+import com.agelousis.payments.views.bottomSheet.BasicBottomSheetDialogFragment
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.share_message_fragment_layout.*
 
-class ShareMessageBottomSheetFragment: BottomSheetDialogFragment(), ShareMessagePresenter {
+class ShareMessageBottomSheetFragment: BasicBottomSheetDialogFragment(), ShareMessagePresenter {
 
     override fun onShareMessageTypeSelected(shareMessageType: ShareMessageType) {
         dismiss()

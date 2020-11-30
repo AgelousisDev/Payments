@@ -18,13 +18,13 @@ import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.currentNavigationFragment
 import com.agelousis.payments.utils.extensions.firstOrNullWithType
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.agelousis.payments.views.bottomSheet.BasicBottomSheetDialogFragment
 import kotlinx.android.synthetic.main.payments_menu_options_fragment_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PaymentsMenuOptionsBottomSheetFragment: BottomSheetDialogFragment(), PaymentsMenuOptionPresenter {
+class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), PaymentsMenuOptionPresenter {
 
     companion object {
         fun show(supportFragmentManager: FragmentManager) {

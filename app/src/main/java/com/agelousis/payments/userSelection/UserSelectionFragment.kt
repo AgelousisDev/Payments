@@ -1,5 +1,6 @@
 package com.agelousis.payments.userSelection
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,11 +13,13 @@ import com.agelousis.payments.userSelection.adapters.UsersAdapter
 import com.agelousis.payments.userSelection.presenters.UserSelectionPresenter
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.saveImage
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.agelousis.payments.views.bottomSheet.BasicBottomSheetDialogFragment
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.user_selection_fragment_layout.*
 import java.io.File
 
-class UserSelectionFragment: BottomSheetDialogFragment(), UserSelectionPresenter {
+class UserSelectionFragment: BasicBottomSheetDialogFragment(), UserSelectionPresenter {
 
     companion object {
         private const val USERS_EXTRA = "UserSelectionFragment=usersExtra"
@@ -41,6 +44,11 @@ class UserSelectionFragment: BottomSheetDialogFragment(), UserSelectionPresenter
     }
 
     private val users by lazy { arguments?.getParcelableArrayList<UserModel>(USERS_EXTRA) }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
+        return super.onCreateDialog(savedInstanceState)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.user_selection_fragment_layout, container, false)
