@@ -320,13 +320,6 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
             )
         }
 
-    private fun initializePersonsImages() =
-        uiScope.launch {
-            viewModel.initializePersonsImages(
-                context = this@LoginActivity
-            )
-        }
-
     private fun initializeDatabaseImport() {
         showTwoButtonsDialog(
             title = resources.getString(R.string.key_import_label),
@@ -359,7 +352,6 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                         ) {
                             initializeUsers()
                             initializeGroups()
-                            initializePersonsImages()
                         }
                     }
                     false ->

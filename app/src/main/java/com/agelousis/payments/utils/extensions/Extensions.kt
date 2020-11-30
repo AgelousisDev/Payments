@@ -7,7 +7,6 @@ import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -21,7 +20,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.CalendarContract
-import android.provider.ContactsContract
 import android.provider.OpenableColumns
 import android.telephony.TelephonyManager
 import android.view.*
@@ -52,7 +50,6 @@ import com.agelousis.payments.R
 import com.agelousis.payments.custom.picasso.CircleTransformation
 import com.agelousis.payments.database.SQLiteHelper
 import com.agelousis.payments.login.enumerations.UIMode
-import com.agelousis.payments.main.ui.newPayment.ContactModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.payments.utils.constants.Constants
@@ -68,7 +65,6 @@ import com.squareup.picasso.Target
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
@@ -740,7 +736,7 @@ var isNightMode: Boolean = false
         )
     }
 
-fun AppCompatActivity.searchContact(readContactsPermissionRequestCode: Int, contactsSelectorRequestCode: Int) {
+/*fun AppCompatActivity.searchContact(readContactsPermissionRequestCode: Int, contactsSelectorRequestCode: Int) {
     if (hasPermissions(android.Manifest.permission.READ_CONTACTS))
         startActivityForResult(
             Intent(
@@ -758,9 +754,9 @@ fun AppCompatActivity.searchContact(readContactsPermissionRequestCode: Int, cont
             ),
             readContactsPermissionRequestCode
         )
-}
+}*/
 
-infix fun Context.contactModelFrom(uri: Uri?) =
+/*infix fun Context.contactModelFrom(uri: Uri?) =
     uri?.let { unwrappedUri ->
         val cursor = contentResolver.query(unwrappedUri, null, null, null, null) ?: return@let null
         if (cursor.count <= 0)
@@ -806,6 +802,7 @@ infix fun Context.contactModelFrom(uri: Uri?) =
         cursor.close()
         contactModel
     }
+ */
 
 val Resources.isLandscape
     get() = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE

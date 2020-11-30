@@ -27,8 +27,7 @@ data class PersonModel(val personId: Int? = null,
                        val groupColor: Int? = null,
                        val groupImage: String? = null,
                        val messageTemplate: String?,
-                       val paymentType: PaymentType?,
-                       val personImage: String?
+                       val paymentType: PaymentType?
 ): Parcelable {
     val totalPaymentAmount: Double?
         get() = payments?.mapNotNull { it.paymentAmount }?.takeIf { it.isNotEmpty() }?.sum()
@@ -45,8 +44,6 @@ data class PersonModel(val personId: Int? = null,
     }
 
     @IgnoredOnParcel var backgroundDrawable = R.drawable.payment_row_background
-
-    @IgnoredOnParcel var personImageData: ByteArray? = null
 
 }
 

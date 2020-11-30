@@ -26,7 +26,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="@dimen/activity_general_horizontal_margin"
-            android:background="@{personModel.groupImage == null &amp;&amp; personModel.personImage == null ? @drawable/oval_background : null}"
+            android:background="@{personModel.groupImage == null ? @drawable/oval_background : null}"
             backgroundDrawableTintColor="@{personModel.free == true ? @color/colorAccent : personModel.groupImage == null ? personModel.groupColor : null}"
             android:elevation="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -39,7 +39,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@{String.valueOf(personModel.groupName.charAt(0)).toUpperCase()}"
-                android:visibility="@{personModel.groupImage == null &amp;&amp; personModel.personImage == null ? View.VISIBLE : View.GONE}"
+                android:visibility="@{personModel.groupImage == null ? View.VISIBLE : View.GONE}"
                 android:textColor="@color/white"
                 android:textStyle="normal" />
 
@@ -47,8 +47,8 @@
                 android:id="@+id/userRowImageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="@{personModel.groupImage != null || personModel.personImage != null ? View.VISIBLE : View.GONE}"
-                picassoGroupImageFromInternalFiles="@{personModel.personImage != null ? personModel.personImage : personModel.groupImage}"
+                android:visibility="@{personModel.groupImage != null ? View.VISIBLE : View.GONE}"
+                picassoGroupImageFromInternalFiles="@{personModel.groupImage}"
                 android:scaleType="centerCrop"/>
 
         </FrameLayout>

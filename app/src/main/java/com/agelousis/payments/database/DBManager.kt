@@ -26,7 +26,6 @@ typealias PersonsClosure = (List<PersonModel>) -> Unit
 typealias DeletionSuccessBlock = () -> Unit
 typealias GroupsSuccessBlock = (List<GroupModel>) -> Unit
 typealias FilesSuccessBlock = (List<FileDataModel>) -> Unit
-typealias PersonsImagesClosure = (List<Pair<String?, ByteArray?>>) -> Unit
 
 class DBManager(context: Context) {
 
@@ -301,8 +300,6 @@ class DBManager(context: Context) {
                     it.put(SQLiteHelper.FREE, personModel.free)
                     it.put(SQLiteHelper.MESSAGE_TEMPLATE, personModel.messageTemplate)
                     it.put(SQLiteHelper.PAYMENT_TYPE, personModel.paymentType?.name)
-                    it.put(SQLiteHelper.PERSON_IMAGE, personModel.personImage)
-                    it.put(SQLiteHelper.PERSON_IMAGE_DATA, personModel.personImageData)
                 }
             )
             personModel.payments?.forEach { paymentAmountModel ->
@@ -344,8 +341,6 @@ class DBManager(context: Context) {
                     it.put(SQLiteHelper.FREE, personModel.free)
                     it.put(SQLiteHelper.MESSAGE_TEMPLATE, personModel.messageTemplate)
                     it.put(SQLiteHelper.PAYMENT_TYPE, personModel.paymentType?.name)
-                    it.put(SQLiteHelper.PERSON_IMAGE, personModel.personImage)
-                    it.put(SQLiteHelper.PERSON_IMAGE_DATA, personModel.personImageData)
                 },
                 "${SQLiteHelper.ID}=?",
                 arrayOf(personModel.personId?.toString())
@@ -465,11 +460,8 @@ class DBManager(context: Context) {
                             payments = payments,
                             groupColor = groups.firstOrNull { it.groupId == personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)) }?.color,
                             groupImage = groups.firstOrNull { it.groupId == personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)) }?.groupImage,
-                            paymentType = valueEnumOrNull(name = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.PAYMENT_TYPE)) ?: ""),
-                            personImage = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.PERSON_IMAGE))
-                        ).also {
-                            it.personImageData = personsCursor.getBlobOrNull(personsCursor.getColumnIndex(SQLiteHelper.PERSON_IMAGE_DATA))
-                        }
+                            paymentType = valueEnumOrNull(name = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.PAYMENT_TYPE)) ?: "")
+                        )
                     )
                     genericList.removeAll {
                         (it as? GroupModel)?.groupId == personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID))
@@ -552,11 +544,8 @@ class DBManager(context: Context) {
                             payments = payments,
                             groupColor = groupCursor?.getIntOrNull(groupCursor.getColumnIndex(SQLiteHelper.COLOR)),
                             groupImage = groupCursor?.getStringOrNull(groupCursor.getColumnIndex(SQLiteHelper.GROUP_IMAGE)),
-                            paymentType = valueEnumOrNull(name = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.PAYMENT_TYPE)) ?: ""),
-                            personImage = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.PERSON_IMAGE))
-                        ).also {
-                            it.personImageData = personsCursor.getBlobOrNull(personsCursor.getColumnIndex(SQLiteHelper.PERSON_IMAGE_DATA))
-                        }
+                            paymentType = valueEnumOrNull(name = personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.PAYMENT_TYPE)) ?: "")
+                        )
                     )
                 }
                 while(personsCursor.moveToNext())
@@ -630,35 +619,6 @@ class DBManager(context: Context) {
             groupsCursor?.close()
             withContext(Dispatchers.Main) {
                 groupsSuccessBlock(groups)
-            }
-        }
-    }
-
-    suspend fun initializePersonsImages(personsImagesClosure: PersonsImagesClosure) {
-        withContext(Dispatchers.Default) {
-            val persons = arrayListOf<Pair<String?, ByteArray?>>()
-            val personsCursor = database?.query(
-                SQLiteHelper.PERSONS_TABLE_NAME,
-                null,
-                null,
-               null,
-                null,
-                null,
-                null
-            )
-            if (personsCursor?.moveToFirst() == true && personsCursor.count > 0)
-                do {
-                    persons.add(
-                        personsCursor.getStringOrNull(personsCursor.getColumnIndex(SQLiteHelper.PERSON_IMAGE)) to
-                                personsCursor.getBlobOrNull(personsCursor.getColumnIndex(SQLiteHelper.PERSON_IMAGE_DATA))
-                    )
-                }
-                while(personsCursor.moveToNext())
-            personsCursor?.close()
-            withContext(Dispatchers.Main) {
-                personsImagesClosure(
-                    persons
-                )
             }
         }
     }

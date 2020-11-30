@@ -27,11 +27,4 @@ class LoginViewModel: ViewModel() {
         }
     }
 
-    suspend fun initializePersonsImages(context: Context) {
-        val dbManager = DBManager(context = context)
-        dbManager.initializePersonsImages {
-            personsImagesLiveData.value = it
-        }
-    }
-
 }

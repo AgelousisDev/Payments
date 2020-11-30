@@ -1,7 +1,6 @@
 package com.agelousis.payments.main.ui.newPayment
 
 import android.animation.Animator
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -106,7 +105,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             addPaymentButton.isEnabled = value
         }
     private var selectedPaymentType = PaymentType.CASH_PAYMENT
-    private var contactModel: ContactModel? = null
 
     override fun onResume() {
         super.onResume()
@@ -148,12 +146,12 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     }
 
     private fun setupUI() {
-        selectFromContactLayout.setOnDetailsPressed {
+        /*selectFromContactLayout.setOnDetailsPressed {
             (activity as? MainActivity)?.searchContact(
                 readContactsPermissionRequestCode = MainActivity.CONTACTS_PERMISSION_REQUEST_CODE,
                 contactsSelectorRequestCode = MainActivity.CONTACTS_SELECTOR_REQUEST_CODE
             )
-        }
+        }*/
         paymentTypeLayout.setOnDetailsPressed {
             context?.showListDialog(
                 title = resources.getString(R.string.key_payment_type_label),
@@ -258,7 +256,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                 ),
                 date = paymentAmountModel.paymentDate.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.formattedDateWith(pattern = Constants.VIEWING_DATE_FORMAT),
                 groupName = currentPersonModel?.groupName,
-                groupImage = currentPersonModel?.personImage ?: currentPersonModel?.groupImage ?: args.groupDataModel?.groupImage,
+                groupImage = /*currentPersonModel?.personImage ?: */currentPersonModel?.groupImage ?: args.groupDataModel?.groupImage,
                 groupTint = currentPersonModel?.groupColor
             )
         }
@@ -381,55 +379,8 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             payments = availablePayments,
             paymentType = selectedPaymentType,
             groupColor = args.personDataModel?.groupColor,
-            groupImage = args.personDataModel?.groupImage,
-            personImage = contactModel?.photo ?: args.personDataModel?.personImage
-        ).also {
-            it.personImageData = contactModel?.photoImageData ?: args.personDataModel?.personImageData
-        }
-    }
-
-    fun applyContact(uri: Uri?) {
-        context?.contactModelFrom(
-            uri = uri
-        )?.let { contactModel ->
-            binding?.firstNameLayout?.value = contactModel.firstName
-            binding?.surnameLayout?.value = contactModel.lastName
-            binding?.phoneLayout?.value = contactModel.phoneNumber
-            binding?.emailLayout?.value = contactModel.email
-            this.contactModel = contactModel
-            contactModel.photoUri?.let { photoUri ->
-                binding?.userRowImageView?.visibility = View.VISIBLE
-                loadImageBitmap(
-                    imageUri = photoUri
-                ) { bitmap ->
-                    this.contactModel?.photo?.let {
-                        context?.deleteInternalFile(
-                            fileName = it
-                        )
-                    }
-                    this.contactModel?.photo = context?.saveProfileImage(
-                        bitmap = bitmap
-                    )
-                    this.contactModel?.photoImageData = bitmap?.byteArray
-                    binding?.userRowImageView?.loadImageUri(
-                        imageUri = photoUri
-                    )
-                }
-            } ?: run {
-                if (args.groupDataModel?.groupImage == null && args.personDataModel?.groupImage == null)
-                    binding?.userRowImageView?.visibility = View.GONE
-                else
-                    args.groupDataModel?.groupImage?.let {
-                        binding?.userRowImageView?.setPicassoGroupImageInternalFile(
-                            fileName = it
-                        )
-                    } ?: args.personDataModel?.groupImage?.let {
-                        binding?.userRowImageView?.setPicassoGroupImageInternalFile(
-                            fileName = it
-                        )
-                    }
-            }
-        }
+            groupImage = args.personDataModel?.groupImage
+        )
     }
 
     fun dismissPayment() {
