@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.agelousis.payments.R
@@ -51,7 +52,8 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
         arrayListOf(
             HeaderModel(
                 dateTime = null,
-                header = resources.getString(R.string.key_options_label)
+                header = resources.getString(R.string.key_options_label),
+                headerBackgroundColor = context?.let { ContextCompat.getColor(it, android.R.color.transparent) }
             ),
             PaymentsMenuOptionType.CLEAR_PAYMENTS,
             PaymentsMenuOptionType.CSV_EXPORT

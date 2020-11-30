@@ -4,5 +4,6 @@ import java.util.*
 
 data class HeaderModel(
     val dateTime: Date?,
-    val header: String
+    val header: String,
+    val headerBackgroundColor: Int? = null
 )

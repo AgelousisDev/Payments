@@ -119,8 +119,11 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         if (newVersion > oldVersion) {
-            db?.execSQL("ALTER TABLE $PERSONS_TABLE_NAME ADD COLUMN $PERSON_IMAGE INTEGER DEFAULT null")
-            db?.execSQL("ALTER TABLE $PERSONS_TABLE_NAME ADD COLUMN $PERSON_IMAGE_DATA BLOB DEFAULT null")
+            try {
+                db?.execSQL("ALTER TABLE $PERSONS_TABLE_NAME ADD COLUMN $PERSON_IMAGE INTEGER DEFAULT null")
+                db?.execSQL("ALTER TABLE $PERSONS_TABLE_NAME ADD COLUMN $PERSON_IMAGE_DATA BLOB DEFAULT null")
+            }
+            catch(e: Exception) {}
         }
     }
 

@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:orientation="vertical"
-        android:background="@color/whiteTwo">
+        android:background="@{headerModel.headerBackgroundColor != null ? headerModel.headerBackgroundColor : @color/whiteTwo}">
 
         <com.google.android.material.textview.MaterialTextView
             style="@style/TextViewLabel"
