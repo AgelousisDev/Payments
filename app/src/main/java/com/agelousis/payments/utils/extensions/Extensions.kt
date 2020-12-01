@@ -47,6 +47,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.agelousis.payments.BuildConfig
 import com.agelousis.payments.R
+import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.custom.picasso.CircleTransformation
 import com.agelousis.payments.database.SQLiteHelper
 import com.agelousis.payments.login.enumerations.UIMode
@@ -254,7 +255,7 @@ fun Context.toast(message: String) {
 val Double?.euroFormattedString: String?
     get() {
         val unwrappedAmount = this ?: return null
-        val pattern = "€#,##0.00"
+        val pattern = "${MainApplication.currencySymbol ?: "€"}#,##0.00"
         val decimalFormatter = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
         decimalFormatter.applyPattern(pattern)
         return decimalFormatter.format(unwrappedAmount)
@@ -806,6 +807,16 @@ var isNightMode: Boolean = false
 
 val Resources.isLandscape
     get() = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+var SharedPreferences.currencySymbol: String?
+    set(value) {
+        edit(
+            commit = true
+        ) {
+            putString(Constants.SHARED_PREFERENCES_CURRENCY_SUMBOL_KEY, value)
+        }
+    }
+    get() = getString(Constants.SHARED_PREFERENCES_CURRENCY_SUMBOL_KEY, null)
 
 @BindingAdapter("picassoImagePath")
 fun AppCompatImageView.loadImagePath(fileName: String?) {

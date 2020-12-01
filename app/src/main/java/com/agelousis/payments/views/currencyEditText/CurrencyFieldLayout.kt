@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import com.agelousis.payments.R
+import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.databinding.CurrencyEditTextLayoutBinding
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.isZero
@@ -50,7 +51,7 @@ class CurrencyFieldLayout(context: Context, attrs: AttributeSet?): FrameLayout(c
             }
         }
         get() {
-            return binding?.currencyField?.text?.toString()?.replace(Constants.EURO_VALUE, "")?.toDoubleOrNull()
+            return binding?.currencyField?.text?.toString()?.replace(MainApplication.currencySymbol ?: Constants.EURO_VALUE, "")?.toDoubleOrNull()
         }
     var infoLabel: String? = null
         set(value) {
@@ -104,7 +105,7 @@ class CurrencyFieldLayout(context: Context, attrs: AttributeSet?): FrameLayout(c
                 return@doOnTextChanged
             }
             if (text?.toString() != current) {
-                current = String.format("${Constants.EURO_VALUE}%s", text.toString().replace(Constants.EURO_VALUE, ""))
+                current = String.format("${MainApplication.currencySymbol ?: Constants.EURO_VALUE}%s", text.toString().replace(Constants.EURO_VALUE, ""))
                 binding?.currencyField?.setText(current)
                 binding?.currencyField?.setSelection(current.length)
             }

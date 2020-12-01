@@ -3,6 +3,7 @@ package com.agelousis.payments.main.ui.payments.models
 import android.content.Context
 import android.os.Parcelable
 import com.agelousis.payments.R
+import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.main.ui.newPayment.enumerations.PaymentAmountRowState
 import com.agelousis.payments.main.ui.payments.enumerations.PaymentType
 import com.agelousis.payments.utils.constants.Constants
@@ -65,11 +66,11 @@ data class PaymentAmountModel(val paymentId: Int? = null,
             vat = vat
         ).euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label)
 
-    fun getVatAmount(context: Context, vat: Int?) =
+    fun getVatAmount(vat: Int?) =
         vat.takeIf { !it.isZero }?.let { paymentAmount.getVatAmount(
             vat = vat
         ).euroFormattedString } ?: String.format(
-            context.resources.getString(R.string.key_euro_value),
+            "${MainApplication.currencySymbol ?: "€"}%s",
             "0.00"
         )
 

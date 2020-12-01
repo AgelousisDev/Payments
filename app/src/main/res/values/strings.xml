@@ -94,7 +94,6 @@
     <string name="key_summary_label">Summary</string>
     <string name="key_amount_without_vat_label">Amount without VAT</string>
     <string name="key_single_payment_label">Single Payment</string>
-    <string name="key_euro_value">€%s</string>
     <string name="key_contact_share_message_label">Contact &amp; Share Message</string>
     <string name="key_share_message_template_hint">Message template to share</string>
     <string name="key_free_label">FREE</string>

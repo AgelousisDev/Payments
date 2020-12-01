@@ -80,7 +80,7 @@
             android:layout_marginTop="@dimen/nav_header_vertical_spacing"
             android:layout_marginStart="@dimen/nav_header_vertical_spacing"
             android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
-            android:text="@{String.format(@string/key_vat_amount_value_label, ExtensionsKt.getPercentageEnclosed(vat), paymentAmountModel.getVatAmount(context, vat))}"
+            android:text="@{String.format(@string/key_vat_amount_value_label, ExtensionsKt.getPercentageEnclosed(vat), paymentAmountModel.getVatAmount(vat))}"
             android:singleLine="true"
             android:maxLines="1"
             android:visibility="@{vat != null ? View.VISIBLE : View.GONE}"

@@ -3,6 +3,7 @@ package com.agelousis.payments.utils.helpers
 import android.content.Context
 import android.net.Uri
 import com.agelousis.payments.R
+import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.ui.payments.models.PersonModel
 import com.agelousis.payments.utils.constants.Constants
@@ -189,7 +190,7 @@ class PDFHelper {
             )
             table.addCell(
                 getCell(
-                    text = if (!paymentAmountModel.paymentAmount.isZero) paymentAmountModel.paymentAmount?.euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label) else String.format(context.resources.getString(R.string.key_euro_value), "0"),
+                    text = if (!paymentAmountModel.paymentAmount.isZero) paymentAmountModel.paymentAmount?.euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label) else String.format("${MainApplication.currencySymbol ?: "€"}%s", "0"),
                     withBorder = false,
                     textColor = BaseColor.GRAY,
                     backgroundColor = if (index % 2 == 0) BaseColor.WHITE else lightGreyColor
@@ -252,21 +253,21 @@ class PDFHelper {
     private fun addPaymentFooter(context: Context, document: Document, personModel: PersonModel, userModel: UserModel?) {
         document.add(
             Paragraph(
-                "${context.resources.getString(R.string.key_subtotal_label)}          ${personModel.totalPaymentAmount?.getAmountWithoutVat(vat = userModel?.vat)?.takeIf { !it.isZero }?.let { it.euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label) } ?: String.format(context.resources.getString(R.string.key_euro_value), "0")}",
+                "${context.resources.getString(R.string.key_subtotal_label)}          ${personModel.totalPaymentAmount?.getAmountWithoutVat(vat = userModel?.vat)?.takeIf { !it.isZero }?.let { it.euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label) } ?: String.format("${MainApplication.currencySymbol ?: "€"}%s", "0")}",
                 Font(ubuntuFont, 14.0f, Font.BOLD, blueColor)
             ).also {
                 it.alignment = Element.ALIGN_RIGHT
             })
         document.add(
             Paragraph(
-                "${context.resources.getString(R.string.key_vat_label)}                  ${personModel.totalPaymentAmount?.getVatAmount(vat = userModel?.vat)?.takeIf { !it.isZero }?.let { it.euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label) } ?: String.format(context.resources.getString(R.string.key_euro_value), "0")}",
+                "${context.resources.getString(R.string.key_vat_label)}                  ${personModel.totalPaymentAmount?.getVatAmount(vat = userModel?.vat)?.takeIf { !it.isZero }?.let { it.euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label) } ?: String.format("${MainApplication.currencySymbol ?: "€"}%s", "0")}",
                 Font(ubuntuFont, 14.0f, Font.BOLD, blueColor)
             ).also {
                 it.alignment = Element.ALIGN_RIGHT
             })
         document.add(
             Paragraph(
-                personModel.totalPaymentAmount?.takeIf { !it.isZero }?.let { it.euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label) } ?: String.format(context.resources.getString(R.string.key_euro_value), "0"),
+                personModel.totalPaymentAmount?.takeIf { !it.isZero }?.let { it.euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label) } ?: String.format("${MainApplication.currencySymbol ?: "€"}%s", "0"),
                 Font(ubuntuFont, 20.0f, Font.BOLD, blueColor)
             ).also {
                 it.alignment = Element.ALIGN_RIGHT

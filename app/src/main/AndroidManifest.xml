@@ -12,6 +12,7 @@
     </queries>
 
     <application
+        android:name=".application.MainApplication"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/payments_app_icon"
