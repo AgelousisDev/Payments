@@ -2,7 +2,7 @@ package com.agelousis.payments.main.ui.periodFilter.models
 
 import android.os.Parcelable
 import com.agelousis.payments.utils.constants.Constants
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
 import java.util.*
 

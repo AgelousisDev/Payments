@@ -13,21 +13,21 @@ import com.agelousis.payments.utils.extensions.showKeyboard
 import com.agelousis.payments.views.personDetailsLayout.enumerations.ImeOptionsType
 import com.agelousis.payments.views.personDetailsLayout.enumerations.PersonDetailFieldType
 import com.agelousis.payments.views.personDetailsLayout.models.PersonDetailsViewDataModel
-import kotlinx.android.synthetic.main.person_details_field_layout.view.*
 
 class PersonDetailsLayout(context: Context, attributeSet: AttributeSet?): FrameLayout(context, attributeSet) {
 
+    private var binding: PersonDetailsFieldLayoutBinding? = null
     var value: String? = null
         set(value) {
             field = value
-            value?.let { personDetailField.setText(it) }
+            value?.let { binding?.personDetailField?.setText(it) }
         }
-        get() = if (personDetailField.text?.toString()?.isEmpty() == true) null else personDetailField.text?.toString()
+        get() = if (binding?.personDetailField?.text?.toString()?.isEmpty() == true) null else binding?.personDetailField?.text?.toString()
 
     var errorState = false
         set(value) {
             field = value
-            lineSeparator.setBackgroundColor(ContextCompat.getColor(context, if (value) R.color.red else R.color.grey))
+            binding?.lineSeparator?.setBackgroundColor(ContextCompat.getColor(context, if (value) R.color.red else R.color.grey))
         }
 
     init {
@@ -37,15 +37,15 @@ class PersonDetailsLayout(context: Context, attributeSet: AttributeSet?): FrameL
     private fun initAttributesAndView(attributeSet: AttributeSet?) {
         attributeSet?.let {
             val attributes = context.obtainStyledAttributes(it, R.styleable.PersonDetailsLayout, 0, 0)
-            val binding = PersonDetailsFieldLayoutBinding.inflate(LayoutInflater.from(context), null, false)
-            binding.dataModel = PersonDetailsViewDataModel(
+            binding = PersonDetailsFieldLayoutBinding.inflate(LayoutInflater.from(context), null, false)
+            binding?.dataModel = PersonDetailsViewDataModel(
                 label = attributes.getString(R.styleable.PersonDetailsLayout_label),
                 showLine = attributes.getBoolean(R.styleable.PersonDetailsLayout_showLine, true),
                 imeOptionsType = ImeOptionsType.values()[attributes.getInt(R.styleable.PersonDetailsLayout_imeOptionType, 0)],
                 type = PersonDetailFieldType.values()[attributes.getInt(R.styleable.PersonDetailsLayout_fieldType, 0)]
             )
             attributes.recycle()
-            addView(binding.root)
+            addView(binding?.root)
         }
     }
 
@@ -55,16 +55,16 @@ class PersonDetailsLayout(context: Context, attributeSet: AttributeSet?): FrameL
     }
 
     private fun setupUI() {
-        personDetailsLayout.setOnClickListener {
-            personDetailField.requestFocus()
-            personDetailField.text?.toString()?.takeIf { it.isNotEmpty() }?.length?.let {
-                personDetailField.setSelection(it)
+        binding?.personDetailsLayout?.setOnClickListener {
+            binding?.personDetailField?.requestFocus()
+            binding?.personDetailField?.text?.toString()?.takeIf { it.isNotEmpty() }?.length?.let {
+                binding?.personDetailField?.setSelection(it)
             }
             context?.showKeyboard(
-                view = personDetailField
+                view = binding?.personDetailField ?: return@setOnClickListener
             )
         }
-        personDetailField.doOnTextChanged { _, _, _, _ ->
+        binding?.personDetailField?.doOnTextChanged { _, _, _, _ ->
             errorState = false
         }
     }

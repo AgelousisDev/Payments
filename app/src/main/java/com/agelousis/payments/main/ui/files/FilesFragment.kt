@@ -24,9 +24,6 @@ import com.agelousis.payments.main.ui.files.viewHolders.FileViewHolder
 import com.agelousis.payments.main.ui.files.viewModel.FilesViewModel
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.utils.extensions.*
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_files_layout.*
-import kotlinx.android.synthetic.main.fragment_files_layout.searchLayout
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,6 +45,7 @@ class FilesFragment: Fragment(), FilePresenter {
         )
     }
 
+    private var binding: FragmentFilesLayoutBinding? = null
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(FilesViewModel::class.java) }
     private val fileList by lazy { arrayListOf<FileDataModel>() }
@@ -55,7 +53,7 @@ class FilesFragment: Fragment(), FilePresenter {
     private var searchViewState: Boolean = false
         set(value) {
             field  = value
-            searchLayout?.visibility = if (value) View.VISIBLE else View.GONE
+            binding?.searchLayout?.visibility = if (value) View.VISIBLE else View.GONE
         }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -63,14 +61,16 @@ class FilesFragment: Fragment(), FilePresenter {
         configureObservers()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-        FragmentFilesLayoutBinding.inflate(
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentFilesLayoutBinding.inflate(
             inflater,
             container,
             false
         ).also {
             it.userModel = (activity as? MainActivity)?.userModel
-        }.root
+        }
+        return binding?.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -80,10 +80,10 @@ class FilesFragment: Fragment(), FilePresenter {
     }
 
     private fun configureSearchView() {
-        searchLayout.onProfileImageClicked {
-            (activity as? MainActivity)?.drawerLayout?.openDrawer(GravityCompat.START)
+        binding?.searchLayout?.onProfileImageClicked {
+            (activity as? MainActivity)?.binding?.drawerLayout?.openDrawer(GravityCompat.START)
         }
-        searchLayout.onQueryListener {
+        binding?.searchLayout?.onQueryListener {
             configureFileList(
                 files = fileList,
                 query = it
@@ -92,19 +92,19 @@ class FilesFragment: Fragment(), FilePresenter {
     }
 
     private fun configureRecyclerView() {
-        filesListRecyclerView.adapter = FilesAdapter(
+        binding?.filesListRecyclerView?.adapter = FilesAdapter(
             list = filteredList,
             presenter = this
         )
-        filesListRecyclerView.addItemDecoration(DividerItemRecyclerViewDecorator(
+        binding?.filesListRecyclerView?.addItemDecoration(DividerItemRecyclerViewDecorator(
             context = context ?: return,
             margin = resources.getDimension(R.dimen.activity_general_horizontal_margin).toInt()
         ) {
             filteredList.getOrNull(index = it) !is HeaderModel
         })
-        filesListRecyclerView.addItemDecoration(
+        binding?.filesListRecyclerView?.addItemDecoration(
             HeaderItemDecoration(
-                parent = filesListRecyclerView
+                parent = binding?.filesListRecyclerView ?: return
             ) { position ->
                 filteredList.getOrNull(
                     index = position
@@ -128,7 +128,7 @@ class FilesFragment: Fragment(), FilePresenter {
                         configureShareAction(
                             position = position
                         )
-                        (filesListRecyclerView.adapter as? FilesAdapter)?.restoreItem(
+                        (binding?.filesListRecyclerView?.adapter as? FilesAdapter)?.restoreItem(
                             position = position
                         )
                     }
@@ -139,7 +139,7 @@ class FilesFragment: Fragment(), FilePresenter {
                 }
             }
         )
-        swipeItemTouchHelper.attachToRecyclerView(filesListRecyclerView)
+        swipeItemTouchHelper.attachToRecyclerView(binding?.filesListRecyclerView)
     }
 
     private fun configureShareAction(position: Int) {
@@ -161,7 +161,7 @@ class FilesFragment: Fragment(), FilePresenter {
             message = resources.getString(R.string.key_delete_file_message),
             isCancellable = false,
             negativeButtonBlock = {
-                (filesListRecyclerView.adapter as? FilesAdapter)?.restoreItem(
+                (binding?.filesListRecyclerView?.adapter as? FilesAdapter)?.restoreItem(
                     position = position
                 )
             },
@@ -239,8 +239,8 @@ class FilesFragment: Fragment(), FilePresenter {
                     )
                 )
             }
-        filesListRecyclerView.scheduleLayoutAnimation()
-        (filesListRecyclerView.adapter as? FilesAdapter)?.reloadData()
+        binding?.filesListRecyclerView?.scheduleLayoutAnimation()
+        (binding?.filesListRecyclerView?.adapter as? FilesAdapter)?.reloadData()
     }
 
     private fun initializeFiles() {

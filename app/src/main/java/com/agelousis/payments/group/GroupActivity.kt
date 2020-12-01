@@ -16,7 +16,6 @@ import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import dev.sasikanth.colorsheet.ColorPickerListener
 import dev.sasikanth.colorsheet.ColorSheet
-import kotlinx.android.synthetic.main.activity_group.*
 
 class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerListener {
 
@@ -34,7 +33,7 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
     }
 
     override fun onGroupAdd() {
-        rootLayout.circularUnReveal {
+        binding?.rootLayout?.circularUnReveal {
             setResult(
                 Activity.RESULT_OK,
                 Intent().also {
@@ -72,14 +71,14 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
     private var addGroupButtonState: Boolean = false
         set(value) {
             field = value
-            addGroupButton.visibility = if (value) View.VISIBLE else View.GONE
+            binding?.addGroupButton?.visibility = if (value) View.VISIBLE else View.GONE
         }
     private var onTouchCenterX: Float? = null
     private var onTouchCenterY: Float? = null
     private val selectedGroupModel by lazy { intent?.extras?.getParcelable(GROUP_MODEL_EXTRA) ?: GroupModel() }
 
     override fun onBackPressed() {
-        rootLayout.circularUnReveal(
+       binding?. rootLayout?.circularUnReveal(
             centerX = onTouchCenterX?.toInt(),
             centerY = onTouchCenterY?.toInt()
         ) {

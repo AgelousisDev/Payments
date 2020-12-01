@@ -19,6 +19,8 @@ import androidx.navigation.ui.NavigationUI
 import com.agelousis.payments.R
 import com.agelousis.payments.database.DBManager
 import com.agelousis.payments.database.SQLiteHelper
+import com.agelousis.payments.databinding.ActivityMainBinding
+import com.agelousis.payments.databinding.NavHeaderMainBinding
 import com.agelousis.payments.group.GroupActivity
 import com.agelousis.payments.login.LoginActivity
 import com.agelousis.payments.login.models.UserModel
@@ -39,10 +41,6 @@ import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.nav_header_main.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -57,23 +55,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.navigationHome -> {
-                navHostFragmentContainerView.findNavController().popBackStack()
-                navHostFragmentContainerView.findNavController().navigate(R.id.action_global_paymentsFragment)
+                binding?.appBarMain?.contentMain?.navHostFragmentContainerView?.findNavController()?.popBackStack()
+                binding?.appBarMain?.contentMain?.navHostFragmentContainerView?.findNavController()?.navigate(R.id.action_global_paymentsFragment)
             }
             R.id.navigationProfile -> {
-                navHostFragmentContainerView.findNavController().popBackStack(R.id.personalInformationFragment, true)
-                navHostFragmentContainerView.findNavController().navigate(R.id.action_global_personalInformation)
+                binding?.appBarMain?.contentMain?.navHostFragmentContainerView?.findNavController()?.popBackStack(R.id.personalInformationFragment, true)
+                binding?.appBarMain?.contentMain?.navHostFragmentContainerView?.findNavController()?.navigate(R.id.action_global_personalInformation)
             }
             R.id.navigationFiles -> {
-                navHostFragmentContainerView.findNavController().popBackStack(R.id.filesFragment, true)
-                navHostFragmentContainerView.findNavController().navigate(R.id.action_global_filesFragment)
+                binding?.appBarMain?.contentMain?.navHostFragmentContainerView?.findNavController()?.popBackStack(R.id.filesFragment, true)
+                binding?.appBarMain?.contentMain?.navHostFragmentContainerView?.findNavController()?.navigate(R.id.action_global_filesFragment)
             }
             R.id.navigationGraph -> {
-                navHostFragmentContainerView.findNavController().popBackStack(R.id.historyFragment, true)
-                navHostFragmentContainerView.findNavController().navigate(R.id.action_global_historyFragment)
+                binding?.appBarMain?.contentMain?.navHostFragmentContainerView?.findNavController()?.popBackStack(R.id.historyFragment, true)
+                binding?.appBarMain?.contentMain?.navHostFragmentContainerView?.findNavController()?.navigate(R.id.action_global_historyFragment)
             }
         }
-        drawerLayout.closeDrawer(GravityCompat.START)
+        binding?.drawerLayout?.closeDrawer(GravityCompat.START)
         return true
     }
 
@@ -133,7 +131,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 view = it
             )
         }
-        when(navHostFragmentContainerView.findNavController().currentDestination?.id) {
+        when(binding?.appBarMain?.contentMain?.navHostFragmentContainerView?.findNavController()?.currentDestination?.id) {
             R.id.personalInformationFragment ->
                 (supportFragmentManager.currentNavigationFragment as? PersonalInformationFragment)?.playProfileSuccessAnimation()
             R.id.paymentsFragment -> startGroupActivity()
@@ -153,6 +151,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    var binding: ActivityMainBinding? = null
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val dbManager by lazy { DBManager(context = this) }
     val userModel by lazy { intent?.extras?.getParcelable<UserModel>(USER_MODEL_EXTRA) }
@@ -160,22 +159,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         set(value) {
             field = value
             value?.let {
-                bottomAppBarTitle.text = it
+                binding?.appBarMain?.bottomAppBarTitle?.text = it
             }
         }
     @DrawableRes private var floatingButtonImage: Int = R.drawable.ic_add
         set(value) {
             field = value
-            floatingButton.hide()
-            floatingButton.setImageResource(value)
-            floatingButton.show()
+            binding?.appBarMain?.floatingButton?.hide()
+            binding?.appBarMain?.floatingButton?.setImageResource(value)
+            binding?.appBarMain?.floatingButton?.show()
         }
     var floatingButtonState: Boolean = true
         set(value) {
             field = value
             if (value)
-                floatingButton.show()
-            else floatingButton.hide()
+                binding?.appBarMain?.floatingButton?.show()
+            else binding?.appBarMain?.floatingButton?.hide()
         }
     var floatingButtonType = FloatingButtonType.NORMAL
     private var floatingButtonPosition = FloatingButtonPosition.END
@@ -183,25 +182,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             field = value
             when(value) {
                 FloatingButtonPosition.CENTER ->
-                    bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
+                    binding?.appBarMain?.bottomAppBar?.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
                 FloatingButtonPosition.END ->
-                    bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_END
+                    binding?.appBarMain?.bottomAppBar?.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_END
             }
         }
     private var menuOptionsIsVisible = false
         set(value) {
             field = value
-            bottomAppBar.menu?.findItem(R.id.menuSettings)?.isVisible = value
+            binding?.appBarMain?.bottomAppBar?.menu?.findItem(R.id.menuSettings)?.isVisible = value
         }
     var historyButtonIsVisible = false
         set(value) {
             field = value
-            navigationView?.menu?.findItem(R.id.navigationGraph)?.isVisible = value
+            binding?.navigationView?.menu?.findItem(R.id.navigationGraph)?.isVisible = value
         }
 
     override fun onBackPressed() {
         unCheckAllMenuItems(
-            menu = navigationView.menu
+            menu = binding?.navigationView?.menu
         )
         if (supportFragmentManager.currentNavigationFragment is PaymentsFragment)
             showSimpleDialog(
@@ -213,14 +212,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 finish()
             }
         else {
-            navHostFragmentContainerView.findNavController().previousBackStackEntry?.savedStateHandle?.remove<PaymentAmountModel>(NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA)
+            binding?.appBarMain?.contentMain?.navHostFragmentContainerView?.findNavController()?.previousBackStackEntry?.savedStateHandle?.remove<PaymentAmountModel>(NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA)
             super.onBackPressed()
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding?.root)
         setupToolbar()
         setupNavigationView()
         setupUI()
@@ -233,31 +233,39 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun configureNavigationController() {
-        navHostFragmentContainerView.findNavController().addOnDestinationChangedListener(this)
-        NavigationUI.setupWithNavController(navigationView, navHostFragmentContainerView.findNavController())
-        navigationView.setNavigationItemSelectedListener(this)
+        binding?.appBarMain?.contentMain?.navHostFragmentContainerView?.findNavController()?.addOnDestinationChangedListener(this)
+        ifLet(
+            binding?.navigationView,
+            binding?.appBarMain?.contentMain?.navHostFragmentContainerView?.findNavController()
+        ) {
+            NavigationUI.setupWithNavController(it.first() as NavigationView, it.second() as NavController)
+        }
+        binding?.navigationView?.setNavigationItemSelectedListener(this)
     }
 
     private fun setupToolbar() {
-        setSupportActionBar(bottomAppBar)
-        bottomAppBar.replaceMenu(R.menu.activity_menu_main)
+        setSupportActionBar(binding?.appBarMain?.bottomAppBar)
+        binding?.appBarMain?.bottomAppBar?.replaceMenu(R.menu.activity_menu_main)
     }
 
     private fun setupNavigationView() {
-        val toggle = ActionBarDrawerToggle(this, drawerLayout, bottomAppBar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawerLayout.addDrawerListener(toggle)
+        val toggle = ActionBarDrawerToggle(this, binding?.drawerLayout, binding?.appBarMain?.bottomAppBar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        binding?.drawerLayout?.addDrawerListener(toggle)
         toggle.syncState()
-        navigationView.getHeaderView(0).navigationViewProfileImageView.loadImagePath(
-            fileName = userModel?.profileImage
-        )
-        navigationView.getHeaderView(0).navigationViewProfileImageView.setOnClickListener {
-            showProfilePicture()
+        binding?.navigationView?.getHeaderView(0)?.let {
+            val navHeaderBinding = NavHeaderMainBinding.bind(it)
+            navHeaderBinding.navigationViewProfileImageView.loadImagePath(
+                fileName = userModel?.profileImage
+            )
+            navHeaderBinding.navigationViewProfileImageView.setOnClickListener {
+                showProfilePicture()
+            }
+            navHeaderBinding.navigationViewProfileUsername.text = userModel?.fullName ?: resources.getString(R.string.key_empty_field_label)
         }
-        navigationView.getHeaderView(0).navigationViewProfileUsername.text = userModel?.fullName ?: resources.getString(R.string.key_empty_field_label)
     }
 
     private fun setupUI() {
-        floatingButton.setOnClickListener(this)
+        binding?.appBarMain?.floatingButton?.setOnClickListener(this)
     }
 
     private fun addInactiveGroup() {
@@ -322,26 +330,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         )
     }
 
-    private fun unCheckAllMenuItems(menu: Menu) {
-        for (i in 0 until menu.size()) {
-            val item = menu.getItem(i)
-            if(item.hasSubMenu())
+    private fun unCheckAllMenuItems(menu: Menu?) {
+        for (i in 0 until (menu?.size() ?: 0)) {
+            val item = menu?.getItem(i)
+            if(item?.hasSubMenu() == true)
                 unCheckAllMenuItems(item.subMenu)
             else
-                item.isChecked = false
+                item?.isChecked = false
         }
     }
 
     fun setFloatingButtonAsPaymentRemovalButton() {
         floatingButtonType = FloatingButtonType.NEGATIVE
         floatingButtonImage = R.drawable.ic_delete
-        floatingButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red))
+        binding?.appBarMain?.floatingButton?.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red))
     }
 
     fun returnFloatingButtonBackToNormal() {
         floatingButtonType = FloatingButtonType.NORMAL
         floatingButtonImage = R.drawable.ic_check
-        floatingButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorAccent))
+        binding?.appBarMain?.floatingButton?.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorAccent))
     }
 
     fun startGroupActivity(groupModel: GroupModel? = null) =

@@ -12,7 +12,6 @@ import com.agelousis.payments.utils.extensions.infiniteAlphaAnimation
 import com.agelousis.payments.utils.extensions.initializeField
 import com.agelousis.payments.utils.extensions.setAnimatedImageResourceId
 import com.agelousis.payments.views.searchLayout.enumerations.MaterialSearchViewIconState
-import kotlinx.android.synthetic.main.material_search_view_layout.view.*
 
 typealias SearchQueryChangesBlock = (String?) -> Unit
 class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLayout(context, attributeSet) {
@@ -21,10 +20,10 @@ class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLa
     private var searchViewIconState = MaterialSearchViewIconState.SEARCH
         set(value) {
             field = value
-            searchIcon.setAnimatedImageResourceId(
+            binding?.searchIcon?.setAnimatedImageResourceId(
                 resourceId = value.icon
             )
-            searchIcon.setOnClickListener(when(value) {
+            binding?.searchIcon?.setOnClickListener(when(value) {
                 MaterialSearchViewIconState.SEARCH -> this::onSearchIcon
                 MaterialSearchViewIconState.CLOSE -> this::onDeleteQuery
             })
@@ -54,25 +53,25 @@ class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLa
     }
 
     private fun setupUI() {
-        searchField.infiniteAlphaAnimation(
+        binding?.searchField?.infiniteAlphaAnimation(
             state = true
         )
-        searchIcon.setOnClickListener(this::onSearchIcon)
+        binding?.searchIcon?.setOnClickListener(this::onSearchIcon)
     }
 
     private fun onDeleteQuery(p0: View) {
-        searchField.text?.clear()
+        binding?.searchField?.text?.clear()
     }
 
     private fun onSearchIcon(p0: View) {
         context?.initializeField(
-            appCompatEditText = searchField
+            appCompatEditText = binding?.searchField ?: return
         )
     }
 
     fun onQueryListener(searchQueryChangesBlock: SearchQueryChangesBlock) {
-        searchField.doOnTextChanged { text, _, _, _ ->
-            searchField.infiniteAlphaAnimation(
+        binding?.searchField?.doOnTextChanged { text, _, _, _ ->
+            binding?.searchField?.infiniteAlphaAnimation(
                 state = text?.length == 0
             )
             if (searchViewIconState != MaterialSearchViewIconState.CLOSE && !text.isNullOrEmpty())
@@ -84,7 +83,7 @@ class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLa
     }
 
     fun onProfileImageClicked(onClickListener: OnClickListener) {
-        profileImageView.setOnClickListener(onClickListener)
+        binding?.profileImageView?.setOnClickListener(onClickListener)
     }
 
 }

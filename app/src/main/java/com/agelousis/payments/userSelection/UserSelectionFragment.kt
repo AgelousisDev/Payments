@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
-import com.agelousis.payments.R
+import com.agelousis.payments.databinding.UserSelectionFragmentLayoutBinding
 import com.agelousis.payments.login.LoginActivity
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.userSelection.adapters.UsersAdapter
@@ -16,7 +16,6 @@ import com.agelousis.payments.utils.extensions.saveImage
 import com.agelousis.payments.views.bottomSheet.BasicBottomSheetDialogFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import kotlinx.android.synthetic.main.user_selection_fragment_layout.*
 import java.io.File
 
 class UserSelectionFragment: BasicBottomSheetDialogFragment(), UserSelectionPresenter {
@@ -43,6 +42,7 @@ class UserSelectionFragment: BasicBottomSheetDialogFragment(), UserSelectionPres
         dismiss()
     }
 
+    private var binding: UserSelectionFragmentLayoutBinding? = null
     private val users by lazy { arguments?.getParcelableArrayList<UserModel>(USERS_EXTRA) }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -50,8 +50,14 @@ class UserSelectionFragment: BasicBottomSheetDialogFragment(), UserSelectionPres
         return super.onCreateDialog(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.user_selection_fragment_layout, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = UserSelectionFragmentLayoutBinding.inflate(
+            inflater,
+            container,
+            false
+        )
+        return binding?.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -70,7 +76,7 @@ class UserSelectionFragment: BasicBottomSheetDialogFragment(), UserSelectionPres
     }
 
     private fun configureRecyclerView() {
-        usersRecyclerView.adapter = UsersAdapter(
+        binding?.usersRecyclerView?.adapter = UsersAdapter(
             users = users ?: return,
             presenter = this
         )

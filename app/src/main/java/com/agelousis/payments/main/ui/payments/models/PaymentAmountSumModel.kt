@@ -6,7 +6,7 @@ import com.agelousis.payments.R
 import com.agelousis.payments.utils.extensions.euroFormattedString
 import com.agelousis.payments.utils.extensions.getAmountWithoutVat
 import com.agelousis.payments.utils.extensions.getVatAmount
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class PaymentAmountSumModel(val sum: Double?,

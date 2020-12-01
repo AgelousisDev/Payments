@@ -12,26 +12,26 @@ import com.agelousis.payments.databinding.DateFieldLayoutBinding
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.views.dateLayout.interfaces.DatePickerPresenter
 import com.agelousis.payments.views.personDetailsLayout.models.PersonDetailsViewDataModel
-import kotlinx.android.synthetic.main.date_field_layout.view.*
 import java.util.*
 
 typealias DateSelectionClosure = (String) -> Unit
 class DateFieldLayout(context: Context, attributeSet: AttributeSet?): FrameLayout(context, attributeSet), DatePickerPresenter {
 
+    private var binding: DateFieldLayoutBinding? = null
     var dateValue: String? = null
         set(value) {
             field = value
             value?.let {
-                dateView.text = it
+                binding?.dateView?.text = it
                 dateSelectionClosure?.invoke(it)
             }
         }
-        get() = if (dateView.text?.toString()?.isEmpty() == true) null else dateView.text?.toString()
+        get() = if (binding?.dateView?.text?.toString()?.isEmpty() == true) null else binding?.dateView?.text?.toString()
 
     var errorState = false
         set(value) {
             field = value
-            lineSeparator.setBackgroundColor(ContextCompat.getColor(context, if (value) R.color.red else R.color.grey))
+            binding?.lineSeparator?.setBackgroundColor(ContextCompat.getColor(context, if (value) R.color.red else R.color.grey))
             //dateIcon.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(context, if (value) R.color.red else R.color.dayNightTextOnBackground))
         }
     private var dateSelectionClosure: DateSelectionClosure? = null
@@ -55,16 +55,16 @@ class DateFieldLayout(context: Context, attributeSet: AttributeSet?): FrameLayou
     private fun initAttributesAndView(attributeSet: AttributeSet?) {
         attributeSet?.let {
             val attributes = context.obtainStyledAttributes(it, R.styleable.PersonDetailsLayout, 0, 0)
-            val binding = DateFieldLayoutBinding.inflate(LayoutInflater.from(context), null, false)
-            binding.dataModel = PersonDetailsViewDataModel(
+            binding = DateFieldLayoutBinding.inflate(LayoutInflater.from(context), null, false)
+            binding?.dataModel = PersonDetailsViewDataModel(
                 label = attributes.getString(R.styleable.PersonDetailsLayout_label),
                 value = attributes.getString(R.styleable.PersonDetailsLayout_value),
                 showLine = attributes.getBoolean(R.styleable.PersonDetailsLayout_showLine, true),
                 icon = attributes.getResourceId(R.styleable.PersonDetailsLayout_iconResource, 0)
             )
-            binding.presenter = this
+            binding?.presenter = this
             attributes.recycle()
-            addView(binding.root)
+            addView(binding?.root)
         }
     }
 

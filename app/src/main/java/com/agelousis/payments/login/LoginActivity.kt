@@ -29,7 +29,6 @@ import com.agelousis.payments.userSelection.UserSelectionFragment
 import com.agelousis.payments.userSelection.presenters.UserSelectionPresenter
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -64,8 +63,8 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                         hasBiometrics
                     }
                 ) { biometricsState ->
-                    userModel.username = usernameField.text?.toString()
-                    userModel.password = passwordField.text?.toString()
+                    userModel.username = binding?.usernameField?.text?.toString()
+                    userModel.password = binding?.passwordField?.text?.toString()
                     userModel.biometrics = biometricsState
                     userModel.vat = 0
                     userModel.defaultPaymentAmount = 0.0
@@ -86,12 +85,12 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                 uiScope.launch {
                     dbManager?.searchUser(
                         userModel = UserModel(
-                            username = usernameField.text?.toString(),
-                            password = passwordField.text?.toString()
+                            username = binding?.usernameField?.text?.toString(),
+                            password = binding?.passwordField?.text?.toString()
                         )
                     ) { userModel ->
                         if (userModel == null)
-                            cardView animateBackgroundColor ContextCompat.getColor(this@LoginActivity, R.color.red)
+                            binding?.cardView?.animateBackgroundColor(endColor = ContextCompat.getColor(this@LoginActivity, R.color.red))
                         else {
                             showMainActivity(
                                 userModel = userModel
@@ -124,12 +123,12 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
         uiScope.launch {
             dbManager?.searchUser(
                 userModel = UserModel(
-                    username = usernameField.text?.toString(),
-                    password = passwordField.text?.toString()
+                    username = binding?.usernameField?.text?.toString(),
+                    password = binding?.passwordField?.text?.toString()
                 )
             ) { userModel ->
                 if (userModel == null)
-                    cardView animateBackgroundColor ContextCompat.getColor(this@LoginActivity, R.color.red)
+                    binding?.cardView?.animateBackgroundColor(endColor = ContextCompat.getColor(this@LoginActivity, R.color.red))
                 else
                     showMainActivity(
                         userModel = userModel
@@ -276,28 +275,28 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
             dbManager?.checkUsers {
                 signInState = if (it.isNotEmpty()) SignInState.LOGIN else SignInState.SIGN_UP
                 binding?.signInState = signInState
-                profileImageView.isEnabled = signInState == SignInState.SIGN_UP
+                binding?.profileImageView?.isEnabled = signInState == SignInState.SIGN_UP
             }
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setupUI() {
-        usernameField.doAfterTextChanged {
-            binding?.loginButtonState = it?.isNotEmpty() == true && passwordField.text?.isNotEmpty() == true
+        binding?.usernameField?.doAfterTextChanged {
+            binding?.loginButtonState = it?.isNotEmpty() == true && binding?.passwordField?.text?.isNotEmpty() == true
         }
-        passwordField.doAfterTextChanged {
-            binding?.loginButtonState = it?.isNotEmpty() == true && usernameField.text?.isNotEmpty() == true
+        binding?.passwordField?.doAfterTextChanged {
+            binding?.loginButtonState = it?.isNotEmpty() == true && binding?.usernameField?.text?.isNotEmpty() == true
         }
-        importLayout.setOnTouchListener { _, motionEvent ->
+        binding?.importLayout?.setOnTouchListener { _, motionEvent ->
             when(motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    importLabel.setTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-                    importLine.background?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(this, R.color.colorAccent), PorterDuff.Mode.SRC_IN)
+                    binding?.importLabel?.setTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+                    binding?.importLine?.background?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(this, R.color.colorAccent), PorterDuff.Mode.SRC_IN)
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    importLabel.setTextColor(ContextCompat.getColor(this, R.color.grey))
-                    importLine.background?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(this, R.color.grey), PorterDuff.Mode.SRC_IN)
+                    binding?.importLabel?.setTextColor(ContextCompat.getColor(this, R.color.grey))
+                    binding?.importLine?.background?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(this, R.color.grey), PorterDuff.Mode.SRC_IN)
                 }
             }
             false
@@ -399,8 +398,8 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                         )
                         userModel.profileImageData = bitmap?.byteArray
                     }
-                    profileImageView.setBackgroundResource(0)
-                    profileImageView.loadImageUri(
+                    binding?.profileImageView?.setBackgroundResource(0)
+                    binding?.profileImageView?.loadImageUri(
                         imageUri = imageUri
                     )
                 }

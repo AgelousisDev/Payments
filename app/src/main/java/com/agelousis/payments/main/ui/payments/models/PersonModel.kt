@@ -8,8 +8,8 @@ import com.agelousis.payments.main.ui.newPayment.enumerations.PaymentAmountRowSt
 import com.agelousis.payments.main.ui.payments.enumerations.PaymentType
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
-import kotlinx.android.parcel.IgnoredOnParcel
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.IgnoredOnParcel
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize

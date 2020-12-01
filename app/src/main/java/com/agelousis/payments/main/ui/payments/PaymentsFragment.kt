@@ -33,8 +33,6 @@ import com.agelousis.payments.main.ui.shareMessageFragment.ShareMessageBottomShe
 import com.agelousis.payments.main.ui.totalPaymentsAmount.TotalPaymentsAmountDialogFragment
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.PDFHelper
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_payments_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -78,6 +76,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         )
     }
 
+    private var binding: FragmentPaymentsLayoutBinding? = null
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
     private val itemsList by lazy { arrayListOf<Any>() }
@@ -85,7 +84,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
     private var searchViewState: Boolean = false
         set(value) {
             field  = value
-            searchLayout?.visibility = if (value) View.VISIBLE else View.GONE
+            binding?.searchLayout?.visibility = if (value) View.VISIBLE else View.GONE
         }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -93,14 +92,16 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         configureObservers()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-        FragmentPaymentsLayoutBinding.inflate(
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentPaymentsLayoutBinding.inflate(
             inflater,
             container,
             false
         ).also {
             it.userModel = (activity as? MainActivity)?.userModel
-        }.root
+        }
+        return binding?.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -110,10 +111,10 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
     }
 
     private fun configureSearchView() {
-        searchLayout.onProfileImageClicked {
-            (activity as? MainActivity)?.drawerLayout?.openDrawer(GravityCompat.START)
+        binding?.searchLayout?.onProfileImageClicked {
+            (activity as? MainActivity)?.binding?.drawerLayout?.openDrawer(GravityCompat.START)
         }
-        searchLayout.onQueryListener {
+        binding?.searchLayout?.onQueryListener {
             configurePayments(
                 list = itemsList,
                 query = it
@@ -122,13 +123,13 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
     }
     
     private fun configureRecyclerView() {
-        paymentListRecyclerView.adapter = PaymentsAdapter(
+        binding?.paymentListRecyclerView?.adapter = PaymentsAdapter(
             list = filteredList,
             groupPresenter = this,
             paymentPresenter = this,
             paymentAmountSumPresenter = this
         )
-        paymentListRecyclerView.addItemDecoration(
+        binding?.paymentListRecyclerView?.addItemDecoration(
             object: RecyclerView.ItemDecoration() {
                 override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
                     super.getItemOffsets(outRect, view, parent, state)
@@ -172,7 +173,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                         configurePDFAction(
                             position = position
                         )
-                        (paymentListRecyclerView.adapter as? PaymentsAdapter)?.restoreItem(
+                        (binding?.paymentListRecyclerView?.adapter as? PaymentsAdapter)?.restoreItem(
                             position = position
                         )
                     }
@@ -183,7 +184,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                 }
             }
         )
-        swipeItemTouchHelper.attachToRecyclerView(paymentListRecyclerView)
+        swipeItemTouchHelper.attachToRecyclerView(binding?.paymentListRecyclerView)
     }
 
     private fun configurePDFAction(position: Int) {
@@ -240,7 +241,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                 else
                     resources.getString(R.string.key_delete_payment_message),
             negativeButtonBlock = {
-                (paymentListRecyclerView.adapter as? PaymentsAdapter)?.restoreItem(
+                (binding?.paymentListRecyclerView?.adapter as? PaymentsAdapter)?.restoreItem(
                     position = position
                 )
             },
@@ -343,8 +344,8 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                     )
                 )
             }
-        paymentListRecyclerView.scheduleLayoutAnimation()
-        (paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
+        binding?.paymentListRecyclerView?.scheduleLayoutAnimation()
+        (binding?.paymentListRecyclerView?.adapter as? PaymentsAdapter)?.reloadData()
         (activity as? MainActivity)?.historyButtonIsVisible = filteredList.filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten().isNotEmpty()
     }
 

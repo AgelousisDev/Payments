@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
-import com.agelousis.payments.R
+import com.agelousis.payments.databinding.ShareMessageFragmentLayoutBinding
 import com.agelousis.payments.main.ui.payments.models.PersonModel
 import com.agelousis.payments.main.ui.shareMessageFragment.adapters.ShareMessageAdapter
 import com.agelousis.payments.main.ui.shareMessageFragment.enumerations.ShareMessageType
@@ -17,7 +17,6 @@ import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
-import kotlinx.android.synthetic.main.share_message_fragment_layout.*
 
 class ShareMessageBottomSheetFragment: BasicBottomSheetDialogFragment(), ShareMessagePresenter {
 
@@ -44,6 +43,7 @@ class ShareMessageBottomSheetFragment: BasicBottomSheetDialogFragment(), ShareMe
 
     }
 
+    private var binding: ShareMessageFragmentLayoutBinding? = null
     private val personModel by lazy {
         arguments?.getParcelable<PersonModel>(PERSON_MODEL_EXTRA)
     }
@@ -77,8 +77,14 @@ class ShareMessageBottomSheetFragment: BasicBottomSheetDialogFragment(), ShareMe
         array
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.share_message_fragment_layout, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = ShareMessageFragmentLayoutBinding.inflate(
+            layoutInflater,
+            container,
+            false
+        )
+        return binding?.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -86,12 +92,12 @@ class ShareMessageBottomSheetFragment: BasicBottomSheetDialogFragment(), ShareMe
     }
 
     private fun configureShareMessageRecyclerView() {
-        shareMessageRecyclerView.layoutManager = FlexboxLayoutManager(context, FlexDirection.ROW).also {
+        binding?.shareMessageRecyclerView?.layoutManager = FlexboxLayoutManager(context, FlexDirection.ROW).also {
             it.flexDirection = FlexDirection.ROW
             it.justifyContent = JustifyContent.CENTER
             it.alignItems = AlignItems.CENTER
         }
-        shareMessageRecyclerView.adapter = ShareMessageAdapter(
+        binding?.shareMessageRecyclerView?.adapter = ShareMessageAdapter(
             shareMessageTypeList = shareMessageTypeList,
             presenter = this
         )

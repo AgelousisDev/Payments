@@ -27,7 +27,9 @@
 
     </com.google.android.material.bottomappbar.BottomAppBar>
 
-    <include layout="@layout/content_main"
+    <include
+        android:id="@+id/contentMain"
+        layout="@layout/content_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="?attr/actionBarSize"/>

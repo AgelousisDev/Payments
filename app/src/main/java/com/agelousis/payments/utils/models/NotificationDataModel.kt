@@ -3,7 +3,7 @@ package com.agelousis.payments.utils.models
 import android.content.Context
 import android.os.Parcelable
 import com.agelousis.payments.R
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize

@@ -9,22 +9,22 @@ import com.agelousis.payments.R
 import com.agelousis.payments.databinding.DetailsAppSwitchLayoutBinding
 import com.agelousis.payments.views.detailsSwitch.interfaces.AppSwitchListener
 import com.agelousis.payments.views.detailsSwitch.models.DetailsAppSwitchDataModel
-import kotlinx.android.synthetic.main.details_app_switch_layout.view.*
 
 class DetailsAppSwitch(context: Context, attributeSet: AttributeSet?): FrameLayout(context, attributeSet) {
 
+    private var binding: DetailsAppSwitchLayoutBinding? = null
     var appSwitchListener: AppSwitchListener? = null
     var isChecked: Boolean = false
         set(value) {
             field = value
-            detailsAppSwitch.isChecked = value
+            binding?.detailsAppSwitch?.isChecked = value
         }
-        get() = detailsAppSwitch.isChecked
+        get() = binding?.detailsAppSwitch?.isChecked == true
 
     var appSwitchIsEnabled = true
         set(value) {
             field = value
-            detailsAppSwitch.isEnabled = value
+            binding?.detailsAppSwitch?.isEnabled = value
         }
 
     init {
@@ -34,19 +34,19 @@ class DetailsAppSwitch(context: Context, attributeSet: AttributeSet?): FrameLayo
     private fun initAttributesAndView(attributeSet: AttributeSet?) {
         attributeSet?.let {
             val attributes = context.obtainStyledAttributes(it, R.styleable.DetailsAppSwitch, 0, 0)
-            val binding = DetailsAppSwitchLayoutBinding.inflate(
+            binding = DetailsAppSwitchLayoutBinding.inflate(
                 LayoutInflater.from(
                     context
                 ),
                 null,
                 false
             )
-            binding.detailsAppSwitchDataModel = DetailsAppSwitchDataModel(
+            binding?.detailsAppSwitchDataModel = DetailsAppSwitchDataModel(
                 label = attributes.getString(R.styleable.DetailsAppSwitch_appSwitchLabel),
                 showLine = attributes.getBoolean(R.styleable.DetailsAppSwitch_appSwitchShowLine, false),
             )
             attributes.recycle()
-            addView(binding.root)
+            addView(binding?.root)
         }
     }
 
@@ -56,7 +56,7 @@ class DetailsAppSwitch(context: Context, attributeSet: AttributeSet?): FrameLayo
     }
 
     private fun setupUI() {
-        detailsAppSwitch.setOnCheckedChangeListener { _, isChecked ->
+        binding?.detailsAppSwitch?.setOnCheckedChangeListener { _, isChecked ->
             appSwitchListener?.onAppSwitchValueChanged(
                 isChecked = isChecked
             )

@@ -29,7 +29,6 @@ import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.models.CalendarDataModel
 import com.agelousis.payments.utils.models.NotificationDataModel
 import com.agelousis.payments.views.detailsSwitch.interfaces.AppSwitchListener
-import kotlinx.android.synthetic.main.fragment_new_payment_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -52,7 +51,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
 
     override fun onPaymentAmountLongPressed(adapterPosition: Int) {
         availablePayments.getOrNull(index = adapterPosition)?.paymentAmountRowState = availablePayments.getOrNull(index = adapterPosition)?.paymentAmountRowState?.otherState ?: PaymentAmountRowState.NORMAL
-        (paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
+        (binding?.paymentAmountRecyclerView?.adapter as? PaymentAmountAdapter)?.reloadData()
         when((activity as? MainActivity)?.floatingButtonType) {
             FloatingButtonType.NORMAL ->
                 if (availablePayments.any { it.paymentAmountRowState == PaymentAmountRowState.CAN_BE_DISMISSED })
@@ -82,7 +81,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                     vat = (activity as? MainActivity)?.userModel?.vat ?: return
                 )
             ),
-            email = emailLayout.value ?: return
+            email = binding?.emailLayout?.value ?: return
         )
     }
 
@@ -101,8 +100,8 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     private var addPaymentButtonState = true
         set(value) {
             field = value
-            addPaymentButton.animateAlpha(toAlpha = if (value) 1.0f else 0.2f)
-            addPaymentButton.isEnabled = value
+            binding?.addPaymentButton?.animateAlpha(toAlpha = if (value) 1.0f else 0.2f)
+            binding?.addPaymentButton?.isEnabled = value
         }
     private var selectedPaymentType = PaymentType.CASH_PAYMENT
 
@@ -146,13 +145,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     }
 
     private fun setupUI() {
-        /*selectFromContactLayout.setOnDetailsPressed {
-            (activity as? MainActivity)?.searchContact(
-                readContactsPermissionRequestCode = MainActivity.CONTACTS_PERMISSION_REQUEST_CODE,
-                contactsSelectorRequestCode = MainActivity.CONTACTS_SELECTOR_REQUEST_CODE
-            )
-        }*/
-        paymentTypeLayout.setOnDetailsPressed {
+        binding?.paymentTypeLayout?.setOnDetailsPressed {
             context?.showListDialog(
                 title = resources.getString(R.string.key_payment_type_label),
                 items = resources.getStringArray(R.array.key_payment_type_array).toList()
@@ -164,7 +157,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                 )
             }
         }
-        groupDetailsLayout.setOnDetailsPressed {
+        binding?.groupDetailsLayout?.setOnDetailsPressed {
             context?.showListDialog(
                 title = resources.getString(R.string.key_select_group_label),
                 items = availableGroups.mapNotNull { it.groupName }
@@ -173,19 +166,19 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                 binding?.groupDetailsLayout?.value = availableGroups.getOrNull(index = it)?.groupName
             }
         }
-        activeAppSwitchLayout.setOnClickListener {
-            binding?.activeAppSwitchLayout?.isChecked = !activeAppSwitchLayout.isChecked
+        binding?.activeAppSwitchLayout?.setOnClickListener {
+            binding?.activeAppSwitchLayout?.isChecked = binding?.activeAppSwitchLayout?.isChecked == false
         }
-        activeAppSwitchLayout.appSwitchListener = object: AppSwitchListener {
+        binding?.activeAppSwitchLayout?.appSwitchListener = object: AppSwitchListener {
             override fun onAppSwitchValueChanged(isChecked: Boolean) {
                 if (!isChecked)
                     binding?.groupDetailsLayout?.value = resources.getString(R.string.key_inactive_label)
             }
         }
-        freeAppSwitchLayout.setOnClickListener {
-            binding?.freeAppSwitchLayout?.isChecked = !freeAppSwitchLayout.isChecked
+        binding?.freeAppSwitchLayout?.setOnClickListener {
+            binding?.freeAppSwitchLayout?.isChecked = binding?.freeAppSwitchLayout?.isChecked == false
         }
-        freeAppSwitchLayout.appSwitchListener = object: AppSwitchListener {
+        binding?.freeAppSwitchLayout?.appSwitchListener = object: AppSwitchListener {
             override fun onAppSwitchValueChanged(isChecked: Boolean) {
                 addPaymentButtonState = !isChecked
             }
@@ -210,10 +203,10 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     }
 
     private fun playSuccessAnimation(block: () -> Unit) {
-        linearLayout.visibility = View.GONE
-        successAnimationLottieView.visibility = View.VISIBLE
-        successAnimationLottieView.playAnimation()
-        successAnimationLottieView.addAnimatorListener(object: Animator.AnimatorListener {
+        binding?.linearLayout?.visibility = View.GONE
+        binding?.successAnimationLottieView?.visibility = View.VISIBLE
+        binding?.successAnimationLottieView?.playAnimation()
+        binding?.successAnimationLottieView?.addAnimatorListener(object: Animator.AnimatorListener {
             override fun onAnimationCancel(animation: Animator?) {}
             override fun onAnimationRepeat(animation: Animator?) {}
             override fun onAnimationStart(animation: Animator?) {}
@@ -278,18 +271,18 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                         !currentPersonModel?.phone.isNullOrEmpty()
                     }
                 }
-                (paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
+                (binding?.paymentAmountRecyclerView?.adapter as? PaymentAmountAdapter)?.reloadData()
             })
     }
 
     private fun configureRecyclerView() {
-        paymentAmountRecyclerView.adapter = PaymentAmountAdapter(
+        binding?.paymentAmountRecyclerView?.adapter = PaymentAmountAdapter(
             paymentModelList = availablePayments,
             vat = (activity as? MainActivity)?.userModel?.vat,
             presenter = this
         )
-        paymentAmountRecyclerView.scheduleLayoutAnimation()
-        (paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
+        binding?.paymentAmountRecyclerView?.scheduleLayoutAnimation()
+        (binding?.paymentAmountRecyclerView?.adapter as? PaymentAmountAdapter)?.reloadData()
     }
 
     private fun initializeGroups() {
@@ -347,7 +340,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             availablePayments.forEach {
                 it.paymentAmountRowState = PaymentAmountRowState.NORMAL
             }
-            (paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
+            (binding?.paymentAmountRecyclerView?.adapter as? PaymentAmountAdapter)?.reloadData()
             paymentReadyForDeletionIndexArray.clear()
             (activity as? MainActivity)?.returnFloatingButtonBackToNormal()
         }
@@ -386,7 +379,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     fun dismissPayment() {
         paymentReadyForDeletionIndexArray.sortDescending()
         paymentReadyForDeletionIndexArray.forEach { paymentReadyForDeletionIndex ->
-            (paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.removeItem(
+            (binding?.paymentAmountRecyclerView?.adapter as? PaymentAmountAdapter)?.removeItem(
                 position = paymentReadyForDeletionIndex
             )
             (activity as? MainActivity)?.returnFloatingButtonBackToNormal()

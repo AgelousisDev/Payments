@@ -15,7 +15,6 @@ import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.views.currencyEditText.interfaces.AmountListener
 import com.agelousis.payments.views.detailsSwitch.interfaces.AppSwitchListener
-import kotlinx.android.synthetic.main.fragment_new_payment_amount_layout.*
 import java.util.*
 
 class NewPaymentAmountFragment: Fragment(), AmountListener {
@@ -25,7 +24,7 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
     }
 
     override fun onAmountChanged(amount: Double?) {
-        amountLayout.infoLabel =
+        binding?.amountLayout?.infoLabel =
             if (amount != null && !amount.toInt().isZero)
                 String.format(
                     resources.getString(R.string.key_vat_value_count_message),
@@ -34,6 +33,7 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
             else null
     }
 
+    private var binding: FragmentNewPaymentAmountLayoutBinding? = null
     private val args: NewPaymentAmountFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,15 +41,17 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
         enterTransition = TransitionInflater.from(context ?: return).inflateTransition(R.transition.slide_right)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-        FragmentNewPaymentAmountLayoutBinding.inflate(
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentNewPaymentAmountLayoutBinding.inflate(
             inflater,
             container,
             false
         ).also {
             it.paymentAmountModel = args.paymentAmountDataModel
             it.defaultPaymentAmount = (activity as? MainActivity)?.userModel?.defaultPaymentAmount
-        }.root
+        }
+        return binding?.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,54 +59,54 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
     }
 
     private fun setupUI() {
-        amountLayout.amountListener = this
+        binding?.amountLayout?.amountListener = this
         args.lastPaymentMonthDate?.let { lastPaymentMonthDate ->
             val paymentMonthCalendar = lastPaymentMonthDate.toCalendar(plusMonths = 1)
-            paymentMonthDetailsLayout.dateValue = String.format(
+            binding?.paymentMonthDetailsLayout?.dateValue = String.format(
                 "%s %s",
                 resources.getStringArray(R.array.key_months_array).getOrNull(index = paymentMonthCalendar.get(Calendar.MONTH)) ?: "",
                 paymentMonthCalendar.get(Calendar.YEAR)
             )
         }
-        if (paymentMonthDetailsLayout.dateValue == null && args.paymentAmountDataModel?.paymentMonth == null) {
+        if (binding?.paymentMonthDetailsLayout?.dateValue == null && args.paymentAmountDataModel?.paymentMonth == null) {
             val paymentMonthCalendar = Date().calendar
-            paymentMonthDetailsLayout.dateValue = String.format(
+            binding?.paymentMonthDetailsLayout?.dateValue = String.format(
                 "%s %s",
                 resources.getStringArray(R.array.key_months_array).getOrNull(index = paymentMonthCalendar.get(Calendar.MONTH)) ?: "",
                 paymentMonthCalendar.get(Calendar.YEAR)
             )
         }
-        skipPaymentAppSwitchLayout.setOnClickListener {
-            skipPaymentAppSwitchLayout.isChecked = !skipPaymentAppSwitchLayout.isChecked
+        binding?.skipPaymentAppSwitchLayout?.setOnClickListener {
+            binding?.skipPaymentAppSwitchLayout?.isChecked = binding?.skipPaymentAppSwitchLayout?.isChecked == false
         }
-        singlePaymentAppSwitchLayout.appSwitchListener = object: AppSwitchListener {
+        binding?.singlePaymentAppSwitchLayout?.appSwitchListener = object: AppSwitchListener {
             override fun onAppSwitchValueChanged(isChecked: Boolean) {
-                paymentMonthDetailsLayout.visibility = if (isChecked) View.GONE else View.VISIBLE
+                binding?.paymentMonthDetailsLayout?.visibility = if (isChecked) View.GONE else View.VISIBLE
             }
         }
     }
 
     fun checkInputFields() {
         ifLet(
-            amountLayout.doubleValue,
-            dateDetailsLayout.dateValue
+            binding?.amountLayout?.doubleValue,
+            binding?.dateDetailsLayout?.dateValue
         ) {
             findNavController().previousBackStackEntry?.savedStateHandle?.set(
                 PAYMENT_AMOUNT_DATA_EXTRA,
                 PaymentAmountModel(
                     paymentAmount = it.first().toString().toDouble(),
-                    paymentMonth = paymentMonthDetailsLayout.dateValue,
+                    paymentMonth = binding?.paymentMonthDetailsLayout?.dateValue,
                     paymentDate = it.second().toString(),
-                    skipPayment = skipPaymentAppSwitchLayout.isChecked,
-                    paymentNote = notesField.text?.toString(),
-                    paymentDateNotification = paymentDateNotificationSwitchLayout.isChecked,
-                    singlePayment = singlePaymentAppSwitchLayout.isChecked
+                    skipPayment = binding?.skipPaymentAppSwitchLayout?.isChecked,
+                    paymentNote = binding?.notesField?.text?.toString(),
+                    paymentDateNotification = binding?.paymentDateNotificationSwitchLayout?.isChecked,
+                    singlePayment = binding?.singlePaymentAppSwitchLayout?.isChecked
                 )
             )
             findNavController().popBackStack()
         } ?: run {
-            amountLayout.errorState = amountLayout.doubleValue == null
-            dateDetailsLayout.errorState = dateDetailsLayout.dateValue == null
+            binding?.amountLayout?.errorState = binding?.amountLayout?.doubleValue == null
+            binding?.dateDetailsLayout?.errorState = binding?.dateDetailsLayout?.dateValue == null
         }
     }
 

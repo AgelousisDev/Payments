@@ -1,11 +1,14 @@
 package com.agelousis.payments.main.ui.history
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.agelousis.payments.R
+import com.agelousis.payments.databinding.HistoryFragmentLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.history.listeners.PaymentLineChartGestureListener
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
@@ -22,21 +25,30 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import kotlinx.android.synthetic.main.history_fragment_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HistoryFragment: Fragment(R.layout.history_fragment_layout) {
+class HistoryFragment: Fragment() {
 
+    private var binding: HistoryFragmentLayoutBinding? = null
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         addObservers()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = HistoryFragmentLayoutBinding.inflate(
+            layoutInflater,
+            container,
+            false
+        )
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,33 +89,34 @@ class HistoryFragment: Fragment(R.layout.history_fragment_layout) {
     private fun configureLineChart(payments: List<PaymentAmountModel>) {
         val desc = Description()
         desc.text = ""
-        lineChart.description = desc
-        lineChart.legend.isEnabled = false
-        lineChart.xAxis.textColor = ContextCompat.getColor(context ?: return, R.color.dayNightTextOnBackground)
-        lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-        lineChart.xAxis.valueFormatter = object: ValueFormatter() {
+        binding?.lineChart?.description = desc
+        binding?.lineChart?.legend?.isEnabled = false
+        binding?.lineChart?.xAxis?.textColor = ContextCompat.getColor(context ?: return, R.color.dayNightTextOnBackground)
+        binding?.lineChart?.xAxis?.position = XAxis.XAxisPosition.BOTTOM
+        binding?.lineChart?.xAxis?.valueFormatter = object: ValueFormatter() {
             override fun getFormattedValue(value: Float) =
                 SimpleDateFormat(Constants.GRAPH_DATE_FORMAT, Locale.US).format(value.toLong())
         }
         //lineChart.xAxis.setAvoidFirstLastClipping(true)
-        lineChart.xAxis.isGranularityEnabled = true
-        lineChart.xAxis.setDrawLimitLinesBehindData(true)
-        lineChart.axisLeft.valueFormatter = object: ValueFormatter() {
+        binding?.lineChart?.xAxis?.isGranularityEnabled = true
+        binding?.lineChart?.xAxis?.setDrawLimitLinesBehindData(true)
+        binding?.lineChart?.axisLeft?.valueFormatter = object: ValueFormatter() {
             override fun getFormattedValue(value: Float) =
                 if (value == 0f)
                     "0"
                 else
                     value.toDouble().euroFormattedString
         }
-        lineChart.axisLeft.textColor = ContextCompat.getColor(context ?: return, R.color.dayNightTextOnBackground)
-        lineChart.axisRight.isEnabled = false
-        lineChart.onChartGestureListener = object: PaymentLineChartGestureListener(chart = lineChart) {
-            override fun onAmountSelected(amount: String) {
-                context?.toast(
-                    message = amount
-                )
+        binding?.lineChart?.axisLeft?.textColor = ContextCompat.getColor(context ?: return, R.color.dayNightTextOnBackground)
+        binding?.lineChart?.axisRight?.isEnabled = false
+        binding?.lineChart?.onChartGestureListener =
+            object: PaymentLineChartGestureListener(chart = binding?.lineChart!!) {
+                override fun onAmountSelected(amount: String) {
+                    context?.toast(
+                        message = amount
+                    )
+                }
             }
-        }
         val entries = arrayListOf<Entry>()
         payments.forEach {
             entries.add(
@@ -114,7 +127,7 @@ class HistoryFragment: Fragment(R.layout.history_fragment_layout) {
             )
         }
         //lineChart.xAxis.setLabelCount(entries.size, true)
-        lineChart.xAxis.granularity = 1f
+        binding?.lineChart?.xAxis?.granularity = 1f
         //lineChart.setMaxVisibleValueCount(4)
         setLineChartData(
             entries = entries
@@ -140,8 +153,8 @@ class HistoryFragment: Fragment(R.layout.history_fragment_layout) {
                 it.highLightColor = ContextCompat.getColor(context ?: return, R.color.green)
             }
         )
-        lineChart.data = LineData(dataSets)
-        lineChart.invalidate()
+        binding?.lineChart?.data = LineData(dataSets)
+        binding?.lineChart?.invalidate()
     }
 
 }

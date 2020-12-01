@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.agelousis.payments.R
 import com.agelousis.payments.custom.itemDecoration.DividerItemRecyclerViewDecorator
+import com.agelousis.payments.databinding.PaymentsMenuOptionsFragmentLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.menuOptions.enumerations.PaymentsMenuOptionType
 import com.agelousis.payments.main.menuOptions.presenters.PaymentsMenuOptionPresenter
@@ -20,7 +21,6 @@ import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.currentNavigationFragment
 import com.agelousis.payments.utils.extensions.firstOrNullWithType
 import com.agelousis.payments.views.bottomSheet.BasicBottomSheetDialogFragment
-import kotlinx.android.synthetic.main.payments_menu_options_fragment_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,6 +46,7 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
         (activity?.supportFragmentManager?.currentNavigationFragment as? PaymentsFragment)?.navigateToPeriodFilterFragment()
     }
 
+    private var binding: PaymentsMenuOptionsFragmentLayoutBinding? = null
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
     private val optionList by lazy {
@@ -65,8 +66,14 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
         addObservers()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.payments_menu_options_fragment_layout, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = PaymentsMenuOptionsFragmentLayoutBinding.inflate(
+            layoutInflater,
+            container,
+            false
+        )
+        return binding?.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -92,7 +99,7 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
                     it == PaymentsMenuOptionType.CSV_EXPORT
                 }
             )?.isEnabled = list.filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten().isNotEmpty()
-            (menuOptionsRecyclerView.adapter as? PaymentsMenuOptionAdapter)?.reloadData()
+            (binding?.menuOptionsRecyclerView?.adapter as? PaymentsMenuOptionAdapter)?.reloadData()
         }
     }
 
@@ -106,11 +113,11 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
     }
 
     private fun configureRecyclerView() {
-        menuOptionsRecyclerView.adapter = PaymentsMenuOptionAdapter(
+        binding?.menuOptionsRecyclerView?.adapter = PaymentsMenuOptionAdapter(
             list = optionList,
             paymentsMenuOptionPresenter = this
         )
-        menuOptionsRecyclerView.addItemDecoration(
+        binding?.menuOptionsRecyclerView?.addItemDecoration(
             DividerItemRecyclerViewDecorator(
                 context = context ?: return,
                 margin = resources.getDimension(R.dimen.activity_general_horizontal_margin).toInt()
