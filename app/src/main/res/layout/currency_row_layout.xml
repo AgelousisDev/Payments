@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="currencyType"
+            type="com.agelousis.payments.main.ui.currencySelector.enumerations.CurrencyType" />
+        <variable
+            name="presenter"
+            type="com.agelousis.payments.main.ui.currencySelector.CurrencyPresenter" />
+    </data>
+
+<com.google.android.material.card.MaterialCardView
+    android:layout_width="70dp"
+    android:layout_height="50dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:onClick="@{() -> presenter.onCurrencySelected(currencyType)}"
+    app:cardCornerRadius="8dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true"
+    app:cardElevation="2dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/currencyImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:srcCompat="@{currencyType.icon}"
+            tools:srcCompat="@drawable/ic_united_states_of_america" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@{currencyType.symbol}"
+            android:textColor="@color/white"
+            android:layerType="software"
+            android:shadowColor="@color/black"
+            android:shadowRadius="8"
+            tools:text="$" />
+
+</com.google.android.material.card.MaterialCardView>
+</layout>

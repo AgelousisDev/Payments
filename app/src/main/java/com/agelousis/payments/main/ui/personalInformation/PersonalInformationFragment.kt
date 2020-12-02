@@ -10,12 +10,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.agelousis.payments.R
+import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.custom.itemDecoration.DividerItemRecyclerViewDecorator
 import com.agelousis.payments.custom.itemDecoration.HeaderItemDecoration
 import com.agelousis.payments.database.DBManager
 import com.agelousis.payments.databinding.FragmentPersonalInformationLayoutBinding
 import com.agelousis.payments.login.LoginActivity
 import com.agelousis.payments.main.MainActivity
+import com.agelousis.payments.main.ui.currencySelector.CurrencySelectorDialogFragment
+import com.agelousis.payments.main.ui.currencySelector.enumerations.CurrencyType
+import com.agelousis.payments.main.ui.currencySelector.interfaces.CurrencySelectorFragmentPresenter
 import com.agelousis.payments.main.ui.files.models.HeaderModel
 import com.agelousis.payments.main.ui.personalInformation.adapters.OptionTypesAdapter
 import com.agelousis.payments.main.ui.personalInformation.models.OptionType
@@ -106,6 +110,26 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
         (activity as? MainActivity)?.initializeDatabaseExport()
     }
 
+    override fun onChangeCurrency() {
+        CurrencySelectorDialogFragment.show(
+            supportFragmentManager = childFragmentManager,
+            currencySelectorFragmentPresenter = object: CurrencySelectorFragmentPresenter {
+                override fun onCurrencySelected(currencyType: CurrencyType) {
+                    optionList.firstOrNullWithType(
+                        typeBlock = {
+                            it as? OptionType
+                        },
+                        predicate = {
+                            it == OptionType.CHANGE_CURRENCY
+                        }
+                    )?.currencyType = currencyType
+                    binding?.optionRecyclerView?.scheduleLayoutAnimation()
+                    (binding?.optionRecyclerView?.adapter as? OptionTypesAdapter)?.reloadData()
+                }
+            }
+        )
+    }
+
     override fun onProfilePicturePressed() {
         (activity as? MainActivity)?.showProfilePicture()
     }
@@ -157,6 +181,9 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
                 dateTime = null,
                 header = resources.getString(R.string.key_payment_setting_label)
             ),
+            OptionType.CHANGE_CURRENCY.also {
+                it.currencyType = CurrencyType.values().firstOrNull { currencyType -> currencyType.symbol == MainApplication.currencySymbol }
+            },
             OptionType.VAT.also {
                 it.userModel = newUserModel
             },

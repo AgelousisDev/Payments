@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="android.view.View" />
         <import type="com.agelousis.payments.main.ui.personalInformation.models.OptionType" />
         <variable
             name="optionType"
@@ -18,7 +19,7 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackgroundBorderless"
-    android:onClick="@{() -> optionType == OptionType.DELETE_USER ? presenter.onDeleteUser() : optionType == OptionType.EXPORT_DATABASE ? presenter.onExportDatabase() : null}">
+    android:onClick="@{() -> optionType == OptionType.DELETE_USER ? presenter.onDeleteUser() : optionType == OptionType.EXPORT_DATABASE ? presenter.onExportDatabase() : optionType == OptionType.CHANGE_CURRENCY ? presenter.onChangeCurrency() : null}">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/materialTextView"
@@ -31,13 +32,37 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Delete User" />
 
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="50dp"
+        android:layout_height="38dp"
+        android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+        android:visibility="@{optionType == OptionType.CHANGE_CURRENCY ? View.VISIBLE : View.GONE}"
+        app:cardCornerRadius="8dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/appCompatImageView4"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            style="@style/TextViewValueLabel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:srcCompat="@{optionType.currencyType.icon}"
+            tools:srcCompat="@drawable/ic_united_states_of_america" />
+
+    </com.google.android.material.card.MaterialCardView>
+
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/appCompatImageView4"
         android:layout_width="10dp"
         android:layout_height="10dp"
-        app:srcCompat="@drawable/ic_arrow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_arrow" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

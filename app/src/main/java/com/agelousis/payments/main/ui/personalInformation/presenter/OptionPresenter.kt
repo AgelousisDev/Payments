@@ -16,4 +16,5 @@ interface OptionPresenter {
     fun onMessageTemplateChange(newMessageTemplate: String)
     fun onDeleteUser()
     fun onExportDatabase()
+    fun onChangeCurrency()
 }
