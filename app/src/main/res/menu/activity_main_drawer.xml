@@ -22,6 +22,11 @@
                     android:id="@+id/navigationGraph"
                     android:icon="@drawable/ic_diagram"
                     android:title="@string/key_history_label" />
+                <item
+                    android:checkable="false"
+                    android:id="@+id/navigationGuide"
+                    android:icon="@drawable/ic_guide"
+                    android:title="@string/key_guide_label"/>
             </group>
         </menu>
     </item>

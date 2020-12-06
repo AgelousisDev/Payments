@@ -2,6 +2,7 @@ package com.agelousis.payments.login
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
@@ -203,7 +204,9 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
         configureLoginState()
         setupUI()
         initializeUsers()
-        showGuide()
+        showGuideIf {
+            getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE).isFirstTime
+        }
     }
 
     private fun showBiometricsAlert(predicate: () -> Boolean, closure: (Boolean) -> Unit) {
@@ -380,8 +383,9 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
             }
     }
 
-    private fun showGuide() {
-        startActivity(Intent(this, GuideActivity::class.java))
+    private fun showGuideIf(predicate: () -> Boolean) {
+        if (predicate())
+            startActivity(Intent(this, GuideActivity::class.java))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

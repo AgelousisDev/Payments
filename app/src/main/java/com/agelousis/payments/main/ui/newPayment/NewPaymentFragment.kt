@@ -301,18 +301,16 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             currentPersonModel?.firstName,
             currentPersonModel?.surname,
             currentPersonModel?.phone,
-            currentPersonModel?.payments
         ) {
             checkDatabasePaymentAction()
         } ?: run {
+            binding?.nestedScrollView?.post {
+                binding?.nestedScrollView?.smoothScrollTo(0, 0)
+            }
             binding?.groupDetailsLayout?.errorState = binding?.groupDetailsLayout?.value == null
             binding?.firstNameLayout?.errorState = binding?.firstNameLayout?.value == null
             binding?.surnameLayout?.errorState = binding?.surnameLayout?.value == null
             binding?.phoneLayout?.errorState = binding?.phoneLayout?.value == null
-            if (availablePayments.isEmpty())
-                context?.message(
-                    message = resources.getString(R.string.key_add_payment_message)
-                )
         }
     }
 

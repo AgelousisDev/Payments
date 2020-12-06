@@ -22,6 +22,7 @@ import com.agelousis.payments.database.SQLiteHelper
 import com.agelousis.payments.databinding.ActivityMainBinding
 import com.agelousis.payments.databinding.NavHeaderMainBinding
 import com.agelousis.payments.group.GroupActivity
+import com.agelousis.payments.guide.GuideActivity
 import com.agelousis.payments.login.LoginActivity
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.enumerations.FloatingButtonPosition
@@ -70,6 +71,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 binding?.appBarMain?.contentMain?.navHostFragmentContainerView?.findNavController()?.popBackStack(R.id.historyFragment, true)
                 binding?.appBarMain?.contentMain?.navHostFragmentContainerView?.findNavController()?.navigate(R.id.action_global_historyFragment)
             }
+            R.id.navigationGuide ->
+                showGuide()
         }
         binding?.drawerLayout?.closeDrawer(GravityCompat.START)
         return true
@@ -340,6 +343,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    private fun showPaymentsMenuOptionsFragment() {
+        PaymentsMenuOptionsBottomSheetFragment.show(
+            supportFragmentManager = supportFragmentManager
+        )
+    }
+
+    private fun showGuide() {
+        startActivity(Intent(this, GuideActivity::class.java))
+    }
+
     fun setFloatingButtonAsPaymentRemovalButton() {
         floatingButtonType = FloatingButtonType.NEGATIVE
         floatingButtonImage = R.drawable.ic_delete
@@ -360,6 +373,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             GroupActivity.GROUP_SELECTION_REQUEST_CODE
         )
 
+    fun showProfilePicture() {
+        startActivity(
+            Intent(
+                this,
+                ProfilePictureActivity::class.java
+            ).also {
+                it.putExtra(USER_MODEL_EXTRA, userModel)
+            }
+        )
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK)
@@ -376,23 +400,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
                     }
             }
-    }
-
-    private fun showPaymentsMenuOptionsFragment() {
-        PaymentsMenuOptionsBottomSheetFragment.show(
-            supportFragmentManager = supportFragmentManager
-        )
-    }
-
-    fun showProfilePicture() {
-        startActivity(
-            Intent(
-                this,
-                ProfilePictureActivity::class.java
-            ).also {
-                it.putExtra(USER_MODEL_EXTRA, userModel)
-            }
-        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
