@@ -12,6 +12,7 @@ import com.agelousis.payments.R
 import com.agelousis.payments.databinding.FragmentNewPaymentAmountLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
+import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.views.currencyEditText.interfaces.AmountListener
 import com.agelousis.payments.views.detailsSwitch.interfaces.AppSwitchListener
@@ -60,6 +61,21 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
 
     private fun setupUI() {
         binding?.amountLayout?.amountListener = this
+        binding?.dateDetailsLayout?.dateSelectionClosure = {
+            if (it.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.isDatePassed == true)
+            binding?.paymentDateNotificationSwitchLayout?.isChecked = false
+        }
+        binding?.paymentDateNotificationSwitchLayout?.appSwitchListener = object: AppSwitchListener {
+            override fun onAppSwitchValueChanged(isChecked: Boolean) {
+                if (isChecked)
+                    if (binding?.dateDetailsLayout?.dateValue?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.isDatePassed == true) {
+                        binding?.paymentDateNotificationSwitchLayout?.isChecked = false
+                        context?.toast(
+                            message = resources.getString(R.string.key_payment_date_notification_warning_message)
+                        )
+                    }
+            }
+        }
         args.lastPaymentMonthDate?.let { lastPaymentMonthDate ->
             val paymentMonthCalendar = lastPaymentMonthDate.toCalendar(plusMonths = 1)
             binding?.paymentMonthDetailsLayout?.dateValue = String.format(

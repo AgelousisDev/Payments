@@ -34,7 +34,7 @@ class DateFieldLayout(context: Context, attributeSet: AttributeSet?): FrameLayou
             binding?.lineSeparator?.setBackgroundColor(ContextCompat.getColor(context, if (value) R.color.red else R.color.grey))
             //dateIcon.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(context, if (value) R.color.red else R.color.dayNightTextOnBackground))
         }
-    private var dateSelectionClosure: DateSelectionClosure? = null
+    var dateSelectionClosure: DateSelectionClosure? = null
 
     override fun onDatePickerShow() {
         val c = Calendar.getInstance()
