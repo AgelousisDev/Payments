@@ -144,11 +144,11 @@
     <string name="key_select_currency_label">Select Currency</string>
     <string name="key_payment_date_notification_warning_message">Notifications must me set on a future Payment Date!</string>
     <string name="key_offline_login_label">Offline Login</string>
-    <string name="key_create_user_guide_message">Create multiple users offline, add your authentication method(biometrics or password) and manage your payments</string>
-    <string name="key_payments_grouped_guide_message">Separate your clients by creating colorful or with image groups</string>
+    <string name="key_create_user_guide_message">∙ \tCreate multiple users offline\n∙ \tAdd your authentication method(biometrics or password)\n∙ \tAdd Profile Image\n∙ \tManage your payments</string>
+    <string name="key_payments_grouped_guide_message">∙ \tAdd colorful or groups with image\n∙ \tWatch your payments by group name alphabetically\n∙ \tSwipe left to create a client\'s PDF - Swipe right to delete\n∙ \tMake a long click to share message to the client</string>
     <string name="key_your_client_label">Your Client</string>
-    <string name="key_add_payment_guide_message">Fill client info and add multiple payments</string>
-    <string name="key_edit_personal_information_guide_message">Edit your user\'s details, change currency, edit VAT(%) and a lot more…</string>
+    <string name="key_add_payment_guide_message">∙ \tFill client info and add multiple payments\n∙ \tSee the all the payments of the current client in the bottom of this screen\n∙ \tAdd the payment on the Google Calendar</string>
+    <string name="key_edit_personal_information_guide_message">∙ \tEdit your user\'s details, change currency, edit VAT(%) and a lot more…</string>
     <string name="dot_value" translatable="false">&#8226;</string>
     <string name="key_skip_label">SKIP</string>
 

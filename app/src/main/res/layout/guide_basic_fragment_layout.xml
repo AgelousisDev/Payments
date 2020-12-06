@@ -11,43 +11,56 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/guideImageView"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/guideCardView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="32dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardCornerRadius="12dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardElevation="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintHeight_percent="0.6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.5"
-        app:srcCompat="@{guideModel.icon}" />
+        app:layout_constraintWidth_percent="0.6">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:srcCompat="@{guideModel.icon}"
+            tools:srcCompat="@drawable/ic_guide_login_light"/>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.textview.MaterialTextView
-        style="@style/TextViewTitleLabel"
         android:id="@+id/guideTitle"
+        style="@style/TextViewTitleLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:gravity="center_horizontal"
         android:text="@{guideModel.title}"
-        tools:text="Login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideImageView" />
+        app:layout_constraintTop_toBottomOf="@+id/guideCardView"
+        tools:text="Login" />
 
     <com.google.android.material.textview.MaterialTextView
-        style="@style/TextViewValueLabel"
         android:id="@+id/guideSubtitle"
+        style="@style/TextViewValueLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        android:gravity="center_horizontal"
         android:text="@{guideModel.subtitle}"
-        tools:text="Add a user offline"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/guideTitle"
+        tools:text="Add a user offline" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

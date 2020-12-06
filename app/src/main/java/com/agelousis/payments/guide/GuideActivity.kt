@@ -26,7 +26,7 @@ class GuideActivity : AppCompatActivity(), ViewPager.OnPageChangeListener, Guide
     }
 
     private var binding: ActivityGuideBinding? = null
-    private val guideModelList by lazy { GuideController.guideItems }
+    private val guideModelList by lazy { GuideController getGuideItems this }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
