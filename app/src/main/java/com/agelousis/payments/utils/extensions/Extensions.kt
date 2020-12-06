@@ -22,12 +22,16 @@ import android.os.Looper
 import android.provider.CalendarContract
 import android.provider.OpenableColumns
 import android.telephony.TelephonyManager
+import android.text.Html
+import android.text.Spanned
 import android.view.*
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.webkit.MimeTypeMap
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -817,6 +821,36 @@ var SharedPreferences.currencySymbol: String?
         }
     }
     get() = getString(Constants.SHARED_PREFERENCES_CURRENCY_SUMBOL_KEY, null)
+
+fun ViewGroup.addTabDots(currentPage: Int, totalPages: Int) {
+    val dots = arrayOfNulls<TextView>(totalPages)
+    removeAllViews()
+    for(count in dots.indices) {
+        dots[count] = TextView(context)
+        dots[count]?.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        dots[count]?.gravity = Gravity.CENTER
+        dots[count]?.text = resources.getString(R.string.dot_value).html
+        dots[count]?.textSize = 25.0f
+        dots[count]?.setTextColor(ContextCompat.getColor(context,
+            R.color.color_inactive))
+        addView(dots[count])
+    }
+    if (dots.isNotEmpty()) dots[currentPage]?.setTextColor(ContextCompat.getColor(context,
+        R.color.steel))
+}
+
+val String.html: Spanned?
+    get() = Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)
+
+var SharedPreferences.isFirstTime: Boolean
+    set(value) {
+        edit(
+            commit = true
+        ) {
+            putBoolean(Constants.SHARED_PREFERENCES_FIRST_TIME_KEY, value)
+        }
+    }
+    get() = getBoolean(Constants.SHARED_PREFERENCES_FIRST_TIME_KEY, true)
 
 @BindingAdapter("picassoImagePath")
 fun AppCompatImageView.loadImagePath(fileName: String?) {

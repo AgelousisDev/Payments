@@ -20,6 +20,7 @@ import com.agelousis.payments.biometrics.BiometricsListener
 import com.agelousis.payments.database.DBManager
 import com.agelousis.payments.databinding.ActivityLoginBinding
 import com.agelousis.payments.forgotPassword.ForgotPasswordBottomSheetFragment
+import com.agelousis.payments.guide.GuideActivity
 import com.agelousis.payments.login.enumerations.UIMode
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.login.presenter.LoginPresenter
@@ -202,6 +203,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
         configureLoginState()
         setupUI()
         initializeUsers()
+        showGuide()
     }
 
     private fun showBiometricsAlert(predicate: () -> Boolean, closure: (Boolean) -> Unit) {
@@ -376,6 +378,10 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
             ) {
                 this@LoginActivity.finish()
             }
+    }
+
+    private fun showGuide() {
+        startActivity(Intent(this, GuideActivity::class.java))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -143,6 +143,14 @@
     <string name="key_select_from_contact_label">Select from contact</string>
     <string name="key_select_currency_label">Select Currency</string>
     <string name="key_payment_date_notification_warning_message">Notifications must me set on a future Payment Date!</string>
+    <string name="key_offline_login_label">Offline Login</string>
+    <string name="key_create_user_guide_message">Create multiple users offline, add your authentication method(biometrics or password) and manage your payments</string>
+    <string name="key_payments_grouped_guide_message">Separate your clients by creating colorful or with image groups</string>
+    <string name="key_your_client_label">Your Client</string>
+    <string name="key_add_payment_guide_message">Fill client info and add multiple payments</string>
+    <string name="key_edit_personal_information_guide_message">Edit your user\'s details, change currency, edit VAT(%) and a lot more…</string>
+    <string name="dot_value" translatable="false">&#8226;</string>
+    <string name="key_skip_label">SKIP</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>
