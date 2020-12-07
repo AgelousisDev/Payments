@@ -23,7 +23,9 @@ import android.provider.CalendarContract
 import android.provider.OpenableColumns
 import android.telephony.TelephonyManager
 import android.text.Html
+import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.style.BulletSpan
 import android.view.*
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
@@ -58,6 +60,7 @@ import com.agelousis.payments.login.enumerations.UIMode
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.payments.utils.constants.Constants
+import com.agelousis.payments.utils.custom.ImprovedBulletSpan
 import com.agelousis.payments.utils.models.CalendarDataModel
 import com.agelousis.payments.utils.models.NotificationDataModel
 import com.agelousis.payments.utils.receivers.NotificationReceiver
@@ -1001,5 +1004,35 @@ fun setAnimatedText(materialTextView: MaterialTextView, text: String?) {
             }
         })
         materialTextView.startAnimation(anim)
+    }
+}
+
+@BindingAdapter("picassoResourceDrawable")
+fun setPicassoDrawable(appCompatImageView: AppCompatImageView, resourceId: Int?) {
+    resourceId?.let {
+        appCompatImageView.post {
+            Picasso.get().load(it).resize(appCompatImageView.width * 2, 0).into(appCompatImageView)
+        }
+    }
+}
+
+@BindingAdapter("bulletsHtmlText")
+fun setHtmlTextWithBullets(materialTextView: MaterialTextView, htmlTextResourceId: Int?) {
+    htmlTextResourceId?.let { htmlResource ->
+        val htmlSpannable = Html.fromHtml(materialTextView.resources.getString(htmlResource), Html.FROM_HTML_MODE_LEGACY)
+        val spannableBuilder = SpannableStringBuilder(htmlSpannable)
+        val bulletSpans = spannableBuilder.getSpans(0, spannableBuilder.length, BulletSpan::class.java)
+        bulletSpans.forEach {
+            val start = spannableBuilder.getSpanStart(it)
+            val end = spannableBuilder.getSpanEnd(it)
+            spannableBuilder.removeSpan(it)
+            spannableBuilder.setSpan(
+                ImprovedBulletSpan(bulletRadius = 3.px, gapWidth = 8.px),
+                start,
+                end,
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+            )
+        }
+        materialTextView.text = spannableBuilder
     }
 }

@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:srcCompat="@{guideModel.icon}"
+            picassoResourceDrawable="@{guideModel.icon}"
             tools:srcCompat="@drawable/ic_guide_login_light"/>
 
     </com.google.android.material.card.MaterialCardView>
@@ -55,7 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        android:text="@{guideModel.subtitle}"
+        bulletsHtmlText="@{guideModel.subtitle}"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
