@@ -184,6 +184,9 @@
     <string name="dot_value" translatable="false">&#8226;</string>
     <string name="key_skip_label">SKIP</string>
     <string name="key_guide_label">Guide</string>
+    <string name="key_unsaved_changes_message">You have unsaved changes left</string>
+    <string name="key_discard_label">Discard</string>
+    <string name="key_save_label">Save</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>

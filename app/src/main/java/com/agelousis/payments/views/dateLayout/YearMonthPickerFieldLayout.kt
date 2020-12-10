@@ -21,6 +21,7 @@ class YearMonthPickerFieldLayout(context: Context, attributeSet: AttributeSet?):
             field = value
             value?.let {
                 binding?.dateView?.text = it
+                dateSelectionClosure?.invoke(it)
             }
         }
         get() = if (binding?.dateView?.text?.toString()?.isEmpty() == true) null else binding?.dateView?.text?.toString()
@@ -31,6 +32,7 @@ class YearMonthPickerFieldLayout(context: Context, attributeSet: AttributeSet?):
             binding?.lineSeparator?.setBackgroundColor(ContextCompat.getColor(context, if (value) R.color.red else R.color.grey))
             //dateIcon.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(context, if (value) R.color.red else R.color.dayNightTextOnBackground))
         }
+    var dateSelectionClosure: DateSelectionClosure? = null
 
     override fun onDateSet(selectedMonth: Int, selectedYear: Int) {
         errorState = false

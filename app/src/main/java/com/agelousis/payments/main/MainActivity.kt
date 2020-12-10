@@ -205,18 +205,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         unCheckAllMenuItems(
             menu = binding?.navigationView?.menu
         )
-        if (supportFragmentManager.currentNavigationFragment is PaymentsFragment)
-            showSimpleDialog(
-                title = resources.getString(R.string.key_logout_label),
-                message = resources.getString(R.string.key_logout_message),
-                icon = R.drawable.ic_logout
-            ) {
-                startActivity(Intent(this, LoginActivity::class.java))
-                finish()
+        when(supportFragmentManager.currentNavigationFragment) {
+            is PaymentsFragment ->
+                showSimpleDialog(
+                    title = resources.getString(R.string.key_logout_label),
+                    message = resources.getString(R.string.key_logout_message),
+                    icon = R.drawable.ic_logout
+                ) {
+                    startActivity(Intent(this, LoginActivity::class.java))
+                    finish()
+                }
+            is NewPaymentAmountFragment ->
+                showNewPaymentUnsavedFieldsWarning()
+            else -> {
+                binding?.appBarMain?.contentMain?.navHostFragmentContainerView?.findNavController()?.previousBackStackEntry?.savedStateHandle?.remove<PaymentAmountModel>(NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA)
+                super.onBackPressed()
             }
-        else {
-            binding?.appBarMain?.contentMain?.navHostFragmentContainerView?.findNavController()?.previousBackStackEntry?.savedStateHandle?.remove<PaymentAmountModel>(NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA)
-            super.onBackPressed()
         }
     }
 
@@ -351,6 +355,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun showGuide() {
         startActivity(Intent(this, GuideActivity::class.java))
+    }
+
+    private fun showNewPaymentUnsavedFieldsWarning() {
+        showTwoButtonsDialog(
+            title = resources.getString(R.string.key_warning_label),
+            message = resources.getString(R.string.key_unsaved_changes_message),
+            negativeButtonText = resources.getString(R.string.key_discard_label),
+            negativeButtonBlock = {
+                super.onBackPressed()
+            },
+            positiveButtonText = resources.getString(R.string.key_save_label),
+            positiveButtonBlock = {
+                (supportFragmentManager.currentNavigationFragment as? NewPaymentAmountFragment)?.checkInputFields()
+            }
+        )
     }
 
     fun setFloatingButtonAsPaymentRemovalButton() {
