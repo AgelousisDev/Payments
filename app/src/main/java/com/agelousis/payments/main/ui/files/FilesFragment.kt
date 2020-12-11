@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.agelousis.payments.R
 import com.agelousis.payments.custom.enumerations.SwipeAction
@@ -36,8 +37,10 @@ class FilesFragment: Fragment(), FilePresenter {
         File(context?.filesDir ?: return, fileDataModel.fileName ?: return).takeIf {
             it.exists()
         }?.let {
-            context?.openPDF(
-                pdfFile = it
+            findNavController().navigate(
+                FilesFragmentDirections.actionFilesFragmentToPdfViewerFragment(
+                    fileDataModel = fileDataModel
+                )
             )
         } ?: context?.showSimpleDialog(
             title = resources.getString(R.string.key_warning_label),

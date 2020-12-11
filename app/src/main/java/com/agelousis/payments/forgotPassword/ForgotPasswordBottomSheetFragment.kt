@@ -12,7 +12,6 @@ import com.agelousis.payments.forgotPassword.viewModels.ForgotPasswordViewModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.toast
 import com.agelousis.payments.views.bottomSheet.BasicBottomSheetDialogFragment
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -187,6 +187,7 @@
     <string name="key_unsaved_changes_message">You have unsaved changes left</string>
     <string name="key_discard_label">Discard</string>
     <string name="key_save_label">Save</string>
+    <string name="key_pdf_label">Pdf</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>

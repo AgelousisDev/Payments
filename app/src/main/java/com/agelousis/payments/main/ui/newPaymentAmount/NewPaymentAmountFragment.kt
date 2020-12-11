@@ -36,6 +36,20 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
 
     private var binding: FragmentNewPaymentAmountLayoutBinding? = null
     private val args: NewPaymentAmountFragmentArgs by navArgs()
+    val fieldsHaveChanged
+        get() = args.paymentAmountDataModel?.let {
+            val currentPaymentAmountModel = PaymentAmountModel(
+                paymentId = binding?.paymentAmountModel?.paymentId,
+                paymentAmount = binding?.amountLayout?.doubleValue,
+                paymentMonth = binding?.paymentMonthDetailsLayout?.dateValue,
+                paymentDate = binding?.dateDetailsLayout?.dateValue,
+                skipPayment = binding?.skipPaymentAppSwitchLayout?.isChecked,
+                paymentNote = binding?.notesField?.text?.toString(),
+                paymentDateNotification = binding?.paymentDateNotificationSwitchLayout?.isChecked,
+                singlePayment = binding?.singlePaymentAppSwitchLayout?.isChecked
+            )
+            currentPaymentAmountModel != it
+        } ?: true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

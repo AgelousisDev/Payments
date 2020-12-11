@@ -104,6 +104,11 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             binding?.addPaymentButton?.isEnabled = value
         }
     private var selectedPaymentType = PaymentType.CASH_PAYMENT
+    val fieldsHaveChanged
+        get() = args.personDataModel?.let {
+            fillCurrentPersonModel()
+            currentPersonModel != it
+        } ?: true
 
     override fun onResume() {
         super.onResume()

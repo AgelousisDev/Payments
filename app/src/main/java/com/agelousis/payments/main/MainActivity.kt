@@ -35,6 +35,7 @@ import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
 import com.agelousis.payments.main.ui.payments.PaymentsFragment
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
+import com.agelousis.payments.main.ui.pdfViewer.PdfViewerFragment
 import com.agelousis.payments.main.ui.periodFilter.PeriodFilterFragment
 import com.agelousis.payments.main.ui.personalInformation.PersonalInformationFragment
 import com.agelousis.payments.profilePicture.ProfilePictureActivity
@@ -125,6 +126,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 floatingButtonState = false
                 menuOptionsIsVisible = false
             }
+            in PdfViewerFragment::class.java.name -> {
+                appBarTitle = resources.getString(R.string.key_pdf_label)
+                floatingButtonState = false
+                menuOptionsIsVisible = false
+            }
         }
     }
 
@@ -158,7 +164,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val dbManager by lazy { DBManager(context = this) }
     val userModel by lazy { intent?.extras?.getParcelable<UserModel>(USER_MODEL_EXTRA) }
-    private var appBarTitle: String? = null
+    var appBarTitle: String? = null
         set(value) {
             field = value
             value?.let {
@@ -215,6 +221,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     startActivity(Intent(this, LoginActivity::class.java))
                     finish()
                 }
+            is NewPaymentFragment ->
+                showNewPersonUnsavedFieldsWarning()
             is NewPaymentAmountFragment ->
                 showNewPaymentUnsavedFieldsWarning()
             else -> {
@@ -357,19 +365,40 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         startActivity(Intent(this, GuideActivity::class.java))
     }
 
+    private fun showNewPersonUnsavedFieldsWarning() {
+        if ((supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.fieldsHaveChanged == true)
+            showTwoButtonsDialog(
+                title = resources.getString(R.string.key_warning_label),
+                message = resources.getString(R.string.key_unsaved_changes_message),
+                negativeButtonText = resources.getString(R.string.key_discard_label),
+                negativeButtonBlock = {
+                    super.onBackPressed()
+                },
+                positiveButtonText = resources.getString(R.string.key_save_label),
+                positiveButtonBlock = {
+                    (supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.checkInputFields()
+                }
+            )
+        else
+            super.onBackPressed()
+    }
+
     private fun showNewPaymentUnsavedFieldsWarning() {
-        showTwoButtonsDialog(
-            title = resources.getString(R.string.key_warning_label),
-            message = resources.getString(R.string.key_unsaved_changes_message),
-            negativeButtonText = resources.getString(R.string.key_discard_label),
-            negativeButtonBlock = {
-                super.onBackPressed()
-            },
-            positiveButtonText = resources.getString(R.string.key_save_label),
-            positiveButtonBlock = {
-                (supportFragmentManager.currentNavigationFragment as? NewPaymentAmountFragment)?.checkInputFields()
-            }
-        )
+        if ((supportFragmentManager.currentNavigationFragment as? NewPaymentAmountFragment)?.fieldsHaveChanged == true)
+            showTwoButtonsDialog(
+                title = resources.getString(R.string.key_warning_label),
+                message = resources.getString(R.string.key_unsaved_changes_message),
+                negativeButtonText = resources.getString(R.string.key_discard_label),
+                negativeButtonBlock = {
+                    super.onBackPressed()
+                },
+                positiveButtonText = resources.getString(R.string.key_save_label),
+                positiveButtonBlock = {
+                    (supportFragmentManager.currentNavigationFragment as? NewPaymentAmountFragment)?.checkInputFields()
+                }
+            )
+        else
+            super.onBackPressed()
     }
 
     fun setFloatingButtonAsPaymentRemovalButton() {
