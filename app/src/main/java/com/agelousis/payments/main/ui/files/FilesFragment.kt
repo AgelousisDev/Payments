@@ -2,13 +2,16 @@ package com.agelousis.payments.main.ui.files
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.R
 import com.agelousis.payments.custom.itemDecoration.HeaderItemDecoration
 import com.agelousis.payments.databinding.FragmentFilesLayoutBinding
@@ -121,6 +124,21 @@ class FilesFragment: Fragment(), FilePresenter {
     }
 
     private fun configureRecyclerView() {
+        binding?.filesListRecyclerView?.addOnItemTouchListener(object: RecyclerView.OnItemTouchListener {
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                if (e.action != MotionEvent.ACTION_UP)
+                    return false
+                val child = rv.findChildViewUnder(e.x, e.y)
+                return if (child != null)
+                    false
+                else {
+                    deselectFiles()
+                    true
+                }
+            }
+        })
         binding?.filesListRecyclerView?.layoutManager = GridLayoutManager(
             context ?: return,
             if (resources.isLandscape) 4 else 2
@@ -153,7 +171,6 @@ class FilesFragment: Fragment(), FilePresenter {
         context?.showTwoButtonsDialog(
             title = resources.getString(R.string.key_warning_label),
             message = resources.getString(R.string.key_delete_selected_files_message),
-            isCancellable = false,
             positiveButtonText = resources.getString(R.string.key_delete_label),
             positiveButtonBlock = {
                 uiScope.launch {
@@ -201,7 +218,8 @@ class FilesFragment: Fragment(), FilePresenter {
                     filteredList.add(
                         HeaderModel(
                             dateTime = map.value.firstOrNull()?.fileDate,
-                            header = header ?: resources.getString(R.string.key_empty_field_label)
+                            header = header ?: resources.getString(R.string.key_empty_field_label),
+                            headerBackgroundColor = context?.let { ContextCompat.getColor(it, android.R.color.transparent) }
                         )
                     )
                     filteredList.addAll(
@@ -248,6 +266,19 @@ class FilesFragment: Fragment(), FilePresenter {
             context = context ?: return,
             files = files
         )
+    }
+
+    private fun deselectFiles() {
+        selectedFilePositions.clear()
+        filteredList.forEachIfEach(
+            predicate = {
+                it is FileDataModel
+            }
+        ) {
+            (it as? FileDataModel)?.fileRowState = FileRowState.NORMAL
+        }
+        (binding?.filesListRecyclerView?.adapter as? FilesAdapter)?.reloadData()
+        configureAppBar()
     }
 
     private fun configureAppBar() {
