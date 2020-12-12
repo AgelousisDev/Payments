@@ -19,5 +19,6 @@
 
     <color name="color_inactive">#408A8A8D</color>
     <color name="steel">#8a8a8d</color>
+    <color name="lightRed">#fd907e</color>
 
 </resources>

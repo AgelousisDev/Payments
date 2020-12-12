@@ -9,19 +9,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.ItemTouchHelper
 import com.agelousis.payments.R
-import com.agelousis.payments.custom.enumerations.SwipeAction
 import com.agelousis.payments.custom.itemDecoration.HeaderItemDecoration
-import com.agelousis.payments.custom.itemTouchHelper.SwipeItemTouchHelper
 import com.agelousis.payments.databinding.FragmentFilesLayoutBinding
 import com.agelousis.payments.main.MainActivity
-import com.agelousis.payments.main.enumerations.SwipeItemType
 import com.agelousis.payments.main.ui.files.adapters.FilesAdapter
+import com.agelousis.payments.main.ui.files.enumerations.FileRowState
 import com.agelousis.payments.main.ui.files.models.FileDataModel
 import com.agelousis.payments.main.ui.files.models.HeaderModel
 import com.agelousis.payments.main.ui.files.presenter.FilePresenter
-import com.agelousis.payments.main.ui.files.viewHolders.FileViewHolder
 import com.agelousis.payments.main.ui.files.viewModel.FilesViewModel
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.utils.extensions.*
@@ -48,6 +44,34 @@ class FilesFragment: Fragment(), FilePresenter {
         )
     }
 
+    override fun onFileLongPressed(adapterPosition: Int) {
+        (filteredList.getOrNull(
+            index = adapterPosition
+        ) as? FileDataModel)?.fileRowState = (filteredList.getOrNull(
+            index = adapterPosition
+        ) as? FileDataModel)?.fileRowState?.other ?: FileRowState.NORMAL
+
+        when((filteredList.getOrNull(
+            index = adapterPosition
+        ) as? FileDataModel)?.fileRowState) {
+            FileRowState.NORMAL ->
+                selectedFilePositions.remove(
+                    filteredList.getOrNull(
+                        index = adapterPosition
+                    ) as? FileDataModel
+                )
+            FileRowState.SELECTED ->
+                selectedFilePositions.add(
+                    filteredList.getOrNull(
+                        index = adapterPosition
+                    ) as? FileDataModel
+                )
+        }
+        configureAppBar()
+
+        (binding?.filesListRecyclerView?.adapter as? FilesAdapter)?.reloadData()
+    }
+
     private var binding: FragmentFilesLayoutBinding? = null
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(FilesViewModel::class.java) }
@@ -58,10 +82,12 @@ class FilesFragment: Fragment(), FilePresenter {
             field  = value
             binding?.searchLayout?.visibility = if (value) View.VISIBLE else View.GONE
         }
+    private val selectedFilePositions by lazy { arrayListOf<FileDataModel?>() }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         configureObservers()
+        selectedFilePositions.clear()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -121,66 +147,19 @@ class FilesFragment: Fragment(), FilePresenter {
                 ) is HeaderModel
             }
         )
-        configureSwipeEvents()
     }
 
-    private fun configureSwipeEvents() {
-        val swipeItemTouchHelper = ItemTouchHelper(
-            SwipeItemTouchHelper(
-                context = context ?: return,
-                swipeItemType = SwipeItemType.PDF_ITEM,
-                swipePredicateBlock = {
-                    it is FileViewHolder
-                }
-            ) innerBlock@ { swipeAction, position ->
-                when(swipeAction) {
-                    SwipeAction.RIGHT -> {
-                        configureShareAction(
-                            position = position
-                        )
-                        (binding?.filesListRecyclerView?.adapter as? FilesAdapter)?.restoreItem(
-                            position = position
-                        )
-                    }
-                    SwipeAction.LEFT ->
-                        configureDeleteAction(
-                            position = position
-                        )
-                }
-            }
-        )
-        swipeItemTouchHelper.attachToRecyclerView(binding?.filesListRecyclerView)
-    }
-
-    private fun configureShareAction(position: Int) {
-        File(context?.filesDir ?: return, (filteredList.getOrNull(index = position) as? FileDataModel)?.fileName ?: return).takeIf {
-            it.exists()
-        }?.let {
-            context?.sharePDF(
-                pdfFile = it
-            )
-        } ?: context?.showSimpleDialog(
-            title = resources.getString(R.string.key_warning_label),
-            message = resources.getString(R.string.key_file_not_exists_message)
-        )
-    }
-
-    private fun configureDeleteAction(position: Int) {
+    fun configureDeleteAction() {
         context?.showTwoButtonsDialog(
             title = resources.getString(R.string.key_warning_label),
-            message = resources.getString(R.string.key_delete_file_message),
+            message = resources.getString(R.string.key_delete_selected_files_message),
             isCancellable = false,
-            negativeButtonBlock = {
-                (binding?.filesListRecyclerView?.adapter as? FilesAdapter)?.restoreItem(
-                    position = position
-                )
-            },
             positiveButtonText = resources.getString(R.string.key_delete_label),
             positiveButtonBlock = {
                 uiScope.launch {
-                    viewModel.deleteFile(
+                    viewModel.deleteFiles(
                         context = context ?: return@launch,
-                        fileDataModel = filteredList.getOrNull(index = position) as? FileDataModel ?: return@launch
+                        fileDataModelList = selectedFilePositions
                     )
                 }
             }
@@ -208,6 +187,8 @@ class FilesFragment: Fragment(), FilePresenter {
         viewModel.fileDeletionLiveData.observe(viewLifecycleOwner) {
             if (it)
                 initializeFiles()
+            selectedFilePositions.clear()
+            configureAppBar()
         }
     }
 
@@ -267,6 +248,17 @@ class FilesFragment: Fragment(), FilePresenter {
             context = context ?: return,
             files = files
         )
+    }
+
+    private fun configureAppBar() {
+        (activity as? MainActivity)?.floatingButtonState = selectedFilePositions.isNotEmpty()
+        if (selectedFilePositions.isNotEmpty())
+            (activity as? MainActivity)?.appBarTitle = String.format(
+                resources.getString(R.string.key_files_selected_value_label),
+                selectedFilePositions.size
+            )
+        else
+            (activity as? MainActivity)?.appBarTitle = resources.getString(R.string.key_files_label)
     }
 
 }

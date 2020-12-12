@@ -732,6 +732,21 @@ class DBManager(context: Context) {
         }
     }
 
+    suspend fun deleteFiles(fileIds: List<Int>, deletionSuccessBlock: DeletionSuccessBlock) {
+        withContext(Dispatchers.Default) {
+            fileIds.forEach { fileId ->
+                database?.delete(
+                    SQLiteHelper.FILES_TABLE_NAME,
+                    "${SQLiteHelper.ID}=?",
+                    arrayOf(fileId.toString())
+                )
+            }
+            withContext(Dispatchers.Main) {
+                deletionSuccessBlock()
+            }
+        }
+    }
+
     fun close() {
         sqLiteHelper?.close()
     }

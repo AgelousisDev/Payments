@@ -13,17 +13,18 @@
 <com.google.android.material.card.MaterialCardView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:onClick="@{() -> presenter.onFileSelected(fileDataModel)}"
     app:cardUseCompatPadding="true"
     app:cardCornerRadius="16dp"
-    app:cardElevation="8dp">
+    app:cardElevation="8dp"
+    app:cardBackgroundColor="@{fileDataModel.fileRowState.getBackgroundColor(context)}"
+    android:id="@+id/fileRowCardView">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:onClick="@{() -> presenter.onFileSelected(fileDataModel)}"
         android:padding="@dimen/activity_general_horizontal_margin">
 
         <androidx.appcompat.widget.AppCompatImageView

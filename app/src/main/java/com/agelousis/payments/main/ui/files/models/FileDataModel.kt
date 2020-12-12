@@ -1,6 +1,7 @@
 package com.agelousis.payments.main.ui.files.models
 
 import android.os.Parcelable
+import com.agelousis.payments.main.ui.files.enumerations.FileRowState
 import com.agelousis.payments.utils.constants.Constants
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
@@ -27,5 +28,8 @@ data class FileDataModel(val fileId: Int? = null,
 
     @IgnoredOnParcel
     var fileData: ByteArray? = null
+
+    @IgnoredOnParcel
+    var fileRowState = FileRowState.NORMAL
 
 }

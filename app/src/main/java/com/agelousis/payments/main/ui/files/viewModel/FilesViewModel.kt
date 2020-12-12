@@ -22,14 +22,16 @@ class FilesViewModel: ViewModel() {
         }
     }
 
-    suspend fun deleteFile(context: Context, fileDataModel: FileDataModel) {
-        deleteActualFile(
-            context = context,
-            fileName = fileDataModel.fileName
-        )
+    suspend fun deleteFiles(context: Context, fileDataModelList: List<FileDataModel?>) {
+        fileDataModelList.forEach { fileDataModel ->
+            deleteActualFile(
+                context = context,
+                fileName = fileDataModel?.fileName
+            )
+        }
         val dbManager = DBManager(context = context)
-        dbManager.deleteFile(
-            fileId = fileDataModel.fileId
+        dbManager.deleteFiles(
+            fileIds = fileDataModelList.mapNotNull { it?.fileId }
         ) {
             fileDeletionLiveData.value = true
         }

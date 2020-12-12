@@ -86,6 +86,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END
+                floatingButtonTint = R.color.colorAccent
                 menuOptionsIsVisible = false
             }
             in PaymentsFragment::class.java.name -> {
@@ -93,6 +94,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_add_group
                 floatingButtonPosition = FloatingButtonPosition.CENTER
+                floatingButtonTint = R.color.colorAccent
                 menuOptionsIsVisible = true
             }
             in NewPaymentFragment::class.java.name -> {
@@ -100,6 +102,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END
+                floatingButtonTint = R.color.colorAccent
                 menuOptionsIsVisible = false
             }
             in NewPaymentAmountFragment::class.java.name -> {
@@ -107,11 +110,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END
+                floatingButtonTint = R.color.colorAccent
                 menuOptionsIsVisible = false
             }
             in FilesFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_files_label)
+                floatingButtonImage = R.drawable.ic_delete
                 floatingButtonState = false
+                floatingButtonPosition = FloatingButtonPosition.END
+                floatingButtonTint = R.color.red
                 menuOptionsIsVisible = false
             }
             in PeriodFilterFragment::class.java.name -> {
@@ -119,6 +126,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_table
                 floatingButtonPosition = FloatingButtonPosition.END
+                floatingButtonTint = R.color.colorAccent
                 menuOptionsIsVisible = false
             }
             in HistoryFragment::class.java.name -> {
@@ -128,7 +136,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             in PdfViewerFragment::class.java.name -> {
                 appBarTitle = resources.getString(R.string.key_pdf_label)
-                floatingButtonState = false
+                floatingButtonState = true
+                floatingButtonImage = R.drawable.ic_share
+                floatingButtonPosition = FloatingButtonPosition.END
+                floatingButtonTint = R.color.colorAccent
                 menuOptionsIsVisible = false
             }
         }
@@ -157,6 +168,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 (supportFragmentManager.currentNavigationFragment as? NewPaymentAmountFragment)?.checkInputFields()
             R.id.periodFilterFragment ->
                 (supportFragmentManager.currentNavigationFragment as? PeriodFilterFragment)?.initializeExportToExcelOperation()
+            R.id.filesFragment ->
+                (supportFragmentManager.currentNavigationFragment as? FilesFragment)?.configureDeleteAction()
+            R.id.pdfViewerFragment ->
+                (supportFragmentManager.currentNavigationFragment as? PdfViewerFragment)?.sharePDF()
         }
     }
 
@@ -195,6 +210,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 FloatingButtonPosition.END ->
                     binding?.appBarMain?.bottomAppBar?.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_END
             }
+        }
+    private var floatingButtonTint: Int = 0
+        set(value) {
+            field = value
+            binding?.appBarMain?.floatingButton?.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, value))
         }
     private var menuOptionsIsVisible = false
         set(value) {
