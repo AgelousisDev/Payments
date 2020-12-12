@@ -146,7 +146,7 @@ class FilesFragment: Fragment(), FilePresenter {
             it.spanSizeLookup = object: GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int) =
                     when(filteredList.getOrNull(index = position)) {
-                        is HeaderModel -> if (resources.isLandscape) 4 else 2
+                        is HeaderModel, is EmptyModel -> if (resources.isLandscape) 4 else 2
                         is FileDataModel -> 1
                         else -> 1
                     }
