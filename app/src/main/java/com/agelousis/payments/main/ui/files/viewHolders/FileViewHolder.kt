@@ -10,6 +10,8 @@ class FileViewHolder(private val binding: FileRowLayoutBinding): RecyclerView.Vi
     fun bind(fileDataModel: FileDataModel, presenter: FilePresenter) {
         binding.fileDataModel = fileDataModel
         binding.presenter = presenter
+        binding.fileRowDescription.isSelected = true
+        binding.fileRowDate.isSelected = true
         binding.executePendingBindings()
     }
 

@@ -452,6 +452,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.activity_menu_main, menu)
+        menu?.findItem(R.id.menuSettings)?.isVisible = menuOptionsIsVisible
         return super.onCreateOptionsMenu(menu)
     }
 

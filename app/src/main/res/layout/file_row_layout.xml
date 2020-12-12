@@ -10,54 +10,65 @@
             name="presenter"
             type="com.agelousis.payments.main.ui.files.presenter.FilePresenter" />
     </data>
-<androidx.constraintlayout.widget.ConstraintLayout
+<com.google.android.material.card.MaterialCardView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?attr/selectableItemBackgroundBorderless"
-    android:onClick="@{() -> presenter.onFileSelected(fileDataModel)}"
-    android:padding="@dimen/activity_general_horizontal_margin">
+    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/fileRowImageView"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:srcCompat="@drawable/ic_pdf"
-        app:tint="@color/red"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/fileRowDescription"
-        style="@style/TextViewTitleLabel"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_general_horizontal_margin"
-        android:gravity="center"
-        android:text="@{fileDataModel.description}"
-        android:singleLine="true"
-        android:maxLines="1"
-        app:layout_constraintStart_toEndOf="@+id/fileRowImageView"
-        app:layout_constraintTop_toTopOf="@+id/fileRowImageView"
-        tools:text="Vagelis Agelousis" />
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:onClick="@{() -> presenter.onFileSelected(fileDataModel)}"
+        android:padding="@dimen/activity_general_horizontal_margin">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/fileRowDate"
-        style="@style/TextViewLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_general_horizontal_margin"
-        android:gravity="center"
-        android:text="@{fileDataModel.showingDate}"
-        android:singleLine="true"
-        android:maxLines="1"
-        app:layout_constraintVertical_bias="1.0"
-        app:layout_constraintTop_toBottomOf="@id/fileRowDescription"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/fileRowImageView"
-        tools:text="Jan 9, 2020" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/fileRowImageView"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_colored_pdf" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/fileRowDescription"
+            style="@style/TextViewTitleLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="@{fileDataModel.description}"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fileRowImageView"
+            tools:text="Vagelis Agelousis" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/fileRowDate"
+            style="@style/TextViewLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="@{fileDataModel.showingDate}"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fileRowDescription"
+            app:layout_constraintVertical_bias="1.0"
+            tools:text="Jan 9, 2020" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
 </layout>

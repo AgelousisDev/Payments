@@ -8,10 +8,10 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.agelousis.payments.R
 import com.agelousis.payments.custom.enumerations.SwipeAction
-import com.agelousis.payments.custom.itemDecoration.DividerItemRecyclerViewDecorator
 import com.agelousis.payments.custom.itemDecoration.HeaderItemDecoration
 import com.agelousis.payments.custom.itemTouchHelper.SwipeItemTouchHelper
 import com.agelousis.payments.databinding.FragmentFilesLayoutBinding
@@ -95,16 +95,23 @@ class FilesFragment: Fragment(), FilePresenter {
     }
 
     private fun configureRecyclerView() {
+        binding?.filesListRecyclerView?.layoutManager = GridLayoutManager(
+            context ?: return,
+            if (resources.isLandscape) 4 else 2
+        ).also {
+            it.spanSizeLookup = object: GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int) =
+                    when(filteredList.getOrNull(index = position)) {
+                        is HeaderModel -> if (resources.isLandscape) 4 else 2
+                        is FileDataModel -> 1
+                        else -> 1
+                    }
+            }
+        }
         binding?.filesListRecyclerView?.adapter = FilesAdapter(
             list = filteredList,
             presenter = this
         )
-        binding?.filesListRecyclerView?.addItemDecoration(DividerItemRecyclerViewDecorator(
-            context = context ?: return,
-            margin = resources.getDimension(R.dimen.activity_general_horizontal_margin).toInt()
-        ) {
-            filteredList.getOrNull(index = it) !is HeaderModel
-        })
         binding?.filesListRecyclerView?.addItemDecoration(
             HeaderItemDecoration(
                 parent = binding?.filesListRecyclerView ?: return
