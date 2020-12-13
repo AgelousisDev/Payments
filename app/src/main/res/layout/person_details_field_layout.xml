@@ -27,21 +27,24 @@
         android:text="@{dataModel.label}"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:text="Full Name" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/personDetailField"
         style="@style/TextViewValueLabel"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_general_horizontal_margin"
-        android:gravity="end"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+        android:gravity="center_vertical|end"
         android:background="@null"
         android:imeOptions="@{dataModel.imeOptionsType == ImeOptionsType.ACTION_NEXT ? 0x00000005 : 0x00000006}"
         android:inputType="@{dataModel.type == PersonDetailFieldType.NUMBER_INPUT_TYPE ? 0x00002002 : dataModel.type == PersonDetailFieldType.TEXT_ALL_CAPS_INPUT_TYPE ? 0x00001001 : dataModel.type == PersonDetailFieldType.EMAIL ? 0x00000021 : 0x00000001}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/label"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:hint="Vagelis Agelousis" />
 
     <View
