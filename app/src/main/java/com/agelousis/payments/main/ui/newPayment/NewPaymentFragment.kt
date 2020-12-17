@@ -162,6 +162,14 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                 )
             }
         }
+        binding?.phoneLayout?.binding?.personDetailField?.let { phoneField ->
+            binding?.countryCodeLayout?.registerPhoneNumberTextView(phoneField)
+        }
+        args.personDataModel?.phone?.split(" ")?.firstOrNull()?.let { countryZipCode ->
+            binding?.countryCodeLayout?.setCountryForPhoneCode(countryZipCode.replace("+", "").toIntOrNull() ?: return@let )
+        } ?: Constants.CountryCodes.getCountryCode(context = context ?: return)?.let { countryCode ->
+            binding?.countryCodeLayout?.setCountryForNameCode(countryCode)
+        }
         binding?.groupDetailsLayout?.setOnDetailsPressed {
             context?.showListDialog(
                 title = resources.getString(R.string.key_select_group_label),
@@ -351,7 +359,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
 
     private fun fillCurrentPersonModel() {
         var phone = binding?.phoneLayout?.value
-        Constants.CountryCodes.getCountryZipCode(context = context ?: return)?.let {
+        binding?.countryCodeLayout?.selectedCountryCode?.let {
             if (binding?.phoneLayout?.value?.startsWith("+$it") == false)
                 phone = String.format(
                     "%s%s",

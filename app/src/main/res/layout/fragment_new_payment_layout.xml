@@ -126,6 +126,12 @@
                 app:label="@string/key_surname_label"
                 app:showLine="true" />
 
+            <com.rilixtech.widget.countrycodepicker.CountryCodePicker
+                android:id="@+id/countryCodeLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"/>
+
             <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
                 android:id="@+id/phoneLayout"
                 personDetails='@{personModel.phone != null ? personModel.phone : ""}'

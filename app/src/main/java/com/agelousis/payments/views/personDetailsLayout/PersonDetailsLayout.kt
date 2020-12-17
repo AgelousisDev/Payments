@@ -16,7 +16,7 @@ import com.agelousis.payments.views.personDetailsLayout.models.PersonDetailsView
 
 class PersonDetailsLayout(context: Context, attributeSet: AttributeSet?): FrameLayout(context, attributeSet) {
 
-    private var binding: PersonDetailsFieldLayoutBinding? = null
+    var binding: PersonDetailsFieldLayoutBinding? = null
     var value: String? = null
         set(value) {
             field = value

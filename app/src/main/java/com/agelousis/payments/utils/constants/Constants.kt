@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.telephony.TelephonyManager
 import com.agelousis.payments.R
+import com.agelousis.payments.utils.extensions.second
 import java.util.*
 
 object Constants {
@@ -67,6 +68,13 @@ object Constants {
              return context.resources.getStringArray(R.array.CountryCodes)
                  .firstOrNull { it.contains(countryID ?: "") }?.split(",")?.firstOrNull()
          }
+
+        fun getCountryCode(context: Context): String? {
+            val manager =  context.getSystemService(Context.TELEPHONY_SERVICE) as? TelephonyManager
+            val countryID = manager?.simCountryIso?.toUpperCase(Locale.getDefault())
+            return context.resources.getStringArray(R.array.CountryCodes)
+                .firstOrNull { it.contains(countryID ?: "") }?.split(",")?.second()
+        }
 
     }
 
