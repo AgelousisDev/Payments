@@ -238,7 +238,6 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
         )
         binding?.optionRecyclerView?.setOnScrollChangeListener { _, _, _, _, _ ->
             binding?.headerConstraintLayout?.elevation = if (binding?.optionRecyclerView?.canScrollVertically(-1) == true) 8.inPixel else 0.0f
-            (activity as? MainActivity)?.floatingButtonState = binding?.optionRecyclerView?.canScrollVertically(1) == true
         }
     }
 

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -165,6 +166,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         binding?.phoneLayout?.binding?.personDetailField?.let { phoneField ->
             binding?.countryCodeLayout?.registerPhoneNumberTextView(phoneField)
         }
+        binding?.countryCodeLayout?.typeFace = ResourcesCompat.getFont(context ?: return, R.font.ubuntu)
         args.personDataModel?.phone?.split(" ")?.firstOrNull()?.let { countryZipCode ->
             binding?.countryCodeLayout?.setCountryForPhoneCode(countryZipCode.replace("+", "").toIntOrNull() ?: return@let )
         } ?: Constants.CountryCodes.getCountryCode(context = context ?: return)?.let { countryCode ->
