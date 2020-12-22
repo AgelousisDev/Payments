@@ -16,7 +16,6 @@ import com.agelousis.payments.main.ui.payments.models.PersonModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.euroFormattedString
-import com.agelousis.payments.utils.extensions.isSizeOne
 import com.agelousis.payments.utils.extensions.toast
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.XAxis
@@ -58,23 +57,27 @@ class HistoryFragment: Fragment() {
 
     private fun addObservers() {
         viewModel.paymentsLiveData.observe(viewLifecycleOwner) { payments ->
-            val filteredPayments = arrayListOf<PaymentAmountModel>()
-            payments.asSequence().filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten().sortedBy { it.paymentMonthDate }.groupBy { it.paymentMonthDate }.forEach { (_, list) ->
-                if (list.isSizeOne)
-                    filteredPayments.addAll(
-                        list
-                    )
-                else
-                    list.maxByOrNull { it.paymentAmount ?: 0.0 }?.let {
-                        filteredPayments.add(
-                            it
-                        )
-                    }
-            }
-            configureLineChart(
-                payments = filteredPayments
+            configureEntries(
+                payments = payments.filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten()
             )
         }
+    }
+
+    private fun configureEntries(payments: List<PaymentAmountModel>) {
+        val entries = arrayListOf<Entry>()
+
+        payments.sortedBy { it.paymentMonthDate }.groupBy { it.paymentMonthDate }.forEach { (monthDate, list) ->
+            entries.add(
+                Entry(
+                    monthDate?.time?.toFloat() ?: 0f,
+                    list.mapNotNull { it.paymentAmount }.sum().toFloat()
+                )
+            )
+        }
+
+        configureLineChart(
+            entries = entries
+        )
     }
 
     private fun initializePayments() {
@@ -86,7 +89,7 @@ class HistoryFragment: Fragment() {
         }
     }
 
-    private fun configureLineChart(payments: List<PaymentAmountModel>) {
+    private fun configureLineChart(entries: List<Entry>) {
         val desc = Description()
         desc.text = ""
         binding?.lineChart?.description = desc
@@ -117,15 +120,6 @@ class HistoryFragment: Fragment() {
                     )
                 }
             }
-        val entries = arrayListOf<Entry>()
-        payments.forEach {
-            entries.add(
-                Entry(
-                    it.paymentMonthDate?.time?.toFloat() ?: 0.0f,
-                    it.paymentAmount?.toFloat() ?: 0.0f
-                )
-            )
-        }
         //lineChart.xAxis.setLabelCount(entries.size, true)
         binding?.lineChart?.xAxis?.granularity = 1f
         //lineChart.setMaxVisibleValueCount(4)
