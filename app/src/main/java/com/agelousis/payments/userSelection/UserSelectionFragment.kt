@@ -42,7 +42,7 @@ class UserSelectionFragment: BasicBottomSheetDialogFragment(), UserSelectionPres
         dismiss()
     }
 
-    private var binding: UserSelectionFragmentLayoutBinding? = null
+    private lateinit var binding: UserSelectionFragmentLayoutBinding
     private val users by lazy { arguments?.getParcelableArrayList<UserModel>(USERS_EXTRA) }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -50,13 +50,13 @@ class UserSelectionFragment: BasicBottomSheetDialogFragment(), UserSelectionPres
         return super.onCreateDialog(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = UserSelectionFragmentLayoutBinding.inflate(
             inflater,
             container,
             false
         )
-        return binding?.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -76,7 +76,7 @@ class UserSelectionFragment: BasicBottomSheetDialogFragment(), UserSelectionPres
     }
 
     private fun configureRecyclerView() {
-        binding?.usersRecyclerView?.adapter = UsersAdapter(
+        binding.usersRecyclerView.adapter = UsersAdapter(
             users = users ?: return,
             presenter = this
         )

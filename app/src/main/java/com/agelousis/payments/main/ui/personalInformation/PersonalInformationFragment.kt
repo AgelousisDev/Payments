@@ -123,8 +123,8 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
                             it == OptionType.CHANGE_CURRENCY
                         }
                     )?.currencyType = currencyType
-                    binding?.optionRecyclerView?.scheduleLayoutAnimation()
-                    (binding?.optionRecyclerView?.adapter as? OptionTypesAdapter)?.reloadData()
+                    binding.optionRecyclerView.scheduleLayoutAnimation()
+                    (binding.optionRecyclerView.adapter as? OptionTypesAdapter)?.reloadData()
                 }
             }
         )
@@ -134,7 +134,7 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
         (activity as? MainActivity)?.showProfilePicture()
     }
 
-    private var binding: FragmentPersonalInformationLayoutBinding? = null
+    private lateinit var binding: FragmentPersonalInformationLayoutBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val dbManager by lazy { context?.let { DBManager(context = it) } }
     private val newUserModel by lazy { (activity as? MainActivity)?.userModel?.copy() }
@@ -196,7 +196,7 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
         )
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentPersonalInformationLayoutBinding.inflate(
             inflater,
             container,
@@ -205,7 +205,7 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
             it.userModel = (activity as? MainActivity)?.userModel
             it.presenter = this
         }
-        return binding?.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -215,36 +215,36 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
     }
 
     private fun setupUI() {
-        binding?.materialTextViewTitle?.isSelected = true
+        binding.materialTextViewTitle.isSelected = true
     }
 
     private fun configureRecyclerView() {
-        binding?.optionRecyclerView?.adapter = OptionTypesAdapter(
+        binding.optionRecyclerView.adapter = OptionTypesAdapter(
             list = optionList,
             optionPresenter = this
         )
-        binding?.optionRecyclerView?.addItemDecoration(DividerItemRecyclerViewDecorator(
+        binding.optionRecyclerView.addItemDecoration(DividerItemRecyclerViewDecorator(
             context = context ?: return,
             margin = resources.getDimension(R.dimen.activity_general_horizontal_margin).toInt()
         ) {
             optionList.getOrNull(index = it) !is HeaderModel && optionList.getOrNull(index = it) != OptionType.DELETE_USER
         })
-        binding?.optionRecyclerView?.addItemDecoration(
+        binding.optionRecyclerView.addItemDecoration(
             HeaderItemDecoration(
-                parent = binding?.optionRecyclerView ?: return
+                parent = binding.optionRecyclerView
             ) {
                 optionList.getOrNull(index = it) is HeaderModel
             }
         )
-        binding?.optionRecyclerView?.setOnScrollChangeListener { _, _, _, _, _ ->
-            binding?.headerConstraintLayout?.elevation = if (binding?.optionRecyclerView?.canScrollVertically(-1) == true) 8.inPixel else 0.0f
+        binding.optionRecyclerView.setOnScrollChangeListener { _, _, _, _, _ ->
+            binding.headerConstraintLayout.elevation = if (binding.optionRecyclerView.canScrollVertically(-1)) 8.inPixel else 0.0f
         }
     }
 
     fun playProfileSuccessAnimation() {
-        binding?.profileAnimationView?.visibility = View.VISIBLE
-        binding?.profileAnimationView?.playAnimation()
-        binding?.profileAnimationView?.addAnimatorListener(this)
+        binding.profileAnimationView.visibility = View.VISIBLE
+        binding.profileAnimationView.playAnimation()
+        binding.profileAnimationView.addAnimatorListener(this)
     }
 
     private fun updateUser() {
@@ -312,8 +312,8 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
                         ) {
                             it is OptionType
                         }?.userModel?.profileImage = newUserModel?.profileImage
-                        binding?.optionRecyclerView?.scheduleLayoutAnimation()
-                        (binding?.optionRecyclerView?.adapter as? OptionTypesAdapter)?.reloadData()
+                        binding.optionRecyclerView.scheduleLayoutAnimation()
+                        (binding.optionRecyclerView.adapter as? OptionTypesAdapter)?.reloadData()
                     }
                 }
         }

@@ -14,7 +14,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:orientation="vertical"
         android:clickable="true"
         android:focusable="true"
@@ -35,8 +35,8 @@
             tools:text="Group 1" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
             android:clickable="true"
             android:focusable="true"

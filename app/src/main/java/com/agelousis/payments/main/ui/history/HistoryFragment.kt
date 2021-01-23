@@ -32,7 +32,7 @@ import java.util.*
 
 class HistoryFragment: Fragment() {
 
-    private var binding: HistoryFragmentLayoutBinding? = null
+    private lateinit var binding: HistoryFragmentLayoutBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
 
@@ -41,13 +41,13 @@ class HistoryFragment: Fragment() {
         addObservers()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = HistoryFragmentLayoutBinding.inflate(
             layoutInflater,
             container,
             false
         )
-        return binding?.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -92,28 +92,28 @@ class HistoryFragment: Fragment() {
     private fun configureLineChart(entries: List<Entry>) {
         val desc = Description()
         desc.text = ""
-        binding?.lineChart?.description = desc
-        binding?.lineChart?.legend?.isEnabled = false
-        binding?.lineChart?.xAxis?.textColor = ContextCompat.getColor(context ?: return, R.color.dayNightTextOnBackground)
-        binding?.lineChart?.xAxis?.position = XAxis.XAxisPosition.BOTTOM
-        binding?.lineChart?.xAxis?.valueFormatter = object: ValueFormatter() {
+        binding.lineChart.description = desc
+        binding.lineChart.legend?.isEnabled = false
+        binding.lineChart.xAxis?.textColor = ContextCompat.getColor(context ?: return, R.color.dayNightTextOnBackground)
+        binding.lineChart.xAxis?.position = XAxis.XAxisPosition.BOTTOM
+        binding.lineChart.xAxis?.valueFormatter = object: ValueFormatter() {
             override fun getFormattedValue(value: Float) =
                 SimpleDateFormat(Constants.GRAPH_DATE_FORMAT, Locale.US).format(value.toLong())
         }
         //lineChart.xAxis.setAvoidFirstLastClipping(true)
-        binding?.lineChart?.xAxis?.isGranularityEnabled = true
-        binding?.lineChart?.xAxis?.setDrawLimitLinesBehindData(true)
-        binding?.lineChart?.axisLeft?.valueFormatter = object: ValueFormatter() {
+        binding.lineChart.xAxis?.isGranularityEnabled = true
+        binding.lineChart.xAxis?.setDrawLimitLinesBehindData(true)
+        binding.lineChart.axisLeft?.valueFormatter = object: ValueFormatter() {
             override fun getFormattedValue(value: Float) =
                 if (value == 0f)
                     "0"
                 else
                     value.toDouble().euroFormattedString
         }
-        binding?.lineChart?.axisLeft?.textColor = ContextCompat.getColor(context ?: return, R.color.dayNightTextOnBackground)
-        binding?.lineChart?.axisRight?.isEnabled = false
-        binding?.lineChart?.onChartGestureListener =
-            object: PaymentLineChartGestureListener(chart = binding?.lineChart!!) {
+        binding.lineChart.axisLeft?.textColor = ContextCompat.getColor(context ?: return, R.color.dayNightTextOnBackground)
+        binding.lineChart.axisRight?.isEnabled = false
+        binding.lineChart.onChartGestureListener =
+            object: PaymentLineChartGestureListener(chart = binding.lineChart) {
                 override fun onAmountSelected(amount: String) {
                     context?.toast(
                         message = amount
@@ -121,7 +121,7 @@ class HistoryFragment: Fragment() {
                 }
             }
         //lineChart.xAxis.setLabelCount(entries.size, true)
-        binding?.lineChart?.xAxis?.granularity = 1f
+        binding.lineChart.xAxis?.granularity = 1f
         //lineChart.setMaxVisibleValueCount(4)
         setLineChartData(
             entries = entries
@@ -147,8 +147,8 @@ class HistoryFragment: Fragment() {
                 it.highLightColor = ContextCompat.getColor(context ?: return, R.color.green)
             }
         )
-        binding?.lineChart?.data = LineData(dataSets)
-        binding?.lineChart?.invalidate()
+        binding.lineChart.data = LineData(dataSets)
+        binding.lineChart.invalidate()
     }
 
 }

@@ -48,14 +48,14 @@ class ForgotPasswordBottomSheetFragment: BasicBottomSheetDialogFragment(), Forgo
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(ForgotPasswordViewModel::class.java) }
     private val userId by lazy { arguments?.getInt(USER_ID_EXTRA) }
-    private var binding: ForgotPasswordFragmentLayoutBinding? = null
+    private lateinit var binding: ForgotPasswordFragmentLayoutBinding
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         addObservers()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = ForgotPasswordFragmentLayoutBinding.inflate(
             inflater,
             container,
@@ -64,20 +64,20 @@ class ForgotPasswordBottomSheetFragment: BasicBottomSheetDialogFragment(), Forgo
             it.viewModel = viewModel
             it.presenter = this
         }
-        return binding?.root
+        return binding.root
     }
 
     private fun addObservers() {
         viewModel.pinLiveData.observe(viewLifecycleOwner) {
-            binding?.buttonState = !it.isNullOrEmpty() &&
+            binding.buttonState = !it.isNullOrEmpty() &&
                     !viewModel.newPasswordLiveData.value.isNullOrEmpty() &&
                     !viewModel.repeatNewPasswordLiveData.value.isNullOrEmpty()
         }
         viewModel.newPasswordLiveData.observe(viewLifecycleOwner) {
-            binding?.buttonState = it == viewModel.repeatNewPasswordLiveData.value && !viewModel.pinLiveData.value.isNullOrEmpty()
+            binding.buttonState = it == viewModel.repeatNewPasswordLiveData.value && !viewModel.pinLiveData.value.isNullOrEmpty()
         }
         viewModel.repeatNewPasswordLiveData.observe(viewLifecycleOwner) {
-            binding?.buttonState = it == viewModel.newPasswordLiveData.value && !viewModel.pinLiveData.value.isNullOrEmpty()
+            binding.buttonState = it == viewModel.newPasswordLiveData.value && !viewModel.pinLiveData.value.isNullOrEmpty()
         }
         viewModel.updatePasswordLiveData.observe(viewLifecycleOwner) {
             if (it) {

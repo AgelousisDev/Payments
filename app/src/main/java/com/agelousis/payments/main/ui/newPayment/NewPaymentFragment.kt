@@ -52,7 +52,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
 
     override fun onPaymentAmountLongPressed(adapterPosition: Int) {
         availablePayments.getOrNull(index = adapterPosition)?.paymentAmountRowState = availablePayments.getOrNull(index = adapterPosition)?.paymentAmountRowState?.otherState ?: PaymentAmountRowState.NORMAL
-        (binding?.paymentAmountRecyclerView?.adapter as? PaymentAmountAdapter)?.reloadData()
+        (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
         when((activity as? MainActivity)?.floatingButtonType) {
             FloatingButtonType.NORMAL ->
                 if (availablePayments.any { it.paymentAmountRowState == PaymentAmountRowState.CAN_BE_DISMISSED })
@@ -72,8 +72,8 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             calendar = paymentAmountModel?.paymentDate?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.calendar ?: return,
             title = String.format(
                 "%s %s",
-                binding?.firstNameLayout?.value ?: return,
-                binding?.surnameLayout?.value ?: return
+                binding.firstNameLayout.value ?: return,
+                binding.surnameLayout.value ?: return
             ),
             description = String.format(
                 resources.getString(R.string.key_calendar_event_amount_value),
@@ -82,7 +82,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                     vat = (activity as? MainActivity)?.userModel?.vat ?: return
                 )
             ),
-            email = binding?.emailLayout?.value ?: return
+            email = binding.emailLayout.value ?: return
         )
     }
 
@@ -94,15 +94,15 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     }
     private val availableGroups by lazy { arrayListOf<GroupModel>() }
     private val availablePayments by lazy { ArrayList(args.personDataModel?.payments ?: listOf()) }
-    private var binding: FragmentNewPaymentLayoutBinding? = null
+    private lateinit var binding: FragmentNewPaymentLayoutBinding
     private var currentPersonModel: PersonModel? = null
     private var paymentReadyForDeletionIndexArray = arrayListOf<Int>()
     private var paymentAmountUpdateIndex: Int? = null
     private var addPaymentButtonState = true
         set(value) {
             field = value
-            binding?.addPaymentButton?.animateAlpha(toAlpha = if (value) 1.0f else 0.2f)
-            binding?.addPaymentButton?.isEnabled = value
+            binding.addPaymentButton.animateAlpha(toAlpha = if (value) 1.0f else 0.2f)
+            binding.addPaymentButton.isEnabled = value
         }
     private var selectedPaymentType = PaymentType.CASH_PAYMENT
     val fieldsHaveChanged
@@ -114,7 +114,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     override fun onResume() {
         super.onResume()
         currentPersonModel?.let {
-            binding?.personModel = it
+            binding.personModel = it
         }
     }
 
@@ -128,7 +128,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         enterTransition = TransitionInflater.from(context ?: return).inflateTransition(R.transition.slide_right)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentNewPaymentLayoutBinding.inflate(
             inflater,
             container,
@@ -139,7 +139,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             it.userModel = (activity as? MainActivity)?.userModel
             it.presenter = this
         }
-        return binding?.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -151,49 +151,47 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     }
 
     private fun setupUI() {
-        binding?.paymentTypeLayout?.setOnDetailsPressed {
+        binding.paymentTypeLayout.setOnDetailsPressed {
             context?.showListDialog(
                 title = resources.getString(R.string.key_payment_type_label),
                 items = resources.getStringArray(R.array.key_payment_type_array).toList()
             ) {
                 val paymentType = PaymentType.values().getOrNull(index = it) ?: return@showListDialog
                 selectedPaymentType = paymentType
-                binding?.paymentTypeLayout?.value = paymentType.getLocalizedTitle(
+                binding.paymentTypeLayout.value = paymentType.getLocalizedTitle(
                     resources = resources
                 )
             }
         }
-        binding?.phoneLayout?.binding?.personDetailField?.let { phoneField ->
-            binding?.countryCodeLayout?.registerPhoneNumberTextView(phoneField)
-        }
-        binding?.countryCodeLayout?.typeFace = ResourcesCompat.getFont(context ?: return, R.font.ubuntu)
+        binding.countryCodeLayout.registerPhoneNumberTextView(binding.phoneLayout.binding.personDetailField)
+        binding.countryCodeLayout.typeFace = ResourcesCompat.getFont(context ?: return, R.font.ubuntu)
         args.personDataModel?.phone?.split(" ")?.firstOrNull()?.let { countryZipCode ->
-            binding?.countryCodeLayout?.setCountryForPhoneCode(countryZipCode.replace("+", "").toIntOrNull() ?: return@let )
+            binding.countryCodeLayout.setCountryForPhoneCode(countryZipCode.replace("+", "").toIntOrNull() ?: return@let )
         } ?: Constants.CountryCodes.getCountryCode(context = context ?: return)?.let { countryCode ->
-            binding?.countryCodeLayout?.setCountryForNameCode(countryCode)
+            binding.countryCodeLayout.setCountryForNameCode(countryCode)
         }
-        binding?.groupDetailsLayout?.setOnDetailsPressed {
+        binding.groupDetailsLayout.setOnDetailsPressed {
             context?.showListDialog(
                 title = resources.getString(R.string.key_select_group_label),
                 items = availableGroups.mapNotNull { it.groupName }
             ) {
-                binding?.groupDetailsLayout?.errorState = false
-                binding?.groupDetailsLayout?.value = availableGroups.getOrNull(index = it)?.groupName
+                binding.groupDetailsLayout.errorState = false
+                binding.groupDetailsLayout.value = availableGroups.getOrNull(index = it)?.groupName
             }
         }
-        binding?.activeAppSwitchLayout?.setOnClickListener {
-            binding?.activeAppSwitchLayout?.isChecked = binding?.activeAppSwitchLayout?.isChecked == false
+        binding.activeAppSwitchLayout.setOnClickListener {
+            binding.activeAppSwitchLayout.isChecked = binding.activeAppSwitchLayout.isChecked == false
         }
-        binding?.activeAppSwitchLayout?.appSwitchListener = object: AppSwitchListener {
+        binding.activeAppSwitchLayout.appSwitchListener = object: AppSwitchListener {
             override fun onAppSwitchValueChanged(isChecked: Boolean) {
                 if (!isChecked)
-                    binding?.groupDetailsLayout?.value = resources.getString(R.string.key_inactive_label)
+                    binding.groupDetailsLayout.value = resources.getString(R.string.key_inactive_label)
             }
         }
-        binding?.freeAppSwitchLayout?.setOnClickListener {
-            binding?.freeAppSwitchLayout?.isChecked = binding?.freeAppSwitchLayout?.isChecked == false
+        binding.freeAppSwitchLayout.setOnClickListener {
+            binding.freeAppSwitchLayout.isChecked = binding.freeAppSwitchLayout.isChecked == false
         }
-        binding?.freeAppSwitchLayout?.appSwitchListener = object: AppSwitchListener {
+        binding.freeAppSwitchLayout.appSwitchListener = object: AppSwitchListener {
             override fun onAppSwitchValueChanged(isChecked: Boolean) {
                 addPaymentButtonState = !isChecked
             }
@@ -218,10 +216,10 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     }
 
     private fun playSuccessAnimation(block: () -> Unit) {
-        binding?.linearLayout?.visibility = View.GONE
-        binding?.successAnimationLottieView?.visibility = View.VISIBLE
-        binding?.successAnimationLottieView?.playAnimation()
-        binding?.successAnimationLottieView?.addAnimatorListener(object: Animator.AnimatorListener {
+        binding.linearLayout.visibility = View.GONE
+        binding.successAnimationLottieView.visibility = View.VISIBLE
+        binding.successAnimationLottieView.playAnimation()
+        binding.successAnimationLottieView.addAnimatorListener(object: Animator.AnimatorListener {
             override fun onAnimationCancel(animation: Animator?) {}
             override fun onAnimationRepeat(animation: Animator?) {}
             override fun onAnimationStart(animation: Animator?) {}
@@ -240,10 +238,10 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                 positiveButtonText = resources.getString(R.string.key_send_label),
                 positiveButtonBlock = {
                     context?.sendSMSMessage(
-                        mobileNumber = binding?.phoneLayout?.value ?: "",
+                        mobileNumber = binding.phoneLayout.value ?: "",
                         message = String.format(
                             "%s\n%s",
-                            binding?.messageTemplateField?.text?.toString() ?: "",
+                            binding.messageTemplateField.text?.toString() ?: "",
                             payment.paymentMonth ?: payment.paymentDate ?: ""
                         )
                     )
@@ -286,18 +284,18 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                         !currentPersonModel?.phone.isNullOrEmpty()
                     }
                 }
-                (binding?.paymentAmountRecyclerView?.adapter as? PaymentAmountAdapter)?.reloadData()
+                (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
             })
     }
 
     private fun configureRecyclerView() {
-        binding?.paymentAmountRecyclerView?.adapter = PaymentAmountAdapter(
+        binding.paymentAmountRecyclerView.adapter = PaymentAmountAdapter(
             paymentModelList = availablePayments,
             vat = (activity as? MainActivity)?.userModel?.vat,
             presenter = this
         )
-        binding?.paymentAmountRecyclerView?.scheduleLayoutAnimation()
-        (binding?.paymentAmountRecyclerView?.adapter as? PaymentAmountAdapter)?.reloadData()
+        binding.paymentAmountRecyclerView.scheduleLayoutAnimation()
+        (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
     }
 
     private fun initializeGroups() {
@@ -319,13 +317,13 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         ) {
             checkDatabasePaymentAction()
         } ?: run {
-            binding?.nestedScrollView?.post {
-                binding?.nestedScrollView?.smoothScrollTo(0, 0)
+            binding.nestedScrollView.post {
+                binding.nestedScrollView.smoothScrollTo(0, 0)
             }
-            binding?.groupDetailsLayout?.errorState = binding?.groupDetailsLayout?.value == null
-            binding?.firstNameLayout?.errorState = binding?.firstNameLayout?.value == null
-            binding?.surnameLayout?.errorState = binding?.surnameLayout?.value == null
-            binding?.phoneLayout?.errorState = binding?.phoneLayout?.value == null
+            binding.groupDetailsLayout.errorState = binding.groupDetailsLayout.value == null
+            binding.firstNameLayout.errorState = binding.firstNameLayout.value == null
+            binding.surnameLayout.errorState = binding.surnameLayout.value == null
+            binding.phoneLayout.errorState = binding.phoneLayout.value == null
         }
     }
 
@@ -353,35 +351,35 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             availablePayments.forEach {
                 it.paymentAmountRowState = PaymentAmountRowState.NORMAL
             }
-            (binding?.paymentAmountRecyclerView?.adapter as? PaymentAmountAdapter)?.reloadData()
+            (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
             paymentReadyForDeletionIndexArray.clear()
             (activity as? MainActivity)?.returnFloatingButtonBackToNormal()
         }
     }
 
     private fun fillCurrentPersonModel() {
-        var phone = binding?.phoneLayout?.value
-        binding?.countryCodeLayout?.selectedCountryCode?.let {
-            if (binding?.phoneLayout?.value?.startsWith("+$it") == false)
+        var phone = binding.phoneLayout.value
+        binding.countryCodeLayout.selectedCountryCode?.let {
+            if (binding.phoneLayout.value?.startsWith("+$it") == false)
                 phone = String.format(
                     "%s%s",
                     "+$it ",
-                    binding?.phoneLayout?.value
+                    binding.phoneLayout.value
                 )
         }
         currentPersonModel = PersonModel(
             personId = args.personDataModel?.personId,
-            groupId = availableGroups.firstOrNull { it.groupName.equals(binding?.groupDetailsLayout?.value, ignoreCase = true) }?.groupId,
-            groupName = binding?.groupDetailsLayout?.value,
-            firstName = binding?.firstNameLayout?.value,
-            surname = binding?.surnameLayout?.value,
+            groupId = availableGroups.firstOrNull { it.groupName.equals(binding.groupDetailsLayout.value, ignoreCase = true) }?.groupId,
+            groupName = binding.groupDetailsLayout.value,
+            firstName = binding.firstNameLayout.value,
+            surname = binding.surnameLayout.value,
             phone = phone,
-            parentName = binding?.parentNameLayout?.value,
-            parentPhone = binding?.parentPhoneLayout?.value,
-            email = binding?.emailLayout?.value,
-            active = binding?.activeAppSwitchLayout?.isChecked,
-            free = binding?.freeAppSwitchLayout?.isChecked,
-            messageTemplate = binding?.messageTemplateField?.text?.toString(),
+            parentName = binding.parentNameLayout.value,
+            parentPhone = binding.parentPhoneLayout.value,
+            email = binding.emailLayout.value,
+            active = binding.activeAppSwitchLayout.isChecked,
+            free = binding.freeAppSwitchLayout.isChecked,
+            messageTemplate = binding.messageTemplateField.text?.toString(),
             payments = availablePayments,
             paymentType = selectedPaymentType,
             groupColor = args.personDataModel?.groupColor,
@@ -392,7 +390,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     fun dismissPayment() {
         paymentReadyForDeletionIndexArray.sortDescending()
         paymentReadyForDeletionIndexArray.forEach { paymentReadyForDeletionIndex ->
-            (binding?.paymentAmountRecyclerView?.adapter as? PaymentAmountAdapter)?.removeItem(
+            (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.removeItem(
                 position = paymentReadyForDeletionIndex
             )
             (activity as? MainActivity)?.returnFloatingButtonBackToNormal()

@@ -76,7 +76,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         )
     }
 
-    private var binding: FragmentPaymentsLayoutBinding? = null
+    private lateinit var binding: FragmentPaymentsLayoutBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
     private val itemsList by lazy { arrayListOf<Any>() }
@@ -84,7 +84,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
     private var searchViewState: Boolean = false
         set(value) {
             field  = value
-            binding?.searchLayout?.visibility = if (value) View.VISIBLE else View.GONE
+            binding.searchLayout.visibility = if (value) View.VISIBLE else View.GONE
         }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -92,7 +92,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         configureObservers()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentPaymentsLayoutBinding.inflate(
             inflater,
             container,
@@ -100,7 +100,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         ).also {
             it.userModel = (activity as? MainActivity)?.userModel
         }
-        return binding?.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -111,10 +111,10 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
     }
 
     private fun configureSearchView() {
-        binding?.searchLayout?.onProfileImageClicked {
+        binding.searchLayout.onProfileImageClicked {
             (activity as? MainActivity)?.binding?.drawerLayout?.openDrawer(GravityCompat.START)
         }
-        binding?.searchLayout?.onQueryListener {
+        binding.searchLayout.onQueryListener {
             configurePayments(
                 list = itemsList,
                 query = it
@@ -123,13 +123,13 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
     }
     
     private fun configureRecyclerView() {
-        binding?.paymentListRecyclerView?.adapter = PaymentsAdapter(
+        binding.paymentListRecyclerView.adapter = PaymentsAdapter(
             list = filteredList,
             groupPresenter = this,
             paymentPresenter = this,
             paymentAmountSumPresenter = this
         )
-        binding?.paymentListRecyclerView?.addItemDecoration(
+        binding.paymentListRecyclerView.addItemDecoration(
             object: RecyclerView.ItemDecoration() {
                 override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
                     super.getItemOffsets(outRect, view, parent, state)
@@ -173,7 +173,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                         configurePDFAction(
                             position = position
                         )
-                        (binding?.paymentListRecyclerView?.adapter as? PaymentsAdapter)?.restoreItem(
+                        (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.restoreItem(
                             position = position
                         )
                     }
@@ -184,7 +184,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                 }
             }
         )
-        swipeItemTouchHelper.attachToRecyclerView(binding?.paymentListRecyclerView)
+        swipeItemTouchHelper.attachToRecyclerView(binding.paymentListRecyclerView)
     }
 
     private fun configurePDFAction(position: Int) {
@@ -241,7 +241,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                 else
                     resources.getString(R.string.key_delete_payment_message),
             negativeButtonBlock = {
-                (binding?.paymentListRecyclerView?.adapter as? PaymentsAdapter)?.restoreItem(
+                (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.restoreItem(
                     position = position
                 )
             },
@@ -289,7 +289,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         filteredList.clear()
         list.filterIsInstance<PersonModel>().takeIf { it.isNotEmpty() }?.let { payments ->
             payments.groupBy { it.groupName ?: "" }.toSortedMap().forEach { map ->
-                map.value.filter { it.firstName?.toLowerCase(Locale.getDefault())?.contains(query?.toLowerCase(Locale.getDefault()) ?: "") == true || it.groupName?.toLowerCase(Locale.getDefault())?.contains(query?.toLowerCase(Locale.getDefault()) ?: "") == true }
+                map.value.filter { it.fullName.toLowerCase(Locale.getDefault()).contains(query?.replace(" ", "")?.toLowerCase(Locale.getDefault()) ?: "") || it.groupName?.toLowerCase(Locale.getDefault())?.contains(query?.replace(" ", "")?.toLowerCase(Locale.getDefault()) ?: "") == true }
                     .takeIf { it.isNotEmpty() }?.let inner@ { filteredByQueryPayments ->
                         filteredList.add(
                             GroupModel(
@@ -344,8 +344,8 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                     )
                 )
             }
-        binding?.paymentListRecyclerView?.scheduleLayoutAnimation()
-        (binding?.paymentListRecyclerView?.adapter as? PaymentsAdapter)?.reloadData()
+        binding.paymentListRecyclerView.scheduleLayoutAnimation()
+        (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
         (activity as? MainActivity)?.historyButtonIsVisible = filteredList.filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten().isNotEmpty()
     }
 

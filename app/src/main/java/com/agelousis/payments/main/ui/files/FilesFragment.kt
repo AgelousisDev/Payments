@@ -72,10 +72,10 @@ class FilesFragment: Fragment(), FilePresenter {
         }
         configureAppBar()
 
-        (binding?.filesListRecyclerView?.adapter as? FilesAdapter)?.reloadData()
+        (binding.filesListRecyclerView.adapter as? FilesAdapter)?.reloadData()
     }
 
-    private var binding: FragmentFilesLayoutBinding? = null
+    private lateinit var binding: FragmentFilesLayoutBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(FilesViewModel::class.java) }
     private val fileList by lazy { arrayListOf<FileDataModel>() }
@@ -83,7 +83,7 @@ class FilesFragment: Fragment(), FilePresenter {
     private var searchViewState: Boolean = false
         set(value) {
             field  = value
-            binding?.searchLayout?.visibility = if (value) View.VISIBLE else View.GONE
+            binding.searchLayout.visibility = if (value) View.VISIBLE else View.GONE
         }
     private val selectedFilePositions by lazy { arrayListOf<FileDataModel?>() }
 
@@ -93,7 +93,7 @@ class FilesFragment: Fragment(), FilePresenter {
         selectedFilePositions.clear()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentFilesLayoutBinding.inflate(
             inflater,
             container,
@@ -101,7 +101,7 @@ class FilesFragment: Fragment(), FilePresenter {
         ).also {
             it.userModel = (activity as? MainActivity)?.userModel
         }
-        return binding?.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -112,10 +112,10 @@ class FilesFragment: Fragment(), FilePresenter {
     }
 
     private fun configureSearchView() {
-        binding?.searchLayout?.onProfileImageClicked {
+        binding.searchLayout.onProfileImageClicked {
             (activity as? MainActivity)?.binding?.drawerLayout?.openDrawer(GravityCompat.START)
         }
-        binding?.searchLayout?.onQueryListener {
+        binding.searchLayout.onQueryListener {
             configureFileList(
                 files = fileList,
                 query = it
@@ -124,7 +124,7 @@ class FilesFragment: Fragment(), FilePresenter {
     }
 
     private fun configureRecyclerView() {
-        binding?.filesListRecyclerView?.addOnItemTouchListener(object: RecyclerView.OnItemTouchListener {
+        binding.filesListRecyclerView.addOnItemTouchListener(object: RecyclerView.OnItemTouchListener {
             override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
             override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
             override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
@@ -139,7 +139,7 @@ class FilesFragment: Fragment(), FilePresenter {
                 }
             }
         })
-        binding?.filesListRecyclerView?.layoutManager = GridLayoutManager(
+        binding.filesListRecyclerView.layoutManager = GridLayoutManager(
             context ?: return,
             if (resources.isLandscape) 4 else 2
         ).also {
@@ -152,13 +152,13 @@ class FilesFragment: Fragment(), FilePresenter {
                     }
             }
         }
-        binding?.filesListRecyclerView?.adapter = FilesAdapter(
+        binding.filesListRecyclerView.adapter = FilesAdapter(
             list = filteredList,
             presenter = this
         )
-        binding?.filesListRecyclerView?.addItemDecoration(
+        binding.filesListRecyclerView.addItemDecoration(
             HeaderItemDecoration(
-                parent = binding?.filesListRecyclerView ?: return
+                parent = binding.filesListRecyclerView
             ) { position ->
                 filteredList.getOrNull(
                     index = position
@@ -248,8 +248,8 @@ class FilesFragment: Fragment(), FilePresenter {
                     )
                 )
             }
-        binding?.filesListRecyclerView?.scheduleLayoutAnimation()
-        (binding?.filesListRecyclerView?.adapter as? FilesAdapter)?.reloadData()
+        binding.filesListRecyclerView.scheduleLayoutAnimation()
+        (binding.filesListRecyclerView.adapter as? FilesAdapter)?.reloadData()
     }
 
     private fun initializeFiles() {
@@ -277,7 +277,7 @@ class FilesFragment: Fragment(), FilePresenter {
         ) {
             (it as? FileDataModel)?.fileRowState = FileRowState.NORMAL
         }
-        (binding?.filesListRecyclerView?.adapter as? FilesAdapter)?.reloadData()
+        (binding.filesListRecyclerView.adapter as? FilesAdapter)?.reloadData()
         configureAppBar()
     }
 

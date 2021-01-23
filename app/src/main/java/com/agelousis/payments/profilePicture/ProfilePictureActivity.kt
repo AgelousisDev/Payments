@@ -8,20 +8,20 @@ import com.thefuntasty.hauler.setOnDragDismissedListener
 
 class ProfilePictureActivity : AppCompatActivity() {
 
-    private var binding: ActivityProfilePictureBinding? = null
+    private lateinit var binding: ActivityProfilePictureBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfilePictureBinding.inflate(layoutInflater)
-        binding?.userModel = intent?.extras?.getParcelable(MainActivity.USER_MODEL_EXTRA)
+        binding.userModel = intent?.extras?.getParcelable(MainActivity.USER_MODEL_EXTRA)
         setContentView(
-            binding?.root
+            binding.root
         )
         setupUI()
     }
 
     private fun setupUI() {
-        binding?.haulerView?.setOnDragDismissedListener {
+        binding.haulerView.setOnDragDismissedListener {
             finish()
         }
     }

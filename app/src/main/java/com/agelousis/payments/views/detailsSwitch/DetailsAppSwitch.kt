@@ -12,19 +12,19 @@ import com.agelousis.payments.views.detailsSwitch.models.DetailsAppSwitchDataMod
 
 class DetailsAppSwitch(context: Context, attributeSet: AttributeSet?): FrameLayout(context, attributeSet) {
 
-    private var binding: DetailsAppSwitchLayoutBinding? = null
+    private lateinit var binding: DetailsAppSwitchLayoutBinding
     var appSwitchListener: AppSwitchListener? = null
     var isChecked: Boolean = false
         set(value) {
             field = value
-            binding?.detailsAppSwitch?.isChecked = value
+            binding.detailsAppSwitch.isChecked = value
         }
-        get() = binding?.detailsAppSwitch?.isChecked == true
+        get() = binding.detailsAppSwitch.isChecked
 
     var appSwitchIsEnabled = true
         set(value) {
             field = value
-            binding?.detailsAppSwitch?.isEnabled = value
+            binding.detailsAppSwitch.isEnabled = value
         }
 
     init {
@@ -41,12 +41,12 @@ class DetailsAppSwitch(context: Context, attributeSet: AttributeSet?): FrameLayo
                 null,
                 false
             )
-            binding?.detailsAppSwitchDataModel = DetailsAppSwitchDataModel(
+            binding.detailsAppSwitchDataModel = DetailsAppSwitchDataModel(
                 label = attributes.getString(R.styleable.DetailsAppSwitch_appSwitchLabel),
                 showLine = attributes.getBoolean(R.styleable.DetailsAppSwitch_appSwitchShowLine, false),
             )
             attributes.recycle()
-            addView(binding?.root)
+            addView(binding.root)
         }
     }
 
@@ -56,7 +56,7 @@ class DetailsAppSwitch(context: Context, attributeSet: AttributeSet?): FrameLayo
     }
 
     private fun setupUI() {
-        binding?.detailsAppSwitch?.setOnCheckedChangeListener { _, isChecked ->
+        binding.detailsAppSwitch.setOnCheckedChangeListener { _, isChecked ->
             appSwitchListener?.onAppSwitchValueChanged(
                 isChecked = isChecked
             )

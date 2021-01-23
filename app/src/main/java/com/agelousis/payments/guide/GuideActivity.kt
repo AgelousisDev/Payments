@@ -18,7 +18,7 @@ class GuideActivity : AppCompatActivity(), ViewPager.OnPageChangeListener, Guide
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
     override fun onPageSelected(position: Int) {
-        binding?.dotsLayout?.addTabDots(
+        binding.dotsLayout.addTabDots(
             currentPage = position,
             totalPages = guideModelList.size
         )
@@ -28,7 +28,7 @@ class GuideActivity : AppCompatActivity(), ViewPager.OnPageChangeListener, Guide
         skipGuide()
     }
 
-    private var binding: ActivityGuideBinding? = null
+    private lateinit var binding: ActivityGuideBinding
     private val guideModelList by lazy { GuideController getGuideItems this }
 
     override fun onBackPressed() {
@@ -40,17 +40,17 @@ class GuideActivity : AppCompatActivity(), ViewPager.OnPageChangeListener, Guide
         binding = ActivityGuideBinding.inflate(layoutInflater).also {
             it.presenter = this
         }
-        setContentView(binding?.root)
+        setContentView(binding.root)
         setupView()
     }
 
     private fun setupView() {
-        binding?.viewPager?.adapter = GuidePagerAdapter(
+        binding.viewPager.adapter = GuidePagerAdapter(
             supportFragmentManager = supportFragmentManager,
             guideModelList = guideModelList
         )
-        binding?.viewPager?.addOnPageChangeListener(this)
-        binding?.dotsLayout?.addTabDots(
+        binding.viewPager.addOnPageChangeListener(this)
+        binding.dotsLayout.addTabDots(
             currentPage = 0,
             totalPages = guideModelList.size
         )

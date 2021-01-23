@@ -39,7 +39,7 @@ import kotlin.collections.ArrayList
 
 class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, UserSelectionPresenter, GestureDetector.OnGestureListener {
 
-    private var binding: ActivityLoginBinding? = null
+    private lateinit var binding: ActivityLoginBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val userModel by lazy { UserModel() }
     private val viewModel by lazy { ViewModelProvider(this).get(LoginViewModel::class.java) }
@@ -65,8 +65,8 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                         hasBiometrics
                     }
                 ) { biometricsState ->
-                    userModel.username = binding?.usernameField?.text?.toString()
-                    userModel.password = binding?.passwordField?.text?.toString()
+                    userModel.username = binding.usernameField.text?.toString()
+                    userModel.password = binding.passwordField.text?.toString()
                     userModel.biometrics = biometricsState
                     userModel.vat = 0
                     userModel.defaultPaymentAmount = 0.0
@@ -87,12 +87,12 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                 uiScope.launch {
                     dbManager?.searchUser(
                         userModel = UserModel(
-                            username = binding?.usernameField?.text?.toString(),
-                            password = binding?.passwordField?.text?.toString()
+                            username = binding.usernameField.text?.toString(),
+                            password = binding.passwordField.text?.toString()
                         )
                     ) { userModel ->
                         if (userModel == null)
-                            binding?.cardView?.animateBackgroundColor(endColor = ContextCompat.getColor(this@LoginActivity, R.color.red))
+                            binding.cardView.animateBackgroundColor(endColor = ContextCompat.getColor(this@LoginActivity, R.color.red))
                         else {
                             showMainActivity(
                                 userModel = userModel
@@ -105,9 +105,9 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
 
     override fun onSignUp() {
         signInState = SignInState.SIGN_UP
-        binding?.signInState = signInState
-        binding?.userModel = null
-        binding?.loginButtonState = false
+        binding.signInState = signInState
+        binding.userModel = null
+        binding.loginButtonState = false
     }
 
     override fun onImport() {
@@ -115,7 +115,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
     }
 
     override fun onBiometrics() {
-        binding?.biometricsActive = true
+        binding.biometricsActive = true
         showBiometrics(
             biometrics = true
         )
@@ -125,12 +125,12 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
         uiScope.launch {
             dbManager?.searchUser(
                 userModel = UserModel(
-                    username = binding?.usernameField?.text?.toString(),
-                    password = binding?.passwordField?.text?.toString()
+                    username = binding.usernameField.text?.toString(),
+                    password = binding.passwordField.text?.toString()
                 )
             ) { userModel ->
                 if (userModel == null)
-                    binding?.cardView?.animateBackgroundColor(endColor = ContextCompat.getColor(this@LoginActivity, R.color.red))
+                    binding.cardView.animateBackgroundColor(endColor = ContextCompat.getColor(this@LoginActivity, R.color.red))
                 else
                     showMainActivity(
                         userModel = userModel
@@ -140,15 +140,15 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
     }
 
     override fun onBiometricsCancelled() {
-        binding?.biometricsActive = false
+        binding.biometricsActive = false
     }
 
     override fun onUserSelected(userModel: UserModel) {
         signInState = SignInState.LOGIN
-        binding?.signInState = signInState
-        binding?.userModel = userModel
-        binding?.biometricsActive = userModel.biometrics == true
-        binding?.loginButtonState = userModel.username?.isNotEmpty() == true && userModel.password?.isNotEmpty() == true
+        binding.signInState = signInState
+        binding.userModel = userModel
+        binding.biometricsActive = userModel.biometrics == true
+        binding.loginButtonState = userModel.username?.isNotEmpty() == true && userModel.password?.isNotEmpty() == true
         showBiometrics(
             biometrics = userModel.biometrics == true
         )
@@ -157,7 +157,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
     override fun onUsersSelect() {
         viewModel.usersLiveData.value?.takeIf { it.isNotEmpty() }?.let {
             signInState = if (it.isNotEmpty()) SignInState.LOGIN else SignInState.SIGN_UP
-            binding?.signInState = signInState
+            binding.signInState = signInState
             showUserSelectionFragment(
                 users = it
             )
@@ -179,7 +179,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
         when(signInState) {
             SignInState.SIGN_UP -> {
                 signInState = SignInState.LOGIN
-                binding?.signInState = signInState
+                binding.signInState = signInState
             }
             else ->
                 super.onBackPressed()
@@ -195,7 +195,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
             it.presenter = this
         }
         setContentView(
-            binding?.root
+            binding.root
         )
         dbManager = DBManager(
             context = this
@@ -244,7 +244,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
     private fun addObservers() {
         viewModel.usersLiveData.observe(this) { users ->
             signInState = SignInState.LOGIN
-            binding?.signInState = signInState
+            binding.signInState = signInState
             showUserSelectionFragment(
                 users = users
             )
@@ -279,29 +279,29 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
         uiScope.launch {
             dbManager?.checkUsers {
                 signInState = if (it.isNotEmpty()) SignInState.LOGIN else SignInState.SIGN_UP
-                binding?.signInState = signInState
-                binding?.profileImageView?.isEnabled = signInState == SignInState.SIGN_UP
+                binding.signInState = signInState
+                binding.profileImageView.isEnabled = signInState == SignInState.SIGN_UP
             }
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setupUI() {
-        binding?.usernameField?.doAfterTextChanged {
-            binding?.loginButtonState = it?.isNotEmpty() == true && binding?.passwordField?.text?.isNotEmpty() == true
+        binding.usernameField.doAfterTextChanged {
+            binding.loginButtonState = it?.isNotEmpty() == true && binding.passwordField.text?.isNotEmpty() == true
         }
-        binding?.passwordField?.doAfterTextChanged {
-            binding?.loginButtonState = it?.isNotEmpty() == true && binding?.usernameField?.text?.isNotEmpty() == true
+        binding.passwordField.doAfterTextChanged {
+            binding.loginButtonState = it?.isNotEmpty() == true && binding.usernameField.text?.isNotEmpty() == true
         }
-        binding?.importLayout?.setOnTouchListener { _, motionEvent ->
+        binding.importLayout.setOnTouchListener { _, motionEvent ->
             when(motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    binding?.importLabel?.setTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-                    binding?.importLine?.background?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(this, R.color.colorAccent), PorterDuff.Mode.SRC_IN)
+                    binding.importLabel.setTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+                    binding.importLine.background?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(this, R.color.colorAccent), PorterDuff.Mode.SRC_IN)
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    binding?.importLabel?.setTextColor(ContextCompat.getColor(this, R.color.grey))
-                    binding?.importLine?.background?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(this, R.color.grey), PorterDuff.Mode.SRC_IN)
+                    binding.importLabel.setTextColor(ContextCompat.getColor(this, R.color.grey))
+                    binding.importLine.background?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(this, R.color.grey), PorterDuff.Mode.SRC_IN)
                 }
             }
             false
@@ -408,8 +408,8 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
                         )
                         userModel.profileImageData = bitmap?.byteArray
                     }
-                    binding?.profileImageView?.setBackgroundResource(0)
-                    binding?.profileImageView?.loadImageUri(
+                    binding.profileImageView.setBackgroundResource(0)
+                    binding.profileImageView.loadImageUri(
                         imageUri = imageUri
                     )
                 }

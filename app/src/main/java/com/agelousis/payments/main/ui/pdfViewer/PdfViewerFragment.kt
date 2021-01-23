@@ -9,18 +9,32 @@ import androidx.navigation.fragment.navArgs
 import com.agelousis.payments.R
 import com.agelousis.payments.databinding.PdfViewerFragmentLayoutBinding
 import com.agelousis.payments.main.MainActivity
+import com.agelousis.payments.main.ui.pdfViewer.presenters.PdfViewerPresenter
 import com.agelousis.payments.utils.extensions.sharePDF
 import com.agelousis.payments.utils.extensions.showSimpleDialog
+import com.agelousis.payments.utils.helpers.PrinterHelper
 import java.io.File
 
-class PdfViewerFragment: Fragment() {
+class PdfViewerFragment: Fragment(), PdfViewerPresenter {
 
-    private var binding: PdfViewerFragmentLayoutBinding? = null
+    private lateinit var binding: PdfViewerFragmentLayoutBinding
     private val args: PdfViewerFragmentArgs by navArgs()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = PdfViewerFragmentLayoutBinding.inflate(inflater, container, false)
-        return binding?.root
+    override fun onPrint() {
+        PrinterHelper.initialize(
+            context = context ?: return,
+            document = File(
+                context?.filesDir ?: return,
+                args.fileDataModel.fileName ?: return
+            )
+        )
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = PdfViewerFragmentLayoutBinding.inflate(inflater, container, false).also {
+            it.presenter = this
+        }
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,7 +48,7 @@ class PdfViewerFragment: Fragment() {
     }
 
     private fun configurePDF() {
-        binding?.pdfView?.fromFile(
+        binding.pdfView.fromFile(
             File(
                 context?.filesDir ?: return,
                 args.fileDataModel.fileName ?: return

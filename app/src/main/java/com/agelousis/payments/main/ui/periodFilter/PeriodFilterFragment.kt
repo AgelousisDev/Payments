@@ -30,14 +30,14 @@ class PeriodFilterFragment: Fragment() {
     }
 
     private val args: PeriodFilterFragmentArgs by navArgs()
-    private var binding: PeriodFilterFragmentLayoutBinding? = null
+    private lateinit var binding: PeriodFilterFragmentLayoutBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enterTransition = TransitionInflater.from(context ?: return).inflateTransition(R.transition.slide_right)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = PeriodFilterFragmentLayoutBinding.inflate(
             inflater,
             container,
@@ -46,12 +46,12 @@ class PeriodFilterFragment: Fragment() {
             it.periodFilterDataModel = args.periodFilterData
             it.isLoading = false
         }
-        return binding?.root
+        return binding.root
     }
 
     fun initializeExportToExcelOperation() {
         (activity as? MainActivity)?.floatingButtonState = false
-        binding?.isLoading = true
+        binding.isLoading = true
         after(
             millis = LOADING_TIME
         ) {
@@ -63,8 +63,8 @@ class PeriodFilterFragment: Fragment() {
     }
 
     private fun triggerCsvCreation(uri: Uri) {
-        val minimumMonthDate = binding?.periodFilterMinimumPaymentMonthLayout?.dateValue?.toDateWith(pattern = Constants.MONTH_DATE_FORMAT, locale = Locale.US) ?: return
-        val maximumMonthDate = binding?.periodFilterMaximumPaymentMonthLayout?.dateValue?.toDateWith(pattern = Constants.MONTH_DATE_FORMAT, locale = Locale.US) ?: return
+        val minimumMonthDate = binding.periodFilterMinimumPaymentMonthLayout.dateValue?.toDateWith(pattern = Constants.MONTH_DATE_FORMAT, locale = Locale.US) ?: return
+        val maximumMonthDate = binding.periodFilterMaximumPaymentMonthLayout.dateValue?.toDateWith(pattern = Constants.MONTH_DATE_FORMAT, locale = Locale.US) ?: return
         val filteredPayments = args.paymentListData.filter { it.paymentMonthDate ?: Date() in minimumMonthDate..maximumMonthDate }
         PaymentCsvHelper.createPaymentsCsv(
             context = context ?: return,

@@ -33,7 +33,7 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
     }
 
     override fun onGroupAdd() {
-        binding?.rootLayout?.circularUnReveal {
+        binding.rootLayout.circularUnReveal {
             setResult(
                 Activity.RESULT_OK,
                 Intent().also {
@@ -57,7 +57,7 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
         uiBarColor = color
     }
 
-    private var binding: ActivityGroupBinding? = null
+    private lateinit var binding: ActivityGroupBinding
     private var uiBarColor: Int? = null
         set(value) {
             field = value
@@ -65,20 +65,20 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
                 window?.statusBarColor = it
                 window?.navigationBarColor = it
                 selectedGroupModel.color = it
-                binding?.groupModel = selectedGroupModel
+                binding.groupModel = selectedGroupModel
             }
         }
     private var addGroupButtonState: Boolean = false
         set(value) {
             field = value
-            binding?.addGroupButton?.visibility = if (value) View.VISIBLE else View.GONE
+            binding.addGroupButton.visibility = if (value) View.VISIBLE else View.GONE
         }
     private var onTouchCenterX: Float? = null
     private var onTouchCenterY: Float? = null
     private val selectedGroupModel by lazy { intent?.extras?.getParcelable(GROUP_MODEL_EXTRA) ?: GroupModel() }
 
     override fun onBackPressed() {
-       binding?. rootLayout?.circularUnReveal(
+       binding. rootLayout.circularUnReveal(
             centerX = onTouchCenterX?.toInt(),
             centerY = onTouchCenterY?.toInt()
         ) {
@@ -97,7 +97,7 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
             it.presenter = this
         }
         setContentView(
-            binding?.root
+            binding.root
         )
         setupUI()
     }
@@ -113,10 +113,10 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
     }
 
     private fun setupUI() {
-        binding?.rootLayout?.circularReveal {
+        binding.rootLayout.circularReveal {
             uiBarColor = selectedGroupModel.color ?: ContextCompat.getColor(this, R.color.colorAccent)
         }
-        binding?.groupField?.doAfterTextChanged {
+        binding.groupField.doAfterTextChanged {
             addGroupButtonState = it?.isNotEmpty() == true
             selectedGroupModel.groupName = it?.toString()
         }
@@ -140,7 +140,7 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
                                 bitmap = bitmap,
                                 fileName = "${Constants.GROUP_IMAGE_NAME}_${System.currentTimeMillis()}"
                             )
-                            binding?.groupModel = selectedGroupModel
+                            binding.groupModel = selectedGroupModel
                         }
                     }
                 }

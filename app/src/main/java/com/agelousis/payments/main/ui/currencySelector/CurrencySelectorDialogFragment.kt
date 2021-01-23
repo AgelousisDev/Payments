@@ -44,7 +44,7 @@ class CurrencySelectorDialogFragment: DialogFragment(), CurrencyPresenter {
         dismiss()
     }
 
-    private var binding: CurrencySelectorFragmentLayoutBinding? = null
+    private lateinit var binding: CurrencySelectorFragmentLayoutBinding
     private var currencySelectorFragmentPresenter: CurrencySelectorFragmentPresenter? = null
     private val sharedPreferences by lazy { context?.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE) }
     private val currencyTypes by lazy { CurrencyType.values().toList() }
@@ -57,13 +57,13 @@ class CurrencySelectorDialogFragment: DialogFragment(), CurrencyPresenter {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = CurrencySelectorFragmentLayoutBinding.inflate(
             inflater,
             container,
             false
         )
-        return binding?.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,12 +72,12 @@ class CurrencySelectorDialogFragment: DialogFragment(), CurrencyPresenter {
     }
 
     private fun configureRecyclerView() {
-        binding?.currencyRecyclerView?.layoutManager = FlexboxLayoutManager(context, FlexDirection.ROW).also {
+        binding.currencyRecyclerView.layoutManager = FlexboxLayoutManager(context, FlexDirection.ROW).also {
             it.flexDirection = FlexDirection.ROW
             it.justifyContent = JustifyContent.CENTER
             it.alignItems = AlignItems.CENTER
         }
-        binding?.currencyRecyclerView?.adapter = CurrenciesAdapter(
+        binding.currencyRecyclerView.adapter = CurrenciesAdapter(
             currencyTypes = currencyTypes,
             presenter = this
         )

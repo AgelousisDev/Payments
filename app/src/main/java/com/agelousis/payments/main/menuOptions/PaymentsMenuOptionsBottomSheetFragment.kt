@@ -46,7 +46,7 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
         (activity?.supportFragmentManager?.currentNavigationFragment as? PaymentsFragment)?.navigateToPeriodFilterFragment()
     }
 
-    private var binding: PaymentsMenuOptionsFragmentLayoutBinding? = null
+    private lateinit var binding: PaymentsMenuOptionsFragmentLayoutBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
     private val optionList by lazy {
@@ -66,13 +66,13 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
         addObservers()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = PaymentsMenuOptionsFragmentLayoutBinding.inflate(
             layoutInflater,
             container,
             false
         )
-        return binding?.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -99,7 +99,7 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
                     it == PaymentsMenuOptionType.CSV_EXPORT
                 }
             )?.isEnabled = list.filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten().isNotEmpty()
-            (binding?.menuOptionsRecyclerView?.adapter as? PaymentsMenuOptionAdapter)?.reloadData()
+            (binding.menuOptionsRecyclerView.adapter as? PaymentsMenuOptionAdapter)?.reloadData()
         }
     }
 
@@ -113,11 +113,11 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
     }
 
     private fun configureRecyclerView() {
-        binding?.menuOptionsRecyclerView?.adapter = PaymentsMenuOptionAdapter(
+        binding.menuOptionsRecyclerView.adapter = PaymentsMenuOptionAdapter(
             list = optionList,
             paymentsMenuOptionPresenter = this
         )
-        binding?.menuOptionsRecyclerView?.addItemDecoration(
+        binding.menuOptionsRecyclerView.addItemDecoration(
             DividerItemRecyclerViewDecorator(
                 context = context ?: return,
                 margin = resources.getDimension(R.dimen.activity_general_horizontal_margin).toInt()

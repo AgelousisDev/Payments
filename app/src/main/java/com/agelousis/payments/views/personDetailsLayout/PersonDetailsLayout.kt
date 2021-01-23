@@ -16,18 +16,18 @@ import com.agelousis.payments.views.personDetailsLayout.models.PersonDetailsView
 
 class PersonDetailsLayout(context: Context, attributeSet: AttributeSet?): FrameLayout(context, attributeSet) {
 
-    var binding: PersonDetailsFieldLayoutBinding? = null
+    lateinit var binding: PersonDetailsFieldLayoutBinding
     var value: String? = null
         set(value) {
             field = value
-            value?.let { binding?.personDetailField?.setText(it) }
+            value?.let { binding.personDetailField.setText(it) }
         }
-        get() = if (binding?.personDetailField?.text?.toString()?.isEmpty() == true) null else binding?.personDetailField?.text?.toString()
+        get() = if (binding.personDetailField.text?.toString()?.isEmpty() == true) null else binding.personDetailField.text?.toString()
 
     var errorState = false
         set(value) {
             field = value
-            binding?.lineSeparator?.setBackgroundColor(ContextCompat.getColor(context, if (value) R.color.red else R.color.grey))
+            binding.lineSeparator.setBackgroundColor(ContextCompat.getColor(context, if (value) R.color.red else R.color.grey))
         }
 
     init {
@@ -38,14 +38,14 @@ class PersonDetailsLayout(context: Context, attributeSet: AttributeSet?): FrameL
         attributeSet?.let {
             val attributes = context.obtainStyledAttributes(it, R.styleable.PersonDetailsLayout, 0, 0)
             binding = PersonDetailsFieldLayoutBinding.inflate(LayoutInflater.from(context), null, false)
-            binding?.dataModel = PersonDetailsViewDataModel(
+            binding.dataModel = PersonDetailsViewDataModel(
                 label = attributes.getString(R.styleable.PersonDetailsLayout_label),
                 showLine = attributes.getBoolean(R.styleable.PersonDetailsLayout_showLine, true),
                 imeOptionsType = ImeOptionsType.values()[attributes.getInt(R.styleable.PersonDetailsLayout_imeOptionType, 0)],
                 type = PersonDetailFieldType.values()[attributes.getInt(R.styleable.PersonDetailsLayout_fieldType, 0)]
             )
             attributes.recycle()
-            addView(binding?.root)
+            addView(binding.root)
         }
     }
 
@@ -55,16 +55,16 @@ class PersonDetailsLayout(context: Context, attributeSet: AttributeSet?): FrameL
     }
 
     private fun setupUI() {
-        binding?.personDetailsLayout?.setOnClickListener {
-            binding?.personDetailField?.requestFocus()
-            binding?.personDetailField?.text?.toString()?.takeIf { it.isNotEmpty() }?.length?.let {
-                binding?.personDetailField?.setSelection(it)
+        binding.personDetailsLayout.setOnClickListener {
+            binding.personDetailField.requestFocus()
+            binding.personDetailField.text?.toString()?.takeIf { it.isNotEmpty() }?.length?.let {
+                binding.personDetailField.setSelection(it)
             }
             context?.showKeyboard(
-                view = binding?.personDetailField ?: return@setOnClickListener
+                view = binding.personDetailField
             )
         }
-        binding?.personDetailField?.doOnTextChanged { _, _, _, _ ->
+        binding.personDetailField.doOnTextChanged { _, _, _, _ ->
             errorState = false
         }
     }

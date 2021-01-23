@@ -43,7 +43,7 @@ class ShareMessageBottomSheetFragment: BasicBottomSheetDialogFragment(), ShareMe
 
     }
 
-    private var binding: ShareMessageFragmentLayoutBinding? = null
+    private lateinit var binding: ShareMessageFragmentLayoutBinding
     private val personModel by lazy {
         arguments?.getParcelable<PersonModel>(PERSON_MODEL_EXTRA)
     }
@@ -77,13 +77,13 @@ class ShareMessageBottomSheetFragment: BasicBottomSheetDialogFragment(), ShareMe
         array
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = ShareMessageFragmentLayoutBinding.inflate(
             layoutInflater,
             container,
             false
         )
-        return binding?.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -92,12 +92,12 @@ class ShareMessageBottomSheetFragment: BasicBottomSheetDialogFragment(), ShareMe
     }
 
     private fun configureShareMessageRecyclerView() {
-        binding?.shareMessageRecyclerView?.layoutManager = FlexboxLayoutManager(context, FlexDirection.ROW).also {
+        binding.shareMessageRecyclerView.layoutManager = FlexboxLayoutManager(context, FlexDirection.ROW).also {
             it.flexDirection = FlexDirection.ROW
             it.justifyContent = JustifyContent.CENTER
             it.alignItems = AlignItems.CENTER
         }
-        binding?.shareMessageRecyclerView?.adapter = ShareMessageAdapter(
+        binding.shareMessageRecyclerView.adapter = ShareMessageAdapter(
             shareMessageTypeList = shareMessageTypeList,
             presenter = this
         )

@@ -189,6 +189,7 @@
     <string name="key_save_label">Save</string>
     <string name="key_pdf_label">Pdf</string>
     <string name="key_files_selected_value_label">%d selected</string>
+    <string name="key_print_label">Print</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>
