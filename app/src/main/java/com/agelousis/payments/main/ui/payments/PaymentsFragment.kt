@@ -130,6 +130,11 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         binding.searchLayout.onProfileImageClicked {
             (activity as? MainActivity)?.binding?.drawerLayout?.openDrawer(GravityCompat.START)
         }
+        binding.searchLayout.onSecondaryIconClicked {
+            findNavController().navigate(
+                PaymentsFragmentDirections.actionPaymentsFragmentToFilterPaymentsFragment()
+            )
+        }
         binding.searchLayout.onQueryListener {
             configurePayments(
                 list = itemsList,

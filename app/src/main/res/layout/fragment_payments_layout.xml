@@ -20,6 +20,7 @@
         android:visibility="gone"
         app:searchHint="@string/key_search_in_payments_label"
         materialSearchProfile="@{userModel.profileImage}"
+        app:secondaryIconResource="@drawable/ic_sort"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

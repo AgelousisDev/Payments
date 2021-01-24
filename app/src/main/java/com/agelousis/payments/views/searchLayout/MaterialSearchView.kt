@@ -16,14 +16,14 @@ import com.agelousis.payments.views.searchLayout.enumerations.MaterialSearchView
 typealias SearchQueryChangesBlock = (String?) -> Unit
 class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLayout(context, attributeSet) {
 
-    var binding: MaterialSearchViewLayoutBinding? = null
+    lateinit var binding: MaterialSearchViewLayoutBinding
     private var searchViewIconState = MaterialSearchViewIconState.SEARCH
         set(value) {
             field = value
-            binding?.searchIcon?.setAnimatedImageResourceId(
+            binding.searchIcon.setAnimatedImageResourceId(
                 resourceId = value.icon
             )
-            binding?.searchIcon?.setOnClickListener(when(value) {
+            binding.searchIcon.setOnClickListener(when(value) {
                 MaterialSearchViewIconState.SEARCH -> this::onSearchIcon
                 MaterialSearchViewIconState.CLOSE -> this::onDeleteQuery
             })
@@ -41,9 +41,10 @@ class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLa
                 null,
                 false
             )
-            binding?.hint = attributes.getString(R.styleable.MaterialSearchView_searchHint)
+            binding.hint = attributes.getString(R.styleable.MaterialSearchView_searchHint)
+            binding.secondaryImageResourceId = attributes.getResourceId(R.styleable.MaterialSearchView_secondaryIconResource, 0)
             attributes.recycle()
-            addView(binding?.root)
+            addView(binding.root)
         }
     }
 
@@ -53,25 +54,25 @@ class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLa
     }
 
     private fun setupUI() {
-        binding?.searchField?.infiniteAlphaAnimation(
+        binding.searchField.infiniteAlphaAnimation(
             state = true
         )
-        binding?.searchIcon?.setOnClickListener(this::onSearchIcon)
+        binding.searchIcon.setOnClickListener(this::onSearchIcon)
     }
 
     private fun onDeleteQuery(p0: View) {
-        binding?.searchField?.text?.clear()
+        binding.searchField.text?.clear()
     }
 
     private fun onSearchIcon(p0: View) {
         context?.initializeField(
-            appCompatEditText = binding?.searchField ?: return
+            appCompatEditText = binding.searchField
         )
     }
 
     fun onQueryListener(searchQueryChangesBlock: SearchQueryChangesBlock) {
-        binding?.searchField?.doOnTextChanged { text, _, _, _ ->
-            binding?.searchField?.infiniteAlphaAnimation(
+        binding.searchField.doOnTextChanged { text, _, _, _ ->
+            binding.searchField.infiniteAlphaAnimation(
                 state = text?.length == 0
             )
             if (searchViewIconState != MaterialSearchViewIconState.CLOSE && !text.isNullOrEmpty())
@@ -83,7 +84,11 @@ class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLa
     }
 
     fun onProfileImageClicked(onClickListener: OnClickListener) {
-        binding?.profileImageView?.setOnClickListener(onClickListener)
+        binding.profileImageView.setOnClickListener(onClickListener)
+    }
+
+    fun onSecondaryIconClicked(onClickListener: OnClickListener) {
+        binding.secondaryActionIcon.setOnClickListener(onClickListener)
     }
 
 }

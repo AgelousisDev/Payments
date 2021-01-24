@@ -24,6 +24,13 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+        <action
+            android:id="@+id/action_paymentsFragment_to_filterPaymentsFragment"
+            app:destination="@id/filterPaymentsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
     <fragment
         android:id="@+id/personalInformationFragment"
@@ -140,5 +147,10 @@
             android:name="fileDataModel"
             app:argType="com.agelousis.payments.main.ui.files.models.FileDataModel" />
     </fragment>
+    <fragment
+        android:id="@+id/filterPaymentsFragment"
+        android:name="com.agelousis.payments.main.ui.paymentsFiltering.FilterPaymentsFragment"
+        android:label="FilterPaymentsFragment"
+        tools:layout="@layout/filter_payments_fragment_layout"/>
 
 </navigation>

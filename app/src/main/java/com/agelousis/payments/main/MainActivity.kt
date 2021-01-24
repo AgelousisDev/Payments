@@ -35,6 +35,7 @@ import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
 import com.agelousis.payments.main.ui.payments.PaymentsFragment
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
+import com.agelousis.payments.main.ui.paymentsFiltering.FilterPaymentsFragment
 import com.agelousis.payments.main.ui.pdfViewer.PdfViewerFragment
 import com.agelousis.payments.main.ui.periodFilter.PeriodFilterFragment
 import com.agelousis.payments.main.ui.personalInformation.PersonalInformationFragment
@@ -142,6 +143,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 floatingButtonTint = R.color.colorAccent
                 menuOptionsIsVisible = false
             }
+            in FilterPaymentsFragment::class.java.name -> {
+                appBarTitle = resources.getString(R.string.key_filter_payments_label)
+                floatingButtonState = true
+                floatingButtonImage = R.drawable.ic_check
+                floatingButtonPosition = FloatingButtonPosition.END
+                floatingButtonTint = R.color.colorAccent
+                menuOptionsIsVisible = false
+            }
         }
     }
 
@@ -172,6 +181,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 (supportFragmentManager.currentNavigationFragment as? FilesFragment)?.configureDeleteAction()
             R.id.pdfViewerFragment ->
                 (supportFragmentManager.currentNavigationFragment as? PdfViewerFragment)?.sharePDF()
+            R.id.filterPaymentsFragment ->
+                (supportFragmentManager.currentNavigationFragment as? FilterPaymentsFragment)?.checkFilterEntries()
         }
     }
 

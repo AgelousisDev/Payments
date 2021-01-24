@@ -23,5 +23,6 @@
     </declare-styleable>
     <declare-styleable name="MaterialSearchView">
         <attr name="searchHint" format="reference|string" />
+        <attr name="secondaryIconResource" format="reference" />
     </declare-styleable>
 </resources>
