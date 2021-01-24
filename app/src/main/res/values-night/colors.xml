@@ -21,4 +21,8 @@
     <color name="steel">#8a8a8d</color>
     <color name="lightRed">#fd907e</color>
 
+    <color name="lightBlue">#3798F6</color>
+    <color name="lightGreen">#3FE198</color>
+    <color name="lightSea">#C2CCEF</color>
+
 </resources>

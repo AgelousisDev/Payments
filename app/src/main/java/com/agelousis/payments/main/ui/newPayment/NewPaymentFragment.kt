@@ -272,7 +272,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
 
     private fun initializeNewPayments() {
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<PaymentAmountModel>(NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA)
-            ?.observe(viewLifecycleOwner, { paymentAmountModel ->
+            ?.observe(viewLifecycleOwner) { paymentAmountModel ->
                 paymentAmountUpdateIndex?.let { index ->
                     availablePayments.set(
                         index = index,
@@ -287,7 +287,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                     }
                 }
                 (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
-            })
+            }
     }
 
     private fun configureRecyclerView() {

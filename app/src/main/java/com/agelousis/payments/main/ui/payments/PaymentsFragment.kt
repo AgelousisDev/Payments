@@ -28,6 +28,8 @@ import com.agelousis.payments.main.ui.payments.presenters.PaymentPresenter
 import com.agelousis.payments.main.ui.payments.viewHolders.GroupViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.PaymentViewHolder
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
+import com.agelousis.payments.main.ui.paymentsFiltering.FilterPaymentsFragment
+import com.agelousis.payments.main.ui.paymentsFiltering.enumerations.PaymentsFilteringOptionType
 import com.agelousis.payments.main.ui.periodFilter.models.PeriodFilterDataModel
 import com.agelousis.payments.main.ui.shareMessageFragment.ShareMessageBottomSheetFragment
 import com.agelousis.payments.main.ui.totalPaymentsAmount.TotalPaymentsAmountDialogFragment
@@ -124,6 +126,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         configureSearchView()
         configureRecyclerView()
         initializePayments()
+        initializeNewFilters()
     }
 
     private fun configureSearchView() {
@@ -303,6 +306,16 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                 context = context ?: return@launch,
                 userModel = (activity as? MainActivity)?.userModel
             )
+        }
+    }
+
+    private fun initializeNewFilters() {
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<List<PaymentsFilteringOptionType>>(
+            FilterPaymentsFragment.PAYMENTS_FILTERING_OPTION_DATA_EXTRA
+        )?.observe(
+            viewLifecycleOwner
+        ) { paymentsFilteringOptionTypes ->
+            (activity as? MainActivity)?.paymentsFilteringOptionTypes = paymentsFilteringOptionTypes
         }
     }
 
