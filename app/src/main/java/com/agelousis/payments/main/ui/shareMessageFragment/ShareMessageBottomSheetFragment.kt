@@ -111,7 +111,9 @@ class ShareMessageBottomSheetFragment: BasicBottomSheetDialogFragment(), ShareMe
                 )
             ShareMessageType.SMS ->
                 context?.sendSMSMessage(
-                    mobileNumber = personModel?.phone?.toRawMobileNumber ?: return,
+                    mobileNumbers = listOf(
+                        personModel?.phone?.toRawMobileNumber ?: return
+                    ),
                     message = personModel?.messageTemplate ?: ""
                 )
             ShareMessageType.WHATS_APP, ShareMessageType.VIBER ->

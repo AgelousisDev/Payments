@@ -19,7 +19,7 @@
     android:focusable="@{menuOption.enabled}"
     android:foreground="?attr/selectableItemBackgroundBorderless"
     android:alpha="@{menuOption.enabled ? 1.0f : 0.5f}"
-    android:onClick="@{() -> menuOption == PaymentsMenuOptionType.CLEAR_PAYMENTS ? presenter.onClearPayments() : menuOption == PaymentsMenuOptionType.CSV_EXPORT ? presenter.onCsvExport() : null}">
+    android:onClick="@{() -> menuOption == PaymentsMenuOptionType.CLEAR_PAYMENTS ? presenter.onClearPayments() : menuOption == PaymentsMenuOptionType.CSV_EXPORT ? presenter.onCsvExport() : menuOption == PaymentsMenuOptionType.SEND_SMS_GLOBALLY ? presenter.onSendSmsGlobally() : null}">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/appCompatImageView2"

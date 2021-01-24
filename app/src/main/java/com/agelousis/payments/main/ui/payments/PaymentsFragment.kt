@@ -69,6 +69,22 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         )
     }
 
+    override fun onGroupLongPressed(groupModel: GroupModel) {
+        context?.showSimpleDialog(
+            title = resources.getString(R.string.key_sms_label),
+            message = String.format(
+                resources.getString(R.string.key_send_sms_to_group_value_message),
+                groupModel.groupName ?: ""
+            ),
+            positiveButtonText = resources.getString(R.string.key_send_label)
+        ) {
+            context?.sendSMSMessage(
+                mobileNumbers = itemsList.filterIsInstance<PersonModel>().filter { it.groupId == groupModel.groupId }.mapNotNull { it.phone },
+                message = (activity as? MainActivity)?.userModel?.defaultMessageTemplate ?: ""
+            )
+        }
+    }
+
     override fun onPaymentAmountSumSelected(paymentAmountSumModel: PaymentAmountSumModel) {
         TotalPaymentsAmountDialogFragment.show(
             supportFragmentManager = childFragmentManager,

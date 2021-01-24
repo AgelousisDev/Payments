@@ -602,8 +602,10 @@ fun PackageManager.isPackageInstalled(packageName: String) =
         false
     }
 
-fun Context.sendSMSMessage(mobileNumber: String, message: String) {
-    startActivity(Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:$mobileNumber")).also { intent ->
+fun Context.sendSMSMessage(mobileNumbers: List<String>, message: String) {
+    startActivity(Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:${mobileNumbers.joinToString(
+        separator = ";"
+    )}")).also { intent ->
         intent.putExtra("sms_body", message)
     })
 }
@@ -613,7 +615,7 @@ fun Context.shareMessage(schemeUrl: String) {
 }
 
 val String.toRawMobileNumber
-    get() = this.replace("\\s".toRegex(), "").replace("+", "")
+    get() = this.replace("\\s".toRegex(), "")
 
 fun Date.toCalendar(plusMonths: Int? = null): Calendar {
     val calendar = Calendar.getInstance()

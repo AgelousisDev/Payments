@@ -20,6 +20,7 @@ import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.currentNavigationFragment
 import com.agelousis.payments.utils.extensions.firstOrNullWithType
+import com.agelousis.payments.utils.extensions.sendSMSMessage
 import com.agelousis.payments.views.bottomSheet.BasicBottomSheetDialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -46,9 +47,17 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
         (activity?.supportFragmentManager?.currentNavigationFragment as? PaymentsFragment)?.navigateToPeriodFilterFragment()
     }
 
+    override fun onSendSmsGlobally() {
+        context?.sendSMSMessage(
+            mobileNumbers = personModelList.mapNotNull { it.phone },
+            message = (activity as? MainActivity)?.userModel?.defaultMessageTemplate ?: ""
+        )
+    }
+
     private lateinit var binding: PaymentsMenuOptionsFragmentLayoutBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
+    private val personModelList by lazy { arrayListOf<PersonModel>() }
     private val optionList by lazy {
         arrayListOf(
             HeaderModel(
@@ -57,7 +66,8 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
                 headerBackgroundColor = context?.let { ContextCompat.getColor(it, android.R.color.transparent) }
             ),
             PaymentsMenuOptionType.CLEAR_PAYMENTS,
-            PaymentsMenuOptionType.CSV_EXPORT
+            PaymentsMenuOptionType.CSV_EXPORT,
+            PaymentsMenuOptionType.SEND_SMS_GLOBALLY
         )
     }
 
@@ -83,6 +93,10 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
 
     private fun addObservers() {
         viewModel.paymentsLiveData.observe(viewLifecycleOwner) { list ->
+            personModelList.clear()
+            personModelList.addAll(
+                list.filterIsInstance<PersonModel>()
+            )
             optionList.firstOrNullWithType(
                 typeBlock = {
                     it as? PaymentsMenuOptionType
@@ -90,7 +104,7 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
                 predicate = {
                     it == PaymentsMenuOptionType.CLEAR_PAYMENTS
                 }
-            )?.isEnabled = list.filterIsInstance<PersonModel>().isNotEmpty()
+            )?.isEnabled = personModelList.isNotEmpty()
             optionList.firstOrNullWithType(
                 typeBlock = {
                     it as? PaymentsMenuOptionType
@@ -98,7 +112,15 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
                 predicate = {
                     it == PaymentsMenuOptionType.CSV_EXPORT
                 }
-            )?.isEnabled = list.filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten().isNotEmpty()
+            )?.isEnabled = personModelList.mapNotNull { it.payments }.flatten().isNotEmpty()
+            optionList.firstOrNullWithType(
+                typeBlock = {
+                    it as? PaymentsMenuOptionType
+                },
+                predicate = {
+                    it == PaymentsMenuOptionType.SEND_SMS_GLOBALLY
+                }
+            )?.isEnabled = personModelList.mapNotNull { it.phone }.isNotEmpty()
             (binding.menuOptionsRecyclerView.adapter as? PaymentsMenuOptionAdapter)?.reloadData()
         }
     }
@@ -122,7 +144,7 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
                 context = context ?: return,
                 margin = resources.getDimension(R.dimen.activity_general_horizontal_margin).toInt()
             ) {
-                optionList.getOrNull(index = it) !is HeaderModel && optionList.getOrNull(index = it) != PaymentsMenuOptionType.CSV_EXPORT
+                optionList.getOrNull(index = it) !is HeaderModel && optionList.getOrNull(index = it) != PaymentsMenuOptionType.SEND_SMS_GLOBALLY
             }
         )
     }

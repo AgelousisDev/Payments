@@ -238,7 +238,9 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                 positiveButtonText = resources.getString(R.string.key_send_label),
                 positiveButtonBlock = {
                     context?.sendSMSMessage(
-                        mobileNumber = binding.phoneLayout.value ?: "",
+                        mobileNumbers = listOf(
+                            binding.phoneLayout.value ?: ""
+                        ),
                         message = String.format(
                             "%s\n%s",
                             binding.messageTemplateField.text?.toString() ?: "",

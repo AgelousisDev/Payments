@@ -190,6 +190,8 @@
     <string name="key_pdf_label">Pdf</string>
     <string name="key_files_selected_value_label">%d selected</string>
     <string name="key_print_label">Print</string>
+    <string name="key_send_sms_to_group_value_message">Do you want to send SMS to the %s group?</string>
+    <string name="key_send_sms_globally_label">Send SMS to all clients</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>
