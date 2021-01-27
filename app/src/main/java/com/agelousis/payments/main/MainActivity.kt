@@ -238,7 +238,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             field = value
             binding.navigationView.menu.findItem(R.id.navigationGraph)?.isVisible = value
         }
-    var paymentsFilteringOptionTypes: List<PaymentsFilteringOptionType>? = null
+    var paymentsFilteringOptionTypes =
+        listOf(
+            PaymentsFilteringOptionType.DATE,
+            PaymentsFilteringOptionType.FREE,
+            PaymentsFilteringOptionType.CHARGE,
+            PaymentsFilteringOptionType.INACTIVE
+        )
 
     override fun onBackPressed() {
         unCheckAllMenuItems(

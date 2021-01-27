@@ -8,7 +8,6 @@ class PaymentsFilteringOptionViewHolder(private val binding: PaymentsFilteringOp
 
     fun bind(paymentsFilteringOptionType: PaymentsFilteringOptionType) {
         binding.paymentsFilteringOptionType = paymentsFilteringOptionType
-        binding.setPaymentsFilteringOrderNo((adapterPosition + 1).toString())
         binding.executePendingBindings()
     }
 

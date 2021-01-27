@@ -20,13 +20,13 @@ class FilterPaymentsFragment: Fragment() {
     }
 
     private lateinit var binding: FilterPaymentsFragmentLayoutBinding
-    private val paymentsFilteringOptionTypeList by lazy {
-        (activity as? MainActivity)?.paymentsFilteringOptionTypes ?: listOf(
+    private val paymentsFilteringOptionTypeList
+        get() = (activity as? MainActivity)?.paymentsFilteringOptionTypes ?: listOf(
+            PaymentsFilteringOptionType.DATE,
             PaymentsFilteringOptionType.FREE,
             PaymentsFilteringOptionType.CHARGE,
             PaymentsFilteringOptionType.INACTIVE
         )
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FilterPaymentsFragmentLayoutBinding.inflate(
