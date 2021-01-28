@@ -22,10 +22,9 @@ class FilterPaymentsFragment: Fragment() {
     private lateinit var binding: FilterPaymentsFragmentLayoutBinding
     private val paymentsFilteringOptionTypeList
         get() = (activity as? MainActivity)?.paymentsFilteringOptionTypes ?: listOf(
-            PaymentsFilteringOptionType.DATE,
             PaymentsFilteringOptionType.FREE,
             PaymentsFilteringOptionType.CHARGE,
-            PaymentsFilteringOptionType.INACTIVE
+            PaymentsFilteringOptionType.EXPIRED
         )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

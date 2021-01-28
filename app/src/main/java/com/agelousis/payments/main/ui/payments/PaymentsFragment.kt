@@ -316,6 +316,9 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
             viewLifecycleOwner
         ) { paymentsFilteringOptionTypes ->
             (activity as? MainActivity)?.paymentsFilteringOptionTypes = paymentsFilteringOptionTypes
+            (activity as? MainActivity)?.paymentsFilteringOptionTypes?.forEachIndexed { index, paymentsFilteringOptionType ->
+                paymentsFilteringOptionType.position = index
+            }
         }
     }
 
@@ -334,7 +337,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                             )
                         )
                         filteredList.addAll(
-                            filteredByQueryPayments.sortedBy { it.firstName }.also { personModelList ->
+                            filteredByQueryPayments.sortedBy { (it getPaymentsFilteringOptionType (activity as? MainActivity)?.paymentsFilteringOptionTypes).position  }.also { personModelList ->
                                 if (personModelList.isSizeOne)
                                     personModelList.firstOrNull()?.backgroundDrawable = R.drawable.payment_row_radius_background
                                 else {

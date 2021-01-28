@@ -6,6 +6,7 @@ import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.main.ui.newPayment.enumerations.PaymentAmountRowState
 import com.agelousis.payments.main.ui.payments.enumerations.PaymentType
+import com.agelousis.payments.main.ui.paymentsFiltering.enumerations.PaymentsFilteringOptionType
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import kotlinx.parcelize.IgnoredOnParcel
@@ -45,6 +46,19 @@ data class PersonModel(val personId: Int? = null,
     }
 
     @IgnoredOnParcel var backgroundDrawable = R.drawable.payment_row_background
+
+    infix fun getPaymentsFilteringOptionType(paymentsFilteringOptionTypes: List<PaymentsFilteringOptionType>?) =
+        when {
+            free == true -> PaymentsFilteringOptionType.FREE.also { paymentsFilteringOptionType ->
+                paymentsFilteringOptionType.position = paymentsFilteringOptionTypes?.firstOrNull { it == PaymentsFilteringOptionType.FREE }?.position ?: return@also
+            }
+            payments?.any { it.paymentMonthDate?.toCalendar(plusMonths = 1)?.time?.isDatePassed == true } == true -> PaymentsFilteringOptionType.EXPIRED.also { paymentsFilteringOptionType ->
+                paymentsFilteringOptionType.position = paymentsFilteringOptionTypes?.firstOrNull { it == PaymentsFilteringOptionType.EXPIRED }?.position ?: return@also
+            }
+            else -> PaymentsFilteringOptionType.CHARGE.also { paymentsFilteringOptionType ->
+                paymentsFilteringOptionType.position = paymentsFilteringOptionTypes?.firstOrNull { it == PaymentsFilteringOptionType.CHARGE }?.position ?: return@also
+            }
+        }
 
 }
 

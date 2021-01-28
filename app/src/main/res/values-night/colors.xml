@@ -25,5 +25,6 @@
     <color name="lightGreen">#3FE198</color>
     <color name="lightSea">#C2CCEF</color>
     <color name="lightYellow">#FFD365</color>
+    <color name="fadedRed">#fd907e</color>
 
 </resources>
