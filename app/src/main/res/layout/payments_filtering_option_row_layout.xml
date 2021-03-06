@@ -49,7 +49,7 @@
                 android:orientation="vertical"
                 android:background="@{paymentsFilteringOptionType.getHeaderColor(context)}"
                 android:gravity="center"
-                android:padding="@dimen/activity_horizontal_margin"
+                android:padding="@dimen/activity_general_horizontal_margin"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
