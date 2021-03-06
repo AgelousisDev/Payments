@@ -23,10 +23,12 @@ class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLa
             binding.searchIcon.setAnimatedImageResourceId(
                 resourceId = value.icon
             )
-            binding.searchIcon.setOnClickListener(when(value) {
-                MaterialSearchViewIconState.SEARCH -> this::onSearchIcon
-                MaterialSearchViewIconState.CLOSE -> this::onDeleteQuery
-            })
+            binding.searchIcon.setOnClickListener {
+                when(value) {
+                    MaterialSearchViewIconState.SEARCH -> onSearchIcon()
+                    MaterialSearchViewIconState.CLOSE -> onDeleteQuery()
+                }
+            }
         }
 
     init {
@@ -57,14 +59,16 @@ class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLa
         binding.searchField.infiniteAlphaAnimation(
             state = true
         )
-        binding.searchIcon.setOnClickListener(this::onSearchIcon)
+        binding.searchIcon.setOnClickListener {
+            onSearchIcon()
+        }
     }
 
-    private fun onDeleteQuery(p0: View) {
+    private fun onDeleteQuery() {
         binding.searchField.text?.clear()
     }
 
-    private fun onSearchIcon(p0: View) {
+    private fun onSearchIcon() {
         context?.initializeField(
             appCompatEditText = binding.searchField
         )

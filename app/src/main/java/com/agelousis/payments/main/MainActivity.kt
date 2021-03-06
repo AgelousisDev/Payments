@@ -240,9 +240,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     var paymentsFilteringOptionTypes =
         listOf(
-            PaymentsFilteringOptionType.FREE,
-            PaymentsFilteringOptionType.CHARGE,
-            PaymentsFilteringOptionType.EXPIRED
+            PaymentsFilteringOptionType.FREE.also {
+                it.position = 0
+            },
+            PaymentsFilteringOptionType.CHARGE.also {
+                it.position = 1
+            },
+            PaymentsFilteringOptionType.EXPIRED.also {
+                it.position = 2
+            }
         )
 
     override fun onBackPressed() {
