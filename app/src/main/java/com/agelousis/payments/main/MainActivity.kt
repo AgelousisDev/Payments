@@ -145,7 +145,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 menuOptionsIsVisible = false
             }
             in FilterPaymentsFragment::class.java.name -> {
-                appBarTitle = resources.getString(R.string.key_filter_payments_label)
+                appBarTitle = resources.getString(R.string.key_payments_order_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END

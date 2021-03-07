@@ -148,7 +148,7 @@
         <![CDATA[
             <ul>
                 <li>Create multiple users offline</li>
-                <li>Add your authentication method(biometrics or password)</li>
+                <li>Add your authentication method(<b>biometrics</b> or <b>password</b>)</li>
                 <li>Add Profile Image</li>
                 <li>Manage your payments</li>
             </ul>
@@ -161,6 +161,7 @@
                 <li>Watch your payments by group name alphabetically</li>
                 <li>Swipe left to create a client\'s PDF - Swipe right to delete</li>
                 <li>Make a long click to share message to the client</li>
+                <li>Make a long click to each group to send SMS to all clients</li>
             </ul>
         ]]>
     </string>
@@ -181,6 +182,15 @@
             </ul>
         ]]>
     </string>
+    <string name="key_edit_payments_order_guide_message">
+        <![CDATA[
+            <ul>
+                <li>Edit the order of payments with the order that you prefer</li>
+                <li>Keeping it as in the screenshot above, \'<b>Free</b>\' payments show, then \'<b>Charged</b>\' payments and last all the \'<b>Expired</b>\'</li>
+                <li>This order will apply for all payments under each group</li>
+            </ul>
+        ]]>
+    </string>
     <string name="dot_value" translatable="false">&#8226;</string>
     <string name="key_skip_label">SKIP</string>
     <string name="key_guide_label">Guide</string>
@@ -192,7 +202,7 @@
     <string name="key_print_label">Print</string>
     <string name="key_send_sms_to_group_value_message">Do you want to send SMS to the %s group?</string>
     <string name="key_send_sms_globally_label">Send SMS to all clients</string>
-    <string name="key_filter_payments_label">Payments Filter</string>
+    <string name="key_payments_order_label">Payments Order</string>
     <string name="key_charge_label">Charge</string>
     <string name="key_filter_payments_description">Rearrange the items below in order to watch your payments with your order under a group in the home screen. Changes will apply from the 1st to last. Please note that the payments are being shown grouped by group name alphabetically…</string>
     <string name="key_payments_by_label">Payments by</string>
