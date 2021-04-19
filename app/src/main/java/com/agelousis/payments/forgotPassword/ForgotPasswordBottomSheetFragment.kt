@@ -50,11 +50,6 @@ class ForgotPasswordBottomSheetFragment: BasicBottomSheetDialogFragment(), Forgo
     private val userId by lazy { arguments?.getInt(USER_ID_EXTRA) }
     private lateinit var binding: ForgotPasswordFragmentLayoutBinding
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        addObservers()
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = ForgotPasswordFragmentLayoutBinding.inflate(
             inflater,
@@ -65,6 +60,11 @@ class ForgotPasswordBottomSheetFragment: BasicBottomSheetDialogFragment(), Forgo
             it.presenter = this
         }
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        addObservers()
     }
 
     private fun addObservers() {

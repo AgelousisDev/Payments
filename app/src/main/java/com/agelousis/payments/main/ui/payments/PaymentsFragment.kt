@@ -105,11 +105,6 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
             binding.searchLayout.visibility = if (value) View.VISIBLE else View.GONE
         }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        configureObservers()
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentPaymentsLayoutBinding.inflate(
             inflater,
@@ -127,6 +122,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         configureRecyclerView()
         initializePayments()
         initializeNewFilters()
+        configureObservers()
     }
 
     private fun configureSearchView() {

@@ -20,7 +20,6 @@ import dev.sasikanth.colorsheet.ColorSheet
 class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerListener {
 
     companion object {
-        const val GROUP_SELECTION_REQUEST_CODE = 3
         const val GROUP_IMAGE_REQUEST_CODE = 4
         const val GROUP_MODEL_EXTRA = "GroupActivity=groupModelExtra"
     }

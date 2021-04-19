@@ -87,12 +87,6 @@ class FilesFragment: Fragment(), FilePresenter {
         }
     private val selectedFilePositions by lazy { arrayListOf<FileDataModel?>() }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        configureObservers()
-        selectedFilePositions.clear()
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentFilesLayoutBinding.inflate(
             inflater,
@@ -109,6 +103,8 @@ class FilesFragment: Fragment(), FilePresenter {
         configureSearchView()
         configureRecyclerView()
         initializeFiles()
+        configureObservers()
+        selectedFilePositions.clear()
     }
 
     private fun configureSearchView() {

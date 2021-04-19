@@ -71,11 +71,6 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
         )
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        addObservers()
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = PaymentsMenuOptionsFragmentLayoutBinding.inflate(
             layoutInflater,
@@ -89,6 +84,7 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
         super.onViewCreated(view, savedInstanceState)
         configureRecyclerView()
         initializePayments()
+        addObservers()
     }
 
     private fun addObservers() {

@@ -118,11 +118,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        configureObservers()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enterTransition = TransitionInflater.from(context ?: return).inflateTransition(R.transition.slide_right)
@@ -148,6 +143,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         configureRecyclerView()
         initializeGroups()
         initializeNewPayments()
+        configureObservers()
     }
 
     private fun setupUI() {

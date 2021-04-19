@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -250,6 +251,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 it.position = 2
             }
         )
+    private val groupActivityLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK)
+            configureGroup(
+                groupModel = result?.data?.extras?.getParcelable(GroupActivity.GROUP_MODEL_EXTRA) ?: return@registerForActivityResult
+            ) {
+                (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
+            }
+    }
 
     override fun onBackPressed() {
         unCheckAllMenuItems(
@@ -457,13 +468,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding.appBarMain.floatingButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorAccent))
     }
 
-    fun startGroupActivity(groupModel: GroupModel? = null) =
-        startActivityForResult(
+    fun startGroupActivity(groupModel: GroupModel? = null) {
+        groupActivityLauncher.launch(
             Intent(this, GroupActivity::class.java).also {
                 it.putExtra(GroupActivity.GROUP_MODEL_EXTRA, groupModel)
-            },
-            GroupActivity.GROUP_SELECTION_REQUEST_CODE
+            }
         )
+    }
 
     fun showProfilePicture() {
         startActivity(
@@ -485,12 +496,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         uri = data?.data,
                         file = getDatabasePath(SQLiteHelper.DB_NAME)
                     )
-                GroupActivity.GROUP_SELECTION_REQUEST_CODE ->
-                    configureGroup(
-                        groupModel = data?.extras?.getParcelable(GroupActivity.GROUP_MODEL_EXTRA) ?: return
-                    ) {
-                        (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
-                    }
             }
     }
 
