@@ -1,17 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
             name="userModel"
             type="com.agelousis.payments.login.models.UserModel" />
+        <variable
+            name="presenter"
+            type="com.agelousis.payments.main.ui.payments.presenters.PaymentsFragmentPresenter" />
     </data>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     tools:context=".main.ui.payments.PaymentsFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/paymentsAppBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/nativeBackgroundColor"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/paymentsToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:navigationIcon="@drawable/ic_close">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|end"
+            android:orientation="horizontal"
+            android:padding="@dimen/twelve_layout_margin">
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/TextViewValueLabel"
+                android:id="@+id/selectedPaymentsView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+                tools:text="1 selected"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/deleteButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+                android:layout_gravity="center_vertical|end"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="@{() -> presenter.onDeletePayments()}"
+                app:srcCompat="@drawable/ic_delete"
+                app:tint="@color/dayNightTextOnBackground" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/receiptButton"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+                android:layout_gravity="center_vertical|end"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="@{() -> presenter.onExportReceipt()}"
+                app:srcCompat="@drawable/ic_invoice" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/messageButton"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+                android:layout_gravity="center_vertical|end"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="@{() -> presenter.onPaymentsSendSms()}"
+                app:srcCompat="@drawable/ic_speech_bubble" />
+
+        </LinearLayout>
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <com.agelousis.payments.views.searchLayout.MaterialSearchView
         android:id="@+id/searchLayout"
@@ -23,7 +94,7 @@
         app:secondaryIconResource="@drawable/ic_sort"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/paymentsAppBarLayout" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/paymentListRecyclerView"

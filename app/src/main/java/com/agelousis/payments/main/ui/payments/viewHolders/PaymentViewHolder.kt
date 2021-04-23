@@ -12,7 +12,8 @@ class PaymentViewHolder(private val binding: PaymentRowLayoutBinding): RecyclerV
         binding.presenter = presenter
         itemView.setOnLongClickListener {
             presenter.onPaymentLongPressed(
-                personModel = binding.personModel ?: return@setOnLongClickListener true
+                paymentIndex = adapterPosition,
+                isSelected = !personModel.isSelected
             )
             true
         }

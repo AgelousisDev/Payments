@@ -52,10 +52,21 @@ class PaymentsViewModel: ViewModel() {
         }
         (item as? PersonModel)?.let {
             dbManager.deletePayment(
-                paymentId = it.personId
+                personIds = listOf(
+                    it.personId ?: return@let
+                )
             ) {
                 deletionLiveData.value = true
             }
+        }
+    }
+
+    suspend fun deletePayments(context: Context, personIds: List<Int>) {
+        val dbManager = DBManager(context = context)
+        dbManager.deletePayment(
+            personIds = personIds
+        ) {
+            deletionLiveData.value = true
         }
     }
 

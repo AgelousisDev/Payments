@@ -11,6 +11,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.*
@@ -1048,5 +1049,12 @@ fun setHtmlTextWithBullets(materialTextView: MaterialTextView, htmlTextResourceI
             )
         }
         materialTextView.text = spannableBuilder
+    }
+}
+
+@BindingAdapter("imageTintColor")
+fun setImageViewTint(appCompatImageView: AppCompatImageView, tintColor: Int?) {
+    tintColor?.let {
+        appCompatImageView.imageTintList = ColorStateList.valueOf(it)
     }
 }

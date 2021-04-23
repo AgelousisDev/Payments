@@ -215,7 +215,7 @@ class FilesFragment: Fragment(), FilePresenter {
                         HeaderModel(
                             dateTime = map.value.firstOrNull()?.fileDate,
                             header = header ?: resources.getString(R.string.key_empty_field_label),
-                            headerBackgroundColor = context?.let { ContextCompat.getColor(it, android.R.color.transparent) }
+                            headerBackgroundColor = context?.let { ContextCompat.getColor(it, R.color.colorPrimaryDark) }
                         )
                     )
                     filteredList.addAll(

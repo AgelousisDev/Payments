@@ -25,6 +25,7 @@ import com.agelousis.payments.main.ui.payments.models.PersonModel
 import com.agelousis.payments.main.ui.payments.presenters.GroupPresenter
 import com.agelousis.payments.main.ui.payments.presenters.PaymentAmountSumPresenter
 import com.agelousis.payments.main.ui.payments.presenters.PaymentPresenter
+import com.agelousis.payments.main.ui.payments.presenters.PaymentsFragmentPresenter
 import com.agelousis.payments.main.ui.payments.viewHolders.GroupViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.PaymentViewHolder
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
@@ -40,7 +41,27 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
-class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAmountSumPresenter {
+class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAmountSumPresenter, PaymentsFragmentPresenter {
+
+    override fun onDeletePayments() {
+        configureMultipleDeleteAction(
+            positions = filteredList.filterIsInstance<PersonModel>().filter { it.isSelected }.mapNotNull { it.personId }
+        )
+    }
+
+    override fun onExportReceipt() {
+        initializePDFCreation(
+            persons = filteredList.filterIsInstance<PersonModel>().filter { it.isSelected },
+            fromMultipleSelection = true
+        )
+    }
+
+    override fun onPaymentsSendSms() {
+        context?.sendSMSMessage(
+            mobileNumbers = itemsList.filterIsInstance<PersonModel>().filter { it.isSelected }.mapNotNull { it.phone },
+            message = (activity as? MainActivity)?.userModel?.defaultMessageTemplate ?: ""
+        )
+    }
 
     override fun onGroupSelected(groupModel: GroupModel) {
         (activity as? MainActivity)?.startGroupActivity(
@@ -56,11 +77,20 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         )
     }
 
-    override fun onPaymentLongPressed(personModel: PersonModel) {
+    override fun onPaymentShareMessage(personModel: PersonModel) {
         ShareMessageBottomSheetFragment.show(
             supportFragmentManager = activity?.supportFragmentManager ?: return,
             personModel = personModel
         )
+    }
+
+    override fun onPaymentLongPressed(paymentIndex: Int, isSelected: Boolean) {
+        (filteredList.getOrNull(
+            index = paymentIndex
+        ) as? PersonModel)?.isSelected = isSelected
+        appBarIsVisible = filteredList.filterIsInstance<PersonModel>().any { it.isSelected }
+        selectedPayments = filteredList.filterIsInstance<PersonModel>().count { it.isSelected }
+        (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
     }
 
     override fun onPersonAdd(groupModel: GroupModel) {
@@ -104,6 +134,19 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
             field  = value
             binding.searchLayout.visibility = if (value) View.VISIBLE else View.GONE
         }
+    private var appBarIsVisible: Boolean = false
+        set(value) {
+            field = value
+            binding.paymentsAppBarLayout.visibility = if (value) View.VISIBLE else View.GONE
+        }
+    private var selectedPayments: Int = 0
+        set(value) {
+            field = value
+            binding.selectedPaymentsView.text = String.format(
+                resources.getString(R.string.key_payments_selected_value_label),
+                value
+            )
+        }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentPaymentsLayoutBinding.inflate(
@@ -112,17 +155,25 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
             false
         ).also {
             it.userModel = (activity as? MainActivity)?.userModel
+            it.presenter = this
         }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        configureToolbar()
         configureSearchView()
         configureRecyclerView()
         initializePayments()
         initializeNewFilters()
         configureObservers()
+    }
+
+    private fun configureToolbar() {
+        binding.paymentsToolbar.setNavigationOnClickListener {
+            clearSelectedPayments()
+        }
     }
 
     private fun configureSearchView() {
@@ -228,7 +279,10 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         }
     }
 
-    private fun initializePDFCreation(persons: List<PersonModel>) {
+    private fun initializePDFCreation(
+        persons: List<PersonModel>,
+        fromMultipleSelection: Boolean = false
+    ) {
         PDFHelper.shared.initializePDF(
             context = context ?: return,
             userModel = (activity as? MainActivity)?.userModel,
@@ -239,8 +293,15 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                     context = context ?: return@launch,
                     userModel = (activity as? MainActivity)?.userModel,
                     file = pdfFile,
-                    description = if (persons.isSizeOne) persons.firstOrNull()?.fullName ?: "" else persons.firstOrNull()?.groupName ?: ""
+                    description = if (persons.isSizeOne)
+                        persons.firstOrNull()?.fullName ?: ""
+                    else
+                        persons.mapNotNull { it.groupName }.joinToString(
+                            separator = "-"
+                        )
                 )
+                if (fromMultipleSelection)
+                    clearSelectedPayments()
                 context?.sharePDF(
                     pdfFile = pdfFile
                 )
@@ -277,6 +338,23 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         )
     }
 
+    private fun configureMultipleDeleteAction(positions: List<Int>) {
+        context?.showTwoButtonsDialog(
+            isCancellable = false,
+            title = resources.getString(R.string.key_warning_label),
+            message = resources.getString(R.string.key_delete_selected_payments_message),
+            positiveButtonText = resources.getString(R.string.key_delete_label),
+            positiveButtonBlock = {
+                uiScope.launch {
+                    viewModel.deletePayments(
+                        context = context ?: return@launch,
+                        personIds = positions
+                    )
+                }
+            }
+        )
+    }
+
     private fun configureObservers() {
         viewModel.paymentsLiveData.observe(viewLifecycleOwner) { list ->
             after(
@@ -291,9 +369,29 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
             )
         }
         viewModel.deletionLiveData.observe(viewLifecycleOwner) {
+            this setSelectedPaymentsAppBarState false
             if (it)
                 initializePayments()
         }
+    }
+
+    private fun clearSelectedPayments() {
+        this setSelectedPaymentsAppBarState false
+        filteredList.forEachIfEach(
+            predicate = {
+                it is PersonModel
+            },
+            action = {
+                (it as? PersonModel)?.isSelected = false
+            }
+        )
+        (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
+    }
+
+    private infix fun setSelectedPaymentsAppBarState(state: Boolean) {
+        appBarIsVisible = state
+        if (!state)
+            selectedPayments = 0
     }
 
     fun initializePayments() {

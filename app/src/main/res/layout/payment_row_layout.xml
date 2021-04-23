@@ -21,6 +21,18 @@
         android:onClick="@{() -> presenter.onPaymentSelected(personModel)}"
         tools:targetApi="M">
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/selectedPaymentIcon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+            android:visibility="@{personModel.selected == true ? View.VISIBLE : View.GONE}"
+            app:srcCompat="@drawable/ic_check"
+            app:tint="@color/green"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <FrameLayout
             android:id="@+id/paymentRowHeaderFrameLayout"
             android:layout_width="40dp"
@@ -30,7 +42,7 @@
             backgroundDrawableTintColor="@{personModel.free == true ? @color/colorAccent : personModel.groupImage == null ? personModel.groupColor : null}"
             android:elevation="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/selectedPaymentIcon"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textview.MaterialTextView
@@ -83,9 +95,22 @@
             android:textColor="@{personModel.free == true ? @color/fateBlue :  personModel.groupColor}"
             textViewColorByPaymentDate="@{personModel.free == true ? null : personModel.payments}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/sharePaymentButton"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="40$" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/sharePaymentButton"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="@{() -> presenter.onPaymentShareMessage(personModel)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_message"
+            imageTintColor="@{personModel.free == true ? @color/colorAccent : personModel.groupColor}"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/entryDateTextView"

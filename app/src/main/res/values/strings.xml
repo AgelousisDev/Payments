@@ -209,6 +209,8 @@
     <string name="key_expired_label">Expired</string>
     <string name="key_select_country_label">Select country</string>
     <string name="key_search_in_countries_label">Search in Countries</string>
+    <string name="key_payments_selected_value_label">%d selected</string>
+    <string name="key_delete_selected_payments_message">Do you want to delete the selected clients and their payments?</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>

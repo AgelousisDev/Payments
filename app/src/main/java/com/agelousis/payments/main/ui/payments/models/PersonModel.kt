@@ -31,6 +31,10 @@ data class PersonModel(val personId: Int? = null,
                        val messageTemplate: String?,
                        val paymentType: PaymentType?
 ): Parcelable {
+
+    @IgnoredOnParcel
+    var isSelected = false
+
     val totalPaymentAmount: Double?
         get() = payments?.mapNotNull { it.paymentAmount }?.takeIf { it.isNotEmpty() }?.sum()
 

@@ -11,18 +11,14 @@ enum class SwipeItemType {
 
     fun getIcons(context: Context) =
         arrayOf(
-            ContextCompat.getDrawable(context, R.drawable.ic_delete)?.also {
-                it.setTint(ContextCompat.getColor(context, R.color.red))
-            }?.fromVector(padding = 0),
+            ContextCompat.getDrawable(context, R.drawable.ic_delete)?.fromVector(padding = 0),
             ContextCompat.getDrawable(
                 context,
                 when(this) {
-                    PERSON_ITEM -> R.drawable.ic_pdf
+                    PERSON_ITEM -> R.drawable.ic_invoice
                     PDF_ITEM -> R.drawable.ic_share
                 }
-            )?.also {
-                it.setTint(ContextCompat.getColor(context, R.color.colorAccent))
-            }?.fromVector(padding = 0)
+            )?.fromVector(padding = 0)
         )
 
 }
