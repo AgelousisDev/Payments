@@ -3,6 +3,7 @@ package com.agelousis.payments.main.ui.personalInformation.models
 import android.content.Context
 import com.agelousis.payments.R
 import com.agelousis.payments.login.models.UserModel
+import com.agelousis.payments.main.ui.countrySelector.enumerations.CountryDataModel
 import com.agelousis.payments.main.ui.currencySelector.enumerations.CurrencyType
 
 enum class OptionType {
@@ -17,6 +18,7 @@ enum class OptionType {
     CHANGE_ID_CARD_NUMBER,
     CHANGE_SOCIAL_INSURANCE_NUMBER,
     CHANGE_CURRENCY,
+    CHANGE_COUNTRY,
     VAT,
     DEFAULT_PAYMENT_AMOUNT,
     DEFAULT_MESSAGE_TEMPLATE,
@@ -36,6 +38,7 @@ enum class OptionType {
             CHANGE_ID_CARD_NUMBER -> context.resources.getString(R.string.key_id_card_number_label)
             CHANGE_SOCIAL_INSURANCE_NUMBER -> context.resources.getString(R.string.key_social_insurance_number_label)
             CHANGE_CURRENCY -> context.resources.getString(R.string.key_select_currency_label)
+            CHANGE_COUNTRY -> context.resources.getString(R.string.key_select_country_label)
             VAT -> context.resources.getString(R.string.key_vat_percent_label)
             DEFAULT_PAYMENT_AMOUNT -> context.resources.getString(R.string.key_default_payment_amount_label)
             DEFAULT_MESSAGE_TEMPLATE -> context.resources.getString(R.string.key_default_message_template_label)
@@ -46,5 +49,6 @@ enum class OptionType {
     var userModel: UserModel? = null
     var biometricAvailability = false
     var currencyType: CurrencyType? = null
+    var countryDataModel: CountryDataModel? = null
 
 }

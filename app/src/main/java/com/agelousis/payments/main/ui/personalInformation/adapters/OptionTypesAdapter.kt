@@ -62,7 +62,7 @@ class OptionTypesAdapter(private val list: List<Any>, private val optionPresente
         }
         (list.getOrNull(index = position) as? OptionType)?.let {
             return when(it) {
-                OptionType.DELETE_USER, OptionType.EXPORT_DATABASE, OptionType.CHANGE_CURRENCY -> OptionTypeAdapterType.OPTION_ACTION_VIEW.type
+                OptionType.DELETE_USER, OptionType.EXPORT_DATABASE, OptionType.CHANGE_CURRENCY, OptionType.CHANGE_COUNTRY -> OptionTypeAdapterType.OPTION_ACTION_VIEW.type
                 else -> OptionTypeAdapterType.OPTION_VIEW.type
             }
         }

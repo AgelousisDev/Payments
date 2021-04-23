@@ -40,9 +40,11 @@ object Constants {
     const val EXPORT_DATABASE_FILE_NAME = "PAYMENTS.payments"
     const val EXPORT_DATABASE_FILE_NAME_EXTENSION = ".payments"
     const val TOTAL_PAYMENTS_AMOUNT_FRAGMENT_TAG = "totalPaymentsFragmentTag"
-    const val SHARED_PREFERENCES_CURRENCY_SUMBOL_KEY = "currency_symbol"
+    const val SHARED_PREFERENCES_CURRENCY_SYMBOL_KEY = "currency_symbol"
     const val CURRENCY_SELECTOR_FRAGMENT_TAG = "currencySelectorFragmentTag"
     const val SHARED_PREFERENCES_FIRST_TIME_KEY = "first_time"
+    const val COUNTRY_SELECTOR_FRAGMENT_TAG = "countrySelectorFragmentTag"
+    const val SHARED_PREFERENCES_COUNTRY_DATA_KEY = "country_data"
 
     object Colors {
         val colorPickerColors = intArrayOf(

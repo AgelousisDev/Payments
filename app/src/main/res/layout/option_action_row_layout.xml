@@ -19,7 +19,7 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackgroundBorderless"
-    android:onClick="@{() -> optionType == OptionType.DELETE_USER ? presenter.onDeleteUser() : optionType == OptionType.EXPORT_DATABASE ? presenter.onExportDatabase() : optionType == OptionType.CHANGE_CURRENCY ? presenter.onChangeCurrency() : null}">
+    android:onClick="@{() -> optionType == OptionType.DELETE_USER ? presenter.onDeleteUser() : optionType == OptionType.EXPORT_DATABASE ? presenter.onExportDatabase() : optionType == OptionType.CHANGE_CURRENCY ? presenter.onChangeCurrency() : optionType == OptionType.CHANGE_COUNTRY ? presenter.onChangeCountry() : null}">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/materialTextView"
@@ -54,6 +54,19 @@
             tools:srcCompat="@drawable/ic_united_states_of_america" />
 
     </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextViewTitleLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+        android:text='@{optionType.countryDataModel != null ? String.format("%s, %s", optionType.countryDataModel.countryName != null ? optionType.countryDataModel.countryName : "", optionType.countryDataModel.countryCode != null ? optionType.countryDataModel.countryCode : "") : ""}'
+        android:visibility="@{optionType == OptionType.CHANGE_COUNTRY ? View.VISIBLE : View.GONE}"
+        tools:text="Cyprus, CY"
+        tools:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/appCompatImageView4"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/appCompatImageView4"

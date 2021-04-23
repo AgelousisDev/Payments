@@ -17,4 +17,5 @@ interface OptionPresenter {
     fun onDeleteUser()
     fun onExportDatabase()
     fun onChangeCurrency()
+    fun onChangeCountry()
 }

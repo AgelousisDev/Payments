@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import com.agelousis.payments.R
+import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.database.DatabaseTriggeringType
 import com.agelousis.payments.databinding.FragmentNewPaymentLayoutBinding
 import com.agelousis.payments.main.MainActivity
@@ -163,6 +164,8 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         binding.countryCodeLayout.typeFace = ResourcesCompat.getFont(context ?: return, R.font.ubuntu)
         args.personDataModel?.phone?.split(" ")?.firstOrNull()?.let { countryZipCode ->
             binding.countryCodeLayout.setCountryForPhoneCode(countryZipCode.replace("+", "").toIntOrNull() ?: return@let )
+        } ?: MainApplication.countryDataModel?.let { countryDataModel ->
+            binding.countryCodeLayout.setCountryForNameCode(countryDataModel.countryCode)
         } ?: Constants.CountryCodes.getCountryCode(context = context ?: return)?.let { countryCode ->
             binding.countryCodeLayout.setCountryForNameCode(countryCode)
         }
@@ -306,7 +309,9 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
     }
 
     fun checkInputFields() {
-        fillCurrentPersonModel()
+        fillCurrentPersonModel(
+            saveState = true
+        )
         ifLet(
             currentPersonModel?.groupName,
             currentPersonModel?.firstName,
@@ -355,7 +360,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         }
     }
 
-    private fun fillCurrentPersonModel() {
+    private fun fillCurrentPersonModel(saveState: Boolean = false) {
         var phone = binding.phoneLayout.value
         binding.countryCodeLayout.selectedCountryCode?.let {
             if (binding.phoneLayout.value?.startsWith("+$it") == false)
@@ -378,7 +383,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             active = binding.activeAppSwitchLayout.isChecked,
             free = binding.freeAppSwitchLayout.isChecked,
             messageTemplate = binding.messageTemplateField.text?.toString(),
-            payments = availablePayments,
+            payments = if (saveState && !binding.activeAppSwitchLayout.isChecked) listOf() else availablePayments,
             paymentType = selectedPaymentType,
             groupColor = args.personDataModel?.groupColor,
             groupImage = args.personDataModel?.groupImage

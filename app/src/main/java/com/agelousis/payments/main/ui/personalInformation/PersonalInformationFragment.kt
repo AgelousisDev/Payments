@@ -17,6 +17,9 @@ import com.agelousis.payments.database.DBManager
 import com.agelousis.payments.databinding.FragmentPersonalInformationLayoutBinding
 import com.agelousis.payments.login.LoginActivity
 import com.agelousis.payments.main.MainActivity
+import com.agelousis.payments.main.ui.countrySelector.CountrySelectorDialogFragment
+import com.agelousis.payments.main.ui.countrySelector.enumerations.CountryDataModel
+import com.agelousis.payments.main.ui.countrySelector.interfaces.CountrySelectorFragmentPresenter
 import com.agelousis.payments.main.ui.currencySelector.CurrencySelectorDialogFragment
 import com.agelousis.payments.main.ui.currencySelector.enumerations.CurrencyType
 import com.agelousis.payments.main.ui.currencySelector.interfaces.CurrencySelectorFragmentPresenter
@@ -26,6 +29,7 @@ import com.agelousis.payments.main.ui.personalInformation.models.OptionType
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.payments.main.ui.personalInformation.presenter.PersonalInformationPresenter
 import com.agelousis.payments.utils.extensions.*
+import com.agelousis.payments.utils.helpers.CountryHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -130,6 +134,35 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
         )
     }
 
+    override fun onChangeCountry() {
+        CountrySelectorDialogFragment.show(
+            supportFragmentManager = childFragmentManager,
+            countrySelectorFragmentPresenter = object: CountrySelectorFragmentPresenter {
+                override fun onCountrySelected(countryDataModel: CountryDataModel) {
+                    optionList.firstOrNullWithType(
+                        typeBlock = {
+                            it as? OptionType
+                        },
+                        predicate = {
+                            it == OptionType.CHANGE_COUNTRY
+                        }
+                    )?.countryDataModel = countryDataModel
+                    binding.optionRecyclerView.scheduleLayoutAnimation()
+                    (binding.optionRecyclerView.adapter as? OptionTypesAdapter)?.reloadData()
+                }
+            },
+            selectedCountryDataModel = optionList.firstOrNullWithType(
+                typeBlock = {
+                    it as? OptionType
+                },
+                predicate = {
+                    it == OptionType.CHANGE_COUNTRY
+                }
+            )?.countryDataModel,
+            userModel = newUserModel
+        )
+    }
+
     override fun onProfilePicturePressed() {
         (activity as? MainActivity)?.showProfilePicture()
     }
@@ -183,6 +216,9 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
             ),
             OptionType.CHANGE_CURRENCY.also {
                 it.currencyType = CurrencyType.values().firstOrNull { currencyType -> currencyType.symbol == MainApplication.currencySymbol }
+            },
+            OptionType.CHANGE_COUNTRY.also {
+                it.countryDataModel = CountryHelper.countryDataModelList.firstOrNull { countryDataModel -> countryDataModel == MainApplication.countryDataModel }
             },
             OptionType.VAT.also {
                 it.userModel = newUserModel

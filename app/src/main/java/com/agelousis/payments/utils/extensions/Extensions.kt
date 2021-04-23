@@ -57,6 +57,7 @@ import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.custom.picasso.CircleTransformation
 import com.agelousis.payments.database.SQLiteHelper
 import com.agelousis.payments.login.enumerations.UIMode
+import com.agelousis.payments.main.ui.countrySelector.enumerations.CountryDataModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.payments.utils.constants.Constants
@@ -68,6 +69,7 @@ import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textview.MaterialTextView
+import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import java.io.ByteArrayOutputStream
@@ -822,10 +824,20 @@ var SharedPreferences.currencySymbol: String?
         edit(
             commit = true
         ) {
-            putString(Constants.SHARED_PREFERENCES_CURRENCY_SUMBOL_KEY, value)
+            putString(Constants.SHARED_PREFERENCES_CURRENCY_SYMBOL_KEY, value)
         }
     }
-    get() = getString(Constants.SHARED_PREFERENCES_CURRENCY_SUMBOL_KEY, null)
+    get() = getString(Constants.SHARED_PREFERENCES_CURRENCY_SYMBOL_KEY, null)
+
+var SharedPreferences.countryDataModel: CountryDataModel?
+    set(value) {
+        edit(
+            commit = true
+        ) {
+            putString(Constants.SHARED_PREFERENCES_COUNTRY_DATA_KEY, Gson().toJson(value))
+        }
+    }
+    get() = Gson().fromJson(getString(Constants.SHARED_PREFERENCES_COUNTRY_DATA_KEY, null), CountryDataModel::class.java)
 
 fun ViewGroup.addTabDots(currentPage: Int, totalPages: Int) {
     val dots = arrayOfNulls<TextView>(totalPages)

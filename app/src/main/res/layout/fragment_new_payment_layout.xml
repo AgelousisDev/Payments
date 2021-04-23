@@ -224,16 +224,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/paymentAmountRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/nav_header_vertical_spacing"
-                android:layoutAnimation="@anim/layout_animation_fall_down"
-                android:nestedScrollingEnabled="false"
-                android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/addPaymentButton"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -249,6 +239,16 @@
                 android:textColor="@color/dayNightTextOnBackground"
                 app:cornerRadius="8dp"
                 app:icon="@drawable/ic_add" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/paymentAmountRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/nav_header_vertical_spacing"
+                android:layoutAnimation="@anim/layout_animation_fall_down"
+                android:nestedScrollingEnabled="false"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         </LinearLayout>
 
