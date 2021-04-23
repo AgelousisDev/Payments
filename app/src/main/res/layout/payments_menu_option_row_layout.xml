@@ -29,7 +29,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@{menuOption.icon}"
-        app:tint="@color/colorAccent"
         tools:srcCompat="@drawable/ic_clear_all" />
 
     <com.google.android.material.textview.MaterialTextView

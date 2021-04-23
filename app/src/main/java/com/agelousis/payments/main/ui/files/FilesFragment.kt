@@ -285,7 +285,7 @@ class FilesFragment: Fragment(), FilePresenter {
                 selectedFilePositions.size
             )
         else
-            (activity as? MainActivity)?.appBarTitle = resources.getString(R.string.key_files_label)
+            (activity as? MainActivity)?.appBarTitle = resources.getString(R.string.key_invoices_label)
     }
 
 }

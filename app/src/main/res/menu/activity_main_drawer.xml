@@ -16,8 +16,8 @@
                     android:title="@string/key_profile_label"/>
                 <item
                     android:id="@+id/navigationFiles"
-                    android:icon="@drawable/ic_pdf"
-                    android:title="@string/key_files_label"/>
+                    android:icon="@drawable/ic_invoice"
+                    android:title="@string/key_invoice_label"/>
                 <item
                     android:id="@+id/navigationGraph"
                     android:icon="@drawable/ic_diagram"

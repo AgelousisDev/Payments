@@ -8,6 +8,9 @@
         <variable
             name="isLoading"
             type="Boolean" />
+        <variable
+            name="presenter"
+            type="com.agelousis.payments.main.ui.periodFilter.presenter.PeriodFilterFragmentPresenter" />
     </data>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -66,6 +69,21 @@
             app:label="@string/key_maximum_payment_month_label"
             app:showLine="true"
             app:iconResource="@drawable/ic_payment_month"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/addPaymentButton"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/activity_general_horizontal_margin"
+            android:onClick="@{() -> presenter.onPdfReceipt()}"
+            android:text="@string/key_export_receipt_label"
+            android:textAllCaps="false"
+            android:fontFamily="@font/ubuntu"
+            app:cornerRadius="8dp"
+            app:icon="@drawable/ic_invoice"
+            app:iconSize="24dp"/>
 
         <com.airbnb.lottie.LottieAnimationView
             android:layout_width="match_parent"

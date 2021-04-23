@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 menuOptionsIsVisible = false
             }
             in FilesFragment::class.java.name -> {
-                appBarTitle = resources.getString(R.string.key_files_label)
+                appBarTitle = resources.getString(R.string.key_invoices_label)
                 floatingButtonImage = R.drawable.ic_delete
                 floatingButtonState = false
                 floatingButtonPosition = FloatingButtonPosition.END

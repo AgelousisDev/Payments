@@ -15,21 +15,21 @@ import java.util.*
 
 @Parcelize
 data class PersonModel(val personId: Int? = null,
-                       val groupId: Int?,
-                       val groupName: String?,
-                       val firstName: String?,
-                       val surname: String?,
-                       val phone: String?,
-                       val parentName: String?,
-                       val parentPhone: String?,
-                       val email: String?,
-                       val active: Boolean?,
-                       val free: Boolean?,
-                       val payments: List<PaymentAmountModel>?,
+                       val groupId: Int? = null,
+                       val groupName: String? = null,
+                       val firstName: String? = null,
+                       val surname: String? = null,
+                       val phone: String? = null,
+                       val parentName: String? = null,
+                       val parentPhone: String? = null,
+                       val email: String? = null,
+                       val active: Boolean? = null,
+                       val free: Boolean? = null,
+                       val payments: List<PaymentAmountModel>? = null,
                        val groupColor: Int? = null,
                        val groupImage: String? = null,
-                       val messageTemplate: String?,
-                       val paymentType: PaymentType?
+                       val messageTemplate: String? = null,
+                       val paymentType: PaymentType? = null
 ): Parcelable {
 
     @IgnoredOnParcel

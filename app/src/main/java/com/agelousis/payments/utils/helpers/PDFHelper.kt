@@ -111,16 +111,21 @@ class PDFHelper {
 
     private fun addPersons(context: Context, userModel: UserModel?, document: Document, persons: List<PersonModel>) {
         persons.forEach { personModel ->
-            document.add(
-                Paragraph(
-                    "${personModel.fullName}\n${context.resources.getString(R.string.key_phone_label)}: ${personModel.phone}",
-                    Font(ubuntuFont, 14.0f, Font.BOLD, BaseColor.GRAY)
-                ).also {
-                    it.alignment = Element.ALIGN_LEFT
-                })
-
-            document.add(Chunk.NEWLINE)
-            document.add(Chunk(LineSeparator()))
+            ifLet(
+                personModel.fullName,
+                personModel.phone
+            ) { list ->
+                document.add(
+                    Paragraph(
+                        "${list.first()}\n${context.resources.getString(R.string.key_phone_label)}: ${list.second()}",
+                        Font(ubuntuFont, 14.0f, Font.BOLD, BaseColor.GRAY)
+                    ).also {
+                        it.alignment = Element.ALIGN_LEFT
+                    }
+                )
+                document.add(Chunk.NEWLINE)
+                document.add(Chunk(LineSeparator()))
+            }
 
             addPayments(
                 context = context,

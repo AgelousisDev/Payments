@@ -67,11 +67,11 @@
     <string name="key_proceed_label">Proceed</string>
     <string name="key_invalid_database_file_message">Invalid database file\nSelect another File</string>
     <string name="key_database_successfully_imported_message">Database is updated</string>
-    <string name="key_files_label">Files</string>
+    <string name="key_invoices_label">Invoices</string>
     <string name="key_this_month_label">THIS MONTH</string>
     <string name="key_no_files_title_message">There are no files at this time</string>
     <string name="key_no_files_message">Navigate to home &amp; swipe group or person to create a PDF</string>
-    <string name="key_search_in_files_label">Search in files</string>
+    <string name="key_search_in_invoices_label">Search in invoices</string>
     <string name="key_yes_label">YES</string>
     <string name="key_no_label">NO</string>
     <string name="key_file_saved_message">PDF created successfully. Navigate to see the list of PDFs</string>
@@ -106,7 +106,7 @@
     <string name="key_payment_setting_label">Payment Settings</string>
     <string name="key_default_payment_amount_label">Default payment amount</string>
     <string name="key_payment_type_label">Payment Type</string>
-    <string name="key_export_payments_to_csv_label">Export to CSV</string>
+    <string name="key_export_payments_to_csv_and_receipt_label">Export Receipt/CSV</string>
     <string name="key_filter_period_label">Period Filter</string>
     <string name="key_minimum_payment_month_label">Start Date</string>
     <string name="key_maximum_payment_month_label">End Date</string>
@@ -160,8 +160,7 @@
                 <li>Add colorful or groups with image</li>
                 <li>Watch your payments by group name alphabetically</li>
                 <li>Swipe left to create a client\'s PDF - Swipe right to delete</li>
-                <li>Make a long click to share message to the client</li>
-                <li>Make a long click to each group to send SMS to all clients</li>
+                <li>Make a long click and delete, contact and export receipt of the selected clients</li>
             </ul>
         ]]>
     </string>
@@ -211,6 +210,8 @@
     <string name="key_search_in_countries_label">Search in Countries</string>
     <string name="key_payments_selected_value_label">%d selected</string>
     <string name="key_delete_selected_payments_message">Do you want to delete the selected clients and their payments?</string>
+    <string name="key_export_receipt_label">Export PDF Receipt</string>
+    <string name="key_receipt_value_label">Receipt (%s)</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>
