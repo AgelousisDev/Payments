@@ -64,6 +64,9 @@ data class PersonModel(val personId: Int? = null,
             }
         }
 
+    val singlePaymentProducts
+        get() = payments?.mapNotNull { it.singlePaymentProducts }?.flatten()?.joinToString(separator = ",")
+
 }
 
 @Parcelize
@@ -74,7 +77,8 @@ data class PaymentAmountModel(val paymentId: Int? = null,
                               val skipPayment: Boolean?,
                               val paymentNote: String?,
                               val paymentDateNotification: Boolean?,
-                              val singlePayment: Boolean?
+                              val singlePayment: Boolean?,
+                              val singlePaymentProducts: List<String>?
 ): Parcelable {
 
     @IgnoredOnParcel var paymentAmountRowState = PaymentAmountRowState.NORMAL

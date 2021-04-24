@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import com.agelousis.payments.R
+import com.agelousis.payments.databinding.DismissibleChipBinding
 import com.agelousis.payments.databinding.FragmentNewPaymentAmountLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
@@ -16,6 +19,7 @@ import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.views.currencyEditText.interfaces.AmountListener
 import com.agelousis.payments.views.detailsSwitch.interfaces.AppSwitchListener
+import com.google.android.material.chip.Chip
 import java.util.*
 
 class NewPaymentAmountFragment: Fragment(), AmountListener {
@@ -46,7 +50,8 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
                 skipPayment = binding.skipPaymentAppSwitchLayout.isChecked,
                 paymentNote = binding.notesField.text?.toString(),
                 paymentDateNotification = binding.paymentDateNotificationSwitchLayout.isChecked,
-                singlePayment = binding.singlePaymentAppSwitchLayout.isChecked
+                singlePayment = binding.singlePaymentAppSwitchLayout.isChecked,
+                singlePaymentProducts = (binding.singlePaymentProductsChipGroup.children as? Sequence<*>)?.mapNotNull { view -> (view as? Chip)?.text?.toString() }?.toList()
             )
             currentPaymentAmountModel != it
         } ?: true
@@ -111,12 +116,56 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
         }
         binding.singlePaymentAppSwitchLayout.appSwitchListener = object: AppSwitchListener {
             override fun onAppSwitchValueChanged(isChecked: Boolean) {
-                binding.paymentMonthDetailsLayout.visibility = if (isChecked) View.GONE else View.VISIBLE
+                binding.singlePaymentState = isChecked
             }
+        }
+        binding.singlePaymentProductsField.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                addSinglePaymentProductChip(
+                    product = binding.singlePaymentProductsField.text?.toString() ?: return@setOnEditorActionListener true
+                )
+                binding.singlePaymentProductsField.text?.clear()
+            }
+            true
+        }
+        binding.singlePaymentProductsField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus && binding.singlePaymentProductsField.text?.isNotEmpty() == true) {
+                addSinglePaymentProductChip(
+                    product = binding.singlePaymentProductsField.text?.toString() ?: return@setOnFocusChangeListener
+                )
+                binding.singlePaymentProductsField.text?.clear()
+            }
+        }
+        args.paymentAmountDataModel?.singlePaymentProducts?.forEach { singlePaymentProduct ->
+            addSinglePaymentProductChip(
+                product = singlePaymentProduct
+            )
         }
     }
 
+    private fun addSinglePaymentProductChip(product: String) {
+        val dismissibleChipBinding = DismissibleChipBinding.inflate(
+            layoutInflater,
+            binding.singlePaymentProductsChipGroup,
+            false
+        ).also {
+            it.text = product
+        }
+        dismissibleChipBinding.chip.setOnCloseIconClickListener {
+            binding.singlePaymentProductsChipGroup.removeView(
+                dismissibleChipBinding.root
+            )
+        }
+        binding.singlePaymentProductsChipGroup.addView(
+            dismissibleChipBinding.root
+        )
+    }
+
     fun checkInputFields() {
+        if (binding.singlePaymentProductsField.text?.isNotEmpty() == true)
+            addSinglePaymentProductChip(
+                product = binding.singlePaymentProductsField.text?.toString() ?: ""
+            )
         ifLet(
             binding.amountLayout.doubleValue,
             binding.dateDetailsLayout.dateValue
@@ -130,7 +179,8 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
                     skipPayment = binding.skipPaymentAppSwitchLayout.isChecked,
                     paymentNote = binding.notesField.text?.toString(),
                     paymentDateNotification = binding.paymentDateNotificationSwitchLayout.isChecked,
-                    singlePayment = binding.singlePaymentAppSwitchLayout.isChecked
+                    singlePayment = binding.singlePaymentAppSwitchLayout.isChecked,
+                    singlePaymentProducts = (binding.singlePaymentProductsChipGroup.children as? Sequence<*>)?.mapNotNull { view -> (view as? Chip)?.text?.toString()?.takeIf { it.isNotEmpty() } ?: binding.singlePaymentProductsField.text?.toString() }?.toList()
                 )
             )
             findNavController().popBackStack()

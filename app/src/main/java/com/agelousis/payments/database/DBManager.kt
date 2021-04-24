@@ -315,6 +315,7 @@ class DBManager(context: Context) {
                         it.put(SQLiteHelper.PAYMENT_NOTE, paymentAmountModel.paymentNote)
                         it.put(SQLiteHelper.PAYMENT_DATE_NOTIFICATION, paymentAmountModel.paymentDateNotification)
                         it.put(SQLiteHelper.SINGLE_PAYMENT, paymentAmountModel.singlePayment)
+                        it.put(SQLiteHelper.SINGLE_PAYMENT_PRODUCTS, paymentAmountModel.singlePaymentProducts?.joinToString(separator = ","))
                     }
                 )
             }
@@ -363,6 +364,7 @@ class DBManager(context: Context) {
                         it.put(SQLiteHelper.PAYMENT_NOTE, paymentAmountModel.paymentNote)
                         it.put(SQLiteHelper.PAYMENT_DATE_NOTIFICATION, paymentAmountModel.paymentDateNotification)
                         it.put(SQLiteHelper.SINGLE_PAYMENT, paymentAmountModel.singlePayment)
+                        it.put(SQLiteHelper.SINGLE_PAYMENT_PRODUCTS, paymentAmountModel.singlePaymentProducts?.joinToString(separator = ","))
                     }
                 )
             }
@@ -436,7 +438,8 @@ class DBManager(context: Context) {
                                     paymentDate = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PAYMENT_DATE)),
                                     skipPayment = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.SKIP_PAYMENT)) ?: 0 > 0,
                                     paymentDateNotification = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PAYMENT_DATE_NOTIFICATION)) ?: 0 > 0,
-                                    singlePayment = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.SINGLE_PAYMENT)) ?: 0 > 0
+                                    singlePayment = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.SINGLE_PAYMENT)) ?: 0 > 0,
+                                    singlePaymentProducts = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.SINGLE_PAYMENT_PRODUCTS))?.split(",")
                                 )
                             )
                         }
@@ -520,7 +523,8 @@ class DBManager(context: Context) {
                                     paymentDate = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PAYMENT_DATE)),
                                     skipPayment = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.SKIP_PAYMENT)) ?: 0 > 0,
                                     paymentDateNotification = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.PAYMENT_DATE_NOTIFICATION)) ?: 0 > 0,
-                                    singlePayment = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.SINGLE_PAYMENT)) ?: 0 > 0
+                                    singlePayment = paymentsCursor.getIntOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.SINGLE_PAYMENT)) ?: 0 > 0,
+                                    singlePaymentProducts = paymentsCursor.getStringOrNull(paymentsCursor.getColumnIndex(SQLiteHelper.SINGLE_PAYMENT_PRODUCTS))?.split(",")
                                 )
                             )
                         }

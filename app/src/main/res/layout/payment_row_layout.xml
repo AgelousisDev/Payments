@@ -128,11 +128,35 @@
             android:singleLine="true"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
+            app:layout_constraintVertical_bias="0.0"
             app:layout_constraintEnd_toStartOf="@+id/entryTotalAmountTextView"
             app:layout_constraintStart_toEndOf="@+id/paymentRowHeaderFrameLayout"
             app:layout_constraintTop_toBottomOf="@+id/entryCustomerNameTextView"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="10-11-2019" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/singlePaymentProductsView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:layout_marginBottom="@dimen/activity_general_horizontal_margin"
+            android:fontFamily="@font/ubuntu_monospace"
+            android:gravity="start"
+            android:text='@{String.format(@string/key_single_payment_value_label, personModel.singlePaymentProducts)}'
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:visibility='@{personModel.singlePaymentProducts != null &amp;&amp; personModel.singlePaymentProducts != "" ? View.VISIBLE : View.GONE}'
+            app:layout_constraintEnd_toStartOf="@+id/entryTotalAmountTextView"
+            app:layout_constraintStart_toEndOf="@+id/paymentRowHeaderFrameLayout"
+            app:layout_constraintTop_toBottomOf="@+id/entryDateTextView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="Single Payment: sample" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

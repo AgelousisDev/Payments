@@ -61,6 +61,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         const val PAYMENT_NOTE = "payment_note"
         const val PAYMENT_DATE_NOTIFICATION = "payment_date_notification"
         const val SINGLE_PAYMENT = "single_payment"
+        const val SINGLE_PAYMENT_PRODUCTS = "single_payment_products"
 
         // Files Table Columns
         const val DESCRIPTION = "description"
@@ -73,7 +74,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         const val DB_NAME_EXTENSION = ".db"
 
         // database version
-        private const val DB_VERSION = 2
+        private const val DB_VERSION = 3
 
         // Creating users table query
         private const val USERS_TABLE_CREATION_QUERY = "CREATE TABLE $USERS_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -115,6 +116,13 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         db?.execSQL(FILES_TABLE_CREATION_QUERY)
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {}
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+        when {
+            newVersion > oldVersion ->
+                db?.execSQL(
+                    "ALTER TABLE $PAYMENTS_TABLE_NAME ADD COLUMN $SINGLE_PAYMENT_PRODUCTS TEXT"
+                )
+        }
+    }
 
 }
