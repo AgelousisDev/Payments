@@ -78,7 +78,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/activity_general_horizontal_margin"
             android:onClick="@{() -> presenter.onPdfReceipt()}"
-            android:text="@string/key_export_receipt_label"
+            android:text="@string/key_export_invoice_label"
             android:textAllCaps="false"
             android:fontFamily="@font/ubuntu"
             app:cornerRadius="8dp"

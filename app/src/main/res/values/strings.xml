@@ -210,7 +210,7 @@
     <string name="key_search_in_countries_label">Search in Countries</string>
     <string name="key_payments_selected_value_label">%d selected</string>
     <string name="key_delete_selected_payments_message">Do you want to delete the selected clients and their payments?</string>
-    <string name="key_export_receipt_label">Export PDF Receipt</string>
+    <string name="key_export_invoice_label">Export PDF Invoice</string>
     <string name="key_receipt_value_label">Receipt (%s)</string>
 
     <string-array name="key_payment_type_array">
