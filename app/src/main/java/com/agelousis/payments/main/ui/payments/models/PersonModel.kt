@@ -68,7 +68,7 @@ data class PersonModel(val personId: Int? = null,
         }
 
     private val singlePaymentProducts
-        get() = payments?.mapNotNull { it.singlePaymentProducts }?.flatten()?.joinToString(separator = ",")
+        get() = if (payments?.any { it.singlePayment == true } == true) payments.mapNotNull { it.singlePaymentProducts }.flatten().joinToString(separator = ",") else null
 
 }
 
@@ -80,7 +80,7 @@ data class PaymentAmountModel(val paymentId: Int? = null,
                               val skipPayment: Boolean?,
                               val paymentNote: String?,
                               val paymentDateNotification: Boolean?,
-                              val singlePayment: Boolean?,
+                              var singlePayment: Boolean?,
                               val singlePaymentProducts: List<String>?
 ): Parcelable {
 

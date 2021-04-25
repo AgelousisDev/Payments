@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 menuOptionsIsVisible = false
             }
             in PdfViewerFragment::class.java.name -> {
-                appBarTitle = resources.getString(R.string.key_pdf_label)
+                appBarTitle = resources.getString(R.string.key_invoice_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_share
                 floatingButtonPosition = FloatingButtonPosition.END

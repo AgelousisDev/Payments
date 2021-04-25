@@ -11,6 +11,9 @@
         <variable
             name="presenter"
             type="com.agelousis.payments.main.ui.payments.presenters.PaymentPresenter" />
+        <variable
+            name="adapterPosition"
+            type="Integer" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,7 +21,7 @@
         android:focusable="true"
         android:clickable="true"
         viewBackground="@{personModel.backgroundDrawable}"
-        android:onClick="@{() -> presenter.onPaymentSelected(personModel)}"
+        android:onClick="@{() -> presenter.onPaymentSelected(personModel, adapterPosition)}"
         android:animateLayoutChanges="true"
         tools:targetApi="M">
 

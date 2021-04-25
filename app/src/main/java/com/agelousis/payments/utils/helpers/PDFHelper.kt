@@ -179,7 +179,9 @@ class PDFHelper {
             )
             table.addCell(
                 getCell(
-                    text = personModel.personId.invoiceNumber?.let { String.format("%s-%d", it, paymentAmountModel.paymentId ?: 0) } ?: context.resources.getString(R.string.key_empty_field_label) ,
+                    text = personModel.personId.invoiceNumber?.let {
+                        String.format("%s-%d", it, paymentAmountModel.paymentId ?: 0)
+                    } ?: paymentAmountModel.paymentId.invoiceNumber ?: context.resources.getString(R.string.key_empty_field_label) ,
                     withBorder = false,
                     textColor = BaseColor.GRAY,
                     backgroundColor = if (index % 2 == 0) BaseColor.WHITE else lightGreyColor

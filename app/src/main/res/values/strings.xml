@@ -70,14 +70,14 @@
     <string name="key_invoices_label">Invoices</string>
     <string name="key_this_month_label">THIS MONTH</string>
     <string name="key_no_files_title_message">There are no files at this time</string>
-    <string name="key_no_files_message">Navigate to home &amp; swipe group or person to create a PDF</string>
+    <string name="key_no_files_message">Navigate to home &amp; swipe group or person to create an Invoice</string>
     <string name="key_search_in_invoices_label">Search in invoices</string>
     <string name="key_yes_label">YES</string>
     <string name="key_no_label">NO</string>
-    <string name="key_file_saved_message">PDF created successfully. Navigate to see the list of PDFs</string>
+    <string name="key_file_saved_message">Invoice created successfully. Navigate on the \"Invoices\" option to see the list of invoices</string>
     <string name="key_delete_selected_files_message">Do you want to delete the selected files?</string>
     <string name="key_total_payments_label">Total Payments</string>
-    <string name="key_file_not_exists_message">It seems that this PDF does not exist. Recreate it by navigating to home &amp; swipe a person to left.</string>
+    <string name="key_file_not_exists_message">It seems that this invoice does not exist. Recreate it by navigating to home &amp; swipe a person to left.</string>
     <string name="key_address_label">Address</string>
     <string name="key_id_card_number_label">ID Number</string>
     <string name="key_social_insurance_number_label">Social Insurance Number</string>
@@ -106,7 +106,7 @@
     <string name="key_payment_setting_label">Payment Settings</string>
     <string name="key_default_payment_amount_label">Default payment amount</string>
     <string name="key_payment_type_label">Payment Type</string>
-    <string name="key_export_payments_to_csv_and_receipt_label">Export Receipt/CSV</string>
+    <string name="key_export_payments_to_csv_and_invoice_label">Export Invoice/CSV</string>
     <string name="key_filter_period_label">Period Filter</string>
     <string name="key_minimum_payment_month_label">Start Date</string>
     <string name="key_maximum_payment_month_label">End Date</string>
@@ -159,8 +159,8 @@
             <ul>
                 <li>Add colorful or groups with image</li>
                 <li>Watch your payments by group name alphabetically</li>
-                <li>Swipe left to create a client\'s PDF - Swipe right to delete</li>
-                <li>Make a long click and delete, contact and export receipt of the selected clients</li>
+                <li>Swipe left to create a client\'s invoice - Swipe right to delete</li>
+                <li>Make a long click and delete, contact and export invoice of the selected clients</li>
             </ul>
         ]]>
     </string>
@@ -196,7 +196,6 @@
     <string name="key_unsaved_changes_message">You have unsaved changes left</string>
     <string name="key_discard_label">Discard</string>
     <string name="key_save_label">Save</string>
-    <string name="key_pdf_label">Pdf</string>
     <string name="key_files_selected_value_label">%d selected</string>
     <string name="key_print_label">Print</string>
     <string name="key_send_sms_to_group_value_message">Do you want to send SMS to the %s group?</string>
@@ -210,8 +209,7 @@
     <string name="key_search_in_countries_label">Search in Countries</string>
     <string name="key_payments_selected_value_label">%d selected</string>
     <string name="key_delete_selected_payments_message">Do you want to delete the selected clients and their payments?</string>
-    <string name="key_export_invoice_label">Export PDF Invoice</string>
-    <string name="key_receipt_value_label">Receipt (%s)</string>
+    <string name="key_export_invoice_label">Export Invoice</string>
     <string name="key_products_label">Products</string>
 
     <string-array name="key_payment_type_array">

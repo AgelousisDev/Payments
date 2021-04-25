@@ -57,7 +57,6 @@
                 android:onClick="@{() -> presenter.onDeletePayments()}">
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/deleteButton"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     app:srcCompat="@drawable/ic_delete"
@@ -78,10 +77,9 @@
                 android:gravity="center"
                 android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:onClick="@{() -> presenter.onExportReceipt()}">
+                android:onClick="@{() -> presenter.onExportInvoice()}">
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/receiptButton"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     app:srcCompat="@drawable/ic_invoice" />
@@ -105,7 +103,6 @@
                 android:onClick="@{() -> presenter.onPaymentsSendSms()}">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/messageButton"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 app:srcCompat="@drawable/ic_speech_bubble" />

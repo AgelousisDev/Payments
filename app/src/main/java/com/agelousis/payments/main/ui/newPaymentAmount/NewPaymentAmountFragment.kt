@@ -55,6 +55,8 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
             )
             currentPaymentAmountModel != it
         } ?: true
+    private val singlePaymentProductList
+        get() = (binding.singlePaymentProductsChipGroup.children as? Sequence<*>)?.mapNotNull { view -> (view as? Chip)?.text?.toString()?.takeIf { it.isNotEmpty() } ?: binding.singlePaymentProductsField.text?.toString() }?.toList()?.takeIf { it.isNotEmpty() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -180,7 +182,7 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
                     paymentNote = binding.notesField.text?.toString(),
                     paymentDateNotification = binding.paymentDateNotificationSwitchLayout.isChecked,
                     singlePayment = binding.singlePaymentAppSwitchLayout.isChecked,
-                    singlePaymentProducts = (binding.singlePaymentProductsChipGroup.children as? Sequence<*>)?.mapNotNull { view -> (view as? Chip)?.text?.toString()?.takeIf { it.isNotEmpty() } ?: binding.singlePaymentProductsField.text?.toString() }?.toList()
+                    singlePaymentProducts = singlePaymentProductList
                 )
             )
             findNavController().popBackStack()

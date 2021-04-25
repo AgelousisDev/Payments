@@ -17,7 +17,7 @@ enum class PaymentsMenuOptionType {
     val title
         get() = when(this) {
             CLEAR_PAYMENTS -> R.string.key_clear_all_payments_payments_label
-            CSV_EXPORT -> R.string.key_export_payments_to_csv_and_receipt_label
+            CSV_EXPORT -> R.string.key_export_payments_to_csv_and_invoice_label
             SEND_SMS_GLOBALLY -> R.string.key_send_sms_globally_label
         }
 

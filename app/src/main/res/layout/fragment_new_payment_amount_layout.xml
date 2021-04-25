@@ -53,7 +53,7 @@
                 android:id="@+id/paymentMonthDetailsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="@{paymentAmountModel.singlePayment == true || singlePaymentState == true ? View.GONE : View.VISIBLE}"
+                android:visibility="@{paymentAmountModel.singlePayment == true ? singlePaymentState == false ? View.VISIBLE : View.GONE : singlePaymentState == true ? View.GONE : View.VISIBLE}"
                 monthYearValue="@{paymentAmountModel.paymentMonth}"
                 app:label="@string/key_payment_month_label"
                 app:showLine="true"

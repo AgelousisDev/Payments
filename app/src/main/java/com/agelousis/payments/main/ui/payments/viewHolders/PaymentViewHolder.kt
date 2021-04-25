@@ -9,6 +9,7 @@ class PaymentViewHolder(private val binding: PaymentRowLayoutBinding): RecyclerV
 
     fun bind(personModel: PersonModel, presenter: PaymentPresenter) {
         binding.personModel = personModel
+        binding.adapterPosition = adapterPosition
         binding.presenter = presenter
         itemView.setOnLongClickListener {
             presenter.onPaymentLongPressed(

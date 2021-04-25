@@ -35,11 +35,11 @@ class PeriodFilterFragment: Fragment(), PeriodFilterFragmentPresenter {
         private const val LOADING_TIME = 5000L
     }
 
-    override fun onPdfReceipt() {
+    override fun onPdfInvoice() {
         val minimumMonthDate = binding.periodFilterMinimumPaymentMonthLayout.dateValue?.toDateWith(pattern = Constants.MONTH_DATE_FORMAT, locale = Locale.US) ?: return
         val maximumMonthDate = binding.periodFilterMaximumPaymentMonthLayout.dateValue?.toDateWith(pattern = Constants.MONTH_DATE_FORMAT, locale = Locale.US) ?: return
         initializePDFCreation(
-            payments = args.paymentListData.filter { it.paymentMonthDate ?: Date() in minimumMonthDate..maximumMonthDate }
+            payments = args.paymentListData.filter { it.paymentMonthDate ?: Date() in minimumMonthDate..maximumMonthDate }.sortedBy { it.paymentMonthDate }
         )
     }
 
@@ -113,12 +113,9 @@ class PeriodFilterFragment: Fragment(), PeriodFilterFragmentPresenter {
                     userModel = (activity as? MainActivity)?.userModel,
                     file = pdfFile,
                     description = String.format(
-                        resources.getString(R.string.key_receipt_value_label),
-                        payments.mapNotNull {
-                            it.paymentId?.toString()
-                        }.joinToString(
-                            separator = ","
-                        )
+                        "%s - %s",
+                        binding.periodFilterMinimumPaymentMonthLayout.dateValue ?: "",
+                        binding.periodFilterMaximumPaymentMonthLayout.dateValue ?: ""
                     )
                 )
                 context?.sharePDF(

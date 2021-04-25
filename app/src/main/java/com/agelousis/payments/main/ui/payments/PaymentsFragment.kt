@@ -52,7 +52,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         )
     }
 
-    override fun onExportReceipt() {
+    override fun onExportInvoice() {
         initializePDFCreation(
             persons = filteredList.filterIsInstance<PersonModel>().filter { it.isSelected },
             fromMultipleSelection = true
@@ -72,12 +72,20 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         )
     }
 
-    override fun onPaymentSelected(personModel: PersonModel) {
-        findNavController().navigate(
-            PaymentsFragmentDirections.actionPaymentListFragmentToNewPaymentFragment(
-                personDataModel = personModel
-            )
-        )
+    override fun onPaymentSelected(personModel: PersonModel, adapterPosition: Int) {
+        when {
+            filteredList.filterIsInstance<PersonModel>().any { it.isSelected } ->
+                onPaymentLongPressed(
+                    paymentIndex = adapterPosition,
+                    isSelected = !personModel.isSelected
+                )
+            else ->
+                findNavController().navigate(
+                    PaymentsFragmentDirections.actionPaymentListFragmentToNewPaymentFragment(
+                        personDataModel = personModel
+                    )
+                )
+        }
     }
 
     override fun onPaymentShareMessage(personModel: PersonModel) {
@@ -303,7 +311,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                         persons.firstOrNull()?.fullName ?: ""
                     else
                         persons.mapNotNull { it.groupName }.joinToString(
-                            separator = "-"
+                            separator = " - "
                         )
                 )
                 if (fromMultipleSelection)
