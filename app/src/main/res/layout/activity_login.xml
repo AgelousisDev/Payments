@@ -26,6 +26,9 @@
         <variable
             name="passwordLength"
             type="Integer" />
+        <variable
+            name="savedUsersCount"
+            type="Integer" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -287,7 +290,7 @@
         android:clickable="true"
         android:focusable="true"
         android:onClick="@{() -> presenter.onUsersSelect()}"
-        android:visibility="@{signInState == SignInState.LOGIN ? View.VISIBLE : View.GONE}"
+        android:visibility="@{signInState == SignInState.LOGIN &amp;&amp; savedUsersCount > 1 ? View.VISIBLE : View.GONE}"
         app:layout_constraintBottom_toTopOf="@+id/loginButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

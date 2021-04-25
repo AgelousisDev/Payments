@@ -47,36 +47,77 @@
                 android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
                 tools:text="1 selected"/>
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/deleteButton"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
                 android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
-                android:layout_gravity="center_vertical|end"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:onClick="@{() -> presenter.onDeletePayments()}"
-                app:srcCompat="@drawable/ic_delete"
-                app:tint="@color/dayNightTextOnBackground" />
+                android:onClick="@{() -> presenter.onDeletePayments()}">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/receiptButton"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/deleteButton"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/ic_delete"
+                    app:tint="@color/dayNightTextOnBackground" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextViewLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/key_delete_label"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
                 android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
-                android:layout_gravity="center_vertical|end"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:onClick="@{() -> presenter.onExportReceipt()}"
-                app:srcCompat="@drawable/ic_invoice" />
+                android:onClick="@{() -> presenter.onExportReceipt()}">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/receiptButton"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    app:srcCompat="@drawable/ic_invoice" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextViewLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/key_invoice_label" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="@{() -> presenter.onPaymentsSendSms()}">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/messageButton"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
-                android:layout_gravity="center_vertical|end"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:onClick="@{() -> presenter.onPaymentsSendSms()}"
                 app:srcCompat="@drawable/ic_speech_bubble" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextViewLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/key_sms_label" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

@@ -19,6 +19,7 @@
         android:clickable="true"
         viewBackground="@{personModel.backgroundDrawable}"
         android:onClick="@{() -> presenter.onPaymentSelected(personModel)}"
+        android:animateLayoutChanges="true"
         tools:targetApi="M">
 
         <androidx.appcompat.widget.AppCompatImageView

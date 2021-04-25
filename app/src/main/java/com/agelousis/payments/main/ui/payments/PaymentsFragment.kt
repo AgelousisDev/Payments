@@ -93,7 +93,9 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         ) as? PersonModel)?.isSelected = isSelected
         appBarIsVisible = filteredList.filterIsInstance<PersonModel>().any { it.isSelected }
         selectedPayments = filteredList.filterIsInstance<PersonModel>().count { it.isSelected }
-        (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
+        (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.restoreItem(
+            position = paymentIndex
+        )
     }
 
     override fun onPersonAdd(groupModel: GroupModel) {

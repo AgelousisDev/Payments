@@ -246,6 +246,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
         viewModel.usersLiveData.observe(this) { users ->
             signInState = SignInState.LOGIN
             binding.signInState = signInState
+            binding.savedUsersCount = users.size
             showUserSelectionFragment(
                 users = users
             )
@@ -269,11 +270,16 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
     }
 
     private fun showUserSelectionFragment(users: List<UserModel>) {
-        if (supportFragmentManager.findFragmentByTag(Constants.USER_SELECTION_FRAGMENT_TAG) == null)
-            UserSelectionFragment.show(
-                supportFragmentManager = supportFragmentManager,
-                users = ArrayList(users),
+        if (users.isSizeOne)
+            onUserSelected(
+                userModel = users.first()
             )
+        else
+            if (supportFragmentManager.findFragmentByTag(Constants.USER_SELECTION_FRAGMENT_TAG) == null)
+                UserSelectionFragment.show(
+                    supportFragmentManager = supportFragmentManager,
+                    users = ArrayList(users),
+                )
     }
 
     private fun configureLoginState() {

@@ -185,7 +185,7 @@
         <![CDATA[
             <ul>
                 <li>Edit the order of payments with the order that you prefer</li>
-                <li>Keeping it as in the screenshot above, \'<b>Free</b>\' payments show, then \'<b>Charged</b>\' payments and last all the \'<b>Expired</b>\'</li>
+                <li>Keeping it as in the screenshot above, \'<b>Free</b>\' payments show, then \'<b>Charged</b>\' payments, then \'<b>Expired</b>\' and last all the \'<b>Single Payments</b>\'</li>
                 <li>This order will apply for all payments under each group</li>
             </ul>
         ]]>
