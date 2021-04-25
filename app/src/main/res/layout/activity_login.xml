@@ -23,6 +23,9 @@
         <variable
             name="biometricsActive"
             type="Boolean" />
+        <variable
+            name="passwordLength"
+            type="Integer" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -234,7 +237,8 @@
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="@{userModel.biometrics == true &amp;&amp; biometricsActive == true ? userModel.password : null}" />
+                        android:text="@{userModel.biometrics == true &amp;&amp; biometricsActive == true ? userModel.password : null}"
+                        textInputEditTextMaxLength="@{passwordLength}"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 

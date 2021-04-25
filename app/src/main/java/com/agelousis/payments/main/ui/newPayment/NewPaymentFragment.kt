@@ -28,6 +28,7 @@ import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.models.PersonModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
+import com.agelousis.payments.utils.helpers.CountryHelper
 import com.agelousis.payments.utils.models.CalendarDataModel
 import com.agelousis.payments.utils.models.NotificationDataModel
 import com.agelousis.payments.views.detailsSwitch.interfaces.AppSwitchListener
@@ -166,7 +167,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             binding.countryCodeLayout.setCountryForPhoneCode(countryZipCode.replace("+", "").toIntOrNull() ?: return@let )
         } ?: MainApplication.countryDataModel?.let { countryDataModel ->
             binding.countryCodeLayout.setCountryForNameCode(countryDataModel.countryCode)
-        } ?: Constants.CountryCodes.getCountryCode(context = context ?: return)?.let { countryCode ->
+        } ?: CountryHelper.getCountryCode(context = context ?: return)?.let { countryCode ->
             binding.countryCodeLayout.setCountryForNameCode(countryCode)
         }
         binding.groupDetailsLayout.setOnDetailsPressed {

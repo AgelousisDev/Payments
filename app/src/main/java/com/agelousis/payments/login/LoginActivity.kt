@@ -149,6 +149,7 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
         binding.userModel = userModel
         binding.biometricsActive = userModel.biometrics == true
         binding.loginButtonState = userModel.username?.isNotEmpty() == true && userModel.password?.isNotEmpty() == true
+        binding.passwordLength = userModel.password?.length
         showBiometrics(
             biometrics = userModel.biometrics == true
         )

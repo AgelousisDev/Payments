@@ -213,7 +213,6 @@
     <string name="key_export_invoice_label">Export PDF Invoice</string>
     <string name="key_receipt_value_label">Receipt (%s)</string>
     <string name="key_products_label">Products</string>
-    <string name="key_single_payment_value_label">Single Payment: %s</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>

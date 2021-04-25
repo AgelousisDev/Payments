@@ -60,6 +60,7 @@ import com.agelousis.payments.database.SQLiteHelper
 import com.agelousis.payments.login.enumerations.UIMode
 import com.agelousis.payments.main.ui.countrySelector.enumerations.CountryDataModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
+import com.agelousis.payments.main.ui.paymentsFiltering.enumerations.PaymentsFilteringOptionType
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.custom.ImprovedBulletSpan
@@ -71,6 +72,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textview.MaterialTextView
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import java.io.ByteArrayOutputStream
@@ -839,6 +841,16 @@ var SharedPreferences.countryDataModel: CountryDataModel?
         }
     }
     get() = Gson().fromJson(getString(Constants.SHARED_PREFERENCES_COUNTRY_DATA_KEY, null), CountryDataModel::class.java)
+
+var SharedPreferences.paymentsFilteringOptionTypes: List<PaymentsFilteringOptionType>?
+    set(value) {
+        edit(
+            commit = true
+        ) {
+            putString(Constants.SHARED_PREFERENCES_PAYMENTS_FILTERING_DATA_KEY, Gson().toJson(value))
+        }
+    }
+    get() = Gson().fromJson<List<PaymentsFilteringOptionType>>(getString(Constants.SHARED_PREFERENCES_PAYMENTS_FILTERING_DATA_KEY, null), object: TypeToken<List<PaymentsFilteringOptionType>>() {}.type)
 
 fun ViewGroup.addTabDots(currentPage: Int, totalPages: Int) {
     val dots = arrayOfNulls<TextView>(totalPages)

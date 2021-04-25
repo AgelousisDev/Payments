@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
+import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.custom.itemTouchHelper.DraggableItemTouchHelper
 import com.agelousis.payments.databinding.FilterPaymentsFragmentLayoutBinding
-import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.paymentsFiltering.adapters.PaymentsFilteringAdapter
 import com.agelousis.payments.main.ui.paymentsFiltering.enumerations.PaymentsFilteringOptionType
 
@@ -21,10 +21,11 @@ class FilterPaymentsFragment: Fragment() {
 
     private lateinit var binding: FilterPaymentsFragmentLayoutBinding
     private val paymentsFilteringOptionTypeList
-        get() = (activity as? MainActivity)?.paymentsFilteringOptionTypes ?: listOf(
+        get() = MainApplication.paymentsFilteringOptionTypes ?: listOf(
             PaymentsFilteringOptionType.FREE,
             PaymentsFilteringOptionType.CHARGE,
-            PaymentsFilteringOptionType.EXPIRED
+            PaymentsFilteringOptionType.EXPIRED,
+            PaymentsFilteringOptionType.SINGLE_PAYMENT
         )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

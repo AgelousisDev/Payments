@@ -1,5 +1,6 @@
 package com.agelousis.payments.main.ui.payments
 
+import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.R
+import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.custom.enumerations.SwipeAction
 import com.agelousis.payments.custom.itemTouchHelper.SwipeItemTouchHelper
 import com.agelousis.payments.databinding.FragmentPaymentsLayoutBinding
@@ -34,6 +36,7 @@ import com.agelousis.payments.main.ui.paymentsFiltering.enumerations.PaymentsFil
 import com.agelousis.payments.main.ui.periodFilter.models.PeriodFilterDataModel
 import com.agelousis.payments.main.ui.shareMessageFragment.ShareMessageBottomSheetFragment
 import com.agelousis.payments.main.ui.totalPaymentsAmount.TotalPaymentsAmountDialogFragment
+import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.PDFHelper
 import kotlinx.coroutines.CoroutineScope
@@ -126,6 +129,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
 
     private lateinit var binding: FragmentPaymentsLayoutBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
+    private val sharedPreferences by lazy { context?.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE) }
     private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
     private val itemsList by lazy { arrayListOf<Any>() }
     private val filteredList by lazy { arrayListOf<Any>() }
@@ -409,10 +413,11 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         )?.observe(
             viewLifecycleOwner
         ) { paymentsFilteringOptionTypes ->
-            (activity as? MainActivity)?.paymentsFilteringOptionTypes = paymentsFilteringOptionTypes
-            (activity as? MainActivity)?.paymentsFilteringOptionTypes?.forEachIndexed { index, paymentsFilteringOptionType ->
+            paymentsFilteringOptionTypes?.forEachIndexed { index, paymentsFilteringOptionType ->
                 paymentsFilteringOptionType.position = index
             }
+            sharedPreferences?.paymentsFilteringOptionTypes = paymentsFilteringOptionTypes
+            MainApplication.paymentsFilteringOptionTypes = paymentsFilteringOptionTypes
         }
     }
 
@@ -431,7 +436,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                             )
                         )
                         filteredList.addAll(
-                            filteredByQueryPayments.sortedBy { (it getPaymentsFilteringOptionType (activity as? MainActivity)?.paymentsFilteringOptionTypes).position  }.also { personModelList ->
+                            filteredByQueryPayments.sortedBy { (it getPaymentsFilteringOptionType MainApplication.paymentsFilteringOptionTypes).position  }.also { personModelList ->
                                 if (personModelList.isSizeOne)
                                     personModelList.firstOrNull()?.backgroundDrawable = R.drawable.payment_row_radius_background
                                 else {

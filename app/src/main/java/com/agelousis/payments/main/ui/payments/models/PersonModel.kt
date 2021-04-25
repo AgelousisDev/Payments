@@ -39,7 +39,7 @@ data class PersonModel(val personId: Int? = null,
         get() = payments?.mapNotNull { it.paymentAmount }?.takeIf { it.isNotEmpty() }?.sum()
 
     val fullName: String
-        get() = String.format("%s %s", firstName ?: "", surname ?: "")
+        get() = String.format("%s %s%s", firstName ?: "", surname ?: "", singlePaymentProducts?.takeIf { it.isNotBlank() }?.let { " - $it" } ?: "")
 
     fun getCommunicationData(context: Context): String {
         return ifLet(phone, email) {
@@ -59,12 +59,15 @@ data class PersonModel(val personId: Int? = null,
             payments?.any { it.paymentMonthDate?.toCalendar(plusMonths = 1)?.time?.isDatePassed == true } == true -> PaymentsFilteringOptionType.EXPIRED.also { paymentsFilteringOptionType ->
                 paymentsFilteringOptionType.position = paymentsFilteringOptionTypes?.firstOrNull { it == PaymentsFilteringOptionType.EXPIRED }?.position ?: return@also
             }
+            payments?.any { it.singlePayment == true } == true -> PaymentsFilteringOptionType.SINGLE_PAYMENT.also { paymentsFilteringOptionType ->
+                paymentsFilteringOptionType.position = paymentsFilteringOptionTypes?.firstOrNull { it == PaymentsFilteringOptionType.SINGLE_PAYMENT }?.position ?: return@also
+            }
             else -> PaymentsFilteringOptionType.CHARGE.also { paymentsFilteringOptionType ->
                 paymentsFilteringOptionType.position = paymentsFilteringOptionTypes?.firstOrNull { it == PaymentsFilteringOptionType.CHARGE }?.position ?: return@also
             }
         }
 
-    val singlePaymentProducts
+    private val singlePaymentProducts
         get() = payments?.mapNotNull { it.singlePaymentProducts }?.flatten()?.joinToString(separator = ",")
 
 }

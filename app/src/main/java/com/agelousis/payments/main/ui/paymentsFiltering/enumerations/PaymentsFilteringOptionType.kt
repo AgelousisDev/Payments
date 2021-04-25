@@ -5,13 +5,14 @@ import androidx.core.content.ContextCompat
 import com.agelousis.payments.R
 
 enum class PaymentsFilteringOptionType {
-    FREE, CHARGE, EXPIRED;
+    FREE, CHARGE, EXPIRED, SINGLE_PAYMENT;
 
     val label
         get() = when(this) {
             FREE -> R.string.key_free_label
             CHARGE -> R.string.key_charge_label
             EXPIRED -> R.string.key_expired_label
+            SINGLE_PAYMENT -> R.string.key_single_payment_label
         }
 
     infix fun getHeaderColor(context: Context) =
@@ -19,6 +20,7 @@ enum class PaymentsFilteringOptionType {
             FREE -> ContextCompat.getColor(context, R.color.lightBlue)
             CHARGE -> ContextCompat.getColor(context, R.color.lightGreen)
             EXPIRED -> ContextCompat.getColor(context, R.color.fadedRed)
+            SINGLE_PAYMENT -> ContextCompat.getColor(context, R.color.lightYellow)
         }
 
     var position = 0

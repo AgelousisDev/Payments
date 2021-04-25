@@ -1,11 +1,6 @@
 package com.agelousis.payments.utils.constants
 
-import android.content.Context
 import android.graphics.Color
-import android.telephony.TelephonyManager
-import com.agelousis.payments.R
-import com.agelousis.payments.utils.extensions.second
-import java.util.*
 
 object Constants {
     const val IMAGE_MIME_TYPE = "image/*"
@@ -45,6 +40,7 @@ object Constants {
     const val SHARED_PREFERENCES_FIRST_TIME_KEY = "first_time"
     const val COUNTRY_SELECTOR_FRAGMENT_TAG = "countrySelectorFragmentTag"
     const val SHARED_PREFERENCES_COUNTRY_DATA_KEY = "country_data"
+    const val SHARED_PREFERENCES_PAYMENTS_FILTERING_DATA_KEY = "payments_filtering_option_types"
 
     object Colors {
         val colorPickerColors = intArrayOf(
@@ -60,24 +56,6 @@ object Constants {
             Color.parseColor("#E2F587"),
             Color.parseColor("#D9BCAD")
         )
-    }
-
-    object CountryCodes {
-
-         fun getCountryZipCode(context: Context): String? {
-             val manager =  context.getSystemService(Context.TELEPHONY_SERVICE) as? TelephonyManager
-             val countryID = manager?.simCountryIso?.toUpperCase(Locale.getDefault())
-             return context.resources.getStringArray(R.array.CountryCodes)
-                 .firstOrNull { it.contains(countryID ?: "") }?.split(",")?.firstOrNull()
-         }
-
-        fun getCountryCode(context: Context): String? {
-            val manager =  context.getSystemService(Context.TELEPHONY_SERVICE) as? TelephonyManager
-            val countryID = manager?.simCountryIso?.toUpperCase(Locale.getDefault())
-            return context.resources.getStringArray(R.array.CountryCodes)
-                .firstOrNull { it.contains(countryID ?: "") }?.split(",")?.second()
-        }
-
     }
 
 }

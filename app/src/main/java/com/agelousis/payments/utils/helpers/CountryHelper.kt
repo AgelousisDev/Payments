@@ -1,6 +1,9 @@
 package com.agelousis.payments.utils.helpers
 
+import android.content.Context
+import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.countrySelector.enumerations.CountryDataModel
+import com.agelousis.payments.utils.extensions.second
 import java.util.*
 
 object CountryHelper {
@@ -34,5 +37,11 @@ object CountryHelper {
         // of countries collection object.
         countries
     }
+
+    fun getCountryCode(context: Context): String? {
+        return context.resources.getStringArray(R.array.CountryCodes)
+            .firstOrNull { it.contains(context.resources.configuration.locales[0].country ?: "") }?.split(",")?.second()
+    }
+
 
 }

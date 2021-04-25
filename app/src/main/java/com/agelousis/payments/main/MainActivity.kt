@@ -239,18 +239,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             field = value
             binding.navigationView.menu.findItem(R.id.navigationGraph)?.isVisible = value
         }
-    var paymentsFilteringOptionTypes =
-        listOf(
-            PaymentsFilteringOptionType.FREE.also {
-                it.position = 0
-            },
-            PaymentsFilteringOptionType.CHARGE.also {
-                it.position = 1
-            },
-            PaymentsFilteringOptionType.EXPIRED.also {
-                it.position = 2
-            }
-        )
     private val groupActivityLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
