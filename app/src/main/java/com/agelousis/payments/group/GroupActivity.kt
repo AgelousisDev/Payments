@@ -5,10 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import com.agelousis.payments.R
+import com.agelousis.payments.base.BaseActivity
 import com.agelousis.payments.databinding.ActivityGroupBinding
 import com.agelousis.payments.group.presenter.GroupActivityPresenter
 import com.agelousis.payments.main.ui.payments.models.GroupModel
@@ -17,10 +17,9 @@ import com.agelousis.payments.utils.extensions.*
 import dev.sasikanth.colorsheet.ColorPickerListener
 import dev.sasikanth.colorsheet.ColorSheet
 
-class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerListener {
+class GroupActivity : BaseActivity(), GroupActivityPresenter, ColorPickerListener {
 
     companion object {
-        const val GROUP_IMAGE_REQUEST_CODE = 4
         const val GROUP_MODEL_EXTRA = "GroupActivity=groupModelExtra"
     }
 
@@ -47,10 +46,28 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
         }
     }
 
-    override fun onGroupImage() =
-        openGallery(
-            requestCode = GROUP_IMAGE_REQUEST_CODE
-        )
+    override fun onGroupImage() {
+        activityLauncher?.launch(
+            input = gallerIntent
+        ) { result ->
+            result.data?.data?.let { imageUri ->
+                loadImageBitmap(
+                    imageUri = imageUri
+                ) { bitmap ->
+                    selectedGroupModel.groupImage?.let {
+                        deleteInternalFile(
+                            fileName = it
+                        )
+                    }
+                    selectedGroupModel.groupImage = saveImage(
+                        bitmap = bitmap,
+                        fileName = "${Constants.GROUP_IMAGE_NAME}_${System.currentTimeMillis()}"
+                    )
+                    binding.groupModel = selectedGroupModel
+                }
+            }
+        }
+    }
 
     override fun invoke(color: Int) {
         uiBarColor = color
@@ -119,31 +136,6 @@ class GroupActivity : AppCompatActivity(), GroupActivityPresenter, ColorPickerLi
             addGroupButtonState = it?.isNotEmpty() == true
             selectedGroupModel.groupName = it?.toString()
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK)
-            when(requestCode) {
-                GROUP_IMAGE_REQUEST_CODE -> {
-                    data?.data?.let { imageUri ->
-                        loadImageBitmap(
-                            imageUri = imageUri
-                        ) { bitmap ->
-                            selectedGroupModel.groupImage?.let {
-                                deleteInternalFile(
-                                    fileName = it
-                                )
-                            }
-                            selectedGroupModel.groupImage = saveImage(
-                                bitmap = bitmap,
-                                fileName = "${Constants.GROUP_IMAGE_NAME}_${System.currentTimeMillis()}"
-                            )
-                            binding.groupModel = selectedGroupModel
-                        }
-                    }
-                }
-            }
     }
 
 }

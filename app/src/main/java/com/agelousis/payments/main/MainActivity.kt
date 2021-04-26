@@ -7,10 +7,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.navigation.NavController
@@ -18,6 +16,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.agelousis.payments.R
+import com.agelousis.payments.base.BaseActivity
 import com.agelousis.payments.database.DBManager
 import com.agelousis.payments.database.SQLiteHelper
 import com.agelousis.payments.databinding.ActivityMainBinding
@@ -37,7 +36,6 @@ import com.agelousis.payments.main.ui.payments.PaymentsFragment
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.paymentsFiltering.FilterPaymentsFragment
-import com.agelousis.payments.main.ui.paymentsFiltering.enumerations.PaymentsFilteringOptionType
 import com.agelousis.payments.main.ui.pdfViewer.PdfViewerFragment
 import com.agelousis.payments.main.ui.periodFilter.PeriodFilterFragment
 import com.agelousis.payments.main.ui.personalInformation.PersonalInformationFragment
@@ -50,11 +48,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener, View.OnClickListener {
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener, View.OnClickListener {
 
     companion object {
         const val USER_MODEL_EXTRA = "MainActivity=userModelExtra"
-        const val EXPORT_FILE_REQUEST_CODE = 1
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -239,16 +236,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             field = value
             binding.navigationView.menu.findItem(R.id.navigationGraph)?.isVisible = value
         }
-    private val groupActivityLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK)
-            configureGroup(
-                groupModel = result?.data?.extras?.getParcelable(GroupActivity.GROUP_MODEL_EXTRA) ?: return@registerForActivityResult
-            ) {
-                (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
-            }
-    }
 
     override fun onBackPressed() {
         unCheckAllMenuItems(
@@ -361,11 +348,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             icon = R.drawable.ic_export,
             positiveButtonText = resources.getString(R.string.key_proceed_label),
             positiveButtonBlock = {
-                saveFile(
-                    requestCode = EXPORT_FILE_REQUEST_CODE,
-                    fileName = Constants.EXPORT_DATABASE_FILE_NAME,
-                    mimeType = Constants.GENERAL_MIME_TYPE
-                )
+                activityLauncher?.launch(
+                    input = createDocumentIntentWith(
+                        fileName = Constants.EXPORT_DATABASE_FILE_NAME,
+                        mimeType = Constants.GENERAL_MIME_TYPE
+                    )
+                ) { result ->
+                    alterFile(
+                        uri = result.data?.data,
+                        file = getDatabasePath(SQLiteHelper.DB_NAME)
+                    )
+                }
             }
         )
     }
@@ -457,11 +450,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun startGroupActivity(groupModel: GroupModel? = null) {
-        groupActivityLauncher.launch(
-            Intent(this, GroupActivity::class.java).also {
+        activityLauncher?.launch(
+            input = Intent(this, GroupActivity::class.java).also {
                 it.putExtra(GroupActivity.GROUP_MODEL_EXTRA, groupModel)
             }
-        )
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK)
+                configureGroup(
+                    groupModel = result.data?.extras?.getParcelable(GroupActivity.GROUP_MODEL_EXTRA) ?: return@launch
+                ) {
+                    (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
+                }
+        }
     }
 
     fun showProfilePicture() {
@@ -473,18 +473,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 it.putExtra(USER_MODEL_EXTRA, userModel)
             }
         )
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK)
-            when(requestCode) {
-                EXPORT_FILE_REQUEST_CODE ->
-                    alterFile(
-                        uri = data?.data,
-                        file = getDatabasePath(SQLiteHelper.DB_NAME)
-                    )
-            }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

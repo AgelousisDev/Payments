@@ -142,6 +142,13 @@ fun AppCompatActivity.openGallery(requestCode: Int) =
         it.type = Constants.IMAGE_MIME_TYPE
     }, requestCode)
 
+val Context.gallerIntent
+    get() = Intent(
+        Intent.ACTION_GET_CONTENT
+    ).also {
+        it.type = Constants.IMAGE_MIME_TYPE
+    }
+
 fun Fragment.openGallery(requestCode: Int) =
     startActivityForResult(Intent(
         Intent.ACTION_GET_CONTENT
@@ -351,6 +358,12 @@ fun AppCompatActivity.saveFile(requestCode: Int, fileName: String, mimeType: Str
         it.type = mimeType
         it.putExtra(Intent.EXTRA_TITLE, fileName)
     }, requestCode)
+}
+
+fun Context.createDocumentIntentWith(fileName: String, mimeType: String) = Intent(Intent.ACTION_CREATE_DOCUMENT).also {
+    it.addCategory(Intent.CATEGORY_OPENABLE)
+    it.type = mimeType
+    it.putExtra(Intent.EXTRA_TITLE, fileName)
 }
 
 fun AppCompatActivity.alterFile(uri: Uri?, file: File) {
