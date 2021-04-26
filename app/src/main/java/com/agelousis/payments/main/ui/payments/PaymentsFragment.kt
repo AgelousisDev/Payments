@@ -176,11 +176,11 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initializeNewFilters()
         configureToolbar()
         configureSearchView()
         configureRecyclerView()
         initializePayments()
-        initializeNewFilters()
         configureObservers()
     }
 

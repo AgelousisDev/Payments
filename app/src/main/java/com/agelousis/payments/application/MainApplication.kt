@@ -32,7 +32,7 @@ class MainApplication: Application() {
     }
 
     private fun setPaymentsFilteringOptionTypes() {
-        if (sharedPreferences.paymentsFilteringOptionTypes?.isEmpty() == true) {
+        if (sharedPreferences.paymentsFilteringOptionTypes.isNullOrEmpty()) {
             paymentsFilteringOptionTypes = listOf(
                 PaymentsFilteringOptionType.FREE.also {
                     it.position = 0
@@ -49,8 +49,13 @@ class MainApplication: Application() {
             )
             sharedPreferences.paymentsFilteringOptionTypes = paymentsFilteringOptionTypes
         }
-        else
-            paymentsFilteringOptionTypes = sharedPreferences.paymentsFilteringOptionTypes
+        else {
+            val paymentsFilteringOptionTypes = sharedPreferences.paymentsFilteringOptionTypes
+            paymentsFilteringOptionTypes?.forEachIndexed { index, paymentsFilteringOptionType ->
+                paymentsFilteringOptionType.position = index
+            }
+            MainApplication.paymentsFilteringOptionTypes = paymentsFilteringOptionTypes
+        }
     }
 
 }
