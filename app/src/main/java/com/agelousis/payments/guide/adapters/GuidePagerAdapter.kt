@@ -1,15 +1,14 @@
 package com.agelousis.payments.guide.adapters
 
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.agelousis.payments.guide.fragments.GuideBasicFragment
 import com.agelousis.payments.guide.models.GuideModel
 
-class GuidePagerAdapter(supportFragmentManager: FragmentManager, private val guideModelList: List<GuideModel>): FragmentStatePagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class GuidePagerAdapter(fragmentActivity: FragmentActivity, private val guideModelList: List<GuideModel>): FragmentStateAdapter(fragmentActivity) {
 
-    override fun getCount() = guideModelList.size
+    override fun getItemCount() = guideModelList.size
 
-    override fun getItem(position: Int) =
-        GuideBasicFragment instance guideModelList.getOrNull(index = position)
+    override fun createFragment(position: Int) = GuideBasicFragment instance guideModelList.getOrNull(index = position)
 
 }

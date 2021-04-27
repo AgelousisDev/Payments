@@ -21,12 +21,13 @@ class GuideBasicFragment: Fragment() {
             }
     }
 
-    private lateinit var binding: GuideBasicFragmentLayoutBinding
+    lateinit var binding: GuideBasicFragmentLayoutBinding
     private val guideModel by lazy { arguments?.getParcelable<GuideModel>(GUIDE_MODEL_EXTRA) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = GuideBasicFragmentLayoutBinding.inflate(inflater, container, false).also {
             it.guideModel = guideModel
+            it.guideDescriptionIsVisible = false
         }
         return binding.root
     }

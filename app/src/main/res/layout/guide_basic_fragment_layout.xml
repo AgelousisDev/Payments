@@ -3,9 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="android.view.View" />
         <variable
             name="guideModel"
             type="com.agelousis.payments.guide.models.GuideModel" />
+        <variable
+            name="guideDescriptionIsVisible"
+            type="Boolean" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -44,6 +48,7 @@
         android:layout_margin="@dimen/activity_general_horizontal_margin"
         android:gravity="center_horizontal"
         android:text="@{guideModel.title}"
+        android:visibility="@{guideDescriptionIsVisible ? View.VISIBLE : View.GONE}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guideCardView"
@@ -57,6 +62,7 @@
         android:layout_margin="@dimen/activity_general_horizontal_margin"
         bulletsHtmlText="@{guideModel.subtitle}"
         android:textSize="12sp"
+        android:visibility="@{guideDescriptionIsVisible ? View.VISIBLE : View.GONE}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guideTitle"
