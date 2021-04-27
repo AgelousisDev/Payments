@@ -1,7 +1,6 @@
 package com.agelousis.payments.main.ui.periodFilter
 
 import android.app.Activity
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -31,7 +30,6 @@ import java.util.*
 class PeriodFilterFragment: Fragment(), PeriodFilterFragmentPresenter {
 
     companion object {
-        private const val CREATE_CSV_FILE_REQUEST_CODE = 7
         private const val LOADING_TIME = 5000L
     }
 
@@ -72,10 +70,20 @@ class PeriodFilterFragment: Fragment(), PeriodFilterFragmentPresenter {
         after(
             millis = LOADING_TIME
         ) {
-            createFile(
-                requestCode = CREATE_CSV_FILE_REQUEST_CODE,
-                fileName = Constants.PAYMENTS_CSV_FILE
-            )
+            (activity as? MainActivity)?.activityLauncher?.launch(
+                input = createDocumentIntentWith(
+                    fileName = Constants.PAYMENTS_CSV_FILE,
+                    mimeType = Constants.CSV_MIME_TYPE
+                )
+            ) { result ->
+                if (result.resultCode == Activity.RESULT_OK)
+                    triggerCsvCreation(
+                        uri = result.data?.data ?: return@launch
+                    )
+
+                else
+                    findNavController().popBackStack()
+            }
         }
     }
 
@@ -126,19 +134,6 @@ class PeriodFilterFragment: Fragment(), PeriodFilterFragmentPresenter {
                 )
             }
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK)
-            when(requestCode) {
-                CREATE_CSV_FILE_REQUEST_CODE ->
-                    triggerCsvCreation(
-                        uri = data?.data ?: return
-                    )
-            }
-        else
-            findNavController().popBackStack()
     }
 
 }

@@ -48,7 +48,7 @@ class GroupActivity : BaseActivity(), GroupActivityPresenter, ColorPickerListene
 
     override fun onGroupImage() {
         activityLauncher?.launch(
-            input = gallerIntent
+            input = galleryIntent
         ) { result ->
             result.data?.data?.let { imageUri ->
                 loadImageBitmap(

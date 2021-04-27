@@ -135,26 +135,12 @@ inline fun <K, T> ifLet(vararg elements: T?, closure: (List<T>) -> K): K? {
     else null
 }
 
-fun AppCompatActivity.openGallery(requestCode: Int) =
-    startActivityForResult(Intent(
-        Intent.ACTION_GET_CONTENT
-    ).also {
-        it.type = Constants.IMAGE_MIME_TYPE
-    }, requestCode)
-
-val Context.gallerIntent
+val Context.galleryIntent
     get() = Intent(
         Intent.ACTION_GET_CONTENT
     ).also {
         it.type = Constants.IMAGE_MIME_TYPE
     }
-
-fun Fragment.openGallery(requestCode: Int) =
-    startActivityForResult(Intent(
-        Intent.ACTION_GET_CONTENT
-    ).also {
-        it.type = Constants.IMAGE_MIME_TYPE
-    }, requestCode)
 
 val Int.px: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
@@ -352,15 +338,7 @@ fun Context.initializeField(appCompatEditText: AppCompatEditText) {
     )
 }
 
-fun AppCompatActivity.saveFile(requestCode: Int, fileName: String, mimeType: String) {
-    startActivityForResult(Intent(Intent.ACTION_CREATE_DOCUMENT).also {
-        it.addCategory(Intent.CATEGORY_OPENABLE)
-        it.type = mimeType
-        it.putExtra(Intent.EXTRA_TITLE, fileName)
-    }, requestCode)
-}
-
-fun Context.createDocumentIntentWith(fileName: String, mimeType: String) = Intent(Intent.ACTION_CREATE_DOCUMENT).also {
+fun createDocumentIntentWith(fileName: String, mimeType: String) = Intent(Intent.ACTION_CREATE_DOCUMENT).also {
     it.addCategory(Intent.CATEGORY_OPENABLE)
     it.type = mimeType
     it.putExtra(Intent.EXTRA_TITLE, fileName)
@@ -374,11 +352,10 @@ fun AppCompatActivity.alterFile(uri: Uri?, file: File) {
     }
 }
 
-fun AppCompatActivity.searchFile(requestCode: Int, mimeType: String) =
-    startActivityForResult(Intent(Intent.ACTION_GET_CONTENT).also {
-        it.type = mimeType
-        it.addCategory(Intent.CATEGORY_OPENABLE)
-    }, requestCode)
+infix fun Context.getContentIntent(mimeType: String) = Intent(Intent.ACTION_GET_CONTENT).also {
+    it.type = mimeType
+    it.addCategory(Intent.CATEGORY_OPENABLE)
+}
 
 fun Context.isDBFile(uri: Uri?) =
     uri?.let {
@@ -654,19 +631,6 @@ fun Context.showKeyboard(view: View) {
 fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-}
-
-fun Fragment.createFile(requestCode: Int, fileName: String) {
-    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-        // Filter to only show results that can be "opened", such as
-        // a file (as opposed to a list of contacts or timezones).
-        addCategory(Intent.CATEGORY_OPENABLE)
-
-        // Create a file with the requested MIME type.
-        type = Constants.CSV_MIME_TYPE
-        putExtra(Intent.EXTRA_TITLE, fileName)
-    }
-    startActivityForResult(intent, requestCode)
 }
 
 val greetingLabel

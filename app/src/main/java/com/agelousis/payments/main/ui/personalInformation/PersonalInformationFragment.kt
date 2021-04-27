@@ -45,9 +45,36 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
     }
 
     override fun onChangeProfilePicture() {
-        openGallery(
-            requestCode = LoginActivity.PROFILE_SELECT_REQUEST_CODE
-        )
+        (activity as? MainActivity)?.activityLauncher?.launch(
+            input = context?.galleryIntent ?: return
+        ) { result ->
+            if (result.resultCode != Activity.RESULT_OK)
+                return@launch
+            result.data?.data?.let { imageUri ->
+                loadImageBitmap(
+                    imageUri = imageUri
+                ) { bitmap ->
+                    newUserModel?.profileImage?.let {
+                        context?.deleteInternalFile(
+                            fileName = it
+                        )
+                    }
+                    newUserModel?.profileImage = context?.saveProfileImage(
+                        bitmap = bitmap
+                    )
+                    newUserModel?.profileImageData = bitmap?.byteArray
+                    optionList.firstOrNullWithType(
+                        typeBlock = {
+                            it as? OptionType
+                        }
+                    ) {
+                        it is OptionType
+                    }?.userModel?.profileImage = newUserModel?.profileImage
+                    binding.optionRecyclerView.scheduleLayoutAnimation()
+                    (binding.optionRecyclerView.adapter as? OptionTypesAdapter)?.reloadData()
+                }
+            }
+        }
     }
 
     override fun onFirstNameChange(newFirstName: String) {
@@ -319,39 +346,6 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
                 startActivity(Intent(context, LoginActivity::class.java))
                 activity?.finish()
             }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_OK)
-            return
-        when(requestCode) {
-            LoginActivity.PROFILE_SELECT_REQUEST_CODE ->
-                data?.data?.let { imageUri ->
-                    loadImageBitmap(
-                        imageUri = imageUri
-                    ) { bitmap ->
-                        newUserModel?.profileImage?.let {
-                            context?.deleteInternalFile(
-                                fileName = it
-                            )
-                        }
-                        newUserModel?.profileImage = context?.saveProfileImage(
-                            bitmap = bitmap
-                        )
-                        newUserModel?.profileImageData = bitmap?.byteArray
-                        optionList.firstOrNullWithType(
-                            typeBlock = {
-                                it as? OptionType
-                            }
-                        ) {
-                            it is OptionType
-                        }?.userModel?.profileImage = newUserModel?.profileImage
-                        binding.optionRecyclerView.scheduleLayoutAnimation()
-                        (binding.optionRecyclerView.adapter as? OptionTypesAdapter)?.reloadData()
-                    }
-                }
         }
     }
 

@@ -7,7 +7,6 @@ import android.content.Intent
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -16,6 +15,7 @@ import androidx.core.view.GestureDetectorCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import com.agelousis.payments.R
+import com.agelousis.payments.base.BaseActivity
 import com.agelousis.payments.biometrics.BiometricsHelper
 import com.agelousis.payments.biometrics.BiometricsListener
 import com.agelousis.payments.database.DBManager
@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
-class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, UserSelectionPresenter, GestureDetector.OnGestureListener {
+class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, UserSelectionPresenter, GestureDetector.OnGestureListener {
 
     private lateinit var binding: ActivityLoginBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
@@ -47,15 +47,33 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
     private var signInState = SignInState.SIGN_UP
     private var mDetector: GestureDetectorCompat? = null
 
-    companion object {
-        const val PROFILE_SELECT_REQUEST_CODE = 1
-        const val IMPORT_FILE_REQUEST_CODE = 2
+    override fun onProfileSelect() {
+        activityLauncher?.launch(
+            input = galleryIntent
+        ) { result ->
+            if (result.resultCode != Activity.RESULT_OK)
+                return@launch
+            result.data?.data?.let { imageUri ->
+                loadImageBitmap(
+                    imageUri = imageUri
+                ) { bitmap ->
+                    userModel.profileImage?.let {
+                        deleteInternalFile(
+                            fileName = it
+                        )
+                    }
+                    userModel.profileImage = saveProfileImage(
+                        bitmap = bitmap
+                    )
+                    userModel.profileImageData = bitmap?.byteArray
+                }
+                binding.profileImageView.setBackgroundResource(0)
+                binding.profileImageView.loadImageUri(
+                    imageUri = imageUri
+                )
+            }
+        }
     }
-
-    override fun onProfileSelect() =
-        openGallery(
-            requestCode = PROFILE_SELECT_REQUEST_CODE
-        )
 
     override fun onSignIn() {
         when (signInState) {
@@ -338,10 +356,15 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
             icon = R.drawable.ic_import,
             positiveButtonText = resources.getString(R.string.key_proceed_label),
             positiveButtonBlock = {
-                searchFile(
-                    requestCode = IMPORT_FILE_REQUEST_CODE,
-                    mimeType = Constants.GENERAL_MIME_TYPE
-                )
+                activityLauncher?.launch(
+                    input = this getContentIntent Constants.GENERAL_MIME_TYPE
+                ) { result ->
+                    if (result.resultCode != Activity.RESULT_OK)
+                        return@launch
+                    makeDatabaseImport(
+                        uri = result.data?.data
+                    )
+                }
             }
         )
     }
@@ -393,38 +416,6 @@ class LoginActivity : AppCompatActivity(), LoginPresenter, BiometricsListener, U
     private fun showGuideIf(predicate: () -> Boolean) {
         if (predicate())
             startActivity(Intent(this, GuideActivity::class.java))
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_OK)
-            return
-        when(requestCode) {
-            PROFILE_SELECT_REQUEST_CODE ->
-                data?.data?.let { imageUri ->
-                    loadImageBitmap(
-                        imageUri = imageUri
-                    ) { bitmap ->
-                        userModel.profileImage?.let {
-                            deleteInternalFile(
-                                fileName = it
-                            )
-                        }
-                        userModel.profileImage = saveProfileImage(
-                            bitmap = bitmap
-                        )
-                        userModel.profileImageData = bitmap?.byteArray
-                    }
-                    binding.profileImageView.setBackgroundResource(0)
-                    binding.profileImageView.loadImageUri(
-                        imageUri = imageUri
-                    )
-                }
-            IMPORT_FILE_REQUEST_CODE ->
-                makeDatabaseImport(
-                    uri = data?.data
-                )
-        }
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
