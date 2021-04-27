@@ -211,6 +211,7 @@
     <string name="key_delete_selected_payments_message">Do you want to delete the selected clients and their payments?</string>
     <string name="key_export_invoice_label">Export Invoice</string>
     <string name="key_products_label">Products</string>
+    <string name="key_number_label">No.</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>

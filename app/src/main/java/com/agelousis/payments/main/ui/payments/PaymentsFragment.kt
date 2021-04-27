@@ -310,7 +310,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                     description = if (persons.isSizeOne)
                         persons.firstOrNull()?.fullName ?: ""
                     else
-                        persons.mapNotNull { it.groupName }.joinToString(
+                        persons.groupBy { it.groupName }.mapNotNull { it.key }.joinToString(
                             separator = " - "
                         )
                 )

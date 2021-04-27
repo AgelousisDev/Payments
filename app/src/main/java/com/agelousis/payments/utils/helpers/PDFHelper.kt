@@ -210,7 +210,7 @@ class PDFHelper {
     private fun addPaymentHeaderCells(context: Context, table: PdfPTable) {
         table.addCell(
             getCell(
-                text = "",
+                text = context.resources.getString(R.string.key_number_label),
                 withBorder = false,
                 textSize = 12.0f
             )
