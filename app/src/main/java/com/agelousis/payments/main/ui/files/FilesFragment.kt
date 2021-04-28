@@ -6,7 +6,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -24,6 +23,7 @@ import com.agelousis.payments.main.ui.files.presenter.FilePresenter
 import com.agelousis.payments.main.ui.files.viewModel.FilesViewModel
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.utils.extensions.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -109,7 +109,10 @@ class FilesFragment: Fragment(), FilePresenter {
 
     private fun configureSearchView() {
         binding.searchLayout.onProfileImageClicked {
-            (activity as? MainActivity)?.binding?.drawerLayout?.openDrawer(GravityCompat.START)
+            if ((activity as? MainActivity)?.bottomSheetBehavior?.state == BottomSheetBehavior.STATE_HIDDEN)
+                (activity as? MainActivity)?.bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+            else
+                (activity as? MainActivity)?.bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
         }
         binding.searchLayout.onQueryListener {
             configureFileList(

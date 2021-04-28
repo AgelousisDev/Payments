@@ -8,9 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.annotation.DrawableRes
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.content.ContextCompat
-import androidx.core.view.GravityCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
@@ -43,6 +41,7 @@ import com.agelousis.payments.profilePicture.ProfilePictureActivity
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -75,7 +74,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             R.id.navigationGuide ->
                 showGuide()
         }
-        binding.drawerLayout.closeDrawer(GravityCompat.START)
+        item.isChecked = true
+        bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+        //binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 
@@ -188,6 +189,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     lateinit var binding: ActivityMainBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val dbManager by lazy { DBManager(context = this) }
+    var bottomSheetBehavior: BottomSheetBehavior<*>? = null
     val userModel by lazy { intent?.extras?.getParcelable<UserModel>(USER_MODEL_EXTRA) }
     var appBarTitle: String? = null
         set(value) {
@@ -241,25 +243,28 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         unCheckAllMenuItems(
             menu = binding.navigationView.menu
         )
-        when(supportFragmentManager.currentNavigationFragment) {
-            is PaymentsFragment ->
-                showSimpleDialog(
-                    title = resources.getString(R.string.key_logout_label),
-                    message = resources.getString(R.string.key_logout_message),
-                    icon = R.drawable.ic_logout
-                ) {
-                    startActivity(Intent(this, LoginActivity::class.java))
-                    finish()
+        if (bottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED)
+            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+        else
+            when(supportFragmentManager.currentNavigationFragment) {
+                is PaymentsFragment ->
+                    showSimpleDialog(
+                        title = resources.getString(R.string.key_logout_label),
+                        message = resources.getString(R.string.key_logout_message),
+                        icon = R.drawable.ic_logout
+                    ) {
+                        startActivity(Intent(this, LoginActivity::class.java))
+                        finish()
+                    }
+                is NewPaymentFragment ->
+                    showNewPersonUnsavedFieldsWarning()
+                is NewPaymentAmountFragment ->
+                    showNewPaymentUnsavedFieldsWarning()
+                else -> {
+                    binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().previousBackStackEntry?.savedStateHandle?.remove<PaymentAmountModel>(NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA)
+                    super.onBackPressed()
                 }
-            is NewPaymentFragment ->
-                showNewPersonUnsavedFieldsWarning()
-            is NewPaymentAmountFragment ->
-                showNewPaymentUnsavedFieldsWarning()
-            else -> {
-                binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().previousBackStackEntry?.savedStateHandle?.remove<PaymentAmountModel>(NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA)
-                super.onBackPressed()
             }
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -279,12 +284,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun configureNavigationController() {
         binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().addOnDestinationChangedListener(this)
-        ifLet(
-            binding.navigationView,
-            binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController()
-        ) {
-            NavigationUI.setupWithNavController(it.first() as NavigationView, it.second() as NavController)
-        }
+        NavigationUI.setupWithNavController(binding.navigationView, binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController())
         binding.navigationView.setNavigationItemSelectedListener(this)
     }
 
@@ -294,9 +294,15 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private fun setupNavigationView() {
-        val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, binding.appBarMain.bottomAppBar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        binding.drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.navigationView)
+        bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+
+        binding.appBarMain.bottomAppBar.setNavigationOnClickListener {
+            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+        binding.appBarMain.contentMain.root.setOnClickListener {
+            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+        }
         binding.navigationView.getHeaderView(0)?.let {
             val navHeaderBinding = NavHeaderMainBinding.bind(it)
             navHeaderBinding.navigationViewProfileImageView.loadImagePath(

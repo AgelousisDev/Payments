@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -19,6 +18,7 @@ import com.agelousis.payments.custom.itemTouchHelper.SwipeItemTouchHelper
 import com.agelousis.payments.databinding.FragmentPaymentsLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.enumerations.SwipeItemType
+import com.agelousis.payments.main.ui.files.models.FileDataModel
 import com.agelousis.payments.main.ui.payments.adapters.PaymentsAdapter
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.main.ui.payments.models.GroupModel
@@ -39,9 +39,12 @@ import com.agelousis.payments.main.ui.totalPaymentsAmount.TotalPaymentsAmountDia
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.PDFHelper
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.*
 
 class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAmountSumPresenter, PaymentsFragmentPresenter {
@@ -192,7 +195,10 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
 
     private fun configureSearchView() {
         binding.searchLayout.onProfileImageClicked {
-            (activity as? MainActivity)?.binding?.drawerLayout?.openDrawer(GravityCompat.START)
+            if ((activity as? MainActivity)?.bottomSheetBehavior?.state == BottomSheetBehavior.STATE_HIDDEN)
+                (activity as? MainActivity)?.bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+            else
+                (activity as? MainActivity)?.bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
         }
         binding.searchLayout.onSecondaryIconClicked {
             findNavController().navigate(
@@ -316,14 +322,39 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                 )
                 if (fromMultipleSelection)
                     clearSelectedPayments()
-                context?.sharePDF(
-                    pdfFile = pdfFile
-                )
+                uiScope.launch {
+                    delay(
+                        timeMillis = 1000L
+                    )
+                    redirectToPdfViewer(
+                        pdfFile = pdfFile,
+                        description = if (persons.isSizeOne)
+                            persons.firstOrNull()?.fullName ?: ""
+                        else
+                            persons.groupBy { it.groupName }.mapNotNull { it.key }.joinToString(
+                                separator = " - "
+                            )
+                    )
+                }
                 context?.message(
                     message = resources.getString(R.string.key_file_saved_message)
                 )
             }
         }
+    }
+
+    private fun redirectToPdfViewer(pdfFile: File, description: String) {
+        findNavController().navigate(
+            PaymentsFragmentDirections.actionPaymentsFragmentToPdfViewerFragment(
+                fileDataModel = FileDataModel(
+                    description = description,
+                    fileName = pdfFile.name,
+                    dateTime = Date().pdfFormattedCurrentDate
+                ).also {
+                    it.fileData = pdfFile.readBytes()
+                }
+            )
+        )
     }
 
     private fun configureDeleteAction(position: Int) {

@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        app:navigationIcon="@drawable/ic_baseline_keyboard_arrow_up_24"
         app:fabAnimationMode="scale"
         app:fabAlignmentMode="end"
         app:fabCradleRoundedCornerRadius="16dp">

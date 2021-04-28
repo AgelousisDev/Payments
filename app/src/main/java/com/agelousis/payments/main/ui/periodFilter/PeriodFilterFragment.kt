@@ -14,6 +14,7 @@ import androidx.transition.TransitionInflater
 import com.agelousis.payments.R
 import com.agelousis.payments.databinding.PeriodFilterFragmentLayoutBinding
 import com.agelousis.payments.main.MainActivity
+import com.agelousis.payments.main.ui.files.models.FileDataModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.models.PersonModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
@@ -24,7 +25,9 @@ import com.agelousis.payments.utils.helpers.PDFHelper
 import com.agelousis.payments.utils.helpers.PaymentCsvHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.*
 
 class PeriodFilterFragment: Fragment(), PeriodFilterFragmentPresenter {
@@ -126,14 +129,38 @@ class PeriodFilterFragment: Fragment(), PeriodFilterFragmentPresenter {
                         binding.periodFilterMaximumPaymentMonthLayout.dateValue ?: ""
                     )
                 )
-                context?.sharePDF(
-                    pdfFile = pdfFile
-                )
+                uiScope.launch {
+                    delay(
+                        timeMillis = 1000L
+                    )
+                    redirectToPdfViewer(
+                        pdfFile = pdfFile,
+                        description = String.format(
+                            "%s - %s",
+                            binding.periodFilterMinimumPaymentMonthLayout.dateValue ?: "",
+                            binding.periodFilterMaximumPaymentMonthLayout.dateValue ?: ""
+                        )
+                    )
+                }
                 context?.message(
                     message = resources.getString(R.string.key_file_saved_message)
                 )
             }
         }
+    }
+
+    private fun redirectToPdfViewer(pdfFile: File, description: String) {
+        findNavController().navigate(
+            PeriodFilterFragmentDirections.actionPeriodFilterFragmentToPdfViewerFragment(
+                fileDataModel = FileDataModel(
+                    description = description,
+                    fileName = pdfFile.name,
+                    dateTime = Date().pdfFormattedCurrentDate
+                ).also {
+                    it.fileData = pdfFile.readBytes()
+                }
+            )
+        )
     }
 
 }
