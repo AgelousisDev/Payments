@@ -109,10 +109,7 @@ class FilesFragment: Fragment(), FilePresenter {
 
     private fun configureSearchView() {
         binding.searchLayout.onProfileImageClicked {
-            if ((activity as? MainActivity)?.bottomSheetBehavior?.state == BottomSheetBehavior.STATE_HIDDEN)
-                (activity as? MainActivity)?.bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-            else
-                (activity as? MainActivity)?.bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+            (activity as? MainActivity)?.bottomSheetBehaviorState = (activity as? MainActivity)?.bottomSheetBehaviorState == false
         }
         binding.searchLayout.onQueryListener {
             configureFileList(

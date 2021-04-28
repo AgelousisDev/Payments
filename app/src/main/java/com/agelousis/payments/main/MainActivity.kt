@@ -74,9 +74,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             R.id.navigationGuide ->
                 showGuide()
         }
-        item.isChecked = true
-        bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
-        //binding.drawerLayout.closeDrawer(GravityCompat.START)
+        item.isChecked = item.itemId != R.id.navigationGuide
+        bottomSheetBehaviorState = false
         return true
     }
 
@@ -189,7 +188,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     lateinit var binding: ActivityMainBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val dbManager by lazy { DBManager(context = this) }
-    var bottomSheetBehavior: BottomSheetBehavior<*>? = null
+    private var bottomSheetBehavior: BottomSheetBehavior<*>? = null
     val userModel by lazy { intent?.extras?.getParcelable<UserModel>(USER_MODEL_EXTRA) }
     var appBarTitle: String? = null
         set(value) {
@@ -238,13 +237,21 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             field = value
             binding.navigationView.menu.findItem(R.id.navigationGraph)?.isVisible = value
         }
+    var bottomSheetBehaviorState = false
+        set(value) {
+            field = value
+            if (bottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED && !value)
+                bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+            else if (bottomSheetBehavior?.state == BottomSheetBehavior.STATE_HIDDEN && value)
+                bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+        }
 
     override fun onBackPressed() {
         unCheckAllMenuItems(
             menu = binding.navigationView.menu
         )
         if (bottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED)
-            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+            bottomSheetBehaviorState = false
         else
             when(supportFragmentManager.currentNavigationFragment) {
                 is PaymentsFragment ->
@@ -298,10 +305,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
 
         binding.appBarMain.bottomAppBar.setNavigationOnClickListener {
-            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehaviorState = true
         }
         binding.appBarMain.contentMain.root.setOnClickListener {
-            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+            bottomSheetBehaviorState = false
         }
         binding.navigationView.getHeaderView(0)?.let {
             val navHeaderBinding = NavHeaderMainBinding.bind(it)

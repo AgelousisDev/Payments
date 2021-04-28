@@ -39,7 +39,6 @@ import com.agelousis.payments.main.ui.totalPaymentsAmount.TotalPaymentsAmountDia
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.PDFHelper
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -82,12 +81,14 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                     paymentIndex = adapterPosition,
                     isSelected = !personModel.isSelected
                 )
-            else ->
+            else -> {
+                (activity as? MainActivity)?.bottomSheetBehaviorState = false
                 findNavController().navigate(
                     PaymentsFragmentDirections.actionPaymentListFragmentToNewPaymentFragment(
                         personDataModel = personModel
                     )
                 )
+            }
         }
     }
 
@@ -110,6 +111,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
     }
 
     override fun onPersonAdd(groupModel: GroupModel) {
+        (activity as? MainActivity)?.bottomSheetBehaviorState = false
         findNavController().navigate(
             PaymentsFragmentDirections.actionPaymentListFragmentToNewPaymentFragment(
                 groupDataModel = groupModel
@@ -195,12 +197,10 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
 
     private fun configureSearchView() {
         binding.searchLayout.onProfileImageClicked {
-            if ((activity as? MainActivity)?.bottomSheetBehavior?.state == BottomSheetBehavior.STATE_HIDDEN)
-                (activity as? MainActivity)?.bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-            else
-                (activity as? MainActivity)?.bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+            (activity as? MainActivity)?.bottomSheetBehaviorState = (activity as? MainActivity)?.bottomSheetBehaviorState == false
         }
         binding.searchLayout.onSecondaryIconClicked {
+            (activity as? MainActivity)?.bottomSheetBehaviorState = false
             findNavController().navigate(
                 PaymentsFragmentDirections.actionPaymentsFragmentToFilterPaymentsFragment()
             )
@@ -344,6 +344,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
     }
 
     private fun redirectToPdfViewer(pdfFile: File, description: String) {
+        (activity as? MainActivity)?.bottomSheetBehaviorState = false
         findNavController().navigate(
             PaymentsFragmentDirections.actionPaymentsFragmentToPdfViewerFragment(
                 fileDataModel = FileDataModel(
@@ -527,6 +528,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
     }
 
     fun navigateToPeriodFilterFragment() {
+        (activity as? MainActivity)?.bottomSheetBehaviorState = false
         val payments = filteredList.filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten()
         findNavController().popBackStack(R.id.periodFilterFragment, true)
         findNavController().navigate(
