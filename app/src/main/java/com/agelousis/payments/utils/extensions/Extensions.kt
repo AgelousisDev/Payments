@@ -888,6 +888,9 @@ fun AppCompatImageView.setPicassoGroupImageInternalFile(fileName: String?) {
     }
 }
 
+val Context.isLandscape
+    get() = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
 @BindingAdapter("switchStateChanged")
 fun switchStateChanged(switchMaterial: SwitchMaterial, optionPresenter: OptionPresenter) {
     switchMaterial.setOnCheckedChangeListener { _, isChecked ->

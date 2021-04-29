@@ -12,19 +12,21 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
 import com.agelousis.payments.R
 import com.agelousis.payments.base.BaseActivity
 import com.agelousis.payments.database.DBManager
 import com.agelousis.payments.database.SQLiteHelper
 import com.agelousis.payments.databinding.ActivityMainBinding
-import com.agelousis.payments.databinding.NavHeaderMainBinding
 import com.agelousis.payments.group.GroupActivity
 import com.agelousis.payments.guide.GuideActivity
 import com.agelousis.payments.login.LoginActivity
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.enumerations.FloatingButtonPosition
 import com.agelousis.payments.main.enumerations.FloatingButtonType
+import com.agelousis.payments.main.materialMenu.MaterialMenuDialogFragment
+import com.agelousis.payments.main.materialMenu.enumerations.MaterialMenuOption
+import com.agelousis.payments.main.materialMenu.models.MaterialMenuDataModel
+import com.agelousis.payments.main.materialMenu.presenters.MaterialMenuFragmentPresenter
 import com.agelousis.payments.main.menuOptions.PaymentsMenuOptionsBottomSheetFragment
 import com.agelousis.payments.main.ui.history.HistoryFragment
 import com.agelousis.payments.main.ui.files.FilesFragment
@@ -41,42 +43,41 @@ import com.agelousis.payments.profilePicture.ProfilePictureActivity
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.google.android.material.bottomappbar.BottomAppBar
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener, View.OnClickListener {
+class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener, View.OnClickListener, MaterialMenuFragmentPresenter {
 
     companion object {
         const val USER_MODEL_EXTRA = "MainActivity=userModelExtra"
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
-            R.id.navigationHome -> {
+    override fun onMaterialMenuOptionSelected(materialMenuOption: MaterialMenuOption) {
+        when(materialMenuOption) {
+            MaterialMenuOption.HOME -> {
                 binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().popBackStack()
                 binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().navigate(R.id.action_global_paymentsFragment)
             }
-            R.id.navigationProfile -> {
+            MaterialMenuOption.PROFILE -> {
                 binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().popBackStack(R.id.personalInformationFragment, true)
                 binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().navigate(R.id.action_global_personalInformation)
             }
-            R.id.navigationFiles -> {
+            MaterialMenuOption.INVOICES -> {
                 binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().popBackStack(R.id.filesFragment, true)
                 binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().navigate(R.id.action_global_filesFragment)
             }
-            R.id.navigationGraph -> {
+            MaterialMenuOption.HISTORY -> {
                 binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().popBackStack(R.id.historyFragment, true)
                 binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().navigate(R.id.action_global_historyFragment)
             }
-            R.id.navigationGuide ->
+            MaterialMenuOption.GUIDE ->
                 showGuide()
         }
-        item.isChecked = item.itemId != R.id.navigationGuide
-        bottomSheetBehaviorState = false
-        return true
+    }
+
+    override fun onMaterialMenuProfileIconClicked() {
+        showProfilePicture()
     }
 
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
@@ -188,8 +189,20 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     lateinit var binding: ActivityMainBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val dbManager by lazy { DBManager(context = this) }
-    private var bottomSheetBehavior: BottomSheetBehavior<*>? = null
     val userModel by lazy { intent?.extras?.getParcelable<UserModel>(USER_MODEL_EXTRA) }
+    private val materialMenuDataModel by lazy {
+        MaterialMenuDataModel(
+            profileImagePath = userModel?.profileImage,
+            profileName = userModel?.fullName ?: resources.getString(R.string.key_empty_field_label),
+            materialMenuOptionList = listOf(
+                MaterialMenuOption.HOME,
+                MaterialMenuOption.PROFILE,
+                MaterialMenuOption.INVOICES,
+                MaterialMenuOption.HISTORY,
+                MaterialMenuOption.GUIDE
+            )
+        )
+    }
     var appBarTitle: String? = null
         set(value) {
             field = value
@@ -235,43 +248,29 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     var historyButtonIsVisible = false
         set(value) {
             field = value
-            binding.navigationView.menu.findItem(R.id.navigationGraph)?.isVisible = value
-        }
-    var bottomSheetBehaviorState = false
-        set(value) {
-            field = value
-            if (bottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED && !value)
-                bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
-            else if (bottomSheetBehavior?.state == BottomSheetBehavior.STATE_HIDDEN && value)
-                bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+            materialMenuDataModel.materialMenuOptionList?.firstOrNull { it == MaterialMenuOption.HISTORY }?.isEnabled = value
         }
 
     override fun onBackPressed() {
-        unCheckAllMenuItems(
-            menu = binding.navigationView.menu
-        )
-        if (bottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED)
-            bottomSheetBehaviorState = false
-        else
-            when(supportFragmentManager.currentNavigationFragment) {
-                is PaymentsFragment ->
-                    showSimpleDialog(
-                        title = resources.getString(R.string.key_logout_label),
-                        message = resources.getString(R.string.key_logout_message),
-                        icon = R.drawable.ic_logout
-                    ) {
-                        startActivity(Intent(this, LoginActivity::class.java))
-                        finish()
-                    }
-                is NewPaymentFragment ->
-                    showNewPersonUnsavedFieldsWarning()
-                is NewPaymentAmountFragment ->
-                    showNewPaymentUnsavedFieldsWarning()
-                else -> {
-                    binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().previousBackStackEntry?.savedStateHandle?.remove<PaymentAmountModel>(NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA)
-                    super.onBackPressed()
+        when(supportFragmentManager.currentNavigationFragment) {
+            is PaymentsFragment ->
+                showSimpleDialog(
+                    title = resources.getString(R.string.key_logout_label),
+                    message = resources.getString(R.string.key_logout_message),
+                    icon = R.drawable.ic_logout
+                ) {
+                    startActivity(Intent(this, LoginActivity::class.java))
+                    finish()
                 }
+            is NewPaymentFragment ->
+                showNewPersonUnsavedFieldsWarning()
+            is NewPaymentAmountFragment ->
+                showNewPaymentUnsavedFieldsWarning()
+            else -> {
+                binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().previousBackStackEntry?.savedStateHandle?.remove<PaymentAmountModel>(NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA)
+                super.onBackPressed()
             }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -279,7 +278,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar()
-        setupNavigationView()
         setupUI()
         addInactiveGroup()
     }
@@ -291,35 +289,24 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun configureNavigationController() {
         binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().addOnDestinationChangedListener(this)
-        NavigationUI.setupWithNavController(binding.navigationView, binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController())
-        binding.navigationView.setNavigationItemSelectedListener(this)
+        //NavigationUI.setupWithNavController(binding.navigationView, binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController())
+        //binding.navigationView.setNavigationItemSelectedListener(this)
     }
 
     private fun setupToolbar() {
         setSupportActionBar(binding.appBarMain.bottomAppBar)
         binding.appBarMain.bottomAppBar.replaceMenu(R.menu.activity_menu_main)
+        binding.appBarMain.bottomAppBar.setNavigationOnClickListener {
+            showMaterialMenuFragment()
+        }
     }
 
-    private fun setupNavigationView() {
-        bottomSheetBehavior = BottomSheetBehavior.from(binding.navigationView)
-        bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
-
-        binding.appBarMain.bottomAppBar.setNavigationOnClickListener {
-            bottomSheetBehaviorState = true
-        }
-        binding.appBarMain.contentMain.root.setOnClickListener {
-            bottomSheetBehaviorState = false
-        }
-        binding.navigationView.getHeaderView(0)?.let {
-            val navHeaderBinding = NavHeaderMainBinding.bind(it)
-            navHeaderBinding.navigationViewProfileImageView.loadImagePath(
-                fileName = userModel?.profileImage
-            )
-            navHeaderBinding.navigationViewProfileImageView.setOnClickListener {
-                showProfilePicture()
-            }
-            navHeaderBinding.navigationViewProfileUsername.text = userModel?.fullName ?: resources.getString(R.string.key_empty_field_label)
-        }
+    fun showMaterialMenuFragment() {
+        MaterialMenuDialogFragment.show(
+            supportFragmentManager = supportFragmentManager,
+            materialMenuDataModel = materialMenuDataModel,
+            materialMenuFragmentPresenter = this
+        )
     }
 
     private fun setupUI() {
@@ -392,16 +379,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 }
             }
         )
-    }
-
-    private fun unCheckAllMenuItems(menu: Menu?) {
-        for (i in 0 until (menu?.size() ?: 0)) {
-            val item = menu?.getItem(i)
-            if(item?.hasSubMenu() == true)
-                unCheckAllMenuItems(item.subMenu)
-            else
-                item?.isChecked = false
-        }
     }
 
     private fun showPaymentsMenuOptionsFragment() {

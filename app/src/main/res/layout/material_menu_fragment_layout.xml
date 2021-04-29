@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="materialMenuDataModel"
+            type="com.agelousis.payments.main.materialMenu.models.MaterialMenuDataModel" />
+        <variable
+            name="presenter"
+            type="com.agelousis.payments.main.materialMenu.presenters.MaterialMenuFragmentPresenter" />
+    </data>
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/material_menu_dialog_background">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/materialMenuCloseIcon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="@dimen/activity_general_horizontal_margin"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="@{() -> presenter.onMaterialMenuDismiss()}"
+            app:layout_constraintStart_toStartOf="@+id/materialMenuProfileIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/materialMenuProfileIcon"
+            app:srcCompat="@drawable/ic_close" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_general_horizontal_margin"
+            android:text="@string/app_name"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/materialMenuProfileIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="@{() -> presenter.onMaterialMenuProfileIconClicked()}"
+            picassoImageFromInternalFiles="@{materialMenuDataModel.profileImagePath}"
+            app:srcCompat="@drawable/ic_person"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialMenuCloseIcon"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/materialMenuProfileNameView"
+            style="@style/TextViewTitleLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+            android:text="@{materialMenuDataModel.profileName}"
+            app:layout_constraintBottom_toBottomOf="@+id/materialMenuProfileIcon"
+            app:layout_constraintStart_toEndOf="@+id/materialMenuProfileIcon"
+            app:layout_constraintTop_toTopOf="@+id/materialMenuProfileIcon"
+            tools:text="Evans Collins" />
+
+        <View
+            android:id="@+id/materialMenuHeaderSeparatorLine"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/grey"
+            android:layout_marginTop="@dimen/activity_general_horizontal_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialMenuProfileIcon"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/materialMenuRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layoutAnimation="@anim/layout_animation_fall_down"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialMenuHeaderSeparatorLine" />
+
+        <View
+            android:id="@+id/materialMenuFooterSeparatorLine"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/grey"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialMenuRecyclerView"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextViewValueLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_general_horizontal_margin"
+            android:text="@string/key_created_by_vAge_solutions_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialMenuFooterSeparatorLine"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>
+</layout>

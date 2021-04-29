@@ -81,14 +81,12 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                     paymentIndex = adapterPosition,
                     isSelected = !personModel.isSelected
                 )
-            else -> {
-                (activity as? MainActivity)?.bottomSheetBehaviorState = false
+            else ->
                 findNavController().navigate(
                     PaymentsFragmentDirections.actionPaymentListFragmentToNewPaymentFragment(
                         personDataModel = personModel
                     )
                 )
-            }
         }
     }
 
@@ -111,7 +109,6 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
     }
 
     override fun onPersonAdd(groupModel: GroupModel) {
-        (activity as? MainActivity)?.bottomSheetBehaviorState = false
         findNavController().navigate(
             PaymentsFragmentDirections.actionPaymentListFragmentToNewPaymentFragment(
                 groupDataModel = groupModel
@@ -197,10 +194,9 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
 
     private fun configureSearchView() {
         binding.searchLayout.onProfileImageClicked {
-            (activity as? MainActivity)?.bottomSheetBehaviorState = (activity as? MainActivity)?.bottomSheetBehaviorState == false
+            (activity as? MainActivity)?.showMaterialMenuFragment()
         }
         binding.searchLayout.onSecondaryIconClicked {
-            (activity as? MainActivity)?.bottomSheetBehaviorState = false
             findNavController().navigate(
                 PaymentsFragmentDirections.actionPaymentsFragmentToFilterPaymentsFragment()
             )
@@ -344,7 +340,6 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
     }
 
     private fun redirectToPdfViewer(pdfFile: File, description: String) {
-        (activity as? MainActivity)?.bottomSheetBehaviorState = false
         findNavController().navigate(
             PaymentsFragmentDirections.actionPaymentsFragmentToPdfViewerFragment(
                 fileDataModel = FileDataModel(
@@ -528,7 +523,6 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
     }
 
     fun navigateToPeriodFilterFragment() {
-        (activity as? MainActivity)?.bottomSheetBehaviorState = false
         val payments = filteredList.filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten()
         findNavController().popBackStack(R.id.periodFilterFragment, true)
         findNavController().navigate(

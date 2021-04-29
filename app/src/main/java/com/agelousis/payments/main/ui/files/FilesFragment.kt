@@ -109,7 +109,7 @@ class FilesFragment: Fragment(), FilePresenter {
 
     private fun configureSearchView() {
         binding.searchLayout.onProfileImageClicked {
-            (activity as? MainActivity)?.bottomSheetBehaviorState = (activity as? MainActivity)?.bottomSheetBehaviorState == false
+            (activity as? MainActivity)?.showMaterialMenuFragment()
         }
         binding.searchLayout.onQueryListener {
             configureFileList(

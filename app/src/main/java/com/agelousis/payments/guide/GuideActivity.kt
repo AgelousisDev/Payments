@@ -13,6 +13,7 @@ import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.custom.SlideTransformer
 import com.agelousis.payments.utils.extensions.addTabDots
 import com.agelousis.payments.utils.extensions.isFirstTime
+import com.agelousis.payments.utils.extensions.isLandscape
 
 class GuideActivity : AppCompatActivity(), GuideActivityPresenter {
 
@@ -39,11 +40,12 @@ class GuideActivity : AppCompatActivity(), GuideActivityPresenter {
     private fun setupView() {
         binding.viewPager.apply {
             offscreenPageLimit = guideModelList.size
-            setPageTransformer(
-                SlideTransformer(
-                    offscreenPageLimit = guideModelList.size
+            if (!isLandscape)
+                setPageTransformer(
+                    SlideTransformer(
+                        offscreenPageLimit = guideModelList.size
+                    )
                 )
-            )
             adapter = GuidePagerAdapter(
                 fragmentActivity = this@GuideActivity,
                 guideModelList = guideModelList
