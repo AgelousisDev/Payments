@@ -15,6 +15,7 @@ import com.agelousis.payments.R
 import com.agelousis.payments.custom.itemDecoration.HeaderItemDecoration
 import com.agelousis.payments.databinding.FragmentFilesLayoutBinding
 import com.agelousis.payments.main.MainActivity
+import com.agelousis.payments.main.materialMenu.enumerations.MaterialMenuOption
 import com.agelousis.payments.main.ui.files.adapters.FilesAdapter
 import com.agelousis.payments.main.ui.files.enumerations.FileRowState
 import com.agelousis.payments.main.ui.files.models.FileDataModel
@@ -23,7 +24,6 @@ import com.agelousis.payments.main.ui.files.presenter.FilePresenter
 import com.agelousis.payments.main.ui.files.viewModel.FilesViewModel
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.utils.extensions.*
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -109,7 +109,9 @@ class FilesFragment: Fragment(), FilePresenter {
 
     private fun configureSearchView() {
         binding.searchLayout.onProfileImageClicked {
-            (activity as? MainActivity)?.showMaterialMenuFragment()
+            (activity as? MainActivity)?.onMaterialMenuOptionSelected(
+                materialMenuOption = MaterialMenuOption.PROFILE
+            )
         }
         binding.searchLayout.onQueryListener {
             configureFileList(

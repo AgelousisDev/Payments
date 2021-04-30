@@ -289,8 +289,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
 
     private fun configureNavigationController() {
         binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().addOnDestinationChangedListener(this)
-        //NavigationUI.setupWithNavController(binding.navigationView, binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController())
-        //binding.navigationView.setNavigationItemSelectedListener(this)
     }
 
     private fun setupToolbar() {
@@ -301,7 +299,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
         }
     }
 
-    fun showMaterialMenuFragment() {
+    private fun showMaterialMenuFragment() {
         MaterialMenuDialogFragment.show(
             supportFragmentManager = supportFragmentManager,
             materialMenuDataModel = materialMenuDataModel,
