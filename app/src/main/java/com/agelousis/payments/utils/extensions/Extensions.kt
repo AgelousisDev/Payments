@@ -52,6 +52,7 @@ import androidx.core.database.getStringOrNull
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.BuildConfig
 import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
@@ -391,7 +392,7 @@ fun View.circularReveal(circularAnimationCompletionBlock: CircularAnimationCompl
             override fun onGlobalLayout() {
                 val finalRadius: Float = max(width.toFloat(), height.toFloat())
                 // create the animator for this view (the start radius is zero)
-                val circularReveal = ViewAnimationUtils.createCircularReveal(this@circularReveal, width / 2, height - (height / 5), 0f, finalRadius)
+                val circularReveal = ViewAnimationUtils.createCircularReveal(this@circularReveal, width - (width / 5), height - (height / 5), 0f, finalRadius)
                 circularReveal.duration = 500
                 // make the view visible and start the animation
                 visibility = View.VISIBLE
@@ -859,6 +860,30 @@ var SharedPreferences.isFirstTime: Boolean
     }
     get() = getBoolean(Constants.SHARED_PREFERENCES_FIRST_TIME_KEY, true)
 
+fun AppCompatImageView.setPicassoGroupImageInternalFile(fileName: String?) {
+    fileName?.let {
+        Picasso.get().load(File(context.filesDir, it)).transform(CircleTransformation()).into(this)
+    }
+}
+
+val Context.isLandscape
+    get() = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+fun RecyclerView.canScrollVertically(scrollVerticallyBlock: (canScrollVertically: Boolean) -> Unit) {
+    addOnScrollListener(
+        object: RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                scrollVerticallyBlock(
+                    recyclerView.canScrollVertically(1)
+                )
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {}
+        }
+    )
+}
+
 @BindingAdapter("picassoImagePath")
 fun AppCompatImageView.loadImagePath(fileName: String?) {
     fileName?.let {
@@ -881,15 +906,6 @@ fun setPicassoGroupImageFromInternalFiles(appCompatImageView: AppCompatImageView
         Picasso.get().load(File(appCompatImageView.context.filesDir, it)).transform(CircleTransformation()).into(appCompatImageView)
     }
 }
-
-fun AppCompatImageView.setPicassoGroupImageInternalFile(fileName: String?) {
-    fileName?.let {
-        Picasso.get().load(File(context.filesDir, it)).transform(CircleTransformation()).into(this)
-    }
-}
-
-val Context.isLandscape
-    get() = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
 @BindingAdapter("switchStateChanged")
 fun switchStateChanged(switchMaterial: SwitchMaterial, optionPresenter: OptionPresenter) {

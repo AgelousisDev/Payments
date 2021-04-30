@@ -54,6 +54,11 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
         )
     }
 
+    override fun onPaymentsOrder() {
+        dismiss()
+        (activity?.supportFragmentManager?.currentNavigationFragment as? PaymentsFragment)?.redirectToFilterPaymentsFragment()
+    }
+
     private lateinit var binding: PaymentsMenuOptionsFragmentLayoutBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
@@ -65,6 +70,7 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
                 header = resources.getString(R.string.key_options_label),
                 headerBackgroundColor = context?.let { ContextCompat.getColor(it, android.R.color.transparent) }
             ),
+            PaymentsMenuOptionType.PAYMENTS_ORDER,
             PaymentsMenuOptionType.CLEAR_PAYMENTS,
             PaymentsMenuOptionType.CSV_EXPORT,
             PaymentsMenuOptionType.SEND_SMS_GLOBALLY
@@ -93,6 +99,14 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
             personModelList.addAll(
                 list.filterIsInstance<PersonModel>()
             )
+            optionList.firstOrNullWithType(
+                typeBlock = {
+                    it as? PaymentsMenuOptionType
+                },
+                predicate = {
+                    it == PaymentsMenuOptionType.PAYMENTS_ORDER
+                }
+            )?.isEnabled = personModelList.isNotEmpty()
             optionList.firstOrNullWithType(
                 typeBlock = {
                     it as? PaymentsMenuOptionType

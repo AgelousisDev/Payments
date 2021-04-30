@@ -4,4 +4,5 @@ interface PaymentsMenuOptionPresenter {
     fun onClearPayments()
     fun onCsvExport()
     fun onSendSmsGlobally()
+    fun onPaymentsOrder()
 }

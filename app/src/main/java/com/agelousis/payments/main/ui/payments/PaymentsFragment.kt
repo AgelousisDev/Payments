@@ -19,6 +19,7 @@ import com.agelousis.payments.databinding.FragmentPaymentsLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.enumerations.SwipeItemType
 import com.agelousis.payments.main.materialMenu.enumerations.MaterialMenuOption
+import com.agelousis.payments.main.menuOptions.PaymentsMenuOptionsBottomSheetFragment
 import com.agelousis.payments.main.ui.files.models.FileDataModel
 import com.agelousis.payments.main.ui.payments.adapters.PaymentsAdapter
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
@@ -209,9 +210,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
             )
         }
         binding.searchLayout.onSecondaryIconClicked {
-            findNavController().navigate(
-                PaymentsFragmentDirections.actionPaymentsFragmentToFilterPaymentsFragment()
-            )
+            showPaymentsMenuOptionsFragment()
         }
         binding.searchLayout.onQueryListener {
             configurePayments(
@@ -219,6 +218,18 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                 query = it
             )
         }
+    }
+
+    private fun showPaymentsMenuOptionsFragment() {
+        PaymentsMenuOptionsBottomSheetFragment.show(
+            supportFragmentManager = childFragmentManager
+        )
+    }
+
+    fun redirectToFilterPaymentsFragment() {
+        findNavController().navigate(
+            PaymentsFragmentDirections.actionPaymentsFragmentToFilterPaymentsFragment()
+        )
     }
     
     private fun configureRecyclerView() {

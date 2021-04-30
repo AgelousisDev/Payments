@@ -13,6 +13,7 @@ import com.agelousis.payments.R
 import com.agelousis.payments.databinding.HistoryFragmentLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.history.listeners.PaymentLineChartGestureListener
+import com.agelousis.payments.main.ui.history.presenter.HistoryFragmentPresenter
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.models.PersonModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
@@ -32,7 +33,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HistoryFragment: Fragment(), GestureDetector.OnGestureListener, View.OnTouchListener {
+class HistoryFragment: Fragment(), GestureDetector.OnGestureListener, View.OnTouchListener, HistoryFragmentPresenter {
 
     private lateinit var binding: HistoryFragmentLayoutBinding
     private val args: HistoryFragmentArgs by navArgs()
@@ -59,12 +60,19 @@ class HistoryFragment: Fragment(), GestureDetector.OnGestureListener, View.OnTou
 
     override fun onSingleTapUp(event: MotionEvent) = true
 
+    override fun onPayments() {
+        findNavController().popBackStack()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = HistoryFragmentLayoutBinding.inflate(
             layoutInflater,
             container,
             false
-        )
+        ).also {
+            it.fromPaymentsRedirection = args.fromPaymentsRedirection
+            it.presenter = this
+        }
         return binding.root
     }
 
