@@ -4,4 +4,5 @@ interface PaymentsFragmentPresenter {
     fun onDeletePayments()
     fun onExportInvoice()
     fun onPaymentsSendSms()
+    fun onHistoryGraph()
 }

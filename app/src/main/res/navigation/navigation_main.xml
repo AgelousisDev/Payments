@@ -38,6 +38,13 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+        <action
+            android:id="@+id/action_paymentsFragment_to_historyFragment"
+            app:destination="@id/historyFragment"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom" />
     </fragment>
     <fragment
         android:id="@+id/personalInformationFragment"
@@ -144,7 +151,12 @@
         android:id="@+id/historyFragment"
         android:name="com.agelousis.payments.main.ui.history.HistoryFragment"
         android:label="HistoryFragment"
-        tools:layout="@layout/history_fragment_layout"/>
+        tools:layout="@layout/history_fragment_layout">
+        <argument
+            android:name="fromPaymentsRedirection"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
     <action
         android:id="@+id/action_global_historyFragment"
         app:destination="@id/historyFragment"

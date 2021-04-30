@@ -213,6 +213,7 @@
     <string name="key_products_label">Products</string>
     <string name="key_number_label">No.</string>
     <string name="key_created_by_vAge_solutions_label">Created by vAge Solutions</string>
+    <string name="key_history_graph_label">History Graph</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>

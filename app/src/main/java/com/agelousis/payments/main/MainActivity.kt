@@ -94,7 +94,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 appBarTitle = ""
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_add_group
-                floatingButtonPosition = FloatingButtonPosition.CENTER
+                floatingButtonPosition = FloatingButtonPosition.END
                 floatingButtonTint = R.color.colorAccent
                 menuOptionsIsVisible = true
             }

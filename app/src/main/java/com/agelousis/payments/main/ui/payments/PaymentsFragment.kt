@@ -69,6 +69,14 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         )
     }
 
+    override fun onHistoryGraph() {
+        findNavController().navigate(
+            PaymentsFragmentDirections.actionPaymentsFragmentToHistoryFragment(
+                fromPaymentsRedirection = true
+            )
+        )
+    }
+
     override fun onGroupSelected(groupModel: GroupModel) {
         (activity as? MainActivity)?.startGroupActivity(
             groupModel = groupModel
@@ -172,6 +180,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
             false
         ).also {
             it.userModel = (activity as? MainActivity)?.userModel
+            it.paymentsAreAvailable = false
             it.presenter = this
         }
         return binding.root
@@ -523,6 +532,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         binding.paymentListRecyclerView.scheduleLayoutAnimation()
         (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
         (activity as? MainActivity)?.historyButtonIsVisible = filteredList.filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten().isNotEmpty()
+        binding.paymentsAreAvailable = (activity as? MainActivity)?.historyButtonIsVisible == true
     }
 
     fun navigateToPeriodFilterFragment() {

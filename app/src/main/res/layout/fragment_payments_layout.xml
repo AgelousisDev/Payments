@@ -3,9 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="android.view.View" />
         <variable
             name="userModel"
             type="com.agelousis.payments.login.models.UserModel" />
+        <variable
+            name="paymentsAreAvailable"
+            type="Boolean" />
         <variable
             name="presenter"
             type="com.agelousis.payments.main.ui.payments.presenters.PaymentsFragmentPresenter" />
@@ -141,10 +145,38 @@
         android:orientation="vertical"
         android:layoutAnimation="@anim/layout_animation_fall_down"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/historyGraphRedirectionLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchLayout" />
+
+    <LinearLayout
+        android:id="@+id/historyGraphRedirectionLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="@{paymentsAreAvailable ? View.VISIBLE : View.GONE}"
+        android:clickable="@{paymentsAreAvailable}"
+        android:focusable="@{paymentsAreAvailable}"
+        android:onClick="@{() -> presenter.onHistoryGraph()}"
+        android:padding="@dimen/activity_general_horizontal_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            app:srcCompat="@drawable/ic_baseline_keyboard_arrow_up_24"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextViewValueLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/key_history_graph_label"/>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
