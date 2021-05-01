@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
@@ -263,6 +264,20 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                         }
                     }
                 }
+            }
+        )
+        binding.paymentListRecyclerView.addOnScrollListener(
+            object: RecyclerView.OnScrollListener() {
+
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val isInFirstPosition = (binding.paymentListRecyclerView.layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition() == 0 && filteredList.filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten().isNotEmpty()
+                    if (!isInFirstPosition && binding.paymentsAreAvailable == true)
+                        binding.paymentsAreAvailable = false
+                    if (isInFirstPosition && binding.paymentsAreAvailable == false)
+                        binding.paymentsAreAvailable = true
+                }
+
             }
         )
         configureSwipeEvents()

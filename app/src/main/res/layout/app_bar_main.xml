@@ -7,11 +7,20 @@
     android:animateLayoutChanges="true"
     tools:context=".main.MainActivity">
 
+    <include
+        android:id="@+id/contentMain"
+        layout="@layout/content_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        app:backgroundTint="@color/alphaNativeBackgroundColor"
+        app:hideOnScroll="true"
+        app:layout_scrollFlags="scroll|enterAlways"
         app:navigationIcon="@drawable/ic_baseline_menu_24"
         app:fabAnimationMode="scale"
         app:fabAlignmentMode="end"
@@ -27,13 +36,6 @@
             android:text="@string/app_name"/>
 
     </com.google.android.material.bottomappbar.BottomAppBar>
-
-    <include
-        android:id="@+id/contentMain"
-        layout="@layout/content_main"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="?attr/actionBarSize"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingButton"
