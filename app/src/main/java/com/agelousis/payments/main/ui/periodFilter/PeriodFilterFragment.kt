@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.transition.TransitionInflater
 import com.agelousis.payments.R
 import com.agelousis.payments.databinding.PeriodFilterFragmentLayoutBinding
 import com.agelousis.payments.main.MainActivity
@@ -48,11 +47,6 @@ class PeriodFilterFragment: Fragment(), PeriodFilterFragmentPresenter {
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
     private lateinit var binding: PeriodFilterFragmentLayoutBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enterTransition = TransitionInflater.from(context ?: return).inflateTransition(R.transition.slide_right)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = PeriodFilterFragmentLayoutBinding.inflate(
