@@ -89,8 +89,8 @@
     <string name="key_total_amount_value_label">💶 Total %s</string>
     <string name="key_vat_percent_label">VAT(%)</string>
     <string name="key_vat_value_count_message">%s VAT should be counted here</string>
-    <string name="key_payment_month_amount_value_label">%s payment %s</string>
-    <string name="key_vat_amount_value_label">🧾 VAT %s %s</string>
+    <string name="key_payment_month_amount_value_label">%1$s payment %2$s</string>
+    <string name="key_vat_amount_value_label">🧾 VAT %1$s %2$s</string>
     <string name="key_summary_label">Summary</string>
     <string name="key_amount_without_vat_label">Amount without VAT</string>
     <string name="key_single_payment_label">Single Payment</string>

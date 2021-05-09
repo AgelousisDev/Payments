@@ -662,7 +662,7 @@ infix fun Context.createCalendarEventWith(calendarDataModel: CalendarDataModel) 
         .putExtra(CalendarContract.Events.TITLE, calendarDataModel.title) // Simple title
         .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true)
         .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, calendarDataModel.calendar.timeInMillis) // Only date part is considered when ALL_DAY is true; Same as DTSTART
-        .putExtra(CalendarContract.Events.EVENT_LOCATION, (getSystemService(Service.TELEPHONY_SERVICE) as? TelephonyManager)?.networkCountryIso?.toUpperCase(Locale.getDefault()))
+        .putExtra(CalendarContract.Events.EVENT_LOCATION, (getSystemService(Service.TELEPHONY_SERVICE) as? TelephonyManager)?.networkCountryIso?.uppercase())
         .putExtra(CalendarContract.Events.DESCRIPTION, calendarDataModel.description) // Description
         .putExtra(Intent.EXTRA_EMAIL, calendarDataModel.email)
     startActivity(insertCalendarIntent)

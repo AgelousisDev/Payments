@@ -128,7 +128,7 @@ class CountrySelectorDialogFragment: DialogFragment(), CountrySelectorFragmentPr
         filteredCountries.clear()
         filteredCountries.addAll(
             countryDataModelList.filter { countryDataModel ->
-                countryDataModel.countryName.toLowerCase(Locale.getDefault()).contains(query?.toLowerCase(Locale.getDefault()) ?: "")
+                countryDataModel.countryName.lowercase().contains(query?.lowercase() ?: "")
             }
         )
         (binding.countryRecyclerView.adapter as? CountriesAdapter)?.reloadData()

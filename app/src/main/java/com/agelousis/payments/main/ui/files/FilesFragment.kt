@@ -210,7 +210,7 @@ class FilesFragment: Fragment(), FilePresenter {
     private fun configureFileList(files: List<FileDataModel>, query: String? = null) {
         filteredList.clear()
         files.groupBy { it.fileDate.yearMonth }.toSortedMap(compareByDescending { it }).forEach { map ->
-            map.value.filter { it.description?.toLowerCase(Locale.getDefault())?.contains(query?.toLowerCase(Locale.getDefault()) ?: "") == true }
+            map.value.filter { it.description?.lowercase()?.contains(query?.lowercase() ?: "") == true }
                 .takeIf { it.isNotEmpty() }?.let inner@ { filteredByQueryList ->
                     val header = if (map.key?.isSameYearAndMonthWithCurrentDate == true) resources.getString(R.string.key_this_month_label) else map.key?.monthFormattedString
                     filteredList.add(

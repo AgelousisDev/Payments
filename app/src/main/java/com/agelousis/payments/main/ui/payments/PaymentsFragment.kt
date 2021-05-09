@@ -500,7 +500,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         filteredList.clear()
         list.filterIsInstance<PersonModel>().takeIf { it.isNotEmpty() }?.let { payments ->
             payments.groupBy { it.groupName ?: "" }.toSortedMap().forEach { map ->
-                map.value.filter { it.fullName.toLowerCase(Locale.getDefault()).contains(query?.replace(" ", "")?.toLowerCase(Locale.getDefault()) ?: "") || it.groupName?.toLowerCase(Locale.getDefault())?.contains(query?.replace(" ", "")?.toLowerCase(Locale.getDefault()) ?: "") == true }
+                map.value.filter { it.fullName.lowercase().contains(query?.replace(" ", "")?.lowercase() ?: "") || it.groupName?.lowercase()?.contains(query?.replace(" ", "")?.lowercase() ?: "") == true }
                     .takeIf { it.isNotEmpty() }?.let inner@ { filteredByQueryPayments ->
                         filteredList.add(
                             GroupModel(
@@ -532,7 +532,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
             }
         }
         filteredList.addAll(
-            list.filterIsInstance<GroupModel>().filter { it.groupName?.toLowerCase(Locale.getDefault())?.contains(query?.toLowerCase(Locale.getDefault()) ?: "") == true  && it.groupName != resources.getString(R.string.key_inactive_label) }
+            list.filterIsInstance<GroupModel>().filter { it.groupName?.lowercase()?.contains(query?.lowercase() ?: "") == true  && it.groupName != resources.getString(R.string.key_inactive_label) }
         )
 
         if (filteredList.isEmpty())
