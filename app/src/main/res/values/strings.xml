@@ -214,6 +214,11 @@
     <string name="key_number_label">No.</string>
     <string name="key_created_by_vAge_solutions_label">Created by vAge Solutions</string>
     <string name="key_history_graph_label">History Graph</string>
+    <string name="key_clients_payments_generate_qr_code_label">Generate QRCode</string>
+    <string name="key_clients_payments_generate_qr_code__message">QRCode generator for the current user\'s groups, clients &amp; their payments</string>
+    <string name="key_scan_qr_code_label">QRCode Scanner</string>
+    <string name="key_scan_qr_code_message">Import groups, clients &amp; their payments by scanning a QRCode</string>
+
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>

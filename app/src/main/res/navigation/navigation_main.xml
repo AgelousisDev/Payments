@@ -45,6 +45,13 @@
             app:exitAnim="@anim/slide_out_top"
             app:popEnterAnim="@anim/slide_in_top"
             app:popExitAnim="@anim/slide_out_bottom" />
+        <action
+            android:id="@+id/action_paymentsFragment_to_QRCodeFragment"
+            app:destination="@id/QRCodeFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
     <fragment
         android:id="@+id/personalInformationFragment"
@@ -178,5 +185,20 @@
         android:name="com.agelousis.payments.main.ui.paymentsFiltering.FilterPaymentsFragment"
         android:label="FilterPaymentsFragment"
         tools:layout="@layout/filter_payments_fragment_layout"/>
+    <fragment
+        android:id="@+id/QRCodeFragment"
+        android:name="com.agelousis.payments.main.ui.qrCode.QRCodeFragment"
+        android:label="QRCodeFragment"
+        tools:layout="@layout/qr_code_fragment_layout">
+        <argument
+            android:name="qrCodeContent"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="qrCodeSelectionType"
+            app:argType="com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType"
+            android:defaultValue="GENERATE" />
+    </fragment>
 
 </navigation>

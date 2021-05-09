@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
+        <import type="android.view.View" />
         <import type="com.agelousis.payments.main.menuOptions.enumerations.PaymentsMenuOptionType" />
+        <import type="com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType" />
         <variable
             name="menuOption"
             type="com.agelousis.payments.main.menuOptions.enumerations.PaymentsMenuOptionType" />
@@ -19,13 +21,12 @@
     android:focusable="@{menuOption.enabled}"
     android:foreground="?attr/selectableItemBackgroundBorderless"
     android:alpha="@{menuOption.enabled ? 1.0f : 0.5f}"
-    android:onClick="@{() -> menuOption == PaymentsMenuOptionType.CLEAR_PAYMENTS ? presenter.onClearPayments() : menuOption == PaymentsMenuOptionType.CSV_EXPORT ? presenter.onCsvExport() : menuOption == PaymentsMenuOptionType.SEND_SMS_GLOBALLY ? presenter.onSendSmsGlobally() : menuOption == PaymentsMenuOptionType.PAYMENTS_ORDER ? presenter.onPaymentsOrder() : null}">
+    android:onClick="@{() -> menuOption == PaymentsMenuOptionType.CLEAR_PAYMENTS ? presenter.onClearPayments() : menuOption == PaymentsMenuOptionType.CSV_EXPORT ? presenter.onCsvExport() : menuOption == PaymentsMenuOptionType.SEND_SMS_GLOBALLY ? presenter.onSendSmsGlobally() : menuOption == PaymentsMenuOptionType.PAYMENTS_ORDER ? presenter.onPaymentsOrder() : menuOption == PaymentsMenuOptionType.QR_CODE_GENERATOR ? presenter.onQrCode(QRCodeSelectionType.GENERATE) : menuOption == PaymentsMenuOptionType.SCAN_QR_CODE ? presenter.onQrCode(QRCodeSelectionType.SCAN) : null}">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/appCompatImageView2"
+        android:id="@+id/paymentsMenuOptionIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@{menuOption.icon}"
@@ -33,15 +34,31 @@
 
     <com.google.android.material.textview.MaterialTextView
         style="@style/TextViewTitleLabel"
+        android:id="@+id/paymentsMenuRowLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_general_horizontal_margin"
         android:text="@{menuOption.title}"
         android:textStyle="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/appCompatImageView2"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/paymentsMenuOptionIcon"
+        app:layout_constraintStart_toEndOf="@+id/paymentsMenuOptionIcon"
+        app:layout_constraintTop_toTopOf="@+id/paymentsMenuOptionIcon"
         tools:text="Clear Payments" />
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextViewLabel"
+        nullableTextResource="@{menuOption.subtitle}"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+        android:textStyle="normal"
+        android:visibility="@{menuOption.subtitle != null ? View.VISIBLE : View.GONE}"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/paymentsMenuOptionIcon"
+        app:layout_constraintTop_toBottomOf="@+id/paymentsMenuRowLabel"
+        tools:text="Clear all your payments" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

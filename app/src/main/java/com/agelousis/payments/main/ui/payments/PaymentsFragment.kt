@@ -37,11 +37,13 @@ import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
 import com.agelousis.payments.main.ui.paymentsFiltering.FilterPaymentsFragment
 import com.agelousis.payments.main.ui.paymentsFiltering.enumerations.PaymentsFilteringOptionType
 import com.agelousis.payments.main.ui.periodFilter.models.PeriodFilterDataModel
+import com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType
 import com.agelousis.payments.main.ui.shareMessageFragment.ShareMessageBottomSheetFragment
 import com.agelousis.payments.main.ui.totalPaymentsAmount.TotalPaymentsAmountDialogFragment
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.PDFHelper
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -230,6 +232,18 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
     fun redirectToFilterPaymentsFragment() {
         findNavController().navigate(
             PaymentsFragmentDirections.actionPaymentsFragmentToFilterPaymentsFragment()
+        )
+    }
+
+    fun redirectToQrCodeFragment(qrCodeSelectionType: QRCodeSelectionType) {
+        findNavController().navigate(
+            PaymentsFragmentDirections.actionPaymentsFragmentToQRCodeFragment(
+                qrCodeContent = when(qrCodeSelectionType) {
+                    QRCodeSelectionType.GENERATE -> Gson().toJson(itemsList.filterIsInstance<PersonModel>())
+                    else -> null
+                },
+                qrCodeSelectionType = qrCodeSelectionType
+            )
         )
     }
     

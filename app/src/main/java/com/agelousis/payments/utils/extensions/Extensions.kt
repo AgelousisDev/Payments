@@ -1066,3 +1066,13 @@ fun setImageViewTint(appCompatImageView: AppCompatImageView, tintColor: Int?) {
         appCompatImageView.imageTintList = ColorStateList.valueOf(it)
     }
 }
+
+@BindingAdapter("imageViewBitmap")
+fun setImageViewBitmap(appCompatImageView: AppCompatImageView, bitmap: Bitmap?) {
+    appCompatImageView.setImageBitmap(bitmap ?: return)
+}
+
+@BindingAdapter("nullableTextResource")
+fun setNullableTextResource(materialTextView: MaterialTextView, resourceId: Int?) {
+    materialTextView.text = materialTextView.context.resources.getString(resourceId ?: return)
+}

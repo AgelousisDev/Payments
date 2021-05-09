@@ -17,6 +17,7 @@ import com.agelousis.payments.main.ui.files.models.HeaderModel
 import com.agelousis.payments.main.ui.payments.PaymentsFragment
 import com.agelousis.payments.main.ui.payments.models.PersonModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
+import com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.currentNavigationFragment
 import com.agelousis.payments.utils.extensions.firstOrNullWithType
@@ -59,6 +60,13 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
         (activity?.supportFragmentManager?.currentNavigationFragment as? PaymentsFragment)?.redirectToFilterPaymentsFragment()
     }
 
+    override fun onQrCode(qrCodeSelectionType: QRCodeSelectionType) {
+        dismiss()
+        (activity?.supportFragmentManager?.currentNavigationFragment as? PaymentsFragment)?.redirectToQrCodeFragment(
+            qrCodeSelectionType = qrCodeSelectionType
+        )
+    }
+
     private lateinit var binding: PaymentsMenuOptionsFragmentLayoutBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
@@ -73,7 +81,9 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
             PaymentsMenuOptionType.PAYMENTS_ORDER,
             PaymentsMenuOptionType.CLEAR_PAYMENTS,
             PaymentsMenuOptionType.CSV_EXPORT,
-            PaymentsMenuOptionType.SEND_SMS_GLOBALLY
+            PaymentsMenuOptionType.SEND_SMS_GLOBALLY,
+            PaymentsMenuOptionType.QR_CODE_GENERATOR,
+            PaymentsMenuOptionType.SCAN_QR_CODE
         )
     }
 
@@ -131,6 +141,14 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
                     it == PaymentsMenuOptionType.SEND_SMS_GLOBALLY
                 }
             )?.isEnabled = personModelList.mapNotNull { it.phone }.isNotEmpty()
+            optionList.firstOrNullWithType(
+                typeBlock = {
+                    it as? PaymentsMenuOptionType
+                },
+                predicate = {
+                    it == PaymentsMenuOptionType.QR_CODE_GENERATOR
+                }
+            )?.isEnabled = personModelList.isNotEmpty()
             (binding.menuOptionsRecyclerView.adapter as? PaymentsMenuOptionAdapter)?.reloadData()
         }
     }
@@ -154,7 +172,7 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
                 context = context ?: return,
                 margin = resources.getDimension(R.dimen.activity_general_horizontal_margin).toInt()
             ) {
-                optionList.getOrNull(index = it) !is HeaderModel && optionList.getOrNull(index = it) != PaymentsMenuOptionType.SEND_SMS_GLOBALLY
+                optionList.getOrNull(index = it) !is HeaderModel && optionList.getOrNull(index = it) != PaymentsMenuOptionType.SCAN_QR_CODE
             }
         )
     }

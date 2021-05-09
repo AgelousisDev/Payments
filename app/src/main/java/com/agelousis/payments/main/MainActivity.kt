@@ -238,11 +238,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
             field = value
             binding.appBarMain.floatingButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, value))
         }
-    /*private var menuOptionsIsVisible = false
-        set(value) {
-            field = value
-            binding.appBarMain.bottomAppBar.menu?.findItem(R.id.menuSettings)?.isVisible = value
-        }*/
     var historyButtonIsVisible = false
         set(value) {
             field = value
