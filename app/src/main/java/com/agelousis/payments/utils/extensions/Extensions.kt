@@ -902,6 +902,18 @@ fun Window.hideSystemUI() {
                 or View.SYSTEM_UI_FLAG_FULLSCREEN)
 }
 
+val Int.randomPort: String
+    get() {
+        val chars = "1234567890"
+        val salt = StringBuilder()
+        val rnd = Random()
+        while(salt.length < this) {
+            val index: Int = (rnd.nextFloat() * chars.length).toInt()
+            salt.append(chars[index])
+        }
+        return salt.toString()
+    }
+
 @BindingAdapter("picassoImagePath")
 fun AppCompatImageView.loadImagePath(fileName: String?) {
     fileName?.let {

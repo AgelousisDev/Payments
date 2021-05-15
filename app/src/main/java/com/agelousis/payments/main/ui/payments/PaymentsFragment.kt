@@ -238,10 +238,6 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
     fun redirectToQrCodeFragment(qrCodeSelectionType: QRCodeSelectionType) {
         findNavController().navigate(
             PaymentsFragmentDirections.actionPaymentsFragmentToQRCodeFragment(
-                qrCodeContent = when(qrCodeSelectionType) {
-                    QRCodeSelectionType.GENERATE -> Gson().toJson(itemsList.filterIsInstance<PersonModel>())
-                    else -> null
-                },
                 qrCodeSelectionType = qrCodeSelectionType
             )
         )

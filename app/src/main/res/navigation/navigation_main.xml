@@ -191,11 +191,6 @@
         android:label="QRCodeFragment"
         tools:layout="@layout/qr_code_fragment_layout">
         <argument
-            android:name="qrCodeContent"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null" />
-        <argument
             android:name="qrCodeSelectionType"
             app:argType="com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType"
             android:defaultValue="GENERATE" />

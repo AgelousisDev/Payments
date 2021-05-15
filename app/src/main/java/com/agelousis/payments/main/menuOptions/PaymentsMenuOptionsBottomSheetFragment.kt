@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
@@ -21,6 +22,7 @@ import com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.currentNavigationFragment
 import com.agelousis.payments.utils.extensions.firstOrNullWithType
+import com.agelousis.payments.utils.extensions.hasPermissions
 import com.agelousis.payments.utils.extensions.sendSMSMessage
 import com.agelousis.payments.views.bottomSheet.BasicBottomSheetDialogFragment
 import kotlinx.coroutines.CoroutineScope
@@ -62,9 +64,26 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
 
     override fun onQrCode(qrCodeSelectionType: QRCodeSelectionType) {
         dismiss()
-        (activity?.supportFragmentManager?.currentNavigationFragment as? PaymentsFragment)?.redirectToQrCodeFragment(
-            qrCodeSelectionType = qrCodeSelectionType
-        )
+        when(qrCodeSelectionType) {
+            QRCodeSelectionType.GENERATE ->
+                (activity?.supportFragmentManager?.currentNavigationFragment as? PaymentsFragment)?.redirectToQrCodeFragment(
+                    qrCodeSelectionType = qrCodeSelectionType
+                )
+            QRCodeSelectionType.SCAN ->
+                if (context?.hasPermissions(android.Manifest.permission.CAMERA) == true)
+                    (activity?.supportFragmentManager?.currentNavigationFragment as? PaymentsFragment)?.redirectToQrCodeFragment(
+                        qrCodeSelectionType = qrCodeSelectionType
+                    )
+                else
+                    ActivityCompat.requestPermissions(
+                        activity ?: return,
+                        arrayOf(
+                            android.Manifest.permission.CAMERA
+                        ),
+                        MainActivity.QR_CODE_CAMERA_PERMISSION_REQUEST_CODE
+                    )
+        }
+
     }
 
     private lateinit var binding: PaymentsMenuOptionsFragmentLayoutBinding
@@ -83,7 +102,9 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
             PaymentsMenuOptionType.CSV_EXPORT,
             PaymentsMenuOptionType.SEND_SMS_GLOBALLY,
             PaymentsMenuOptionType.QR_CODE_GENERATOR,
-            PaymentsMenuOptionType.SCAN_QR_CODE
+            PaymentsMenuOptionType.SCAN_QR_CODE.also {
+                it.isEnabled = true
+            }
         )
     }
 

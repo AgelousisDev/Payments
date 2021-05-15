@@ -2,6 +2,7 @@ package com.agelousis.payments.main
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
@@ -25,7 +26,6 @@ import com.agelousis.payments.main.materialMenu.MaterialMenuDialogFragment
 import com.agelousis.payments.main.materialMenu.enumerations.MaterialMenuOption
 import com.agelousis.payments.main.materialMenu.models.MaterialMenuDataModel
 import com.agelousis.payments.main.materialMenu.presenters.MaterialMenuFragmentPresenter
-import com.agelousis.payments.main.ui.history.HistoryFragment
 import com.agelousis.payments.main.ui.files.FilesFragment
 import com.agelousis.payments.main.ui.newPayment.NewPaymentFragment
 import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
@@ -36,6 +36,7 @@ import com.agelousis.payments.main.ui.paymentsFiltering.FilterPaymentsFragment
 import com.agelousis.payments.main.ui.pdfViewer.PdfViewerFragment
 import com.agelousis.payments.main.ui.periodFilter.PeriodFilterFragment
 import com.agelousis.payments.main.ui.personalInformation.PersonalInformationFragment
+import com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType
 import com.agelousis.payments.profilePicture.ProfilePictureActivity
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
@@ -48,6 +49,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
 
     companion object {
         const val USER_MODEL_EXTRA = "MainActivity=userModelExtra"
+        const val QR_CODE_CAMERA_PERMISSION_REQUEST_CODE = 1
     }
 
     override fun onMaterialMenuOptionSelected(materialMenuOption: MaterialMenuOption) {
@@ -79,75 +81,70 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
 
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
         binding.appBarMain.bottomAppBar.performShow()
-        when(destination.label ?: "") {
-            in PersonalInformationFragment::class.java.name -> {
+        when(destination.id) {
+            R.id.personalInformationFragment -> {
                 appBarTitle = resources.getString(R.string.key_profile_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END
                 floatingButtonTint = R.color.colorAccent
-                //menuOptionsIsVisible = false
             }
-            in PaymentsFragment::class.java.name -> {
+            R.id.paymentsFragment -> {
                 appBarTitle = ""
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_add_group
                 floatingButtonPosition = FloatingButtonPosition.CENTER
                 floatingButtonTint = R.color.colorAccent
-                //menuOptionsIsVisible = true
             }
-            in NewPaymentFragment::class.java.name -> {
+            R.id.newPaymentFragment -> {
                 appBarTitle = resources.getString(R.string.key_person_info_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END
                 floatingButtonTint = R.color.colorAccent
-                //menuOptionsIsVisible = false
             }
-            in NewPaymentAmountFragment::class.java.name -> {
+            R.id.newPaymentAmountFragment -> {
                 appBarTitle = resources.getString(R.string.key_add_payment_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END
                 floatingButtonTint = R.color.colorAccent
-                //menuOptionsIsVisible = false
             }
-            in FilesFragment::class.java.name -> {
+            R.id.filesFragment -> {
                 appBarTitle = resources.getString(R.string.key_invoices_label)
                 floatingButtonImage = R.drawable.ic_delete
                 floatingButtonState = false
                 floatingButtonPosition = FloatingButtonPosition.END
                 floatingButtonTint = R.color.red
-                //menuOptionsIsVisible = false
             }
-            in PeriodFilterFragment::class.java.name -> {
+            R.id.periodFilterFragment -> {
                 appBarTitle = resources.getString(R.string.key_filter_period_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_table
                 floatingButtonPosition = FloatingButtonPosition.END
                 floatingButtonTint = R.color.colorAccent
-                //menuOptionsIsVisible = false
             }
-            in HistoryFragment::class.java.name -> {
+            R.id.historyFragment -> {
                 appBarTitle = resources.getString(R.string.key_history_label)
                 floatingButtonState = false
-                //menuOptionsIsVisible = false
             }
-            in PdfViewerFragment::class.java.name -> {
+            R.id.pdfViewerFragment -> {
                 appBarTitle = resources.getString(R.string.key_invoice_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_share
                 floatingButtonPosition = FloatingButtonPosition.END
                 floatingButtonTint = R.color.colorAccent
-                //menuOptionsIsVisible = false
             }
-            in FilterPaymentsFragment::class.java.name -> {
+            R.id.filterPaymentsFragment -> {
                 appBarTitle = resources.getString(R.string.key_payments_order_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END
                 floatingButtonTint = R.color.colorAccent
-                //menuOptionsIsVisible = false
+            }
+            R.id.QRCodeFragment -> {
+                appBarTitle = resources.getString(R.string.key_qr_code_label)
+                floatingButtonState = false
             }
         }
     }
@@ -456,18 +453,15 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
         )
     }
 
-    /*override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.activity_menu_main, menu)
-        menu?.findItem(R.id.menuSettings)?.isVisible = menuOptionsIsVisible
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
-            R.id.menuSettings ->
-                showPaymentsMenuOptionsFragment()
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode) {
+            QR_CODE_CAMERA_PERMISSION_REQUEST_CODE ->
+                if (grantResults.all { it == PackageManager.PERMISSION_GRANTED })
+                    (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.redirectToQrCodeFragment(
+                        qrCodeSelectionType = QRCodeSelectionType.SCAN
+                    )
         }
-        return super.onOptionsItemSelected(item)
-    }*/
+    }
 
 }
