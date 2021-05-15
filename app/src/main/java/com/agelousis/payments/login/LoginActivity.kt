@@ -205,6 +205,12 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, UserSe
         }
     }
 
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (isLandscape)
+            window?.hideSystemUI()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(

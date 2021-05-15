@@ -10,9 +10,11 @@ import com.agelousis.payments.guide.controller.GuideController
 import com.agelousis.payments.guide.fragments.GuideBasicFragment
 import com.agelousis.payments.guide.presenters.GuideActivityPresenter
 import com.agelousis.payments.utils.constants.Constants
-import com.agelousis.payments.utils.custom.SlideTransformer
 import com.agelousis.payments.utils.extensions.addTabDots
 import com.agelousis.payments.utils.extensions.isFirstTime
+import com.agelousis.payments.R
+import com.agelousis.payments.utils.custom.CarouselTransformer
+import com.agelousis.payments.utils.custom.HorizontalItemDecoration
 import com.agelousis.payments.utils.extensions.isLandscape
 
 class GuideActivity : AppCompatActivity(), GuideActivityPresenter {
@@ -39,16 +41,22 @@ class GuideActivity : AppCompatActivity(), GuideActivityPresenter {
 
     private fun setupView() {
         binding.viewPager.apply {
-            offscreenPageLimit = guideModelList.size
-            if (!isLandscape)
-                setPageTransformer(
-                    SlideTransformer(
-                        offscreenPageLimit = guideModelList.size
-                    )
-                )
             adapter = GuidePagerAdapter(
                 fragmentActivity = this@GuideActivity,
                 guideModelList = guideModelList
+            )
+            offscreenPageLimit = if (!isLandscape) 1 else guideModelList.size
+            if (!isLandscape)
+                setPageTransformer(
+                    CarouselTransformer(
+                        context = this@GuideActivity,
+                        nextItemWidth = resources.displayMetrics.widthPixels / 3f
+                    )
+                )
+            addItemDecoration(
+                HorizontalItemDecoration(
+                    horizontalMargin = resources.getDimensionPixelSize(R.dimen.viewpager_current_item_horizontal_margin)
+                )
             )
             registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
                 override fun onPageScrollStateChanged(state: Int) {}
