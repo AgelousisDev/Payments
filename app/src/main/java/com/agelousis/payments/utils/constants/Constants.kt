@@ -44,6 +44,7 @@ object Constants {
     const val MATERIAL_MENU_FRAGMENT_TAG = "materialMenuFragmentTag"
     const val LOADER_DIALOG_TAG = "LoaderDialog"
     const val SHOW_NOTIFICATION_INTENT_ACTION = "SHOW_NOTIFICATION"
+    const val CLIENTS_SELECTOR_FRAGMENT_TAG = "clientsSelectorFragmentTag"
 
     object Colors {
         val colorPickerColors = intArrayOf(

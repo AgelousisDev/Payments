@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="userModel"
+            type="com.agelousis.payments.login.models.UserModel" />
+        <variable
+            name="presenter"
+            type="com.agelousis.payments.main.ui.clientsSelector.presenters.ClientsSelectorFragmentPresenter" />
+    </data>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/activity_general_horizontal_margin"
+    android:background="@drawable/basic_dialog_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_general_horizontal_margin"
+            android:textColor="@color/white"
+            android:text="@string/key_select_country_label"/>
+
+        <com.agelousis.payments.views.searchLayout.MaterialSearchView
+            android:id="@+id/searchLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            materialSearchProfile="@{userModel.profileImage}"
+            app:searchHint="@string/key_search_in_countries_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/basic_dialog_footer_background">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/clientsSelectorRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:id="@+id/cancelButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_general_horizontal_margin"
+            android:onClick="@{() -> presenter.onCancel()}"
+            android:text="@string/key_cancel_label"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/importButton"
+            app:layout_constraintTop_toBottomOf="@+id/clientsSelectorRecyclerView" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/importButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_general_horizontal_margin"
+            android:onClick="@{() -> presenter.onImport()}"
+            android:text="@string/key_import_label"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clientsSelectorRecyclerView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
+</layout>
