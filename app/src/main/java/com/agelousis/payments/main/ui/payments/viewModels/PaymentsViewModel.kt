@@ -8,7 +8,7 @@ import com.agelousis.payments.firebase.models.FirebaseMessageModel
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.ui.files.models.FileDataModel
 import com.agelousis.payments.main.ui.payments.models.GroupModel
-import com.agelousis.payments.main.ui.payments.models.PersonModel
+import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.network.repositories.FirebaseMessageRepository
 import com.agelousis.payments.network.responses.ErrorModel
 import com.agelousis.payments.utils.extensions.pdfFormattedCurrentDate
@@ -34,7 +34,7 @@ class PaymentsViewModel: ViewModel() {
         dbManager.close()
     }
 
-    suspend fun initializePayments(context: Context, userModel: UserModel?, groupModel: GroupModel, completionBlock: (List<PersonModel>) -> Unit) {
+    suspend fun initializePayments(context: Context, userModel: UserModel?, groupModel: GroupModel, completionBlock: (List<ClientModel>) -> Unit) {
         val dbManager = DBManager(
             context = context
         )
@@ -55,7 +55,7 @@ class PaymentsViewModel: ViewModel() {
                 deletionLiveData.value = true
             }
         }
-        (item as? PersonModel)?.let {
+        (item as? ClientModel)?.let {
             dbManager.deletePayment(
                 personIds = listOf(
                     it.personId ?: return@let

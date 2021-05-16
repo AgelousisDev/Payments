@@ -5,7 +5,7 @@ import android.net.Uri
 import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.login.models.UserModel
-import com.agelousis.payments.main.ui.payments.models.PersonModel
+import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.itextpdf.text.*
@@ -29,7 +29,7 @@ class PDFHelper {
     private val blueColor by lazy { BaseColor(40, 53, 146) }
     private val lightGreyColor by lazy { BaseColor(243, 243, 243) }
 
-    fun initializePDF(context: Context, userModel: UserModel?, persons: List<PersonModel>, pdfInitializationSuccessBlock: PDFInitializationSuccessBlock) {
+    fun initializePDF(context: Context, userModel: UserModel?, clients: List<ClientModel>, pdfInitializationSuccessBlock: PDFInitializationSuccessBlock) {
         val document = Document()
         val pdfFile = File(context.filesDir, String.format(Constants.PDF_FILE_NAME_FORMAT_VALUE, Date().pdfFormattedCurrentDate))
         PdfWriter.getInstance(document, FileOutputStream(pdfFile))
@@ -57,7 +57,7 @@ class PDFHelper {
             context = context,
             userModel = userModel,
             document = document,
-            persons = persons
+            clients = clients
         )
         document.close()
 
@@ -109,8 +109,8 @@ class PDFHelper {
         })
     }
 
-    private fun addPersons(context: Context, userModel: UserModel?, document: Document, persons: List<PersonModel>) {
-        persons.forEach { personModel ->
+    private fun addPersons(context: Context, userModel: UserModel?, document: Document, clients: List<ClientModel>) {
+        clients.forEach { personModel ->
             ifLet(
                 personModel.fullName,
                 personModel.phone
@@ -130,7 +130,7 @@ class PDFHelper {
             addPayments(
                 context = context,
                 document = document,
-                personModel = personModel
+                clientModel = personModel
             )
 
             document.add(Chunk.NEWLINE)
@@ -138,7 +138,7 @@ class PDFHelper {
             addPaymentFooter(
                 context = context,
                 document = document,
-                personModel = personModel,
+                clientModel = personModel,
                 userModel = userModel
             )
 
@@ -146,13 +146,13 @@ class PDFHelper {
         }
     }
 
-    private fun addPayments(context: Context, document: Document, personModel: PersonModel) {
+    private fun addPayments(context: Context, document: Document, clientModel: ClientModel) {
         val table = PdfPTable(6)
         addPaymentHeaderCells(
             context = context,
             table = table
         )
-        personModel.payments?.forEachIndexed { index, paymentAmountModel ->
+        clientModel.payments?.forEachIndexed { index, paymentAmountModel ->
             table.addCell(
                 getCell(
                     text = (index + 1).toString(),
@@ -179,7 +179,7 @@ class PDFHelper {
             )
             table.addCell(
                 getCell(
-                    text = personModel.personId.invoiceNumber?.let {
+                    text = clientModel.personId.invoiceNumber?.let {
                         String.format("%s-%d", it, paymentAmountModel.paymentId ?: 0)
                     } ?: paymentAmountModel.paymentId.invoiceNumber ?: context.resources.getString(R.string.key_empty_field_label) ,
                     withBorder = false,
@@ -257,24 +257,24 @@ class PDFHelper {
         )
     }
 
-    private fun addPaymentFooter(context: Context, document: Document, personModel: PersonModel, userModel: UserModel?) {
+    private fun addPaymentFooter(context: Context, document: Document, clientModel: ClientModel, userModel: UserModel?) {
         document.add(
             Paragraph(
-                "${context.resources.getString(R.string.key_subtotal_label)}          ${personModel.totalPaymentAmount?.getAmountWithoutVat(vat = userModel?.vat)?.takeIf { !it.isZero }?.let { it.euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label) } ?: String.format("${MainApplication.currencySymbol ?: "€"}%s", "0")}",
+                "${context.resources.getString(R.string.key_subtotal_label)}          ${clientModel.totalPaymentAmount?.getAmountWithoutVat(vat = userModel?.vat)?.takeIf { !it.isZero }?.let { it.euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label) } ?: String.format("${MainApplication.currencySymbol ?: "€"}%s", "0")}",
                 Font(ubuntuFont, 14.0f, Font.BOLD, blueColor)
             ).also {
                 it.alignment = Element.ALIGN_RIGHT
             })
         document.add(
             Paragraph(
-                "${context.resources.getString(R.string.key_vat_label)}                  ${personModel.totalPaymentAmount?.getVatAmount(vat = userModel?.vat)?.takeIf { !it.isZero }?.let { it.euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label) } ?: String.format("${MainApplication.currencySymbol ?: "€"}%s", "0")}",
+                "${context.resources.getString(R.string.key_vat_label)}                  ${clientModel.totalPaymentAmount?.getVatAmount(vat = userModel?.vat)?.takeIf { !it.isZero }?.let { it.euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label) } ?: String.format("${MainApplication.currencySymbol ?: "€"}%s", "0")}",
                 Font(ubuntuFont, 14.0f, Font.BOLD, blueColor)
             ).also {
                 it.alignment = Element.ALIGN_RIGHT
             })
         document.add(
             Paragraph(
-                personModel.totalPaymentAmount?.takeIf { !it.isZero }?.let { it.euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label) } ?: String.format("${MainApplication.currencySymbol ?: "€"}%s", "0"),
+                clientModel.totalPaymentAmount?.takeIf { !it.isZero }?.let { it.euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label) } ?: String.format("${MainApplication.currencySymbol ?: "€"}%s", "0"),
                 Font(ubuntuFont, 20.0f, Font.BOLD, blueColor)
             ).also {
                 it.alignment = Element.ALIGN_RIGHT

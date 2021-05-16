@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import com.agelousis.payments.databinding.ShareMessageFragmentLayoutBinding
-import com.agelousis.payments.main.ui.payments.models.PersonModel
+import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.shareMessageFragment.adapters.ShareMessageAdapter
 import com.agelousis.payments.main.ui.shareMessageFragment.enumerations.ShareMessageType
 import com.agelousis.payments.main.ui.shareMessageFragment.presenters.ShareMessagePresenter
@@ -31,10 +31,10 @@ class ShareMessageBottomSheetFragment: BasicBottomSheetDialogFragment(), ShareMe
 
         private const val PERSON_MODEL_EXTRA = "ShareMessageBottomSheetFragment=personModelExtra"
 
-        fun show(supportFragmentManager: FragmentManager, personModel: PersonModel) {
+        fun show(supportFragmentManager: FragmentManager, clientModel: ClientModel) {
             ShareMessageBottomSheetFragment().also { fragment ->
                 fragment.arguments = Bundle().also { bundle ->
-                    bundle.putParcelable(PERSON_MODEL_EXTRA, personModel)
+                    bundle.putParcelable(PERSON_MODEL_EXTRA, clientModel)
                 }
             }.show(
                 supportFragmentManager, Constants.SHARE_MESSAGE_FRAGMENT_TAG
@@ -45,7 +45,7 @@ class ShareMessageBottomSheetFragment: BasicBottomSheetDialogFragment(), ShareMe
 
     private lateinit var binding: ShareMessageFragmentLayoutBinding
     private val personModel by lazy {
-        arguments?.getParcelable<PersonModel>(PERSON_MODEL_EXTRA)
+        arguments?.getParcelable<ClientModel>(PERSON_MODEL_EXTRA)
     }
     private val shareMessageTypeList by lazy {
         val array = arrayListOf<ShareMessageType>()

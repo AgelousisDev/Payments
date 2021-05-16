@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.agelousis.payments.database.DBManager
 import com.agelousis.payments.main.ui.payments.models.GroupModel
-import com.agelousis.payments.main.ui.payments.models.PersonModel
+import com.agelousis.payments.main.ui.payments.models.ClientModel
 
 class NewPaymentViewModel: ViewModel() {
 
@@ -21,21 +21,21 @@ class NewPaymentViewModel: ViewModel() {
         }
     }
 
-    suspend fun addPayment(context: Context, userId: Int?, personModel: PersonModel) {
+    suspend fun addPayment(context: Context, userId: Int?, clientModel: ClientModel) {
         val dbManager = DBManager(context = context)
         dbManager.insertPayment(
             userId = userId,
-            personModel = personModel
+            clientModel = clientModel
         ) {
             paymentInsertionStateLiveData.value = true
         }
     }
 
-    suspend fun updatePayment(context: Context, userId: Int?, personModel: PersonModel) {
+    suspend fun updatePayment(context: Context, userId: Int?, clientModel: ClientModel) {
         val dbManager = DBManager(context = context)
         dbManager.updatePayment(
             userId = userId,
-            personModel = personModel
+            clientModel = clientModel
         ) {
             paymentInsertionStateLiveData.value = true
         }

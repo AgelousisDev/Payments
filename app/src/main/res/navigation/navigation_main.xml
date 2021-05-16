@@ -69,8 +69,8 @@
             app:nullable="true"
             android:defaultValue="@null" />
         <argument
-            android:name="personDataModel"
-            app:argType="com.agelousis.payments.main.ui.payments.models.PersonModel"
+            android:name="clientDataModel"
+            app:argType="com.agelousis.payments.main.ui.payments.models.ClientModel"
             app:nullable="true"
             android:defaultValue="@null" />
         <action

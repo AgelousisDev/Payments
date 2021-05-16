@@ -17,7 +17,7 @@ import com.agelousis.payments.databinding.QrCodeFragmentLayoutBinding
 import com.agelousis.payments.firebase.models.FirebaseMessageModel
 import com.agelousis.payments.firebase.models.FirebaseNotificationData
 import com.agelousis.payments.main.MainActivity
-import com.agelousis.payments.main.ui.payments.models.PersonModel
+import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
 import com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType
 import com.agelousis.payments.utils.extensions.loaderState
@@ -91,7 +91,7 @@ class QRCodeFragment: Fragment(), ZXingScannerView.ResultHandler {
 
     private fun addObservers() {
         viewModel.paymentsLiveData.observe(viewLifecycleOwner) { list ->
-            this requestClientData list.filterIsInstance<PersonModel>()
+            this requestClientData list.filterIsInstance<ClientModel>()
         }
         viewModel.firebaseResponseLiveData.observe(viewLifecycleOwner) {
             loaderState = false
@@ -135,13 +135,13 @@ class QRCodeFragment: Fragment(), ZXingScannerView.ResultHandler {
             binding.qrCodeScanner.setAspectTolerance(0.5f)
     }
 
-    private infix fun requestClientData(personModelList: List<PersonModel>) {
+    private infix fun requestClientData(clientModelList: List<ClientModel>) {
         loaderState = true
         viewModel.sendClientDataRequestNotification(
             firebaseMessageModel = FirebaseMessageModel(
                 firebaseToken = destinationFirebaseToken ?: return,
                 FirebaseNotificationData(
-                    personModelList = personModelList
+                    clientModelList = clientModelList
                 )
             )
         )

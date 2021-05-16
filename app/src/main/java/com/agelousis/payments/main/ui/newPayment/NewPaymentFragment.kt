@@ -25,7 +25,7 @@ import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
 import com.agelousis.payments.main.ui.payments.enumerations.PaymentType
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
-import com.agelousis.payments.main.ui.payments.models.PersonModel
+import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.CountryHelper
@@ -95,9 +95,9 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         args.groupDataModel?.let { DatabaseTriggeringType.INSERT } ?: DatabaseTriggeringType.UPDATE
     }
     private val availableGroups by lazy { arrayListOf<GroupModel>() }
-    private val availablePayments by lazy { ArrayList(args.personDataModel?.payments ?: listOf()) }
+    private val availablePayments by lazy { ArrayList(args.clientDataModel?.payments ?: listOf()) }
     private lateinit var binding: FragmentNewPaymentLayoutBinding
-    private var currentPersonModel: PersonModel? = null
+    private var currentClientModel: ClientModel? = null
     private var paymentReadyForDeletionIndexArray = arrayListOf<Int>()
     private var paymentAmountUpdateIndex: Int? = null
     private var addPaymentButtonState = true
@@ -108,14 +108,14 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         }
     private var selectedPaymentType = PaymentType.CASH_PAYMENT
     val fieldsHaveChanged
-        get() = args.personDataModel?.let {
+        get() = args.clientDataModel?.let {
             fillCurrentPersonModel()
-            currentPersonModel != it
+            currentClientModel != it
         } ?: true
 
     override fun onResume() {
         super.onResume()
-        currentPersonModel?.let {
+        currentClientModel?.let {
             binding.personModel = it
         }
     }
@@ -132,7 +132,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             false
         ).also {
             it.groupModel = args.groupDataModel
-            it.personModel = args.personDataModel
+            it.personModel = args.clientDataModel
             it.userModel = (activity as? MainActivity)?.userModel
             it.presenter = this
         }
@@ -163,7 +163,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         }
         binding.countryCodeLayout.registerPhoneNumberTextView(binding.phoneLayout.binding.personDetailField)
         binding.countryCodeLayout.typeFace = ResourcesCompat.getFont(context ?: return, R.font.ubuntu)
-        args.personDataModel?.phone?.split(" ")?.firstOrNull()?.let { countryZipCode ->
+        args.clientDataModel?.phone?.split(" ")?.firstOrNull()?.let { countryZipCode ->
             binding.countryCodeLayout.setCountryForPhoneCode(countryZipCode.replace("+", "").toIntOrNull() ?: return@let )
         } ?: MainApplication.countryDataModel?.let { countryDataModel ->
             binding.countryCodeLayout.setCountryForNameCode(countryDataModel.countryCode)
@@ -207,7 +207,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             if (paymentInsertionState) {
                 (activity as? MainActivity)?.floatingButtonState = false
                 scheduleNotification()
-                currentPersonModel = null
+                currentClientModel = null
                 playSuccessAnimation {
                     findNavController().popBackStack()
                 }
@@ -257,15 +257,15 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             (context ?: return@forEachIndexed) scheduleNotification NotificationDataModel(
                 calendar = paymentAmountModel.paymentDate?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.defaultTimeCalendar ?: return@forEachIndexed,
                 notificationId = index,
-                title = currentPersonModel?.fullName,
+                title = currentClientModel?.fullName,
                 body = String.format(
                     resources.getString(R.string.key_notification_amount_value),
                     paymentAmountModel.paymentAmount?.euroFormattedString ?: ""
                 ),
                 date = paymentAmountModel.paymentDate.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.formattedDateWith(pattern = Constants.VIEWING_DATE_FORMAT),
-                groupName = currentPersonModel?.groupName,
-                groupImage = /*currentPersonModel?.personImage ?: */currentPersonModel?.groupImage ?: args.groupDataModel?.groupImage,
-                groupTint = currentPersonModel?.groupColor
+                groupName = currentClientModel?.groupName,
+                groupImage = /*currentPersonModel?.personImage ?: */currentClientModel?.groupImage ?: args.groupDataModel?.groupImage,
+                groupTint = currentClientModel?.groupColor
             )
         }
     }
@@ -283,7 +283,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                     redirectToSMSAppIf(
                         payment = paymentAmountModel
                     ) {
-                        !currentPersonModel?.phone.isNullOrEmpty()
+                        !currentClientModel?.phone.isNullOrEmpty()
                     }
                 }
                 (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
@@ -314,10 +314,10 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             saveState = true
         )
         ifLet(
-            currentPersonModel?.groupName,
-            currentPersonModel?.firstName,
-            currentPersonModel?.surname,
-            currentPersonModel?.phone,
+            currentClientModel?.groupName,
+            currentClientModel?.firstName,
+            currentClientModel?.surname,
+            currentClientModel?.phone,
         ) {
             checkDatabasePaymentAction()
         } ?: run {
@@ -338,13 +338,13 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                     viewModel.addPayment(
                         context = this@NewPaymentFragment.context ?: return@launch,
                         userId = (activity as? MainActivity)?.userModel?.id,
-                        personModel = currentPersonModel ?: return@launch
+                        clientModel = currentClientModel ?: return@launch
                     )
                 DatabaseTriggeringType.UPDATE ->
                     viewModel.updatePayment(
                         context = this@NewPaymentFragment.context ?: return@launch,
                         userId = (activity as? MainActivity)?.userModel?.id,
-                        personModel = currentPersonModel ?: return@launch
+                        clientModel = currentClientModel ?: return@launch
                     )
             }
         }
@@ -371,8 +371,8 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                     binding.phoneLayout.value
                 )
         }
-        currentPersonModel = PersonModel(
-            personId = args.personDataModel?.personId,
+        currentClientModel = ClientModel(
+            personId = args.clientDataModel?.personId,
             groupId = availableGroups.firstOrNull { it.groupName.equals(binding.groupDetailsLayout.value, ignoreCase = true) }?.groupId,
             groupName = binding.groupDetailsLayout.value,
             firstName = binding.firstNameLayout.value,
@@ -386,8 +386,8 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             messageTemplate = binding.messageTemplateField.text?.toString(),
             payments = if (saveState && !binding.activeAppSwitchLayout.isChecked) listOf() else availablePayments,
             paymentType = selectedPaymentType,
-            groupColor = args.personDataModel?.groupColor,
-            groupImage = args.personDataModel?.groupImage
+            groupColor = args.clientDataModel?.groupColor,
+            groupImage = args.clientDataModel?.groupImage
         )
     }
 

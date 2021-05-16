@@ -17,7 +17,7 @@ import com.agelousis.payments.main.menuOptions.enumerations.PaymentsMenuOptionTy
 import com.agelousis.payments.main.menuOptions.presenters.PaymentsMenuOptionPresenter
 import com.agelousis.payments.main.ui.files.models.HeaderModel
 import com.agelousis.payments.main.ui.payments.PaymentsFragment
-import com.agelousis.payments.main.ui.payments.models.PersonModel
+import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
 import com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType
 import com.agelousis.payments.utils.constants.Constants
@@ -90,7 +90,7 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
     private lateinit var binding: PaymentsMenuOptionsFragmentLayoutBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
-    private val personModelList by lazy { arrayListOf<PersonModel>() }
+    private val personModelList by lazy { arrayListOf<ClientModel>() }
     private val optionList by lazy {
         arrayListOf(
             HeaderModel(
@@ -129,7 +129,7 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
         viewModel.paymentsLiveData.observe(viewLifecycleOwner) { list ->
             personModelList.clear()
             personModelList.addAll(
-                list.filterIsInstance<PersonModel>()
+                list.filterIsInstance<ClientModel>()
             )
             optionList.firstOrNullWithType(
                 typeBlock = {

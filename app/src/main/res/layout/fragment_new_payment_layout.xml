@@ -7,7 +7,7 @@
         <import type="com.agelousis.payments.main.ui.payments.enumerations.PaymentType" />
         <variable
             name="personModel"
-            type="com.agelousis.payments.main.ui.payments.models.PersonModel" />
+            type="com.agelousis.payments.main.ui.payments.models.ClientModel" />
         <variable
             name="groupModel"
             type="com.agelousis.payments.main.ui.payments.models.GroupModel" />

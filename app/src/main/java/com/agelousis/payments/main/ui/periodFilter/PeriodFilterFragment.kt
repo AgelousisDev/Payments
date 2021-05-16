@@ -15,7 +15,7 @@ import com.agelousis.payments.databinding.PeriodFilterFragmentLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.files.models.FileDataModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
-import com.agelousis.payments.main.ui.payments.models.PersonModel
+import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
 import com.agelousis.payments.main.ui.periodFilter.presenter.PeriodFilterFragmentPresenter
 import com.agelousis.payments.utils.constants.Constants
@@ -106,8 +106,8 @@ class PeriodFilterFragment: Fragment(), PeriodFilterFragmentPresenter {
         PDFHelper.shared.initializePDF(
             context = context ?: return,
             userModel = (activity as? MainActivity)?.userModel,
-            persons = listOf(
-                PersonModel(
+            clients = listOf(
+                ClientModel(
                     payments = payments
                 )
             ),

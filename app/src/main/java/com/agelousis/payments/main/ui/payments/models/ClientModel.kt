@@ -14,7 +14,7 @@ import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize
-data class PersonModel(val personId: Int? = null,
+data class ClientModel(val personId: Int? = null,
                        val groupId: Int? = null,
                        val groupName: String? = null,
                        val firstName: String? = null,

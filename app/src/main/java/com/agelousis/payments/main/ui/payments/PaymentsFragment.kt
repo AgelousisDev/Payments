@@ -26,7 +26,7 @@ import com.agelousis.payments.main.ui.payments.adapters.PaymentsAdapter
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountSumModel
-import com.agelousis.payments.main.ui.payments.models.PersonModel
+import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.presenters.GroupPresenter
 import com.agelousis.payments.main.ui.payments.presenters.PaymentAmountSumPresenter
 import com.agelousis.payments.main.ui.payments.presenters.PaymentPresenter
@@ -43,7 +43,6 @@ import com.agelousis.payments.main.ui.totalPaymentsAmount.TotalPaymentsAmountDia
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.PDFHelper
-import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -55,20 +54,20 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
 
     override fun onDeletePayments() {
         configureMultipleDeleteAction(
-            positions = filteredList.filterIsInstance<PersonModel>().filter { it.isSelected }.mapNotNull { it.personId }
+            positions = filteredList.filterIsInstance<ClientModel>().filter { it.isSelected }.mapNotNull { it.personId }
         )
     }
 
     override fun onExportInvoice() {
         initializePDFCreation(
-            persons = filteredList.filterIsInstance<PersonModel>().filter { it.isSelected },
+            clients = filteredList.filterIsInstance<ClientModel>().filter { it.isSelected },
             fromMultipleSelection = true
         )
     }
 
     override fun onPaymentsSendSms() {
         context?.sendSMSMessage(
-            mobileNumbers = itemsList.filterIsInstance<PersonModel>().filter { it.isSelected }.mapNotNull { it.phone },
+            mobileNumbers = itemsList.filterIsInstance<ClientModel>().filter { it.isSelected }.mapNotNull { it.phone },
             message = (activity as? MainActivity)?.userModel?.defaultMessageTemplate ?: ""
         )
     }
@@ -87,35 +86,35 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         )
     }
 
-    override fun onPaymentSelected(personModel: PersonModel, adapterPosition: Int) {
+    override fun onPaymentSelected(clientModel: ClientModel, adapterPosition: Int) {
         when {
-            filteredList.filterIsInstance<PersonModel>().any { it.isSelected } ->
+            filteredList.filterIsInstance<ClientModel>().any { it.isSelected } ->
                 onPaymentLongPressed(
                     paymentIndex = adapterPosition,
-                    isSelected = !personModel.isSelected
+                    isSelected = !clientModel.isSelected
                 )
             else ->
                 findNavController().navigate(
                     PaymentsFragmentDirections.actionPaymentListFragmentToNewPaymentFragment(
-                        personDataModel = personModel
+                        clientDataModel = clientModel
                     )
                 )
         }
     }
 
-    override fun onPaymentShareMessage(personModel: PersonModel) {
+    override fun onPaymentShareMessage(clientModel: ClientModel) {
         ShareMessageBottomSheetFragment.show(
             supportFragmentManager = activity?.supportFragmentManager ?: return,
-            personModel = personModel
+            clientModel = clientModel
         )
     }
 
     override fun onPaymentLongPressed(paymentIndex: Int, isSelected: Boolean) {
         (filteredList.getOrNull(
             index = paymentIndex
-        ) as? PersonModel)?.isSelected = isSelected
-        appBarIsVisible = filteredList.filterIsInstance<PersonModel>().any { it.isSelected }
-        selectedPayments = filteredList.filterIsInstance<PersonModel>().count { it.isSelected }
+        ) as? ClientModel)?.isSelected = isSelected
+        appBarIsVisible = filteredList.filterIsInstance<ClientModel>().any { it.isSelected }
+        selectedPayments = filteredList.filterIsInstance<ClientModel>().count { it.isSelected }
         (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.restoreItem(
             position = paymentIndex
         )
@@ -139,7 +138,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
             positiveButtonText = resources.getString(R.string.key_send_label)
         ) {
             context?.sendSMSMessage(
-                mobileNumbers = itemsList.filterIsInstance<PersonModel>().filter { it.groupId == groupModel.groupId }.mapNotNull { it.phone },
+                mobileNumbers = itemsList.filterIsInstance<ClientModel>().filter { it.groupId == groupModel.groupId }.mapNotNull { it.phone },
                 message = (activity as? MainActivity)?.userModel?.defaultMessageTemplate ?: ""
             )
         }
@@ -261,7 +260,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                                 outRect.top = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
                             outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
                         }
-                        is PersonModel -> {
+                        is ClientModel -> {
                             outRect.left = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
                             outRect.right = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
                             if (filteredList isLastAt adapterPosition)
@@ -281,7 +280,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
 
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    val isInFirstPosition = (binding.paymentListRecyclerView.layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition() == 0 && filteredList.filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten().isNotEmpty()
+                    val isInFirstPosition = (binding.paymentListRecyclerView.layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition() == 0 && filteredList.filterIsInstance<ClientModel>().mapNotNull { it.payments }.flatten().isNotEmpty()
                     if (!isInFirstPosition && binding.paymentsAreAvailable == true)
                         binding.paymentsAreAvailable = false
                     if (isInFirstPosition && binding.paymentsAreAvailable == false)
@@ -331,36 +330,36 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                     groupModel = groupModel
                 ) {
                     initializePDFCreation(
-                        persons = it
+                        clients = it
                     )
                 }
             }
-            filteredList.getOrNull(index = position)?.asIs<PersonModel> { personModel ->
+            filteredList.getOrNull(index = position)?.asIs<ClientModel> { personModel ->
                 initializePDFCreation(
-                    persons = listOf(personModel)
+                    clients = listOf(personModel)
                 )
             }
         }
     }
 
     private fun initializePDFCreation(
-        persons: List<PersonModel>,
+        clients: List<ClientModel>,
         fromMultipleSelection: Boolean = false
     ) {
         PDFHelper.shared.initializePDF(
             context = context ?: return,
             userModel = (activity as? MainActivity)?.userModel,
-            persons = persons,
+            clients = clients,
         ) { pdfFile ->
             uiScope.launch {
                 viewModel.insertFile(
                     context = context ?: return@launch,
                     userModel = (activity as? MainActivity)?.userModel,
                     file = pdfFile,
-                    description = if (persons.isSizeOne)
-                        persons.firstOrNull()?.fullName ?: ""
+                    description = if (clients.isSizeOne)
+                        clients.firstOrNull()?.fullName ?: ""
                     else
-                        persons.groupBy { it.groupName }.mapNotNull { it.key }.joinToString(
+                        clients.groupBy { it.groupName }.mapNotNull { it.key }.joinToString(
                             separator = " - "
                         )
                 )
@@ -372,10 +371,10 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                     )
                     redirectToPdfViewer(
                         pdfFile = pdfFile,
-                        description = if (persons.isSizeOne)
-                            persons.firstOrNull()?.fullName ?: ""
+                        description = if (clients.isSizeOne)
+                            clients.firstOrNull()?.fullName ?: ""
                         else
-                            persons.groupBy { it.groupName }.mapNotNull { it.key }.joinToString(
+                            clients.groupBy { it.groupName }.mapNotNull { it.key }.joinToString(
                                 separator = " - "
                             )
                     )
@@ -449,7 +448,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
             after(
                 millis = 1000
             ) {
-                searchViewState = list.filterIsInstance<PersonModel>().isNotEmpty()
+                searchViewState = list.filterIsInstance<ClientModel>().isNotEmpty()
             }
             itemsList.clear()
             itemsList.addAll(list)
@@ -468,10 +467,10 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         this setSelectedPaymentsAppBarState false
         filteredList.forEachIfEach(
             predicate = {
-                it is PersonModel
+                it is ClientModel
             },
             action = {
-                (it as? PersonModel)?.isSelected = false
+                (it as? ClientModel)?.isSelected = false
             }
         )
         (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
@@ -508,7 +507,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
 
     private fun configurePayments(list: List<Any>, query: String? = null) {
         filteredList.clear()
-        list.filterIsInstance<PersonModel>().takeIf { it.isNotEmpty() }?.let { payments ->
+        list.filterIsInstance<ClientModel>().takeIf { it.isNotEmpty() }?.let { payments ->
             payments.groupBy { it.groupName ?: "" }.toSortedMap().forEach { map ->
                 map.value.filter { it.fullName.lowercase().contains(query?.replace(" ", "")?.lowercase() ?: "") || it.groupName?.lowercase()?.contains(query?.replace(" ", "")?.lowercase() ?: "") == true }
                     .takeIf { it.isNotEmpty() }?.let inner@ { filteredByQueryPayments ->
@@ -567,12 +566,12 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
             }
         binding.paymentListRecyclerView.scheduleLayoutAnimation()
         (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
-        (activity as? MainActivity)?.historyButtonIsVisible = filteredList.filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten().isNotEmpty()
+        (activity as? MainActivity)?.historyButtonIsVisible = filteredList.filterIsInstance<ClientModel>().mapNotNull { it.payments }.flatten().isNotEmpty()
         binding.paymentsAreAvailable = (activity as? MainActivity)?.historyButtonIsVisible == true
     }
 
     fun navigateToPeriodFilterFragment() {
-        val payments = filteredList.filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten()
+        val payments = filteredList.filterIsInstance<ClientModel>().mapNotNull { it.payments }.flatten()
         findNavController().popBackStack(R.id.periodFilterFragment, true)
         findNavController().navigate(
             PaymentsFragmentDirections.actionPaymentsFragmentToPeriodFilterFragment(

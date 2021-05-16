@@ -15,7 +15,7 @@ import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.history.listeners.PaymentLineChartGestureListener
 import com.agelousis.payments.main.ui.history.presenter.HistoryFragmentPresenter
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
-import com.agelousis.payments.main.ui.payments.models.PersonModel
+import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.euroFormattedString
@@ -94,7 +94,7 @@ class HistoryFragment: Fragment(), GestureDetector.OnGestureListener, View.OnTou
     private fun addObservers() {
         viewModel.paymentsLiveData.observe(viewLifecycleOwner) { payments ->
             configureEntries(
-                payments = payments.filterIsInstance<PersonModel>().mapNotNull { it.payments }.flatten()
+                payments = payments.filterIsInstance<ClientModel>().mapNotNull { it.payments }.flatten()
             )
         }
     }

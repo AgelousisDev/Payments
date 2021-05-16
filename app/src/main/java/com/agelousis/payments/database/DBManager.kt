@@ -11,7 +11,7 @@ import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.ui.files.models.FileDataModel
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
-import com.agelousis.payments.main.ui.payments.models.PersonModel
+import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.utils.extensions.valueEnumOrNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -22,7 +22,7 @@ typealias InsertionSuccessBlock = () -> Unit
 typealias UpdateSuccessBlock = () -> Unit
 typealias UpdateSuccessClosure = (Boolean) -> Unit
 typealias PaymentsClosure = (List<Any>) -> Unit
-typealias PersonsClosure = (List<PersonModel>) -> Unit
+typealias PersonsClosure = (List<ClientModel>) -> Unit
 typealias DeletionSuccessBlock = () -> Unit
 typealias GroupsSuccessBlock = (List<GroupModel>) -> Unit
 typealias FilesSuccessBlock = (List<FileDataModel>) -> Unit
@@ -282,27 +282,27 @@ class DBManager(context: Context) {
         }
     }
 
-    suspend fun insertPayment(userId: Int?, personModel: PersonModel, insertionSuccessBlock: InsertionSuccessBlock) {
+    suspend fun insertPayment(userId: Int?, clientModel: ClientModel, insertionSuccessBlock: InsertionSuccessBlock) {
         withContext(Dispatchers.Default) {
             val personId = database?.insert(
                 SQLiteHelper.PERSONS_TABLE_NAME,
                 null,
                 ContentValues().also {
                     it.put(SQLiteHelper.USER_ID, userId ?: return@withContext)
-                    it.put(SQLiteHelper.GROUP_ID, personModel.groupId)
-                    it.put(SQLiteHelper.FIRST_NAME, personModel.firstName)
-                    it.put(SQLiteHelper.SURNAME, personModel.surname)
-                    it.put(SQLiteHelper.PHONE, personModel.phone)
-                    it.put(SQLiteHelper.PARENT_NAME, personModel.parentName)
-                    it.put(SQLiteHelper.PARENT_PHONE, personModel.parentPhone)
-                    it.put(SQLiteHelper.EMAIL, personModel.email)
-                    it.put(SQLiteHelper.ACTIVE, personModel.active)
-                    it.put(SQLiteHelper.FREE, personModel.free)
-                    it.put(SQLiteHelper.MESSAGE_TEMPLATE, personModel.messageTemplate)
-                    it.put(SQLiteHelper.PAYMENT_TYPE, personModel.paymentType?.name)
+                    it.put(SQLiteHelper.GROUP_ID, clientModel.groupId)
+                    it.put(SQLiteHelper.FIRST_NAME, clientModel.firstName)
+                    it.put(SQLiteHelper.SURNAME, clientModel.surname)
+                    it.put(SQLiteHelper.PHONE, clientModel.phone)
+                    it.put(SQLiteHelper.PARENT_NAME, clientModel.parentName)
+                    it.put(SQLiteHelper.PARENT_PHONE, clientModel.parentPhone)
+                    it.put(SQLiteHelper.EMAIL, clientModel.email)
+                    it.put(SQLiteHelper.ACTIVE, clientModel.active)
+                    it.put(SQLiteHelper.FREE, clientModel.free)
+                    it.put(SQLiteHelper.MESSAGE_TEMPLATE, clientModel.messageTemplate)
+                    it.put(SQLiteHelper.PAYMENT_TYPE, clientModel.paymentType?.name)
                 }
             )
-            personModel.payments?.forEach { paymentAmountModel ->
+            clientModel.payments?.forEach { paymentAmountModel ->
                 database?.insert(
                     SQLiteHelper.PAYMENTS_TABLE_NAME,
                     null,
@@ -325,38 +325,38 @@ class DBManager(context: Context) {
         }
     }
 
-    suspend fun updatePayment(userId: Int?, personModel: PersonModel, insertionSuccessBlock: InsertionSuccessBlock) {
+    suspend fun updatePayment(userId: Int?, clientModel: ClientModel, insertionSuccessBlock: InsertionSuccessBlock) {
         withContext(Dispatchers.Default) {
             database?.update(
                 SQLiteHelper.PERSONS_TABLE_NAME,
                 ContentValues().also {
                     it.put(SQLiteHelper.USER_ID, userId)
-                    it.put(SQLiteHelper.GROUP_ID, personModel.groupId)
-                    it.put(SQLiteHelper.FIRST_NAME, personModel.firstName)
-                    it.put(SQLiteHelper.SURNAME, personModel.surname)
-                    it.put(SQLiteHelper.PHONE, personModel.phone)
-                    it.put(SQLiteHelper.PARENT_NAME, personModel.parentName)
-                    it.put(SQLiteHelper.PARENT_PHONE, personModel.parentPhone)
-                    it.put(SQLiteHelper.EMAIL, personModel.email)
-                    it.put(SQLiteHelper.ACTIVE, personModel.active)
-                    it.put(SQLiteHelper.FREE, personModel.free)
-                    it.put(SQLiteHelper.MESSAGE_TEMPLATE, personModel.messageTemplate)
-                    it.put(SQLiteHelper.PAYMENT_TYPE, personModel.paymentType?.name)
+                    it.put(SQLiteHelper.GROUP_ID, clientModel.groupId)
+                    it.put(SQLiteHelper.FIRST_NAME, clientModel.firstName)
+                    it.put(SQLiteHelper.SURNAME, clientModel.surname)
+                    it.put(SQLiteHelper.PHONE, clientModel.phone)
+                    it.put(SQLiteHelper.PARENT_NAME, clientModel.parentName)
+                    it.put(SQLiteHelper.PARENT_PHONE, clientModel.parentPhone)
+                    it.put(SQLiteHelper.EMAIL, clientModel.email)
+                    it.put(SQLiteHelper.ACTIVE, clientModel.active)
+                    it.put(SQLiteHelper.FREE, clientModel.free)
+                    it.put(SQLiteHelper.MESSAGE_TEMPLATE, clientModel.messageTemplate)
+                    it.put(SQLiteHelper.PAYMENT_TYPE, clientModel.paymentType?.name)
                 },
                 "${SQLiteHelper.ID}=?",
-                arrayOf(personModel.personId?.toString())
+                arrayOf(clientModel.personId?.toString())
             )
             database?.delete(
                 SQLiteHelper.PAYMENTS_TABLE_NAME,
                 "${SQLiteHelper.PERSON_ID}=?",
-                arrayOf(personModel.personId?.toString())
+                arrayOf(clientModel.personId?.toString())
             )
-            personModel.payments?.forEach { paymentAmountModel ->
+            clientModel.payments?.forEach { paymentAmountModel ->
                 database?.insert(
                     SQLiteHelper.PAYMENTS_TABLE_NAME,
                     null,
                     ContentValues().also {
-                        it.put(SQLiteHelper.PERSON_ID, personModel.personId)
+                        it.put(SQLiteHelper.PERSON_ID, clientModel.personId)
                         it.put(SQLiteHelper.PAYMENT_AMOUNT, paymentAmountModel.paymentAmount)
                         it.put(SQLiteHelper.PAYMENT_MONTH, paymentAmountModel.paymentMonth)
                         it.put(SQLiteHelper.PAYMENT_DATE, paymentAmountModel.paymentDate)
@@ -447,7 +447,7 @@ class DBManager(context: Context) {
                     }
                     paymentsCursor?.close()
                     genericList.add(
-                        PersonModel(
+                        ClientModel(
                             personId = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.ID)),
                             groupId = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)),
                             groupName = groups.firstOrNull { it.groupId == personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)) }?.groupName,
@@ -480,7 +480,7 @@ class DBManager(context: Context) {
 
     suspend fun initializePayments(userId: Int?, groupId: Int?, personsClosure: PersonsClosure) {
         withContext(Dispatchers.Default) {
-            val persons = arrayListOf<PersonModel>()
+            val persons = arrayListOf<ClientModel>()
             val personsCursor = database?.query(
                 SQLiteHelper.PERSONS_TABLE_NAME,
                 null,
@@ -532,7 +532,7 @@ class DBManager(context: Context) {
                     }
                     paymentsCursor?.close()
                     persons.add(
-                        PersonModel(
+                        ClientModel(
                             personId = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.ID)),
                             groupId = personsCursor.getIntOrNull(personsCursor.getColumnIndex(SQLiteHelper.GROUP_ID)),
                             groupName = groupCursor?.getStringOrNull(groupCursor.getColumnIndex(SQLiteHelper.GROUP_NAME)),

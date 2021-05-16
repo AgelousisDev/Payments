@@ -85,7 +85,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
     }
 
     override fun onNotificationReceived(firebaseNotificationData: FirebaseNotificationData) {
-        println("****Notification came: $firebaseNotificationData")
+
     }
 
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {

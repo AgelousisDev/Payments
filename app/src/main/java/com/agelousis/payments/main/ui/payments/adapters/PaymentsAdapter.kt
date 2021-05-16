@@ -11,7 +11,7 @@ import com.agelousis.payments.main.ui.payments.enumerations.PaymentsAdapterViewT
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountSumModel
-import com.agelousis.payments.main.ui.payments.models.PersonModel
+import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.presenters.GroupPresenter
 import com.agelousis.payments.main.ui.payments.presenters.PaymentAmountSumPresenter
 import com.agelousis.payments.main.ui.payments.presenters.PaymentPresenter
@@ -83,9 +83,9 @@ class PaymentsAdapter(private val list: ArrayList<Any>, private val groupPresent
             presenter = groupPresenter
         )
         (holder as? PaymentViewHolder)?.bind(
-            personModel = list.getOrNull(
+            clientModel = list.getOrNull(
                 index = position
-            ) as? PersonModel ?: return,
+            ) as? ClientModel ?: return,
             presenter = paymentPresenter
         )
         (holder as? PaymentAmountSumViewHolder)?.bind(
@@ -99,7 +99,7 @@ class PaymentsAdapter(private val list: ArrayList<Any>, private val groupPresent
     override fun getItemViewType(position: Int): Int {
         (list.getOrNull(index = position) as? EmptyModel)?.let { return PaymentsAdapterViewType.EMPTY_VIEW.type }
         (list.getOrNull(index = position) as? GroupModel)?.let { return PaymentsAdapterViewType.GROUP_VIEW.type }
-        (list.getOrNull(index = position) as? PersonModel)?.let { return PaymentsAdapterViewType.PAYMENT_VIEW.type }
+        (list.getOrNull(index = position) as? ClientModel)?.let { return PaymentsAdapterViewType.PAYMENT_VIEW.type }
         (list.getOrNull(index = position) as? PaymentAmountSumModel)?.let { return PaymentsAdapterViewType.PAYMENT_AMOUNT_SUM_VIEW.type }
         return super.getItemViewType(position)
     }

@@ -2,26 +2,27 @@ package com.agelousis.payments.utils.helpers
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.util.Log
 import androidx.annotation.IntRange
+import androidx.core.content.ContextCompat
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.WriterException
 import com.google.zxing.qrcode.QRCodeWriter
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import java.util.*
+import com.agelousis.payments.R
 
-class QRCodeHelper private constructor(context: Context) {
+class QRCodeHelper(private val context: Context) {
 
     companion object {
-        private var qrCodeHelper: QRCodeHelper? = null
-
         /**
          * This method is for singleton instance od this class.
          *
          * @return the QrCode instance.
          */
-        infix fun instanceWith(context: Context) = qrCodeHelper ?: QRCodeHelper(context = context)
+        infix fun instanceWith(context: Context) = QRCodeHelper(context = context)
 
     }
 
@@ -108,18 +109,16 @@ class QRCodeHelper private constructor(context: Context) {
         hintsMap[EncodeHintType.CHARACTER_SET] = "utf-8"
         hintsMap[EncodeHintType.ERROR_CORRECTION] = mErrorCorrectionLevel
         hintsMap[EncodeHintType.MARGIN] = mMargin
+        val dayNightTextOnBackground = ContextCompat.getColor(context, R.color.dayNightTextOnBackground)
         try {
             val bitMatrix = QRCodeWriter().encode(mContent, BarcodeFormat.QR_CODE, mWidth, mHeight, hintsMap)
             val pixels = IntArray(mWidth * mHeight)
-            for (i in 0 until mHeight) {
-                for (j in 0 until mWidth) {
-                    if (bitMatrix.get(j, i)) {
-                        pixels[i * mWidth + j] = -0x1
-                    } else {
-                        pixels[i * mWidth + j] = 0x282946
-                    }
-                }
-            }
+            for (i in 0 until mHeight)
+                for (j in 0 until mWidth)
+                    if (bitMatrix.get(j, i))
+                        pixels[i * mWidth + j] = dayNightTextOnBackground
+                    else
+                        pixels[i * mWidth + j] = Color.TRANSPARENT
             return Bitmap.createBitmap(pixels, mWidth, mHeight, Bitmap.Config.ARGB_8888)
         } catch (e: WriterException) {
             e.printStackTrace()
