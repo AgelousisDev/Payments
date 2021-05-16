@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "156837474308",
+    "project_id": "manage-payments-297019",
+    "storage_bucket": "manage-payments-297019.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:156837474308:android:097df4460a03b8692e4551",
+        "android_client_info": {
+          "package_name": "com.agelousis.payments"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "156837474308-11c5r18n9simt8vrm3j4m98b785p1cln.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.agelousis.payments",
+            "certificate_hash": "adc9c89277c4a11190c6e256a9bebd44d98d7ecf"
+          }
+        },
+        {
+          "client_id": "156837474308-brq2smi45ggjdfbb9ndf69q8bm1008oo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.agelousis.payments",
+            "certificate_hash": "779dd42301712e075be6af662e7683adad8dbb22"
+          }
+        },
+        {
+          "client_id": "156837474308-omejliomg22nfaa6ica2hcl9i4tdd8fj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.agelousis.payments",
+            "certificate_hash": "8d29750810e08d854a28fe1bbeea577bb593a97f"
+          }
+        },
+        {
+          "client_id": "156837474308-u28quib29lmdnu77hm006mkbkctldha9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRioYIzwKzZj1fzY33B-Um0L81mNjhOtE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "156837474308-u28quib29lmdnu77hm006mkbkctldha9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

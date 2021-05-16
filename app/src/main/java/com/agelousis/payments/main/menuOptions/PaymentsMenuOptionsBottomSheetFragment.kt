@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.agelousis.payments.R
+import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.custom.itemDecoration.DividerItemRecyclerViewDecorator
 import com.agelousis.payments.databinding.PaymentsMenuOptionsFragmentLayoutBinding
 import com.agelousis.payments.main.MainActivity
@@ -169,7 +170,7 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
                 predicate = {
                     it == PaymentsMenuOptionType.QR_CODE_GENERATOR
                 }
-            )?.isEnabled = personModelList.isNotEmpty()
+            )?.isEnabled = MainApplication.firebaseToken != null
             (binding.menuOptionsRecyclerView.adapter as? PaymentsMenuOptionAdapter)?.reloadData()
         }
     }

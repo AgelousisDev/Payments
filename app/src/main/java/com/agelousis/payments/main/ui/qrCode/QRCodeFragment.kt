@@ -5,18 +5,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import com.agelousis.payments.R
+import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.databinding.QrCodeFragmentLayoutBinding
+import com.agelousis.payments.firebase.models.FirebaseMessageModel
+import com.agelousis.payments.firebase.models.FirebaseNotificationData
 import com.agelousis.payments.main.MainActivity
+import com.agelousis.payments.main.ui.payments.models.PersonModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
 import com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType
-import com.agelousis.payments.utils.extensions.randomPort
+import com.agelousis.payments.utils.extensions.loaderState
 import com.agelousis.payments.utils.helpers.QRCodeHelper
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
@@ -30,13 +34,18 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView
 class QRCodeFragment: Fragment(), ZXingScannerView.ResultHandler {
 
     override fun handleResult(p0: Result?) {
-        Toast.makeText(context, Base64.decode(p0?.text), Toast.LENGTH_SHORT).show()
+        destinationFirebaseToken = Base64.decode(p0?.text)
     }
 
     private lateinit var binding: QrCodeFragmentLayoutBinding
     private val args: QRCodeFragmentArgs by navArgs()
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
+    private var destinationFirebaseToken: String? = null
+        set(value) {
+            field = value
+            initializePayments()
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +66,6 @@ class QRCodeFragment: Fragment(), ZXingScannerView.ResultHandler {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configureQrCodeSelection()
-        initializePayments()
         addObservers()
     }
 
@@ -83,7 +91,15 @@ class QRCodeFragment: Fragment(), ZXingScannerView.ResultHandler {
 
     private fun addObservers() {
         viewModel.paymentsLiveData.observe(viewLifecycleOwner) { list ->
-
+            this requestClientData list.filterIsInstance<PersonModel>()
+        }
+        viewModel.firebaseResponseLiveData.observe(viewLifecycleOwner) {
+            loaderState = false
+            findNavController().popBackStack()
+        }
+        viewModel.firebaseErrorLiveData.observe(viewLifecycleOwner) {
+            loaderState = false
+            findNavController().popBackStack()
         }
     }
 
@@ -98,7 +114,7 @@ class QRCodeFragment: Fragment(), ZXingScannerView.ResultHandler {
 
     private fun generateQRCode() {
         (QRCodeHelper instanceWith (context ?: return))
-            .setContent(Base64.encode(4.randomPort))
+            .setContent(Base64.encode(MainApplication.firebaseToken ?: return))
             .setErrorCorrectionLevel(ErrorCorrectionLevel.L)
             .setMargin(2)
             .qrCode?.let { qrCodeBitmap ->
@@ -117,6 +133,18 @@ class QRCodeFragment: Fragment(), ZXingScannerView.ResultHandler {
         //binding.qrCodeScanner.setMaskColor(ContextCompat.getColor(context ?: return, R.color.colorAccent))
         if (Build.MANUFACTURER.equals("HUAWEI", ignoreCase = true))
             binding.qrCodeScanner.setAspectTolerance(0.5f)
+    }
+
+    private infix fun requestClientData(personModelList: List<PersonModel>) {
+        loaderState = true
+        viewModel.sendClientDataRequestNotification(
+            firebaseMessageModel = FirebaseMessageModel(
+                firebaseToken = destinationFirebaseToken ?: return,
+                FirebaseNotificationData(
+                    personModelList = personModelList
+                )
+            )
+        )
     }
 
     override fun onPause() {

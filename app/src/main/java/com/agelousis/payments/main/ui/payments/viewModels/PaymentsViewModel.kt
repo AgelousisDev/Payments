@@ -4,10 +4,13 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.agelousis.payments.database.DBManager
+import com.agelousis.payments.firebase.models.FirebaseMessageModel
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.ui.files.models.FileDataModel
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PersonModel
+import com.agelousis.payments.network.repositories.FirebaseMessageRepository
+import com.agelousis.payments.network.responses.ErrorModel
 import com.agelousis.payments.utils.extensions.pdfFormattedCurrentDate
 import java.io.File
 import java.util.*
@@ -16,6 +19,8 @@ class PaymentsViewModel: ViewModel() {
 
     val paymentsLiveData by lazy { MutableLiveData<List<Any>>() }
     val deletionLiveData by lazy { MutableLiveData<Boolean>() }
+    val firebaseResponseLiveData by lazy { MutableLiveData<String?>() }
+    val firebaseErrorLiveData by lazy { MutableLiveData<ErrorModel>() }
 
     suspend fun initializePayments(context: Context, userModel: UserModel?) {
         val dbManager = DBManager(
@@ -80,6 +85,18 @@ class PaymentsViewModel: ViewModel() {
                 dateTime = Date().pdfFormattedCurrentDate
             ).also {
                 it.fileData = file.readBytes()
+            }
+        )
+    }
+
+    fun sendClientDataRequestNotification(firebaseMessageModel: FirebaseMessageModel) {
+        FirebaseMessageRepository.sendFirebaseMessage(
+            firebaseMessageModel = firebaseMessageModel,
+            onSuccess = {
+                firebaseResponseLiveData.value = it
+            },
+            onFail = {
+                firebaseErrorLiveData.value = it
             }
         )
     }

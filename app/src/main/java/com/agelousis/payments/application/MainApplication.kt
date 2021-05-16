@@ -2,6 +2,7 @@ package com.agelousis.payments.application
 
 import android.app.Application
 import android.content.Context
+import com.agelousis.payments.firebase.FirebaseInstanceHelper
 import com.agelousis.payments.main.ui.countrySelector.enumerations.CountryDataModel
 import com.agelousis.payments.main.ui.paymentsFiltering.enumerations.PaymentsFilteringOptionType
 import com.agelousis.payments.utils.constants.Constants
@@ -16,6 +17,7 @@ class MainApplication: Application() {
         var currencySymbol: String? = null
         var countryDataModel: CountryDataModel? = null
         var paymentsFilteringOptionTypes: List<PaymentsFilteringOptionType>? = null
+        var firebaseToken: String? = null
     }
 
     private val sharedPreferences by lazy { getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE) }
@@ -24,6 +26,7 @@ class MainApplication: Application() {
         super.onCreate()
         setLocaleCurrency()
         setPaymentsFilteringOptionTypes()
+        initializeFirebase()
     }
 
     private fun setLocaleCurrency() {
@@ -55,6 +58,12 @@ class MainApplication: Application() {
                 paymentsFilteringOptionType.position = index
             }
             MainApplication.paymentsFilteringOptionTypes = paymentsFilteringOptionTypes
+        }
+    }
+
+    private fun initializeFirebase() {
+        FirebaseInstanceHelper.shared.initializeFirebaseToken {
+            firebaseToken = it
         }
     }
 

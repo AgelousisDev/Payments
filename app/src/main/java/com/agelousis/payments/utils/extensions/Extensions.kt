@@ -53,6 +53,7 @@ import androidx.core.database.getStringOrNull
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.loader.content.Loader
 import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.BuildConfig
 import com.agelousis.payments.R
@@ -66,6 +67,7 @@ import com.agelousis.payments.main.ui.paymentsFiltering.enumerations.PaymentsFil
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.custom.ImprovedBulletSpan
+import com.agelousis.payments.utils.custom.LoaderDialog
 import com.agelousis.payments.utils.models.CalendarDataModel
 import com.agelousis.payments.utils.models.NotificationDataModel
 import com.agelousis.payments.utils.receivers.NotificationReceiver
@@ -902,16 +904,30 @@ fun Window.hideSystemUI() {
                 or View.SYSTEM_UI_FLAG_FULLSCREEN)
 }
 
-val Int.randomPort: String
-    get() {
-        val chars = "1234567890"
-        val salt = StringBuilder()
-        val rnd = Random()
-        while(salt.length < this) {
-            val index: Int = (rnd.nextFloat() * chars.length).toInt()
-            salt.append(chars[index])
-        }
-        return salt.toString()
+var AppCompatActivity.loaderState: Boolean
+    get() = supportFragmentManager.fragments.any { it is LoaderDialog && (it as? LoaderDialog)?.isVisible == true }
+    set(value) {
+        if (value)
+            LoaderDialog.show(
+                supportFragmentManager = supportFragmentManager
+            )
+        else
+            LoaderDialog.hide(
+                supportFragmentManager = supportFragmentManager
+            )
+    }
+
+var Fragment.loaderState: Boolean
+    get() = childFragmentManager.fragments.any { it is LoaderDialog && (it as? LoaderDialog)?.isVisible == true }
+    set(value) {
+        if (value)
+            LoaderDialog.show(
+                supportFragmentManager = childFragmentManager
+            )
+        else
+            LoaderDialog.hide(
+                supportFragmentManager = childFragmentManager
+            )
     }
 
 @BindingAdapter("picassoImagePath")

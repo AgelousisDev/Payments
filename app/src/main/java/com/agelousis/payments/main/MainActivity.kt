@@ -2,6 +2,7 @@ package com.agelousis.payments.main
 
 import android.app.Activity
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -16,6 +17,7 @@ import com.agelousis.payments.base.BaseActivity
 import com.agelousis.payments.database.DBManager
 import com.agelousis.payments.database.SQLiteHelper
 import com.agelousis.payments.databinding.ActivityMainBinding
+import com.agelousis.payments.firebase.models.FirebaseNotificationData
 import com.agelousis.payments.group.GroupActivity
 import com.agelousis.payments.guide.GuideActivity
 import com.agelousis.payments.login.LoginActivity
@@ -38,6 +40,8 @@ import com.agelousis.payments.main.ui.periodFilter.PeriodFilterFragment
 import com.agelousis.payments.main.ui.personalInformation.PersonalInformationFragment
 import com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType
 import com.agelousis.payments.profilePicture.ProfilePictureActivity
+import com.agelousis.payments.receivers.NotificationDataReceiver
+import com.agelousis.payments.receivers.interfaces.NotificationListener
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.google.android.material.bottomappbar.BottomAppBar
@@ -45,10 +49,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener, View.OnClickListener, MaterialMenuFragmentPresenter {
+class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener, View.OnClickListener, MaterialMenuFragmentPresenter, NotificationListener {
 
     companion object {
         const val USER_MODEL_EXTRA = "MainActivity=userModelExtra"
+        const val FIREBASE_NOTIFICATION_DATA_EXTRA = "MainActivity=firebaseNotificatonDataExtra"
         const val QR_CODE_CAMERA_PERMISSION_REQUEST_CODE = 1
     }
 
@@ -77,6 +82,10 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
 
     override fun onMaterialMenuProfileIconClicked() {
         showProfilePicture()
+    }
+
+    override fun onNotificationReceived(firebaseNotificationData: FirebaseNotificationData) {
+        println("****Notification came: $firebaseNotificationData")
     }
 
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
@@ -240,6 +249,12 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
             field = value
             materialMenuDataModel.materialMenuOptionList?.firstOrNull { it == MaterialMenuOption.HISTORY }?.isEnabled = value
         }
+    private val notificationIntentFilter by lazy { IntentFilter(Constants.SHOW_NOTIFICATION_INTENT_ACTION) }
+    private val notificationDataReceiver by lazy {
+        NotificationDataReceiver().also {
+            it.notificationListener = this
+        }
+    }
 
     override fun onBackPressed() {
         when(supportFragmentManager.currentNavigationFragment) {
@@ -281,6 +296,14 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         configureNavigationController()
+    }
+
+    override fun onResume() {
+        registerReceiver(
+            notificationDataReceiver,
+            notificationIntentFilter
+        )
+        super.onResume()
     }
 
     private fun configureNavigationController() {
@@ -462,6 +485,13 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                         qrCodeSelectionType = QRCodeSelectionType.SCAN
                     )
         }
+    }
+
+    override fun onPause() {
+        unregisterReceiver(
+            notificationDataReceiver
+        )
+        super.onPause()
     }
 
 }

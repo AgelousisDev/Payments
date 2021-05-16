@@ -42,6 +42,8 @@ object Constants {
     const val SHARED_PREFERENCES_COUNTRY_DATA_KEY = "country_data"
     const val SHARED_PREFERENCES_PAYMENTS_FILTERING_DATA_KEY = "payments_filtering_option_types"
     const val MATERIAL_MENU_FRAGMENT_TAG = "materialMenuFragmentTag"
+    const val LOADER_DIALOG_TAG = "LoaderDialog"
+    const val SHOW_NOTIFICATION_INTENT_ACTION = "SHOW_NOTIFICATION"
 
     object Colors {
         val colorPickerColors = intArrayOf(

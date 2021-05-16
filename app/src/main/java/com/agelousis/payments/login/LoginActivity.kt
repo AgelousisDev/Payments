@@ -31,6 +31,7 @@ import com.agelousis.payments.userSelection.UserSelectionFragment
 import com.agelousis.payments.userSelection.presenters.UserSelectionPresenter
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
+import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -222,6 +223,7 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, UserSe
         setContentView(
             binding.root
         )
+        FirebaseApp.initializeApp(this)
         dbManager = DBManager(
             context = this
         )
