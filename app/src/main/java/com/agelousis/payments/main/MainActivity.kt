@@ -332,11 +332,13 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
 
     private fun addInactiveGroup() {
         uiScope.launch {
-            dbManager.insertGroup(
+            dbManager.insertGroups(
                 userId = userModel?.id,
-                groupModel = GroupModel(
-                    groupName = resources.getString(R.string.key_inactive_label),
-                    color = ContextCompat.getColor(this@MainActivity, R.color.grey)
+                groupModelList = listOf(
+                    GroupModel(
+                        groupName = resources.getString(R.string.key_inactive_label),
+                        color = ContextCompat.getColor(this@MainActivity, R.color.grey)
+                    )
                 )
             ) {}
         }
@@ -350,9 +352,11 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                     groupModel = groupModel,
                     updateSuccessBlock = successBlock
                 )
-            } ?: dbManager.insertGroup(
-                    userId = userModel?.id,
-                    groupModel = groupModel,
+            } ?: dbManager.insertGroups(
+                userId = userModel?.id,
+                groupModelList = listOf(
+                    groupModel
+                ),
                 insertionSuccessBlock = successBlock
             )
         }

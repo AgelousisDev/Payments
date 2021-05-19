@@ -203,7 +203,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             availableGroups.clear()
             availableGroups.addAll(it)
         }
-        viewModel.paymentInsertionStateLiveData.observe(viewLifecycleOwner) { paymentInsertionState ->
+        viewModel.clientInsertionStateLiveData.observe(viewLifecycleOwner) { paymentInsertionState ->
             if (paymentInsertionState) {
                 (activity as? MainActivity)?.floatingButtonState = false
                 scheduleNotification()
@@ -335,13 +335,13 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         uiScope.launch {
             when(databaseTriggeringType) {
                 DatabaseTriggeringType.INSERT ->
-                    viewModel.addPayment(
+                    viewModel.addClient(
                         context = this@NewPaymentFragment.context ?: return@launch,
                         userId = (activity as? MainActivity)?.userModel?.id,
                         clientModel = currentClientModel ?: return@launch
                     )
                 DatabaseTriggeringType.UPDATE ->
-                    viewModel.updatePayment(
+                    viewModel.updateClient(
                         context = this@NewPaymentFragment.context ?: return@launch,
                         userId = (activity as? MainActivity)?.userModel?.id,
                         clientModel = currentClientModel ?: return@launch

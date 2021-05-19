@@ -232,31 +232,33 @@ class DBManager(context: Context) {
         }
     }
 
-    suspend fun insertGroup(userId: Int?, groupModel: GroupModel, insertionSuccessBlock: InsertionSuccessBlock) {
+    suspend fun insertGroups(userId: Int?, groupModelList: List<GroupModel>, insertionSuccessBlock: InsertionSuccessBlock) {
         withContext(Dispatchers.Default) {
-            val cursor = database?.query(
-                SQLiteHelper.GROUPS_TABLE_NAME,
-                arrayOf(SQLiteHelper.ID),
-                "${SQLiteHelper.GROUP_NAME}=?",
-                arrayOf(groupModel.groupName),
-                null,
-                null,
-                null,
-                null
-            )
-            if (cursor?.count ?: 0 == 0)
-                database?.insert(
+            groupModelList.forEach { groupModel ->
+                val cursor = database?.query(
                     SQLiteHelper.GROUPS_TABLE_NAME,
+                    arrayOf(SQLiteHelper.ID),
+                    "${SQLiteHelper.GROUP_NAME}=?",
+                    arrayOf(groupModel.groupName),
                     null,
-                    ContentValues().also {
-                        it.put(SQLiteHelper.USER_ID, userId ?: return@withContext)
-                        it.put(SQLiteHelper.GROUP_NAME, groupModel.groupName)
-                        it.put(SQLiteHelper.COLOR, groupModel.color)
-                        it.put(SQLiteHelper.GROUP_IMAGE, groupModel.groupImage)
-                        it.put(SQLiteHelper.GROUP_IMAGE_DATA, groupModel.groupImageData)
-                    }
+                    null,
+                    null,
+                    null
                 )
-            cursor?.close()
+                if (cursor?.count ?: 0 == 0)
+                    database?.insert(
+                        SQLiteHelper.GROUPS_TABLE_NAME,
+                        null,
+                        ContentValues().also {
+                            it.put(SQLiteHelper.USER_ID, userId ?: return@withContext)
+                            it.put(SQLiteHelper.GROUP_NAME, groupModel.groupName)
+                            it.put(SQLiteHelper.COLOR, groupModel.color)
+                            it.put(SQLiteHelper.GROUP_IMAGE, groupModel.groupImage)
+                            it.put(SQLiteHelper.GROUP_IMAGE_DATA, groupModel.groupImageData)
+                        }
+                    )
+                cursor?.close()
+            }
             withContext(Dispatchers.Main) {
                 insertionSuccessBlock()
             }
@@ -282,42 +284,44 @@ class DBManager(context: Context) {
         }
     }
 
-    suspend fun insertPayment(userId: Int?, clientModel: ClientModel, insertionSuccessBlock: InsertionSuccessBlock) {
+    suspend fun insertClients(userId: Int?, clientModelList: List<ClientModel>, insertionSuccessBlock: InsertionSuccessBlock) {
         withContext(Dispatchers.Default) {
-            val personId = database?.insert(
-                SQLiteHelper.PERSONS_TABLE_NAME,
-                null,
-                ContentValues().also {
-                    it.put(SQLiteHelper.USER_ID, userId ?: return@withContext)
-                    it.put(SQLiteHelper.GROUP_ID, clientModel.groupId)
-                    it.put(SQLiteHelper.FIRST_NAME, clientModel.firstName)
-                    it.put(SQLiteHelper.SURNAME, clientModel.surname)
-                    it.put(SQLiteHelper.PHONE, clientModel.phone)
-                    it.put(SQLiteHelper.PARENT_NAME, clientModel.parentName)
-                    it.put(SQLiteHelper.PARENT_PHONE, clientModel.parentPhone)
-                    it.put(SQLiteHelper.EMAIL, clientModel.email)
-                    it.put(SQLiteHelper.ACTIVE, clientModel.active)
-                    it.put(SQLiteHelper.FREE, clientModel.free)
-                    it.put(SQLiteHelper.MESSAGE_TEMPLATE, clientModel.messageTemplate)
-                    it.put(SQLiteHelper.PAYMENT_TYPE, clientModel.paymentType?.name)
-                }
-            )
-            clientModel.payments?.forEach { paymentAmountModel ->
-                database?.insert(
-                    SQLiteHelper.PAYMENTS_TABLE_NAME,
+            clientModelList.forEach { clientModel ->
+                val personId = database?.insert(
+                    SQLiteHelper.PERSONS_TABLE_NAME,
                     null,
                     ContentValues().also {
-                        it.put(SQLiteHelper.PERSON_ID, personId?.toInt())
-                        it.put(SQLiteHelper.PAYMENT_AMOUNT, paymentAmountModel.paymentAmount)
-                        it.put(SQLiteHelper.PAYMENT_MONTH, paymentAmountModel.paymentMonth)
-                        it.put(SQLiteHelper.PAYMENT_DATE, paymentAmountModel.paymentDate)
-                        it.put(SQLiteHelper.SKIP_PAYMENT, paymentAmountModel.skipPayment)
-                        it.put(SQLiteHelper.PAYMENT_NOTE, paymentAmountModel.paymentNote)
-                        it.put(SQLiteHelper.PAYMENT_DATE_NOTIFICATION, paymentAmountModel.paymentDateNotification)
-                        it.put(SQLiteHelper.SINGLE_PAYMENT, paymentAmountModel.singlePayment)
-                        it.put(SQLiteHelper.SINGLE_PAYMENT_PRODUCTS, paymentAmountModel.singlePaymentProducts?.joinToString(separator = ","))
+                        it.put(SQLiteHelper.USER_ID, userId ?: return@withContext)
+                        it.put(SQLiteHelper.GROUP_ID, clientModel.groupId)
+                        it.put(SQLiteHelper.FIRST_NAME, clientModel.firstName)
+                        it.put(SQLiteHelper.SURNAME, clientModel.surname)
+                        it.put(SQLiteHelper.PHONE, clientModel.phone)
+                        it.put(SQLiteHelper.PARENT_NAME, clientModel.parentName)
+                        it.put(SQLiteHelper.PARENT_PHONE, clientModel.parentPhone)
+                        it.put(SQLiteHelper.EMAIL, clientModel.email)
+                        it.put(SQLiteHelper.ACTIVE, clientModel.active)
+                        it.put(SQLiteHelper.FREE, clientModel.free)
+                        it.put(SQLiteHelper.MESSAGE_TEMPLATE, clientModel.messageTemplate)
+                        it.put(SQLiteHelper.PAYMENT_TYPE, clientModel.paymentType?.name)
                     }
                 )
+                clientModel.payments?.forEach { paymentAmountModel ->
+                    database?.insert(
+                        SQLiteHelper.PAYMENTS_TABLE_NAME,
+                        null,
+                        ContentValues().also {
+                            it.put(SQLiteHelper.PERSON_ID, personId?.toInt())
+                            it.put(SQLiteHelper.PAYMENT_AMOUNT, paymentAmountModel.paymentAmount)
+                            it.put(SQLiteHelper.PAYMENT_MONTH, paymentAmountModel.paymentMonth)
+                            it.put(SQLiteHelper.PAYMENT_DATE, paymentAmountModel.paymentDate)
+                            it.put(SQLiteHelper.SKIP_PAYMENT, paymentAmountModel.skipPayment)
+                            it.put(SQLiteHelper.PAYMENT_NOTE, paymentAmountModel.paymentNote)
+                            it.put(SQLiteHelper.PAYMENT_DATE_NOTIFICATION, paymentAmountModel.paymentDateNotification)
+                            it.put(SQLiteHelper.SINGLE_PAYMENT, paymentAmountModel.singlePayment)
+                            it.put(SQLiteHelper.SINGLE_PAYMENT_PRODUCTS, paymentAmountModel.singlePaymentProducts?.joinToString(separator = ","))
+                        }
+                    )
+                }
             }
             withContext(Dispatchers.Main) {
                 insertionSuccessBlock()

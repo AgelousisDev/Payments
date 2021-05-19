@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.viewModels
 import com.agelousis.payments.databinding.ClientsSelectorFragmentLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.clientsSelector.presenters.ClientsSelectorFragmentPresenter
+import com.agelousis.payments.main.ui.clientsSelector.viewModel.ClientsSelectorViewModel
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.utils.constants.Constants
 
@@ -39,6 +41,7 @@ class ClientsSelectorDialogFragment: DialogFragment(), ClientsSelectorFragmentPr
     }
 
     private lateinit var binding: ClientsSelectorFragmentLayoutBinding
+    private val viewModel by viewModels<ClientsSelectorViewModel>()
     private var clientModelList: List<ClientModel>? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -55,7 +58,17 @@ class ClientsSelectorDialogFragment: DialogFragment(), ClientsSelectorFragmentPr
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        addObservers()
         configureRecyclerView()
+    }
+
+    private fun addObservers() {
+        viewModel.groupsInsertionStateLiveData.observe(viewLifecycleOwner) {
+
+        }
+        viewModel.clientInsertionStateLiveData.observe(viewLifecycleOwner) {
+
+        }
     }
 
     private fun configureRecyclerView() {

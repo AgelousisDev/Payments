@@ -10,7 +10,7 @@ import com.agelousis.payments.main.ui.payments.models.ClientModel
 class NewPaymentViewModel: ViewModel() {
 
     val groupsLiveData by lazy { MutableLiveData<List<GroupModel>>() }
-    val paymentInsertionStateLiveData by lazy { MutableLiveData<Boolean>() }
+    val clientInsertionStateLiveData by lazy { MutableLiveData<Boolean>() }
 
     suspend fun initializeGroups(context: Context, userId: Int?) {
         val dbManager = DBManager(context = context)
@@ -21,23 +21,25 @@ class NewPaymentViewModel: ViewModel() {
         }
     }
 
-    suspend fun addPayment(context: Context, userId: Int?, clientModel: ClientModel) {
+    suspend fun addClient(context: Context, userId: Int?, clientModel: ClientModel) {
         val dbManager = DBManager(context = context)
-        dbManager.insertPayment(
+        dbManager.insertClients(
             userId = userId,
-            clientModel = clientModel
+            clientModelList = listOf(
+                clientModel
+            )
         ) {
-            paymentInsertionStateLiveData.value = true
+            clientInsertionStateLiveData.value = true
         }
     }
 
-    suspend fun updatePayment(context: Context, userId: Int?, clientModel: ClientModel) {
+    suspend fun updateClient(context: Context, userId: Int?, clientModel: ClientModel) {
         val dbManager = DBManager(context = context)
         dbManager.updatePayment(
             userId = userId,
             clientModel = clientModel
         ) {
-            paymentInsertionStateLiveData.value = true
+            clientInsertionStateLiveData.value = true
         }
     }
 
