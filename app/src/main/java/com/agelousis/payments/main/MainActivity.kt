@@ -28,6 +28,7 @@ import com.agelousis.payments.main.materialMenu.MaterialMenuDialogFragment
 import com.agelousis.payments.main.materialMenu.enumerations.MaterialMenuOption
 import com.agelousis.payments.main.materialMenu.models.MaterialMenuDataModel
 import com.agelousis.payments.main.materialMenu.presenters.MaterialMenuFragmentPresenter
+import com.agelousis.payments.main.ui.clientsSelector.ClientsSelectorDialogFragment
 import com.agelousis.payments.main.ui.files.FilesFragment
 import com.agelousis.payments.main.ui.newPayment.NewPaymentFragment
 import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
@@ -85,7 +86,12 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
     }
 
     override fun onNotificationReceived(firebaseNotificationData: FirebaseNotificationData) {
-
+        binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().popBackStack()
+        makeSoundNotification()
+        ClientsSelectorDialogFragment.show(
+            supportFragmentManager = supportFragmentManager,
+            clientModelList = firebaseNotificationData.clientModelList
+        )
     }
 
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {

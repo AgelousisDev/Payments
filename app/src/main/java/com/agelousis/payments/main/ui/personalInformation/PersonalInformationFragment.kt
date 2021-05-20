@@ -46,7 +46,7 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
 
     override fun onChangeProfilePicture() {
         (activity as? MainActivity)?.activityLauncher?.launch(
-            input = context?.galleryIntent ?: return
+            input = galleryIntent
         ) { result ->
             if (result.resultCode != Activity.RESULT_OK)
                 return@launch

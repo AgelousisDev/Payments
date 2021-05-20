@@ -6,7 +6,7 @@
         <import type="android.view.View" />
         <import type="com.agelousis.payments.utils.extensions.ExtensionsKt" />
         <variable
-            name="personModel"
+            name="clientModel"
             type="com.agelousis.payments.main.ui.payments.models.ClientModel" />
         <variable
             name="presenter"
@@ -20,8 +20,8 @@
         android:layout_height="wrap_content"
         android:focusable="true"
         android:clickable="true"
-        viewBackground="@{personModel.backgroundDrawable}"
-        android:onClick="@{() -> presenter.onPaymentSelected(personModel, adapterPosition)}"
+        viewBackground="@{clientModel.backgroundDrawable}"
+        android:onClick="@{() -> presenter.onPaymentSelected(clientModel, adapterPosition)}"
         android:animateLayoutChanges="true"
         tools:targetApi="M">
 
@@ -30,7 +30,7 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginStart="@dimen/activity_general_horizontal_margin"
-            android:visibility="@{personModel.selected == true ? View.VISIBLE : View.GONE}"
+            android:visibility="@{clientModel.selected == true ? View.VISIBLE : View.GONE}"
             app:srcCompat="@drawable/ic_check"
             app:tint="@color/green"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -42,8 +42,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="@dimen/activity_general_horizontal_margin"
-            android:background="@{personModel.groupImage == null ? @drawable/oval_background : null}"
-            backgroundDrawableTintColor="@{personModel.free == true ? @color/colorAccent : personModel.groupImage == null ? personModel.groupColor : null}"
+            android:background="@{clientModel.groupImage == null ? @drawable/oval_background : null}"
+            backgroundDrawableTintColor="@{clientModel.free == true ? @color/colorAccent : clientModel.groupImage == null ? clientModel.groupColor : null}"
             android:elevation="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/selectedPaymentIcon"
@@ -54,8 +54,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="@{String.valueOf(personModel.groupName.charAt(0)).toUpperCase()}"
-                android:visibility="@{personModel.groupImage == null ? View.VISIBLE : View.GONE}"
+                android:text="@{String.valueOf(clientModel.groupName.charAt(0)).toUpperCase()}"
+                android:visibility="@{clientModel.groupImage == null ? View.VISIBLE : View.GONE}"
                 android:textColor="@color/white"
                 android:textStyle="normal" />
 
@@ -63,8 +63,8 @@
                 android:id="@+id/userRowImageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="@{personModel.groupImage != null ? View.VISIBLE : View.GONE}"
-                picassoGroupImageFromInternalFiles="@{personModel.groupImage}"
+                android:visibility="@{clientModel.groupImage != null ? View.VISIBLE : View.GONE}"
+                picassoGroupImageFromInternalFiles="@{clientModel.groupImage}"
                 android:scaleType="centerCrop"/>
 
         </FrameLayout>
@@ -77,7 +77,7 @@
             android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
             android:fontFamily="@font/ubuntu"
             android:gravity="start"
-            android:text="@{personModel.fullName}"
+            android:text="@{clientModel.fullName}"
             android:textSize="14sp"
             android:singleLine="true"
             android:ellipsize="marquee"
@@ -94,10 +94,10 @@
             android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
             android:fontFamily="@font/ubuntu"
             android:gravity="end"
-            android:text="@{personModel.free == true ? @string/key_free_label : personModel.totalPaymentAmount != null ? ExtensionsKt.getEuroFormattedString(personModel.totalPaymentAmount) : @string/key_empty_field_label}"
+            android:text="@{clientModel.free == true ? @string/key_free_label : clientModel.totalPaymentAmount != null ? ExtensionsKt.getEuroFormattedString(clientModel.totalPaymentAmount) : @string/key_empty_field_label}"
             android:textSize="18sp"
-            android:textColor="@{personModel.free == true ? @color/fateBlue :  personModel.groupColor}"
-            textViewColorByPaymentDate="@{personModel.free == true ? null : personModel.payments}"
+            android:textColor="@{clientModel.free == true ? @color/fateBlue :  clientModel.groupColor}"
+            textViewColorByPaymentDate="@{clientModel.free == true ? null : clientModel.payments}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/sharePaymentButton"
             app:layout_constraintTop_toTopOf="parent"
@@ -109,12 +109,12 @@
             android:layout_height="25dp"
             android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:onClick="@{() -> presenter.onPaymentShareMessage(personModel)}"
+            android:onClick="@{() -> presenter.onPaymentShareMessage(clientModel)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_message"
-            imageTintColor="@{personModel.groupImage == null ? personModel.groupColor : @color/colorAccent}"/>
+            imageTintColor="@{clientModel.groupImage == null ? clientModel.groupColor : @color/colorAccent}"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/entryDateTextView"
@@ -126,7 +126,7 @@
             android:layout_marginBottom="@dimen/activity_general_horizontal_margin"
             android:fontFamily="@font/ubuntu_monospace"
             android:gravity="start"
-            android:text="@{personModel.getCommunicationData(context)}"
+            android:text="@{clientModel.getCommunicationData(context)}"
             android:textColor="@color/grey"
             android:textSize="12sp"
             android:singleLine="true"

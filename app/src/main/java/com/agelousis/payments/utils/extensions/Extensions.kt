@@ -16,6 +16,7 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -53,7 +54,6 @@ import androidx.core.database.getStringOrNull
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.loader.content.Loader
 import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.BuildConfig
 import com.agelousis.payments.R
@@ -139,7 +139,7 @@ inline fun <K, T> ifLet(vararg elements: T?, closure: (List<T>) -> K): K? {
     else null
 }
 
-val Context.galleryIntent
+val galleryIntent
     get() = Intent(
         Intent.ACTION_GET_CONTENT
     ).also {
@@ -929,6 +929,14 @@ var Fragment.loaderState: Boolean
                 supportFragmentManager = childFragmentManager
             )
     }
+
+fun Context.makeSoundNotification() {
+    try {
+        val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val ringtone = RingtoneManager.getRingtone(this, notification)
+        ringtone.play()
+    } catch (e: Exception) {}
+}
 
 @BindingAdapter("picassoImagePath")
 fun AppCompatImageView.loadImagePath(fileName: String?) {

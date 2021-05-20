@@ -221,6 +221,9 @@
     <string name="key_qr_code_label">QRCode</string>
     <string name="key_share_id_and_receive_payments_message">Share your device id through the QRCode below and receive the clients &amp; their payments from the device you scan it</string>
     <string name="key_select_clients_label">Select clients</string>
+    <string name="key_select_all_label">Select All</string>
+    <string name="key_unselect_all_label">Unselect All</string>
+    <string name="key_search_in_clients_label">Search in Clients</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
             name="userModel"
@@ -7,81 +9,114 @@
         <variable
             name="presenter"
             type="com.agelousis.payments.main.ui.clientsSelector.presenters.ClientsSelectorFragmentPresenter" />
+        <variable
+            name="selectorState"
+            type="Boolean" />
     </data>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_margin="@dimen/activity_general_horizontal_margin"
     android:background="@drawable/basic_dialog_background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:orientation="vertical">
 
-        <com.google.android.material.textview.MaterialTextView
-            style="@style/TextViewTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_general_horizontal_margin"
-            android:textColor="@color/white"
-            android:text="@string/key_select_country_label"/>
-
-        <com.agelousis.payments.views.searchLayout.MaterialSearchView
-            android:id="@+id/searchLayout"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            materialSearchProfile="@{userModel.profileImage}"
-            app:searchHint="@string/key_search_in_countries_label"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/TextViewTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_general_horizontal_margin"
+                android:textColor="@color/white"
+                android:text="@string/key_select_clients_label"/>
+
+            <com.agelousis.payments.views.searchLayout.MaterialSearchView
+                android:id="@+id/searchLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                materialSearchProfile="@{userModel.profileImage}"
+                app:searchHint="@string/key_search_in_clients_label"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/basic_dialog_footer_background"
+            android:animateLayoutChanges="true">
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/materialCheckBox"
+                style="@style/TextViewValueLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+                android:gravity="center"
+                android:drawablePadding="@dimen/nav_header_vertical_spacing"
+                android:text="@{selectorState ? @string/key_select_all_label : @string/key_unselect_all_label}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Select All"/>
+
+            <View
+                android:id="@+id/lineSeparator"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/grey"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/materialCheckBox"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/clientsSelectorRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:orientation="vertical"
+                android:layoutAnimation="@anim/layout_animation_fall_down"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lineSeparator" />
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:id="@+id/cancelButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_general_horizontal_margin"
+                android:onClick="@{() -> presenter.onCancel()}"
+                android:text="@string/key_cancel_label"
+                android:textAllCaps="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/importButton"
+                app:layout_constraintTop_toBottomOf="@+id/clientsSelectorRecyclerView" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/importButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_general_horizontal_margin"
+                android:onClick="@{() -> presenter.onImport()}"
+                android:text="@string/key_import_label"
+                android:textAllCaps="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/clientsSelectorRecyclerView" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/basic_dialog_footer_background">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/clientsSelectorRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:id="@+id/cancelButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_general_horizontal_margin"
-            android:onClick="@{() -> presenter.onCancel()}"
-            android:text="@string/key_cancel_label"
-            android:textAllCaps="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/importButton"
-            app:layout_constraintTop_toBottomOf="@+id/clientsSelectorRecyclerView" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/importButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_general_horizontal_margin"
-            android:onClick="@{() -> presenter.onImport()}"
-            android:text="@string/key_import_label"
-            android:textAllCaps="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/clientsSelectorRecyclerView" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</LinearLayout>
+</RelativeLayout>
 </layout>

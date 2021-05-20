@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="com.agelousis.payments.utils.extensions.ExtensionsKt" />
+        <variable
+            name="clientModel"
+            type="com.agelousis.payments.main.ui.payments.models.ClientModel" />
+    </data>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:id="@+id/constraintLayout">
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/materialCheckBox"
+        style="@style/TextViewTitleLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+        android:text="@{clientModel.fullName}"
+        android:checked="@{clientModel.selected}"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Vagelis Agelousis" />
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextViewValueLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+        android:text="@{clientModel.free == true ? @string/key_free_label : clientModel.totalPaymentAmount != null ? ExtensionsKt.getEuroFormattedString(clientModel.totalPaymentAmount) : @string/key_empty_field_label}"
+        android:textSize="18sp"
+        android:textColor="@{clientModel.free == true ? @color/fateBlue :  clientModel.groupColor}"
+        textViewColorByPaymentDate="@{clientModel.free == true ? null : clientModel.payments}"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="$170.96" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

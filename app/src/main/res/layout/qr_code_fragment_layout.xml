@@ -11,14 +11,10 @@
             name="qrCodeBitmap"
             type="android.graphics.Bitmap" />
     </data>
-<androidx.core.widget.NestedScrollView
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="true">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
 
         <me.dm7.barcodescanner.zxing.ZXingScannerView
             android:id="@+id/qrCodeScanner"
@@ -66,7 +62,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/qrCodeDescriptionView"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

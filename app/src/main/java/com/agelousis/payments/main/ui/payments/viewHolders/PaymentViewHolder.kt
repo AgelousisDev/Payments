@@ -8,7 +8,7 @@ import com.agelousis.payments.main.ui.payments.presenters.PaymentPresenter
 class PaymentViewHolder(private val binding: PaymentRowLayoutBinding): RecyclerView.ViewHolder(binding.root) {
 
     fun bind(clientModel: ClientModel, presenter: PaymentPresenter) {
-        binding.personModel = clientModel
+        binding.clientModel = clientModel
         binding.adapterPosition = adapterPosition
         binding.presenter = presenter
         itemView.setOnLongClickListener {
