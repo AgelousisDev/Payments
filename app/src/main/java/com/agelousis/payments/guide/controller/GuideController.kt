@@ -33,7 +33,7 @@ object GuideController {
             ),
             GuideModel(
                 icon =  if (isDarkMode) context.resources.getIdentifier("ic_guide_payments_order_dark", "drawable", context.packageName) else context.resources.getIdentifier("ic_guide_payments_order_light", "drawable", context.packageName),
-                title = R.string.key_payments_order_label,
+                title = R.string.key_clients_order_label,
                 subtitle = R.string.key_edit_payments_order_guide_message
             )
         )

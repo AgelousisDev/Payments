@@ -250,6 +250,9 @@ class DBManager(context: Context) {
                         SQLiteHelper.GROUPS_TABLE_NAME,
                         null,
                         ContentValues().also {
+                            groupModel.groupId?.let { groupIdExists ->
+                                it.put(SQLiteHelper.ID, groupIdExists)
+                            }
                             it.put(SQLiteHelper.USER_ID, userId ?: return@withContext)
                             it.put(SQLiteHelper.GROUP_NAME, groupModel.groupName)
                             it.put(SQLiteHelper.COLOR, groupModel.color)
@@ -291,6 +294,9 @@ class DBManager(context: Context) {
                     SQLiteHelper.PERSONS_TABLE_NAME,
                     null,
                     ContentValues().also {
+                        clientModel.personId?.let { personIdExists ->
+                            it.put(SQLiteHelper.ID, personIdExists)
+                        }
                         it.put(SQLiteHelper.USER_ID, userId ?: return@withContext)
                         it.put(SQLiteHelper.GROUP_ID, clientModel.groupId)
                         it.put(SQLiteHelper.FIRST_NAME, clientModel.firstName)

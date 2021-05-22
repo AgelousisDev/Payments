@@ -112,7 +112,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 floatingButtonTint = R.color.colorAccent
             }
             R.id.newPaymentFragment -> {
-                appBarTitle = resources.getString(R.string.key_person_info_label)
+                appBarTitle = resources.getString(R.string.key_client_info_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END
@@ -151,7 +151,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 floatingButtonTint = R.color.colorAccent
             }
             R.id.filterPaymentsFragment -> {
-                appBarTitle = resources.getString(R.string.key_payments_order_label)
+                appBarTitle = resources.getString(R.string.key_clients_order_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END

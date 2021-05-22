@@ -13,6 +13,7 @@ import com.google.zxing.qrcode.QRCodeWriter
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import java.util.*
 import com.agelousis.payments.R
+import com.agelousis.payments.utils.extensions.isLandscape
 
 class QRCodeHelper(private val context: Context) {
 
@@ -44,8 +45,8 @@ class QRCodeHelper(private val context: Context) {
      * private constructor of this class only access by stying in this class.
      */
     init {
-        mHeight = (context.resources.displayMetrics.heightPixels / 2.4).toInt()
-        mWidth = (context.resources.displayMetrics.widthPixels / 1.3).toInt()
+        mHeight = if (context.isLandscape) (context.resources.displayMetrics.heightPixels / 2) else (context.resources.displayMetrics.heightPixels / 2.4).toInt()
+        mWidth = if (context.isLandscape) (context.resources.displayMetrics.widthPixels / 4) else (context.resources.displayMetrics.widthPixels / 1.3).toInt()
         Log.e("Dimension = %s", mHeight.toString() + "")
         Log.e("Dimension = %s", mWidth.toString() + "")
     }

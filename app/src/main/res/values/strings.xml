@@ -32,7 +32,7 @@
     <string name="key_no_persons_message">Click \'+\' to add a Group and then click on each one to add Persons</string>
     <string name="key_no_results_found_value">No results found with \'%s\'</string>
     <string name="key_search">Search</string>
-    <string name="key_person_info_label">Person Info</string>
+    <string name="key_client_info_label">Client Info</string>
     <string name="key_first_name_label">First Name</string>
     <string name="key_surname_label">Surname</string>
     <string name="key_phone_label">Phone</string>
@@ -98,7 +98,7 @@
     <string name="key_share_message_template_hint">Message template to share</string>
     <string name="key_free_label">FREE</string>
     <string name="key_inactive_label">Inactive</string>
-    <string name="key_clear_all_payments_payments_label">Clear Payments</string>
+    <string name="key_clear_all_clients_label">Clear All Clients</string>
     <string name="key_clear_all_payments_message">This operation will delete all the payments you have registered except the groups. Do you want to proceed?</string>
     <string name="key_clear_label">Clear</string>
     <string name="key_saved_users_label">Saved Users</string>
@@ -200,7 +200,7 @@
     <string name="key_print_label">Print</string>
     <string name="key_send_sms_to_group_value_message">Do you want to send SMS to the %s group?</string>
     <string name="key_send_sms_globally_label">Send SMS to all clients</string>
-    <string name="key_payments_order_label">Payments Order</string>
+    <string name="key_clients_order_label">Clients Ordering</string>
     <string name="key_charge_label">Charge</string>
     <string name="key_filter_payments_description">Rearrange the items below in order to watch your payments with your order under a group in the home screen. Changes will apply from the 1st to last. Please note that the payments are being shown grouped by group name alphabetically…</string>
     <string name="key_payments_by_label">Payments by</string>

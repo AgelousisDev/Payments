@@ -15,8 +15,15 @@ import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.clientsSelector.presenters.ClientSelectorPresenter
 import com.agelousis.payments.main.ui.clientsSelector.presenters.ClientsSelectorFragmentPresenter
 import com.agelousis.payments.main.ui.clientsSelector.viewModel.ClientsSelectorViewModel
+import com.agelousis.payments.main.ui.payments.PaymentsFragment
 import com.agelousis.payments.main.ui.payments.models.ClientModel
+import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.utils.constants.Constants
+import com.agelousis.payments.utils.extensions.currentNavigationFragment
+import com.agelousis.payments.utils.extensions.loaderState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ClientsSelectorDialogFragment: DialogFragment(), ClientsSelectorFragmentPresenter, ClientSelectorPresenter {
 
@@ -41,7 +48,7 @@ class ClientsSelectorDialogFragment: DialogFragment(), ClientsSelectorFragmentPr
     }
 
     override fun onImport() {
-
+        startGroupsInsertion()
     }
 
     override fun onClientSelected(adapterPosition: Int, isSelected: Boolean) {
@@ -52,6 +59,7 @@ class ClientsSelectorDialogFragment: DialogFragment(), ClientsSelectorFragmentPr
 
     private lateinit var binding: ClientsSelectorFragmentLayoutBinding
     private val viewModel by viewModels<ClientsSelectorViewModel>()
+    private val uiScope = CoroutineScope(Dispatchers.Main)
     private var clientModelList: List<ClientModel>? = null
     private val filteredClientModelList by lazy {
         arrayListOf<ClientModel>()
@@ -87,10 +95,15 @@ class ClientsSelectorDialogFragment: DialogFragment(), ClientsSelectorFragmentPr
 
     private fun addObservers() {
         viewModel.groupsInsertionStateLiveData.observe(viewLifecycleOwner) {
-
+            if (it)
+                startClientsInsertion()
+            else
+                (activity as? MainActivity)?.loaderState = false
         }
         viewModel.clientInsertionStateLiveData.observe(viewLifecycleOwner) {
-
+            (activity as? MainActivity)?.loaderState = false
+            ((activity as? MainActivity)?.supportFragmentManager?.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
+            dismiss()
         }
     }
 
@@ -129,6 +142,33 @@ class ClientsSelectorDialogFragment: DialogFragment(), ClientsSelectorFragmentPr
             clientModelList = filteredClientModelList,
             clientSelectorPresenter = this
         )
+    }
+
+    private fun startGroupsInsertion() {
+        (activity as? MainActivity)?.loaderState = true
+        uiScope.launch {
+            viewModel.insertGroups(
+                context = context ?: return@launch,
+                userId = (activity as? MainActivity)?.userModel?.id,
+                groupModelList = filteredClientModelList.map { clientModel ->
+                    GroupModel(
+                        groupId = clientModel.groupId,
+                        groupName = clientModel.groupName,
+                        color = clientModel.groupColor
+                    )
+                }
+            )
+        }
+    }
+
+    private fun startClientsInsertion() {
+        uiScope.launch {
+            viewModel.insertClients(
+                context = context ?: return@launch,
+                userId = (activity as? MainActivity)?.userModel?.id,
+                clientModeList = filteredClientModelList.filter { it.isSelected }
+            )
+        }
     }
 
 }

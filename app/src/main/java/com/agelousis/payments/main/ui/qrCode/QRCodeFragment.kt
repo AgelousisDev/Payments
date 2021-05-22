@@ -85,7 +85,6 @@ class QRCodeFragment: Fragment(), ZXingScannerView.ResultHandler {
                 (activity as? MainActivity)?.binding?.appBarMain?.bottomAppBar?.performHide()
                 startQRCodeScanning()
             }
-            else -> {}
         }
     }
 

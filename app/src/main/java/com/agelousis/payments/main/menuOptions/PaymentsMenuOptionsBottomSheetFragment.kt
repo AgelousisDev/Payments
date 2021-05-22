@@ -98,8 +98,8 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
                 header = resources.getString(R.string.key_options_label),
                 headerBackgroundColor = context?.let { ContextCompat.getColor(it, android.R.color.transparent) }
             ),
-            PaymentsMenuOptionType.PAYMENTS_ORDER,
-            PaymentsMenuOptionType.CLEAR_PAYMENTS,
+            PaymentsMenuOptionType.CLIENTS_ORDER,
+            PaymentsMenuOptionType.CLEAR_CLIENTS,
             PaymentsMenuOptionType.CSV_EXPORT,
             PaymentsMenuOptionType.SEND_SMS_GLOBALLY,
             PaymentsMenuOptionType.QR_CODE_GENERATOR,
@@ -136,7 +136,7 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
                     it as? PaymentsMenuOptionType
                 },
                 predicate = {
-                    it == PaymentsMenuOptionType.PAYMENTS_ORDER
+                    it == PaymentsMenuOptionType.CLIENTS_ORDER
                 }
             )?.isEnabled = personModelList.isNotEmpty()
             optionList.firstOrNullWithType(
@@ -144,7 +144,7 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
                     it as? PaymentsMenuOptionType
                 },
                 predicate = {
-                    it == PaymentsMenuOptionType.CLEAR_PAYMENTS
+                    it == PaymentsMenuOptionType.CLEAR_CLIENTS
                 }
             )?.isEnabled = personModelList.isNotEmpty()
             optionList.firstOrNullWithType(
