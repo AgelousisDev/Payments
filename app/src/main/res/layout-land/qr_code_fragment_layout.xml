@@ -57,10 +57,11 @@
             imageViewBitmap="@{qrCodeBitmap}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             android:visibility="@{qrCodeSelectionType == QRCodeSelectionType.GENERATE ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/qrCodeScanner"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/scanQrCodeAnimation"
             app:layout_constraintTop_toBottomOf="@+id/qrCodeDescriptionView" />
 
