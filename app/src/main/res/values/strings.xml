@@ -28,8 +28,8 @@
     <string name="key_add_label">Add</string>
     <string name="key_add_group_label">Add Group</string>
     <string name="key_group_name_label">Group name</string>
-    <string name="key_no_persons_title_message">No persons added</string>
-    <string name="key_no_persons_message">Click \'+\' to add a Group and then click on each one to add Persons</string>
+    <string name="key_no_clients_title_message">No clients added</string>
+    <string name="key_no_clients_message">Click \'+\' to add a Group and then click on each one to add Clients</string>
     <string name="key_no_results_found_value">No results found with \'%s\'</string>
     <string name="key_search">Search</string>
     <string name="key_client_info_label">Client Info</string>
@@ -70,14 +70,14 @@
     <string name="key_invoices_label">Invoices</string>
     <string name="key_this_month_label">THIS MONTH</string>
     <string name="key_no_files_title_message">There are no files at this time</string>
-    <string name="key_no_files_message">Navigate to home &amp; swipe group or person to create an Invoice</string>
+    <string name="key_no_files_message">Navigate to home &amp; swipe group or client to create an Invoice</string>
     <string name="key_search_in_invoices_label">Search in invoices</string>
     <string name="key_yes_label">YES</string>
     <string name="key_no_label">NO</string>
     <string name="key_file_saved_message">Invoice created successfully. Navigate on the \"Invoices\" option to see the list of invoices</string>
     <string name="key_delete_selected_files_message">Do you want to delete the selected files?</string>
     <string name="key_total_payments_label">Total Payments</string>
-    <string name="key_file_not_exists_message">It seems that this invoice does not exist. Recreate it by navigating to home &amp; swipe a person to left.</string>
+    <string name="key_file_not_exists_message">It seems that this invoice does not exist. Recreate it by navigating to home &amp; swipe a client to left.</string>
     <string name="key_address_label">Address</string>
     <string name="key_id_card_number_label">ID Number</string>
     <string name="key_social_insurance_number_label">Social Insurance Number</string>

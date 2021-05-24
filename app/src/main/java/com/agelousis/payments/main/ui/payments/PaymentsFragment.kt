@@ -548,8 +548,8 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
             query.whenNull {
                 filteredList.add(
                     EmptyModel(
-                        title = resources.getString(R.string.key_no_persons_title_message),
-                        message = resources.getString(R.string.key_no_persons_message),
+                        title = resources.getString(R.string.key_no_clients_title_message),
+                        message = resources.getString(R.string.key_no_clients_message),
                         animationJsonIcon = "empty_animation.json"
                     )
                 )
