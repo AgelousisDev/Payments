@@ -9,7 +9,6 @@ import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.transition.TransitionInflater
 import com.agelousis.payments.R
 import com.agelousis.payments.databinding.DismissibleChipBinding
 import com.agelousis.payments.databinding.FragmentNewPaymentAmountLayoutBinding
@@ -57,11 +56,6 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
         } ?: true
     private val singlePaymentProductList
         get() = (binding.singlePaymentProductsChipGroup.children as? Sequence<*>)?.mapNotNull { view -> (view as? Chip)?.text?.toString()?.takeIf { it.isNotEmpty() } ?: binding.singlePaymentProductsField.text?.toString() }?.toList()?.takeIf { it.isNotEmpty() }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enterTransition = TransitionInflater.from(context ?: return).inflateTransition(R.transition.slide_right)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentNewPaymentAmountLayoutBinding.inflate(
