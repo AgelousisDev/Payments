@@ -15,7 +15,7 @@ import java.util.*
 
 @Parcelize
 data class ClientModel(val personId: Int? = null,
-                       val groupId: Int? = null,
+                       var groupId: Int? = null,
                        val groupName: String? = null,
                        val firstName: String? = null,
                        val surname: String? = null,

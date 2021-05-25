@@ -1,35 +1,30 @@
 package com.agelousis.payments.main.ui.clientsSelector.viewModel
 
 import android.content.Context
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.agelousis.payments.database.DBManager
+import com.agelousis.payments.database.InsertionSuccessBlock
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 
 class ClientsSelectorViewModel: ViewModel() {
 
-    val groupsInsertionStateLiveData by lazy { MutableLiveData<Boolean>() }
-    val clientInsertionStateLiveData by lazy { MutableLiveData<Boolean>() }
-
-    suspend fun insertGroups(context: Context, userId: Int?, groupModelList: List<GroupModel>) {
+    suspend fun insertGroup(context: Context, userId: Int?, groupModel: GroupModel, groupInsertionSuccessBlock: (groupId: Long?) -> Unit) {
         val dbManager = DBManager(context = context)
-        dbManager.insertGroups(
+        dbManager.insertGroupWithIds(
             userId = userId,
-            groupModelList = groupModelList
-        ) {
-            groupsInsertionStateLiveData.value = true
-        }
+            groupModel = groupModel,
+            groupInsertionSuccessBlock = groupInsertionSuccessBlock
+        )
     }
 
-    suspend fun insertClients(context: Context, userId: Int?, clientModeList: List<ClientModel>) {
+    suspend fun insertClients(context: Context, userId: Int?, clientModelList: List<ClientModel>, clientsInsertionSuccessBlock: InsertionSuccessBlock) {
         val dbManager = DBManager(context = context)
         dbManager.insertClients(
             userId = userId,
-            clientModelList = clientModeList
-        ) {
-            clientInsertionStateLiveData.value = true
-        }
+            clientModelList = clientModelList,
+            insertionSuccessBlock = clientsInsertionSuccessBlock
+        )
     }
 
 }

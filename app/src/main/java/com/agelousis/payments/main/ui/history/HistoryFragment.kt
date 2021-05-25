@@ -78,6 +78,7 @@ class HistoryFragment: Fragment(), GestureDetector.OnGestureListener, View.OnTou
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as? MainActivity)?.binding?.appBarMain?.bottomAppBar?.performHide()
         setupUI()
         initializePayments()
         addObservers()

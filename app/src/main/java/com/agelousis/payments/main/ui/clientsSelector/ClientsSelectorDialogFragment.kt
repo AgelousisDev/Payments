@@ -48,7 +48,7 @@ class ClientsSelectorDialogFragment: DialogFragment(), ClientsSelectorFragmentPr
     }
 
     override fun onImport() {
-        startGroupsInsertion()
+        initializeClientsInsertion()
     }
 
     override fun onClientSelected(adapterPosition: Int, isSelected: Boolean) {
@@ -88,23 +88,8 @@ class ClientsSelectorDialogFragment: DialogFragment(), ClientsSelectorFragmentPr
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        addObservers()
         setupUI()
         configureRecyclerView()
-    }
-
-    private fun addObservers() {
-        viewModel.groupsInsertionStateLiveData.observe(viewLifecycleOwner) {
-            if (it)
-                startClientsInsertion()
-            else
-                (activity as? MainActivity)?.loaderState = false
-        }
-        viewModel.clientInsertionStateLiveData.observe(viewLifecycleOwner) {
-            (activity as? MainActivity)?.loaderState = false
-            ((activity as? MainActivity)?.supportFragmentManager?.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
-            dismiss()
-        }
     }
 
     private fun setupUI() {
@@ -144,31 +129,36 @@ class ClientsSelectorDialogFragment: DialogFragment(), ClientsSelectorFragmentPr
         )
     }
 
-    private fun startGroupsInsertion() {
+    private fun initializeClientsInsertion() {
         (activity as? MainActivity)?.loaderState = true
-        uiScope.launch {
-            viewModel.insertGroups(
-                context = context ?: return@launch,
-                userId = (activity as? MainActivity)?.userModel?.id,
-                groupModelList = filteredClientModelList.map { clientModel ->
-                    GroupModel(
-                        groupId = clientModel.groupId,
-                        groupName = clientModel.groupName,
-                        color = clientModel.groupColor
+        filteredClientModelList.groupBy { it.groupName }.forEach { (key, map) ->
+            uiScope.launch {
+                viewModel.insertGroup(
+                    context = context ?: return@launch,
+                    userId = (activity as? MainActivity)?.userModel?.id,
+                    groupModel = GroupModel(
+                        groupName = key ?: return@launch,
+                        color = map.firstOrNull()?.groupColor
                     )
-                }
-            )
-        }
-    }
+                ) { groupId ->
+                    map.forEach {
+                        it.groupId = groupId?.toInt()
+                    }
+                    uiScope.launch innerLaunch@ {
+                        viewModel.insertClients(
+                            context = context ?: return@innerLaunch,
+                            userId = (activity as? MainActivity)?.userModel?.id,
+                            clientModelList = map
+                        ) {
 
-    private fun startClientsInsertion() {
-        uiScope.launch {
-            viewModel.insertClients(
-                context = context ?: return@launch,
-                userId = (activity as? MainActivity)?.userModel?.id,
-                clientModeList = filteredClientModelList.filter { it.isSelected }
-            )
+                        }
+                    }
+                }
+            }
         }
+        (activity as? MainActivity)?.loaderState = false
+        ((activity as? MainActivity)?.supportFragmentManager?.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
+        dismiss()
     }
 
 }

@@ -250,9 +250,6 @@ class DBManager(context: Context) {
                         SQLiteHelper.GROUPS_TABLE_NAME,
                         null,
                         ContentValues().also {
-                            groupModel.groupId?.let { groupIdExists ->
-                                it.put(SQLiteHelper.ID, groupIdExists)
-                            }
                             it.put(SQLiteHelper.USER_ID, userId ?: return@withContext)
                             it.put(SQLiteHelper.GROUP_NAME, groupModel.groupName)
                             it.put(SQLiteHelper.COLOR, groupModel.color)
@@ -264,6 +261,39 @@ class DBManager(context: Context) {
             }
             withContext(Dispatchers.Main) {
                 insertionSuccessBlock()
+            }
+        }
+    }
+
+    suspend fun insertGroupWithIds(userId: Int?, groupModel: GroupModel, groupInsertionSuccessBlock: (Long?) -> Unit) {
+        withContext(Dispatchers.Default) {
+            var insertedGroupId: Long? = null
+            val cursor = database?.query(
+                SQLiteHelper.GROUPS_TABLE_NAME,
+                arrayOf(SQLiteHelper.ID),
+                "${SQLiteHelper.GROUP_NAME}=?",
+                arrayOf(groupModel.groupName),
+                null,
+                null,
+                null,
+                null
+            )
+            if (cursor?.count ?: 0 == 0) {
+                insertedGroupId = database?.insert(
+                    SQLiteHelper.GROUPS_TABLE_NAME,
+                    null,
+                    ContentValues().also {
+                        it.put(SQLiteHelper.USER_ID, userId ?: return@withContext)
+                        it.put(SQLiteHelper.GROUP_NAME, groupModel.groupName)
+                        it.put(SQLiteHelper.COLOR, groupModel.color)
+                        it.put(SQLiteHelper.GROUP_IMAGE, groupModel.groupImage)
+                        it.put(SQLiteHelper.GROUP_IMAGE_DATA, groupModel.groupImageData)
+                    }
+                )
+            }
+            cursor?.close()
+            withContext(Dispatchers.Main) {
+                groupInsertionSuccessBlock(insertedGroupId)
             }
         }
     }
@@ -294,9 +324,6 @@ class DBManager(context: Context) {
                     SQLiteHelper.PERSONS_TABLE_NAME,
                     null,
                     ContentValues().also {
-                        clientModel.personId?.let { personIdExists ->
-                            it.put(SQLiteHelper.ID, personIdExists)
-                        }
                         it.put(SQLiteHelper.USER_ID, userId ?: return@withContext)
                         it.put(SQLiteHelper.GROUP_ID, clientModel.groupId)
                         it.put(SQLiteHelper.FIRST_NAME, clientModel.firstName)
