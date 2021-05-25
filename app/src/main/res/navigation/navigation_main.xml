@@ -41,10 +41,10 @@
         <action
             android:id="@+id/action_paymentsFragment_to_historyFragment"
             app:destination="@id/historyFragment"
-            app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out"
-            app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@android:anim/fade_out" />
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom" />
         <action
             android:id="@+id/action_paymentsFragment_to_QRCodeFragment"
             app:destination="@id/QRCodeFragment"

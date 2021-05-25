@@ -24,6 +24,7 @@ import com.agelousis.payments.utils.extensions.loaderState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ClientsSelectorDialogFragment: DialogFragment(), ClientsSelectorFragmentPresenter, ClientSelectorPresenter {
 
@@ -131,34 +132,37 @@ class ClientsSelectorDialogFragment: DialogFragment(), ClientsSelectorFragmentPr
 
     private fun initializeClientsInsertion() {
         (activity as? MainActivity)?.loaderState = true
-        filteredClientModelList.groupBy { it.groupName }.forEach { (key, map) ->
-            uiScope.launch {
-                viewModel.insertGroup(
-                    context = context ?: return@launch,
-                    userId = (activity as? MainActivity)?.userModel?.id,
-                    groupModel = GroupModel(
-                        groupName = key ?: return@launch,
-                        color = map.firstOrNull()?.groupColor
-                    )
-                ) { groupId ->
-                    map.forEach {
-                        it.groupId = groupId?.toInt()
-                    }
-                    uiScope.launch innerLaunch@ {
-                        viewModel.insertClients(
-                            context = context ?: return@innerLaunch,
-                            userId = (activity as? MainActivity)?.userModel?.id,
-                            clientModelList = map
-                        ) {
+        uiScope.launch {
+            withContext(Dispatchers.Default) {
+                for (map in filteredClientModelList.filter { it.isSelected }.groupBy { it.groupName })
+                    viewModel.insertGroup(
+                        context = context ?: return@withContext,
+                        userId = (activity as? MainActivity)?.userModel?.id,
+                        groupModel = GroupModel(
+                            groupName = map.key ?: return@withContext,
+                            color = map.value.firstOrNull()?.groupColor
+                        )
+                    ) { groupId ->
+                        map.value.forEach {
+                            it.groupId = groupId?.toInt()
+                        }
+                        uiScope.launch innerLaunch@ {
+                            viewModel.insertClients(
+                                context = context ?: return@innerLaunch,
+                                userId = (activity as? MainActivity)?.userModel?.id,
+                                clientModelList = map.value
+                            ) {
 
+                            }
                         }
                     }
+                withContext(Dispatchers.Main) {
+                    (activity as? MainActivity)?.loaderState = false
+                    ((activity as? MainActivity)?.supportFragmentManager?.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
+                    dismiss()
                 }
             }
         }
-        (activity as? MainActivity)?.loaderState = false
-        ((activity as? MainActivity)?.supportFragmentManager?.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
-        dismiss()
     }
 
 }
