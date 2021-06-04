@@ -984,6 +984,13 @@ fun setBackgroundDrawableTintColor(viewGroup: ViewGroup, color: Int?) {
     }
 }
 
+@BindingAdapter("backgroundDrawableTintColor")
+fun setBackgroundDrawableTintColor(view: View, color: Int?) {
+    color?.let {
+        view.background?.setTint(it)
+    }
+}
+
 @BindingAdapter("backgroundViewColor")
 fun setBackgroundViewColor(view: View, color: Int?) {
     color?.let {

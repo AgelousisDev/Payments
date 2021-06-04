@@ -22,17 +22,29 @@
         android:background="@color/nativeBackgroundColor"
         android:onClick="@{() -> presenter.onGroupSelected(groupModel)}">
 
+        <View
+            android:id="@+id/groupHeaderLine"
+            android:layout_width="3dp"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/activity_general_horizontal_margin"
+            android:background="@drawable/group_header_line"
+            backgroundDrawableTintColor="@{groupModel.color != null ? groupModel.color : @color/colorAccent}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
         <com.google.android.material.textview.MaterialTextView
-            style="@style/TextViewTitleLabel"
+            style="@style/TextViewValueLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+            android:layout_marginStart="@dimen/nav_header_vertical_spacing"
             android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+            android:textSize="16sp"
             android:text="@{groupModel.groupName}"
             android:textColor="@{(groupModel.color != null) ? groupModel.color : @color/grey}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/appCompatImageView3"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/groupHeaderLine"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Group 1" />
 

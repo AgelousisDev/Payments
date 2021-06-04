@@ -11,7 +11,7 @@ class FirebaseInstanceHelper {
 
     fun initializeFirebaseToken(firebaseTokenSuccessBlock: FirebaseTokenSuccessBlock) {
         FirebaseMessaging.getInstance().token.addOnCompleteListener {
-            firebaseTokenSuccessBlock(it.result ?: return@addOnCompleteListener)
+            firebaseTokenSuccessBlock(it.takeIf { it.isSuccessful }?.result ?: return@addOnCompleteListener)
         }
     }
 
