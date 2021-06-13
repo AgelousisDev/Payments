@@ -90,6 +90,19 @@
                 <action android:name="SHOW_NOTIFICATION" />
             </intent-filter>
         </receiver>
+
+        <receiver android:name=".widgets.PaymentsAppWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/payments_collection_widget"/>
+        </receiver>
+        <service
+            android:name=".widgets.PaymentsWidgetRemoteViewsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
     </application>
 
 </manifest>

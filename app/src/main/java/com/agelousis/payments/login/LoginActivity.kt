@@ -41,6 +41,7 @@ import kotlin.collections.ArrayList
 class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, UserSelectionPresenter, GestureDetector.OnGestureListener {
 
     private lateinit var binding: ActivityLoginBinding
+    private val sharedPreferences by lazy { getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE) }
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val userModel by lazy { UserModel() }
     private val viewModel by lazy { ViewModelProvider(this).get(LoginViewModel::class.java) }
@@ -262,6 +263,7 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, UserSe
     }
 
     private fun showMainActivity(userModel: UserModel) {
+        sharedPreferences.currentUserId = userModel.id
         startActivity(Intent(this, MainActivity::class.java).also {
             it.putExtra(MainActivity.USER_MODEL_EXTRA, userModel)
         })

@@ -938,6 +938,20 @@ fun Context.makeSoundNotification() {
     } catch (e: Exception) {}
 }
 
+var SharedPreferences.currentUserId: Int?
+    set(value) = edit(
+        commit = true
+    ) {
+        putInt(
+            Constants.SHARED_PREFERENCES_CURRENT_USER_ID_KEY,
+            value ?: 0
+        )
+    }
+    get() = getInt(
+        Constants.SHARED_PREFERENCES_CURRENT_USER_ID_KEY,
+        0
+    )
+
 @BindingAdapter("picassoImagePath")
 fun AppCompatImageView.loadImagePath(fileName: String?) {
     fileName?.let {
