@@ -1,5 +1,6 @@
 package com.agelousis.payments.widgets
 
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
@@ -7,13 +8,14 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.RemoteViews
-import com.agelousis.payments.R
 import com.agelousis.payments.database.DBManager
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.utils.constants.Constants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import com.agelousis.payments.R
+
 
 class PaymentsAppWidget: AppWidgetProvider() {
 
@@ -63,11 +65,18 @@ class PaymentsAppWidget: AppWidgetProvider() {
                             }
                         )
                         intent.data = Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME))
+                        val pendingIntent = PendingIntent.getActivity(
+                            context,
+                            appWidgetId,
+                            intent,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                        )
                         // Instantiate the RemoteViews object for the app widget layout.
                         val views = RemoteViews(
                             context.packageName,
                             R.layout.payments_collection_widget_layout
                         )
+                        views.setPendingIntentTemplate(R.id.listview, pendingIntent)
                         views.setRemoteAdapter(R.id.widgetListView, intent)
                         //appWidgetManager?.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widgetListView)
                         appWidgetManager.updateAppWidget(appWidgetId, views)

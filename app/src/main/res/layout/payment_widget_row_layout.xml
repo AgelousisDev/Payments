@@ -4,14 +4,28 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="@dimen/activity_general_horizontal_margin">
+    android:padding="@dimen/activity_general_horizontal_margin"
+    android:id="@+id/linearLayout">
 
     <TextView
-        style="@style/TextViewLabel"
+        style="@style/TextViewTitleLabel"
         android:id="@+id/textViewHeaderTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="0.5"
         tools:text="January 2020"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        style="@style/TextViewValueLabel"
+        android:id="@+id/textViewFooterTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:gravity="end"
+        tools:text="1000.0$"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

@@ -33,6 +33,7 @@ import com.agelousis.payments.main.ui.files.FilesFragment
 import com.agelousis.payments.main.ui.newPayment.NewPaymentFragment
 import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
 import com.agelousis.payments.main.ui.payments.PaymentsFragment
+import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.paymentsFiltering.FilterPaymentsFragment
@@ -45,6 +46,7 @@ import com.agelousis.payments.receivers.NotificationDataReceiver
 import com.agelousis.payments.receivers.interfaces.NotificationListener
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
+import com.agelousis.payments.widgets.PaymentsWidgetRemoteViewsFactory
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -260,6 +262,9 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
         NotificationDataReceiver().also {
             it.notificationListener = this
         }
+    }
+    val widgetClientModel by lazy {
+        intent?.extras?.getParcelable<ClientModel>(PaymentsWidgetRemoteViewsFactory.CLIENT_MODEL_EXTRA)
     }
 
     override fun onBackPressed() {

@@ -27,10 +27,12 @@ import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.login.presenter.LoginPresenter
 import com.agelousis.payments.login.viewModel.LoginViewModel
 import com.agelousis.payments.main.MainActivity
+import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.userSelection.UserSelectionFragment
 import com.agelousis.payments.userSelection.presenters.UserSelectionPresenter
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
+import com.agelousis.payments.widgets.PaymentsWidgetRemoteViewsFactory
 import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,6 +50,9 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, UserSe
     private var dbManager: DBManager? = null
     private var signInState = SignInState.SIGN_UP
     private var mDetector: GestureDetectorCompat? = null
+    private val widgetClientModel by lazy {
+        intent?.extras?.getParcelable<ClientModel>(PaymentsWidgetRemoteViewsFactory.CLIENT_MODEL_EXTRA)
+    }
 
     override fun onProfileSelect() {
         activityLauncher?.launch(
@@ -266,6 +271,7 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, UserSe
         sharedPreferences.currentUserId = userModel.id
         startActivity(Intent(this, MainActivity::class.java).also {
             it.putExtra(MainActivity.USER_MODEL_EXTRA, userModel)
+            it.putExtra(PaymentsWidgetRemoteViewsFactory.CLIENT_MODEL_EXTRA, widgetClientModel)
         })
         finish()
     }
