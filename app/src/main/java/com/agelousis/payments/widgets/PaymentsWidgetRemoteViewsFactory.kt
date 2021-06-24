@@ -1,16 +1,14 @@
 package com.agelousis.payments.widgets
 
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Binder
 import android.os.Bundle
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.utils.extensions.euroFormattedString
-
+import com.google.gson.Gson
 
 class PaymentsWidgetRemoteViewsFactory(private val context: Context, private val clientModelList: List<ClientModel>): RemoteViewsService.RemoteViewsFactory {
 
@@ -21,9 +19,7 @@ class PaymentsWidgetRemoteViewsFactory(private val context: Context, private val
     override fun onCreate() {}
 
     override fun onDataSetChanged() {
-        val identityToken = Binder.clearCallingIdentity()
-        //val uri = Contract.PATH_TODOS_URI
-        Binder.restoreCallingIdentity(identityToken)
+        println(clientModelList)
     }
 
     override fun onDestroy() {}
@@ -52,24 +48,20 @@ class PaymentsWidgetRemoteViewsFactory(private val context: Context, private val
                 index = position
             )?.groupColor ?: return rv
         )
-        rv.setOnClickPendingIntent(
-            R.id.linearLayout,
-            PendingIntent.getBroadcast(
-                context, 0,
-                Intent().also { intent ->
-                    intent.putExtras(
-                        Bundle().also { bundle ->
-                            bundle.putParcelable(
-                                CLIENT_MODEL_EXTRA,
-                                clientModelList.getOrNull(
-                                    index = position
-                                )
-                            )
-                        }
-                    )
-                },
-                PendingIntent.FLAG_UPDATE_CURRENT
+        val extras = Bundle()
+        extras.putString(
+            CLIENT_MODEL_EXTRA,
+            Gson().toJson(
+                clientModelList.getOrNull(
+                    index = position
+                )
             )
+        )
+        val intent = Intent()
+        intent.putExtras(extras)
+        rv.setOnClickFillInIntent(
+            R.id.paymentWidgetLayout,
+            intent
         )
         return rv
     }

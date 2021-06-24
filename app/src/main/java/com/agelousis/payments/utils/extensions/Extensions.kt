@@ -7,6 +7,8 @@ import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.Service
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -71,6 +73,7 @@ import com.agelousis.payments.utils.custom.LoaderDialog
 import com.agelousis.payments.utils.models.CalendarDataModel
 import com.agelousis.payments.utils.models.NotificationDataModel
 import com.agelousis.payments.utils.receivers.NotificationReceiver
+import com.agelousis.payments.widgets.PaymentsAppWidget
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -951,6 +954,16 @@ var SharedPreferences.currentUserId: Int?
         Constants.SHARED_PREFERENCES_CURRENT_USER_ID_KEY,
         0
     )
+
+fun Context.updatePaymentsAppWidget() {
+    val intent = Intent(this, PaymentsAppWidget::class.java)
+    intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+    // Use an array and EXTRA_APPWIDGET_IDS instead of AppWidgetManager.EXTRA_APPWIDGET_ID,
+    // since it seems the onUpdate() is only fired on that:
+    val ids = AppWidgetManager.getInstance(applicationContext).getAppWidgetIds(ComponentName(applicationContext, PaymentsAppWidget::class.java))
+    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+    sendBroadcast(intent)
+}
 
 @BindingAdapter("picassoImagePath")
 fun AppCompatImageView.loadImagePath(fileName: String?) {

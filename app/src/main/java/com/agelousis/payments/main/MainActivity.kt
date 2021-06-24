@@ -263,9 +263,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
             it.notificationListener = this
         }
     }
-    val widgetClientModel by lazy {
-        intent?.extras?.getParcelable<ClientModel>(PaymentsWidgetRemoteViewsFactory.CLIENT_MODEL_EXTRA)
-    }
 
     override fun onBackPressed() {
         when(supportFragmentManager.currentNavigationFragment) {

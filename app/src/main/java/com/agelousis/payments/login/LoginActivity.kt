@@ -50,9 +50,6 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, UserSe
     private var dbManager: DBManager? = null
     private var signInState = SignInState.SIGN_UP
     private var mDetector: GestureDetectorCompat? = null
-    private val widgetClientModel by lazy {
-        intent?.extras?.getParcelable<ClientModel>(PaymentsWidgetRemoteViewsFactory.CLIENT_MODEL_EXTRA)
-    }
 
     override fun onProfileSelect() {
         activityLauncher?.launch(
@@ -271,7 +268,6 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, UserSe
         sharedPreferences.currentUserId = userModel.id
         startActivity(Intent(this, MainActivity::class.java).also {
             it.putExtra(MainActivity.USER_MODEL_EXTRA, userModel)
-            it.putExtra(PaymentsWidgetRemoteViewsFactory.CLIENT_MODEL_EXTRA, widgetClientModel)
         })
         finish()
     }

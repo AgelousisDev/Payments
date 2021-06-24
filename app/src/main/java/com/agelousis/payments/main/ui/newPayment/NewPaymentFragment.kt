@@ -202,6 +202,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                 (activity as? MainActivity)?.floatingButtonState = false
                 scheduleNotification()
                 currentClientModel = null
+                context?.updatePaymentsAppWidget()
                 playSuccessAnimation {
                     findNavController().popBackStack()
                 }
@@ -256,7 +257,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                     resources.getString(R.string.key_notification_amount_value),
                     paymentAmountModel.paymentAmount?.euroFormattedString ?: ""
                 ),
-                date = paymentAmountModel.paymentDate.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.formattedDateWith(pattern = Constants.VIEWING_DATE_FORMAT),
+                date = paymentAmountModel.paymentDate?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.formattedDateWith(pattern = Constants.VIEWING_DATE_FORMAT),
                 groupName = currentClientModel?.groupName,
                 groupImage = /*currentPersonModel?.personImage ?: */currentClientModel?.groupImage ?: args.groupDataModel?.groupImage,
                 groupTint = currentClientModel?.groupColor

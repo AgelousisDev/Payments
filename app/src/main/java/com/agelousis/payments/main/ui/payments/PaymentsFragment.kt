@@ -568,18 +568,6 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
         (activity as? MainActivity)?.historyButtonIsVisible = filteredList.filterIsInstance<ClientModel>().mapNotNull { it.payments }.flatten().isNotEmpty()
         binding.paymentsAreAvailable = (activity as? MainActivity)?.historyButtonIsVisible == true
-        redirectToNewPaymentFragmentByWidgetClientSelection()
-    }
-
-    private fun redirectToNewPaymentFragmentByWidgetClientSelection() {
-        (activity as? MainActivity)?.widgetClientModel?.takeIf {
-            itemsList.contains(it)
-        }?.let { widgetClientModel ->
-            onPaymentSelected(
-                clientModel = widgetClientModel,
-                adapterPosition = filteredList.indexOf(widgetClientModel)
-            )
-        }
     }
 
     fun navigateToPeriodFilterFragment() {
