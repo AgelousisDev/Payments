@@ -265,7 +265,6 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, UserSe
     }
 
     private fun showMainActivity(userModel: UserModel) {
-        sharedPreferences.currentUserId = userModel.id
         startActivity(Intent(this, MainActivity::class.java).also {
             it.putExtra(MainActivity.USER_MODEL_EXTRA, userModel)
         })

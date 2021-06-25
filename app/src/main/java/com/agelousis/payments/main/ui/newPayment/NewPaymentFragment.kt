@@ -202,7 +202,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                 (activity as? MainActivity)?.floatingButtonState = false
                 scheduleNotification()
                 currentClientModel = null
-                context?.updatePaymentsAppWidget()
                 playSuccessAnimation {
                     findNavController().popBackStack()
                 }

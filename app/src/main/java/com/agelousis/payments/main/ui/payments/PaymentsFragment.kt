@@ -43,6 +43,8 @@ import com.agelousis.payments.main.ui.totalPaymentsAmount.TotalPaymentsAmountDia
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.PDFHelper
+import com.agelousis.payments.widgets.extensions.clientModelList
+import com.agelousis.payments.widgets.extensions.updatePaymentsAppWidget
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -568,6 +570,8 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
         (activity as? MainActivity)?.historyButtonIsVisible = filteredList.filterIsInstance<ClientModel>().mapNotNull { it.payments }.flatten().isNotEmpty()
         binding.paymentsAreAvailable = (activity as? MainActivity)?.historyButtonIsVisible == true
+        sharedPreferences?.clientModelList = list.filterIsInstance<ClientModel>()
+        context?.updatePaymentsAppWidget()
     }
 
     fun navigateToPeriodFilterFragment() {

@@ -91,7 +91,7 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".widgets.PaymentsAppWidget">
+        <receiver android:name=".widgets.PaymentsAppWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>

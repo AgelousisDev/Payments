@@ -45,7 +45,7 @@ object Constants {
     const val LOADER_DIALOG_TAG = "LoaderDialog"
     const val SHOW_NOTIFICATION_INTENT_ACTION = "SHOW_NOTIFICATION"
     const val CLIENTS_SELECTOR_FRAGMENT_TAG = "clientsSelectorFragmentTag"
-    const val SHARED_PREFERENCES_CURRENT_USER_ID_KEY = "current_user"
+    const val SHARED_PREFERENCES_CLIENT_MODEL_DATA = "client_model_data"
 
     object Colors {
         val colorPickerColors = intArrayOf(
