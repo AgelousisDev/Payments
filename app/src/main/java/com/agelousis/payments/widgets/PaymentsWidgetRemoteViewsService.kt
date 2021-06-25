@@ -11,9 +11,7 @@ class PaymentsWidgetRemoteViewsService: RemoteViewsService() {
             ClientModel::class.java.classLoader
         )
         return PaymentsWidgetRemoteViewsFactory(
-            context = applicationContext,
-            clientModelList = intent?.extras?.getBundle("bundle")?.getParcelableArrayList(PaymentsAppWidgetProvider.CLIENT_MODEL_DATA)
-                ?: listOf()
+            context = applicationContext
         )
     }
 

@@ -33,7 +33,6 @@ import com.agelousis.payments.main.ui.files.FilesFragment
 import com.agelousis.payments.main.ui.newPayment.NewPaymentFragment
 import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
 import com.agelousis.payments.main.ui.payments.PaymentsFragment
-import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.paymentsFiltering.FilterPaymentsFragment
@@ -46,7 +45,6 @@ import com.agelousis.payments.receivers.NotificationDataReceiver
 import com.agelousis.payments.receivers.interfaces.NotificationListener
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
-import com.agelousis.payments.widgets.PaymentsWidgetRemoteViewsFactory
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -298,7 +296,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
         setContentView(binding.root)
         setupToolbar()
         setupUI()
-        addInactiveGroup()
+        //addInactiveGroup()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -338,7 +336,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
         binding.appBarMain.floatingButton.setOnClickListener(this)
     }
 
-    private fun addInactiveGroup() {
+    /*private fun addInactiveGroup() {
         uiScope.launch {
             dbManager.insertGroups(
                 userId = userModel?.id,
@@ -350,7 +348,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 )
             ) {}
         }
-    }
+    }*/
 
     private fun configureGroup(groupModel: GroupModel, successBlock: () -> Unit) {
         uiScope.launch {

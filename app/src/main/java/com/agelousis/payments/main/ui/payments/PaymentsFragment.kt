@@ -543,7 +543,10 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
             }
         }
         filteredList.addAll(
-            list.filterIsInstance<GroupModel>().filter { it.groupName?.lowercase()?.contains(query?.lowercase() ?: "") == true  && it.groupName != resources.getString(R.string.key_inactive_label) }
+            list.filterIsInstance<GroupModel>().filter {
+                it.groupName?.lowercase()?.contains(query?.lowercase() ?: "") == true
+                        //&& it.groupName != resources.getString(R.string.key_inactive_label)
+            }
         )
 
         if (filteredList.isEmpty())
@@ -570,8 +573,10 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
         (activity as? MainActivity)?.historyButtonIsVisible = filteredList.filterIsInstance<ClientModel>().mapNotNull { it.payments }.flatten().isNotEmpty()
         binding.paymentsAreAvailable = (activity as? MainActivity)?.historyButtonIsVisible == true
-        sharedPreferences?.clientModelList = list.filterIsInstance<ClientModel>()
-        context?.updatePaymentsAppWidget()
+        sharedPreferences?.clientModelList?.takeIf { it.size != list.filterIsInstance<ClientModel>().size }?.apply {
+            sharedPreferences?.clientModelList = list.filterIsInstance<ClientModel>()
+            context?.updatePaymentsAppWidget()
+        }
     }
 
     fun navigateToPeriodFilterFragment() {

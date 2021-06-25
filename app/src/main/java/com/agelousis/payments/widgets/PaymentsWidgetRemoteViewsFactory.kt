@@ -1,20 +1,23 @@
 package com.agelousis.payments.widgets
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.agelousis.payments.R
-import com.agelousis.payments.main.ui.payments.models.ClientModel
+import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.euroFormattedString
+import com.agelousis.payments.widgets.extensions.clientModelList
 import com.google.gson.Gson
 
-class PaymentsWidgetRemoteViewsFactory(private val context: Context, private val clientModelList: List<ClientModel>): RemoteViewsService.RemoteViewsFactory {
+class PaymentsWidgetRemoteViewsFactory(private val context: Context): RemoteViewsService.RemoteViewsFactory {
 
     companion object {
         const val CLIENT_MODEL_EXTRA = "PaymentsWidgetRemoteViewsFactory=clientModelExtra"
     }
+
+    private val clientModelList
+        get() = context.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)?.clientModelList ?: listOf()
 
     override fun onCreate() {}
 
@@ -40,7 +43,7 @@ class PaymentsWidgetRemoteViewsFactory(private val context: Context, private val
         )
         rv.setTextViewText(
             R.id.textViewFooterTitle,
-            clientModelList.getOrNull(index = position)?.totalPaymentAmount?.euroFormattedString
+            clientModelList.getOrNull(index = position)?.totalPaymentAmount?.euroFormattedString ?: context.resources.getString(R.string.key_empty_field_label)
         )
         rv.setTextColor(
             R.id.textViewFooterTitle,
@@ -57,12 +60,12 @@ class PaymentsWidgetRemoteViewsFactory(private val context: Context, private val
                 )
             )
         )
-        val intent = Intent()
+        /*val intent = Intent()
         intent.putExtras(extras)
         rv.setOnClickFillInIntent(
             R.id.paymentWidgetLayout,
             intent
-        )
+        )*/
         return rv
     }
 

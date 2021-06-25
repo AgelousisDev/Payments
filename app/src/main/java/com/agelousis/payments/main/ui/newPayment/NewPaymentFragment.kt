@@ -176,12 +176,12 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
         binding.activeAppSwitchLayout.setOnClickListener {
             binding.activeAppSwitchLayout.isChecked = binding.activeAppSwitchLayout.isChecked == false
         }
-        binding.activeAppSwitchLayout.appSwitchListener = object: AppSwitchListener {
+        /*binding.activeAppSwitchLayout.appSwitchListener = object: AppSwitchListener {
             override fun onAppSwitchValueChanged(isChecked: Boolean) {
                 if (!isChecked)
                     binding.groupDetailsLayout.value = resources.getString(R.string.key_inactive_label)
             }
-        }
+        }*/
         binding.freeAppSwitchLayout.setOnClickListener {
             binding.freeAppSwitchLayout.isChecked = binding.freeAppSwitchLayout.isChecked == false
         }
