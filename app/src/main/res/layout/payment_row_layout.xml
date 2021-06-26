@@ -94,7 +94,7 @@
             android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
             android:fontFamily="@font/ubuntu"
             android:gravity="end"
-            android:text="@{clientModel.active == false ? @string/key_empty_field_label : clientModel.free == true ? @string/key_free_label : clientModel.totalPaymentAmount != null ? ExtensionsKt.getEuroFormattedString(clientModel.totalPaymentAmount) : @string/key_empty_field_label}"
+            android:text="@{clientModel.free == true ? @string/key_free_label : clientModel.active == false ? @string/key_empty_field_label : clientModel.totalPaymentAmount != null ? ExtensionsKt.getEuroFormattedString(clientModel.totalPaymentAmount) : @string/key_empty_field_label}"
             android:textSize="18sp"
             android:textColor="@{clientModel.free == true ? @color/fateBlue :  clientModel.groupColor}"
             textViewColorByPaymentDate="@{clientModel.free == true ? null : clientModel.payments}"
