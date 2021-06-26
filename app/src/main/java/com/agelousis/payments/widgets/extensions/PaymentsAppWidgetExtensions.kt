@@ -22,7 +22,7 @@ fun Context.updatePaymentsAppWidget() {
     sendBroadcast(intent)
 }
 
-var SharedPreferences.clientModelList: List<ClientModel>
+var SharedPreferences.clientModelList: List<ClientModel>?
     set(value) {
         edit(
             commit = true
