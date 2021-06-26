@@ -573,7 +573,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
         (activity as? MainActivity)?.historyButtonIsVisible = filteredList.filterIsInstance<ClientModel>().mapNotNull { it.payments }.flatten().isNotEmpty()
         binding.paymentsAreAvailable = (activity as? MainActivity)?.historyButtonIsVisible == true
-        sharedPreferences?.clientModelList?.takeIf { it.size != list.filterIsInstance<ClientModel>().size }?.apply {
+        sharedPreferences?.clientModelList.takeIf { it == null || it.size != list.filterIsInstance<ClientModel>().size }.apply {
             sharedPreferences?.clientModelList = list.filterIsInstance<ClientModel>()
             context?.updatePaymentsAppWidget()
         }
