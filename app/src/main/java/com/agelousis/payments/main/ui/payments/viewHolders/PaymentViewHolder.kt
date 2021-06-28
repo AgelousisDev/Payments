@@ -29,4 +29,8 @@ class PaymentViewHolder(private val binding: PaymentRowLayoutBinding): RecyclerV
         binding.executePendingBindings()
     }
 
+    fun clearAnimation() {
+        itemView.clearAnimation()
+    }
+
 }

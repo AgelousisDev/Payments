@@ -1,6 +1,5 @@
 package com.agelousis.payments.main.ui.newPayment
 
-import android.animation.Animator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -202,25 +201,9 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                 (activity as? MainActivity)?.floatingButtonState = false
                 scheduleNotification()
                 currentClientModel = null
-                playSuccessAnimation {
-                    findNavController().popBackStack()
-                }
+                findNavController().popBackStack()
             }
         }
-    }
-
-    private fun playSuccessAnimation(block: () -> Unit) {
-        binding.linearLayout.visibility = View.GONE
-        binding.successAnimationLottieView.visibility = View.VISIBLE
-        binding.successAnimationLottieView.playAnimation()
-        binding.successAnimationLottieView.addAnimatorListener(object: Animator.AnimatorListener {
-            override fun onAnimationCancel(animation: Animator?) {}
-            override fun onAnimationRepeat(animation: Animator?) {}
-            override fun onAnimationStart(animation: Animator?) {}
-            override fun onAnimationEnd(animation: Animator?) {
-                block()
-            }
-        })
     }
 
     private fun redirectToSMSAppIf(payment: PaymentAmountModel, predicate: () -> Boolean) {

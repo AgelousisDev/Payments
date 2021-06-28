@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
@@ -71,14 +70,6 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         context?.sendSMSMessage(
             mobileNumbers = itemsList.filterIsInstance<ClientModel>().filter { it.isSelected }.mapNotNull { it.phone },
             message = (activity as? MainActivity)?.userModel?.defaultMessageTemplate ?: ""
-        )
-    }
-
-    override fun onHistoryGraph() {
-        findNavController().navigate(
-            PaymentsFragmentDirections.actionPaymentsFragmentToHistoryFragment(
-                fromPaymentsRedirection = true
-            )
         )
     }
 
@@ -185,7 +176,6 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
             false
         ).also {
             it.userModel = (activity as? MainActivity)?.userModel
-            it.paymentsAreAvailable = false
             it.presenter = this
         }
         return binding.root
@@ -275,20 +265,6 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                         }
                     }
                 }
-            }
-        )
-        binding.paymentListRecyclerView.addOnScrollListener(
-            object: RecyclerView.OnScrollListener() {
-
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    val isInFirstPosition = (binding.paymentListRecyclerView.layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition() == 0 && filteredList.filterIsInstance<ClientModel>().mapNotNull { it.payments }.flatten().isNotEmpty()
-                    if (!isInFirstPosition && binding.paymentsAreAvailable == true)
-                        binding.paymentsAreAvailable = false
-                    if (isInFirstPosition && binding.paymentsAreAvailable == false)
-                        binding.paymentsAreAvailable = true
-                }
-
             }
         )
         configureSwipeEvents()
@@ -572,7 +548,6 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         binding.paymentListRecyclerView.scheduleLayoutAnimation()
         (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
         (activity as? MainActivity)?.historyButtonIsVisible = filteredList.filterIsInstance<ClientModel>().mapNotNull { it.payments }.flatten().isNotEmpty()
-        binding.paymentsAreAvailable = (activity as? MainActivity)?.historyButtonIsVisible == true
         sharedPreferences?.clientModelList.takeIf { it == null || it.size != list.filterIsInstance<ClientModel>().size }.apply {
             sharedPreferences?.clientModelList = list.filterIsInstance<ClientModel>()
             context?.updatePaymentsAppWidget()

@@ -1,14 +1,11 @@
 package com.agelousis.payments.main.ui.history
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import androidx.core.content.ContextCompat
-import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.agelousis.payments.R
 import com.agelousis.payments.databinding.HistoryFragmentLayoutBinding
 import com.agelousis.payments.main.MainActivity
@@ -33,32 +30,11 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HistoryFragment: Fragment(), GestureDetector.OnGestureListener, View.OnTouchListener, HistoryFragmentPresenter {
+class HistoryFragment: Fragment(), HistoryFragmentPresenter {
 
     private lateinit var binding: HistoryFragmentLayoutBinding
-    private val args: HistoryFragmentArgs by navArgs()
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
-    private var gestureDetector: GestureDetectorCompat? = null
-
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onTouch(v: View?, event: MotionEvent?) = gestureDetector?.onTouchEvent(event) == true
-
-    override fun onDown(event: MotionEvent) = true
-
-    override fun onFling(event1: MotionEvent, event2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
-        if (event1.y + 100.0 < event2.y)
-            findNavController().popBackStack()
-        return true
-    }
-
-    override fun onLongPress(event: MotionEvent) {}
-
-    override fun onScroll(event1: MotionEvent, event2: MotionEvent, distanceX: Float, distanceY: Float) = true
-
-    override fun onShowPress(event: MotionEvent) {}
-
-    override fun onSingleTapUp(event: MotionEvent) = true
 
     override fun onPayments() {
         findNavController().popBackStack()
@@ -70,7 +46,6 @@ class HistoryFragment: Fragment(), GestureDetector.OnGestureListener, View.OnTou
             container,
             false
         ).also {
-            it.fromPaymentsRedirection = args.fromPaymentsRedirection
             it.presenter = this
         }
         return binding.root
@@ -78,18 +53,8 @@ class HistoryFragment: Fragment(), GestureDetector.OnGestureListener, View.OnTou
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as? MainActivity)?.binding?.appBarMain?.bottomAppBar?.performHide()
-        setupUI()
         initializePayments()
         addObservers()
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    private fun setupUI() {
-        if (!args.fromPaymentsRedirection)
-            return
-        gestureDetector = GestureDetectorCompat(context ?: return, this)
-        binding.lineChart.setOnTouchListener(this)
     }
 
     private fun addObservers() {

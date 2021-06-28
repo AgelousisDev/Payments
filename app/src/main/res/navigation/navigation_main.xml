@@ -38,13 +38,13 @@
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out"/>
-        <action
+        <!--<action
             android:id="@+id/action_paymentsFragment_to_historyFragment"
             app:destination="@id/historyFragment"
             app:enterAnim="@anim/slide_in_bottom"
             app:exitAnim="@anim/slide_out_top"
             app:popEnterAnim="@anim/slide_in_top"
-            app:popExitAnim="@anim/slide_out_bottom" />
+            app:popExitAnim="@anim/slide_out_bottom" />-->
         <action
             android:id="@+id/action_paymentsFragment_to_QRCodeFragment"
             app:destination="@id/QRCodeFragment"
@@ -158,12 +158,7 @@
         android:id="@+id/historyFragment"
         android:name="com.agelousis.payments.main.ui.history.HistoryFragment"
         android:label="HistoryFragment"
-        tools:layout="@layout/history_fragment_layout">
-        <argument
-            android:name="fromPaymentsRedirection"
-            app:argType="boolean"
-            android:defaultValue="false" />
-    </fragment>
+        tools:layout="@layout/history_fragment_layout"/>
     <action
         android:id="@+id/action_global_historyFragment"
         app:destination="@id/historyFragment"

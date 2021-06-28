@@ -18,12 +18,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        app:contentInsetStart="0dp"
+        app:contentInsetEnd="0dp"
         app:backgroundTint="@color/alphaNativeBackgroundColor"
         app:hideOnScroll="true"
         app:layout_scrollFlags="scroll|enterAlways"
-        app:navigationIcon="@drawable/ic_baseline_menu_24"
         app:fabAnimationMode="scale"
-        app:fabAlignmentMode="end"
+        app:fabAlignmentMode="center"
         app:fabCradleRoundedCornerRadius="12dp">
 
         <com.google.android.material.textview.MaterialTextView
@@ -32,8 +33,17 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/ubuntu_regular"
             android:textStyle="bold"
-            android:textSize="16sp"
-            android:text="@string/app_name"/>
+            android:textSize="16sp"/>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:elevation="0dp"
+            app:menu="@menu/bottom_navigation_main_menu"
+            app:itemTextAppearanceActive="@style/BottomNavigationViewTextStyle"
+            app:itemRippleColor="@color/colorAccent"/>
 
     </com.google.android.material.bottomappbar.BottomAppBar>
 

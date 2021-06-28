@@ -33,17 +33,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/successAnimationLottieView"
-            android:layout_width="match_parent"
-            android:layout_height="170dp"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            app:lottie_autoPlay="false"
-            app:lottie_fileName="success_animation.json"
-            app:lottie_loop="false"
-            app:lottie_speed="1" />
-
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"

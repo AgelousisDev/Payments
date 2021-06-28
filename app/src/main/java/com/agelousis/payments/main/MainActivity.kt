@@ -9,9 +9,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.agelousis.payments.R
 import com.agelousis.payments.base.BaseActivity
 import com.agelousis.payments.database.DBManager
@@ -24,7 +26,6 @@ import com.agelousis.payments.login.LoginActivity
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.enumerations.FloatingButtonPosition
 import com.agelousis.payments.main.enumerations.FloatingButtonType
-import com.agelousis.payments.main.materialMenu.MaterialMenuDialogFragment
 import com.agelousis.payments.main.materialMenu.enumerations.MaterialMenuOption
 import com.agelousis.payments.main.materialMenu.models.MaterialMenuDataModel
 import com.agelousis.payments.main.materialMenu.presenters.MaterialMenuFragmentPresenter
@@ -96,12 +97,18 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
 
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
         binding.appBarMain.bottomAppBar.performShow()
+        bottomNavigationViewIsVisible = destination.id == R.id.paymentsFragment
+                || destination.id == R.id.historyFragment
+                || destination.id == R.id.personalInformationFragment
+        bottomAppBarContentInsetState = destination.id != R.id.paymentsFragment
+                && destination.id != R.id.historyFragment
+                && destination.id != R.id.personalInformationFragment
         when(destination.id) {
             R.id.personalInformationFragment -> {
-                appBarTitle = resources.getString(R.string.key_profile_label)
+                //appBarTitle = resources.getString(R.string.key_profile_label)
                 floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
-                floatingButtonPosition = FloatingButtonPosition.END
+                floatingButtonPosition = FloatingButtonPosition.CENTER
                 floatingButtonTint = R.color.colorAccent
             }
             R.id.paymentsFragment -> {
@@ -140,7 +147,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 floatingButtonTint = R.color.colorAccent
             }
             R.id.historyFragment -> {
-                appBarTitle = resources.getString(R.string.key_history_label)
+                //appBarTitle = resources.getString(R.string.key_history_label)
                 floatingButtonState = false
             }
             R.id.pdfViewerFragment -> {
@@ -261,6 +268,22 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
             it.notificationListener = this
         }
     }
+    private var bottomNavigationViewIsVisible = false
+        set(value) {
+            field = value
+            binding.appBarMain.bottomNavigationView.isVisible = value
+        }
+    private var bottomAppBarContentInsetState = false
+        set(value) {
+            field = value
+            binding.appBarMain.bottomAppBar.setContentInsetsAbsolute(
+                if (value)
+                    resources.getDimensionPixelSize(R.dimen.activity_general_horizontal_margin)
+                else
+                    0,
+                0
+            )
+        }
 
     override fun onBackPressed() {
         when(supportFragmentManager.currentNavigationFragment) {
@@ -302,6 +325,10 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         configureNavigationController()
+        NavigationUI.setupWithNavController(
+            binding.appBarMain.bottomNavigationView,
+            binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController()
+        )
     }
 
     override fun onResume() {
@@ -318,19 +345,19 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
 
     private fun setupToolbar() {
         setSupportActionBar(binding.appBarMain.bottomAppBar)
-        //binding.appBarMain.bottomAppBar.replaceMenu(R.menu.activity_menu_main)
+        /*binding.appBarMain.bottomAppBar.replaceMenu(R.menu.activity_menu_main)
         binding.appBarMain.bottomAppBar.setNavigationOnClickListener {
             showMaterialMenuFragment()
-        }
+        }*/
     }
 
-    private fun showMaterialMenuFragment() {
+    /*private fun showMaterialMenuFragment() {
         MaterialMenuDialogFragment.show(
             supportFragmentManager = supportFragmentManager,
             materialMenuDataModel = materialMenuDataModel,
             materialMenuFragmentPresenter = this
         )
-    }
+    }*/
 
     private fun setupUI() {
         binding.appBarMain.floatingButton.setOnClickListener(this)

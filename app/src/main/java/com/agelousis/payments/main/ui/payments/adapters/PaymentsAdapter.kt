@@ -108,6 +108,11 @@ class PaymentsAdapter(private val list: ArrayList<Any>, private val groupPresent
 
     fun restoreItem(position: Int) = notifyItemChanged(position)
 
+    override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+        super.onViewDetachedFromWindow(holder)
+        (holder as? PaymentViewHolder)?.clearAnimation()
+    }
+
     /*fun removeItemAndUpdate(context: Context, position: Int): Boolean {
         list.removeAt(position)
         notifyItemRemoved(position)

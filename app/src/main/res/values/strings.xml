@@ -224,6 +224,7 @@
     <string name="key_select_all_label">Select All</string>
     <string name="key_unselect_all_label">Unselect All</string>
     <string name="key_search_in_clients_label">Search in Clients</string>
+    <string name="key_clients_label">Clients</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/paymentsFragment"
+        android:title="@string/key_clients_label"
+        android:icon="@drawable/ic_home" />
+
+    <item
+        android:id="@+id/filesFragment"
+        android:title="@string/key_invoices_label"
+        android:icon="@drawable/ic_invoice" />
+
+    <item
+        android:id="@+id/placeholder"
+        android:title=""
+        android:enabled="false"/>
+
+    <item
+        android:id="@+id/historyFragment"
+        android:title="@string/key_history_label"
+        android:icon="@drawable/ic_guide" />
+
+    <item
+        android:id="@+id/personalInformationFragment"
+        android:title="@string/key_profile_label"
+        android:icon="@drawable/ic_person" />
+
+</menu>
