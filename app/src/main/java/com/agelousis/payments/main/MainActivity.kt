@@ -30,7 +30,6 @@ import com.agelousis.payments.main.materialMenu.enumerations.MaterialMenuOption
 import com.agelousis.payments.main.materialMenu.models.MaterialMenuDataModel
 import com.agelousis.payments.main.materialMenu.presenters.MaterialMenuFragmentPresenter
 import com.agelousis.payments.main.ui.clientsSelector.ClientsSelectorDialogFragment
-import com.agelousis.payments.main.ui.files.FilesFragment
 import com.agelousis.payments.main.ui.newPayment.NewPaymentFragment
 import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
 import com.agelousis.payments.main.ui.payments.PaymentsFragment
@@ -98,9 +97,11 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
         binding.appBarMain.bottomAppBar.performShow()
         bottomNavigationViewIsVisible = destination.id == R.id.paymentsFragment
+                || destination.id == R.id.filesFragment
                 || destination.id == R.id.historyFragment
                 || destination.id == R.id.personalInformationFragment
         bottomAppBarContentInsetState = destination.id != R.id.paymentsFragment
+                && destination.id != R.id.filesFragment
                 && destination.id != R.id.historyFragment
                 && destination.id != R.id.personalInformationFragment
         when(destination.id) {
@@ -133,11 +134,11 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 floatingButtonTint = R.color.colorAccent
             }
             R.id.filesFragment -> {
-                appBarTitle = resources.getString(R.string.key_invoices_label)
-                floatingButtonImage = R.drawable.ic_delete
+                //appBarTitle = resources.getString(R.string.key_invoices_label)
+                //floatingButtonImage = R.drawable.ic_delete
                 floatingButtonState = false
-                floatingButtonPosition = FloatingButtonPosition.END
-                floatingButtonTint = R.color.red
+                floatingButtonPosition = FloatingButtonPosition.CENTER
+                //floatingButtonTint = R.color.red
             }
             R.id.periodFilterFragment -> {
                 appBarTitle = resources.getString(R.string.key_filter_period_label)
@@ -194,8 +195,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 (supportFragmentManager.currentNavigationFragment as? NewPaymentAmountFragment)?.checkInputFields()
             R.id.periodFilterFragment ->
                 (supportFragmentManager.currentNavigationFragment as? PeriodFilterFragment)?.initializeExportToExcelOperation()
-            R.id.filesFragment ->
-                (supportFragmentManager.currentNavigationFragment as? FilesFragment)?.configureDeleteAction()
             R.id.pdfViewerFragment ->
                 (supportFragmentManager.currentNavigationFragment as? PdfViewerFragment)?.sharePDF()
             R.id.filterPaymentsFragment ->
@@ -286,8 +285,8 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
         }
 
     override fun onBackPressed() {
-        when(supportFragmentManager.currentNavigationFragment) {
-            is PaymentsFragment ->
+        when(binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().currentDestination?.id) {
+            R.id.historyFragment ->
                 showSimpleDialog(
                     title = resources.getString(R.string.key_logout_label),
                     message = resources.getString(R.string.key_logout_message),
@@ -296,9 +295,9 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                     startActivity(Intent(this, LoginActivity::class.java))
                     finish()
                 }
-            is NewPaymentFragment ->
+            R.id.newPaymentFragment ->
                 showNewPersonUnsavedFieldsWarning()
-            is NewPaymentAmountFragment ->
+            R.id.newPaymentAmountFragment ->
                 showNewPaymentUnsavedFieldsWarning()
             else -> {
                 binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().previousBackStackEntry?.savedStateHandle?.remove<PaymentAmountModel>(NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA)

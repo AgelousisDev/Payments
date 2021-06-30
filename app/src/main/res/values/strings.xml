@@ -225,6 +225,8 @@
     <string name="key_unselect_all_label">Unselect All</string>
     <string name="key_search_in_clients_label">Search in Clients</string>
     <string name="key_clients_label">Clients</string>
+    <string name="key_groups_label">Groups</string>
+    <string name="key_clients_by_group_label">Clients by Group</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>

@@ -2,52 +2,34 @@ package com.agelousis.payments.main.ui.history
 
 import android.os.Bundle
 import android.view.*
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
-import com.agelousis.payments.R
+import androidx.viewpager2.widget.ViewPager2
 import com.agelousis.payments.databinding.HistoryFragmentLayoutBinding
 import com.agelousis.payments.main.MainActivity
-import com.agelousis.payments.main.ui.history.listeners.PaymentLineChartGestureListener
-import com.agelousis.payments.main.ui.history.presenter.HistoryFragmentPresenter
-import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
+import com.agelousis.payments.main.ui.history.adapters.ChartPagerAdapter
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
-import com.agelousis.payments.utils.constants.Constants
-import com.agelousis.payments.utils.extensions.euroFormattedString
-import com.agelousis.payments.utils.extensions.toast
-import com.github.mikephil.charting.components.Description
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.ValueFormatter
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.agelousis.payments.utils.extensions.addTabDots
+import com.github.mikephil.charting.data.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.*
 
-class HistoryFragment: Fragment(), HistoryFragmentPresenter {
+class HistoryFragment: Fragment() {
 
     private lateinit var binding: HistoryFragmentLayoutBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
-
-    override fun onPayments() {
-        findNavController().popBackStack()
-    }
+    val clientModelList = arrayListOf<ClientModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = HistoryFragmentLayoutBinding.inflate(
             layoutInflater,
             container,
             false
-        ).also {
-            it.presenter = this
-        }
+        )
         return binding.root
     }
 
@@ -57,29 +39,39 @@ class HistoryFragment: Fragment(), HistoryFragmentPresenter {
         addObservers()
     }
 
+    fun addDefaultDot() {
+        binding.dotsLayout.addTabDots(
+            currentPage = 0,
+            totalPages = 2
+        )
+    }
+
     private fun addObservers() {
         viewModel.paymentsLiveData.observe(viewLifecycleOwner) { payments ->
-            configureEntries(
-                payments = payments.filterIsInstance<ClientModel>().mapNotNull { it.payments }.flatten()
-            )
+            clientModelList.clear()
+            clientModelList.addAll(payments.filterIsInstance<ClientModel>())
+            configureViewPager()
         }
     }
 
-    private fun configureEntries(payments: List<PaymentAmountModel>) {
-        val entries = arrayListOf<Entry>()
-
-        payments.sortedBy { it.paymentMonthDate }.groupBy { it.paymentMonthDate }.forEach { (monthDate, list) ->
-            entries.add(
-                Entry(
-                    monthDate?.time?.toFloat() ?: 0f,
-                    list.mapNotNull { it.paymentAmount }.sum().toFloat()
-                )
+    private fun configureViewPager() {
+        binding.chartViewPager.apply {
+            adapter = ChartPagerAdapter(
+                fragment = this@HistoryFragment
             )
-        }
+            offscreenPageLimit = 2
+            registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+                override fun onPageScrollStateChanged(state: Int) {}
+                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
-        configureLineChart(
-            entries = entries
-        )
+                override fun onPageSelected(position: Int) {
+                    binding.dotsLayout.addTabDots(
+                        currentPage = position,
+                        totalPages = 2
+                    )
+                }
+            })
+        }
     }
 
     private fun initializePayments() {
@@ -89,68 +81,6 @@ class HistoryFragment: Fragment(), HistoryFragmentPresenter {
                 userModel = (activity as? MainActivity)?.userModel
             )
         }
-    }
-
-    private fun configureLineChart(entries: List<Entry>) {
-        val desc = Description()
-        desc.text = ""
-        binding.lineChart.description = desc
-        binding.lineChart.legend?.isEnabled = false
-        binding.lineChart.xAxis?.textColor = ContextCompat.getColor(context ?: return, R.color.dayNightTextOnBackground)
-        binding.lineChart.xAxis?.position = XAxis.XAxisPosition.BOTTOM
-        binding.lineChart.xAxis?.valueFormatter = object: ValueFormatter() {
-            override fun getFormattedValue(value: Float) =
-                SimpleDateFormat(Constants.GRAPH_DATE_FORMAT, Locale.US).format(value.toLong())
-        }
-        //lineChart.xAxis.setAvoidFirstLastClipping(true)
-        binding.lineChart.xAxis?.isGranularityEnabled = true
-        binding.lineChart.xAxis?.setDrawLimitLinesBehindData(true)
-        binding.lineChart.axisLeft?.valueFormatter = object: ValueFormatter() {
-            override fun getFormattedValue(value: Float) =
-                if (value == 0f)
-                    "0"
-                else
-                    value.toDouble().euroFormattedString
-        }
-        binding.lineChart.axisLeft?.textColor = ContextCompat.getColor(context ?: return, R.color.dayNightTextOnBackground)
-        binding.lineChart.axisRight?.isEnabled = false
-        binding.lineChart.onChartGestureListener =
-            object: PaymentLineChartGestureListener(chart = binding.lineChart) {
-                override fun onAmountSelected(amount: String) {
-                    context?.toast(
-                        message = amount
-                    )
-                }
-            }
-        //lineChart.xAxis.setLabelCount(entries.size, true)
-        binding.lineChart.xAxis?.granularity = 1f
-        //lineChart.setMaxVisibleValueCount(4)
-        setLineChartData(
-            entries = entries
-        )
-    }
-
-    private fun setLineChartData(entries: List<Entry>) {
-        val dataSets = arrayListOf<ILineDataSet>()
-        dataSets.add(
-            LineDataSet(
-                entries,
-                resources.getString(R.string.key_amount_label)
-            ).also {
-                it.setDrawFilled(true)
-                it.fillDrawable = ContextCompat.getDrawable(context ?: return, R.drawable.graph_draw_gradient_background)
-                it.setDrawCircles(true)
-                it.circleRadius = 4.0f
-                it.setDrawValues(false)
-                it.lineWidth = 3.0f
-                it.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
-                it.color = ContextCompat.getColor(context ?: return, R.color.colorAccent)
-                it.setCircleColor(ContextCompat.getColor(context ?: return, R.color.colorAccent))
-                it.highLightColor = ContextCompat.getColor(context ?: return, R.color.green)
-            }
-        )
-        binding.lineChart.data = LineData(dataSets)
-        binding.lineChart.invalidate()
     }
 
 }

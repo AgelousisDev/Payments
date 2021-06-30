@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
             name="userModel"
             type="com.agelousis.payments.login.models.UserModel" />
+        <variable
+            name="presenter"
+            type="com.agelousis.payments.main.ui.files.presenter.FilesFragmentPresenter" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -12,6 +15,66 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:id="@+id/constraintLayout">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/filesAppBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/nativeBackgroundColor"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/paymentsToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:navigationIcon="@drawable/ic_close">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|end"
+                android:orientation="horizontal"
+                android:padding="@dimen/twelve_layout_margin">
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextViewValueLabel"
+                    android:id="@+id/selectedFilesView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+                    tools:text="1 selected"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:onClick="@{() -> presenter.onDeleteInvoices()}">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        app:srcCompat="@drawable/ic_delete"
+                        app:tint="@color/dayNightTextOnBackground" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="@style/TextViewLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/key_delete_label"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <com.agelousis.payments.views.searchLayout.MaterialSearchView
         android:id="@+id/searchLayout"
@@ -22,7 +85,7 @@
         materialSearchProfile="@{userModel.profileImage}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/filesAppBarLayout" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/filesListRecyclerView"

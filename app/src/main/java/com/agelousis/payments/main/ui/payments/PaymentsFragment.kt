@@ -6,8 +6,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -147,13 +148,13 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
     private lateinit var binding: FragmentPaymentsLayoutBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val sharedPreferences by lazy { context?.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE) }
-    private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
+    private val viewModel: PaymentsViewModel by viewModels()
     private val itemsList by lazy { arrayListOf<Any>() }
     private val filteredList by lazy { arrayListOf<Any>() }
     private var searchViewState: Boolean = false
         set(value) {
             field  = value
-            binding.searchLayout.visibility = if (value) View.VISIBLE else View.GONE
+            binding.searchLayout.isVisible = value
         }
     private var appBarIsVisible: Boolean = false
         set(value) {

@@ -6,8 +6,9 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,7 @@ import com.agelousis.payments.main.ui.files.enumerations.FileRowState
 import com.agelousis.payments.main.ui.files.models.FileDataModel
 import com.agelousis.payments.main.ui.files.models.HeaderModel
 import com.agelousis.payments.main.ui.files.presenter.FilePresenter
+import com.agelousis.payments.main.ui.files.presenter.FilesFragmentPresenter
 import com.agelousis.payments.main.ui.files.viewModel.FilesViewModel
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.utils.extensions.*
@@ -30,7 +32,11 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 
-class FilesFragment: Fragment(), FilePresenter {
+class FilesFragment: Fragment(), FilePresenter, FilesFragmentPresenter {
+
+    override fun onDeleteInvoices() {
+        configureDeleteAction()
+    }
 
     override fun onFileSelected(fileDataModel: FileDataModel) {
         File(context?.filesDir ?: return, fileDataModel.fileName ?: return).takeIf {
@@ -77,13 +83,13 @@ class FilesFragment: Fragment(), FilePresenter {
 
     private lateinit var binding: FragmentFilesLayoutBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
-    private val viewModel by lazy { ViewModelProvider(this).get(FilesViewModel::class.java) }
+    private val viewModel: FilesViewModel by viewModels()
     private val fileList by lazy { arrayListOf<FileDataModel>() }
     private val filteredList by lazy { arrayListOf<Any>() }
     private var searchViewState: Boolean = false
         set(value) {
             field  = value
-            binding.searchLayout.visibility = if (value) View.VISIBLE else View.GONE
+            binding.searchLayout.isVisible = value
         }
     private val selectedFilePositions by lazy { arrayListOf<FileDataModel?>() }
 
@@ -93,6 +99,7 @@ class FilesFragment: Fragment(), FilePresenter {
             container,
             false
         ).also {
+            it.presenter = this
             it.userModel = (activity as? MainActivity)?.userModel
         }
         return binding.root
@@ -165,7 +172,7 @@ class FilesFragment: Fragment(), FilePresenter {
         )
     }
 
-    fun configureDeleteAction() {
+    private fun configureDeleteAction() {
         context?.showTwoButtonsDialog(
             title = resources.getString(R.string.key_warning_label),
             message = resources.getString(R.string.key_delete_selected_files_message),
@@ -280,14 +287,12 @@ class FilesFragment: Fragment(), FilePresenter {
     }
 
     private fun configureAppBar() {
-        (activity as? MainActivity)?.floatingButtonState = selectedFilePositions.isNotEmpty()
+        binding.filesAppBarLayout.isVisible = selectedFilePositions.isNotEmpty()
         if (selectedFilePositions.isNotEmpty())
-            (activity as? MainActivity)?.appBarTitle = String.format(
+            binding.selectedFilesView.text = String.format(
                 resources.getString(R.string.key_files_selected_value_label),
                 selectedFilePositions.size
             )
-        else
-            (activity as? MainActivity)?.appBarTitle = resources.getString(R.string.key_invoices_label)
     }
 
 }
