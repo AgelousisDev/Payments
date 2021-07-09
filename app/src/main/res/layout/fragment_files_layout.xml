@@ -54,7 +54,7 @@
                     android:gravity="center"
                     android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:onClick="@{() -> presenter.onDeleteInvoices()}">
+                    android:onClick="@{() -> presenter.onDeleteInvoices(false)}">
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="24dp"

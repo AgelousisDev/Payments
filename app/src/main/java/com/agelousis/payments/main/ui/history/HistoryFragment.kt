@@ -23,6 +23,7 @@ class HistoryFragment: Fragment() {
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
     val clientModelList = arrayListOf<ClientModel>()
+    private var firstTimeChartsLoaded = true
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = HistoryFragmentLayoutBinding.inflate(
@@ -37,13 +38,6 @@ class HistoryFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initializePayments()
         addObservers()
-    }
-
-    fun addDefaultDot() {
-        binding.dotsLayout.addTabDots(
-            currentPage = 0,
-            totalPages = 2
-        )
     }
 
     private fun addObservers() {
@@ -65,10 +59,19 @@ class HistoryFragment: Fragment() {
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
                 override fun onPageSelected(position: Int) {
-                    binding.dotsLayout.addTabDots(
-                        currentPage = position,
-                        totalPages = 2
-                    )
+                    if (firstTimeChartsLoaded)
+                        postDelayed({
+                            firstTimeChartsLoaded = false
+                            binding.dotsLayout.addTabDots(
+                                currentPage = position,
+                                totalPages = 2
+                            )
+                        }, 1000)
+                    else
+                        binding.dotsLayout.addTabDots(
+                            currentPage = position,
+                            totalPages = 2
+                        )
                 }
             })
         }
@@ -81,6 +84,10 @@ class HistoryFragment: Fragment() {
                 userModel = (activity as? MainActivity)?.userModel
             )
         }
+    }
+
+    fun switchChart() {
+        binding.chartViewPager.currentItem = if (binding.chartViewPager.currentItem == 0) 1 else 0
     }
 
 }

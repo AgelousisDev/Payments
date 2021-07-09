@@ -34,8 +34,16 @@ import java.util.*
 
 class FilesFragment: Fragment(), FilePresenter, FilesFragmentPresenter {
 
-    override fun onDeleteInvoices() {
-        configureDeleteAction()
+    override fun onDeleteInvoices(clearAllState: Boolean) {
+        if (clearAllState) {
+            selectedFilePositions.clear()
+            selectedFilePositions.addAll(
+                fileList
+            )
+        }
+        configureDeleteAction(
+            clearAllState = clearAllState
+        )
     }
 
     override fun onFileSelected(fileDataModel: FileDataModel) {
@@ -172,11 +180,21 @@ class FilesFragment: Fragment(), FilePresenter, FilesFragmentPresenter {
         )
     }
 
-    private fun configureDeleteAction() {
+    private fun configureDeleteAction(clearAllState: Boolean) {
         context?.showTwoButtonsDialog(
             title = resources.getString(R.string.key_warning_label),
-            message = resources.getString(R.string.key_delete_selected_files_message),
-            positiveButtonText = resources.getString(R.string.key_delete_label),
+            message = resources.getString(
+                if (clearAllState)
+                    R.string.key_clear_all_invoices_question
+                else
+                    R.string.key_delete_selected_invoices_message
+            ),
+            positiveButtonText = resources.getString(
+                if (clearAllState)
+                    R.string.key_clear_label
+                else
+                    R.string.key_delete_label
+            ),
             positiveButtonBlock = {
                 uiScope.launch {
                     viewModel.deleteFiles(
@@ -190,6 +208,7 @@ class FilesFragment: Fragment(), FilePresenter, FilesFragmentPresenter {
 
     private fun configureObservers() {
         viewModel.filesLiveData.observe(viewLifecycleOwner) { files ->
+            (activity as? MainActivity)?.floatingButtonState = files.isNotEmpty()
             initializeActualFiles(
                 files = files
             )

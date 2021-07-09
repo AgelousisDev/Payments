@@ -75,7 +75,7 @@
     <string name="key_yes_label">YES</string>
     <string name="key_no_label">NO</string>
     <string name="key_file_saved_message">Invoice created successfully. Navigate on the \"Invoices\" option to see the list of invoices</string>
-    <string name="key_delete_selected_files_message">Do you want to delete the selected files?</string>
+    <string name="key_delete_selected_invoices_message">Do you want to delete the selected invoices?</string>
     <string name="key_total_payments_label">Total Payments</string>
     <string name="key_file_not_exists_message">It seems that this invoice does not exist. Recreate it by navigating to home &amp; swipe a client to left.</string>
     <string name="key_address_label">Address</string>
@@ -227,6 +227,7 @@
     <string name="key_clients_label">Clients</string>
     <string name="key_groups_label">Groups</string>
     <string name="key_clients_by_group_label">Clients by Group</string>
+    <string name="key_clear_all_invoices_question">Do you want to clear all invoices?</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>

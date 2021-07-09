@@ -104,7 +104,10 @@ class ChartFragment: Fragment() {
                         }?.size?.toFloat() ?: 0f) / (clientModelList?.size ?: 0) * 100
                         PieEntry(
                             groupNamePercentage,
-                            map.value.firstOrNull()?.groupName,
+                            if ((map.value.firstOrNull()?.groupName?.length ?: 0) > 8)
+                                "${map.value.firstOrNull()?.groupName?.take(n = 5)}..."
+                            else
+                                map.value.firstOrNull()?.groupName,
                             map.value.mapNotNull { it.payments }.flatten().mapNotNull { it.paymentAmount }.sum()
                         )
                     } ?: return
