@@ -2,6 +2,8 @@ package com.agelousis.payments.main.ui.history
 
 import android.os.Bundle
 import android.view.*
+import android.widget.FrameLayout
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
@@ -12,8 +14,8 @@ import com.agelousis.payments.main.ui.history.adapters.ChartPagerAdapter
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
-import com.agelousis.payments.utils.extensions.addTabDots
 import com.github.mikephil.charting.data.*
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,7 +27,12 @@ class HistoryFragment: Fragment() {
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
     val clientModelList = arrayListOf<ClientModel>()
-    private var firstTimeChartsLoaded = true
+    private val chartPagerAdapter by lazy {
+        ChartPagerAdapter(
+            fragment = this@HistoryFragment
+        )
+    }
+    private var indicatorWidth = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = HistoryFragmentLayoutBinding.inflate(
@@ -61,30 +68,38 @@ class HistoryFragment: Fragment() {
 
     private fun configureViewPager() {
         binding.chartViewPager.apply {
-            adapter = ChartPagerAdapter(
-                fragment = this@HistoryFragment
-            )
+            adapter = chartPagerAdapter
             offscreenPageLimit = 2
-            registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
-                override fun onPageScrollStateChanged(state: Int) {}
-                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+            TabLayoutMediator(
+                binding.materialTabLayout,
+                this
+            ) { tab, index ->
+                tab.setIcon(
+                    chartPagerAdapter.getPageIcon(
+                        position = index
+                    )
+                )
+            }.attach()
+            binding.materialTabLayout.post {
+                indicatorWidth = binding.materialTabLayout.width / binding.materialTabLayout.tabCount
 
-                override fun onPageSelected(position: Int) {
-                    if (firstTimeChartsLoaded)
-                        postDelayed({
-                            firstTimeChartsLoaded = false
-                            binding.dotsLayout.addTabDots(
-                                currentPage = position,
-                                totalPages = 2
-                            )
-                        }, 1000)
-                    else
-                        binding.dotsLayout.addTabDots(
-                            currentPage = position,
-                            totalPages = 2
-                        )
+                //Assign new width
+                binding.indicator.updateLayoutParams<FrameLayout.LayoutParams> {
+                    width = indicatorWidth
                 }
-            })
+            }
+            registerOnPageChangeCallback(
+                object: ViewPager2.OnPageChangeCallback() {
+                    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                        super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+                        binding.indicator.updateLayoutParams<FrameLayout.LayoutParams> {
+                            //Multiply positionOffset with indicatorWidth to get translation
+                            val translationOffset =  (positionOffset + position) * indicatorWidth
+                            leftMargin = translationOffset.toInt()
+                        }
+                    }
+                }
+            )
         }
     }
 

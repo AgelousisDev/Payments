@@ -204,7 +204,16 @@ class ChartFragment: Fragment() {
         binding.pieChart.setHoleColor(Color.TRANSPARENT)
         binding.pieChart.setCenterTextColor(ContextCompat.getColor(context ?: return, R.color.dayNightTextOnBackground))
         binding.pieChart.isRotationEnabled = false
-        binding.pieChart.holeRadius = 60f
+        binding.pieChart.holeRadius = 55f
+        binding.pieChart.renderer.paintRender.setShadowLayer(
+            4f,
+            0f,
+            0f,
+            ContextCompat.getColor(
+                context ?: return,
+                R.color.dayNightTextOnBackground
+            )
+        )
 
         /*val legend = binding.pieChart.legend
         legend.textColor = ContextCompat.getColor(context ?: return, R.color.dayNightTextOnBackground)
@@ -241,7 +250,7 @@ class ChartFragment: Fragment() {
         binding.pieChart.data = data
         binding.pieChart.invalidate()
 
-        binding.pieChart.animateY(1400, Easing.EaseInOutQuad)
+        binding.pieChart.animateY(1400, Easing.EaseOutCirc)
     }
 
 }
