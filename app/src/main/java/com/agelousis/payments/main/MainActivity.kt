@@ -108,65 +108,65 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 && destination.id != R.id.personalInformationFragment
         when(destination.id) {
             R.id.personalInformationFragment -> {
-                floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.CENTER
                 floatingButtonTint = R.color.colorAccent
+                floatingButtonState = true
             }
             R.id.paymentsFragment -> {
                 appBarTitle = ""
-                floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_add_group
                 floatingButtonPosition = FloatingButtonPosition.CENTER
                 floatingButtonTint = R.color.colorAccent
+                floatingButtonState = true
             }
             R.id.newPaymentFragment -> {
                 appBarTitle = resources.getString(R.string.key_client_info_label)
-                floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END
                 floatingButtonTint = R.color.colorAccent
+                floatingButtonState = true
             }
             R.id.newPaymentAmountFragment -> {
                 appBarTitle = resources.getString(R.string.key_add_payment_label)
-                floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END
                 floatingButtonTint = R.color.colorAccent
+                floatingButtonState = true
             }
             R.id.filesFragment -> {
                 appBarTitle = ""
-                floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_delete
                 floatingButtonPosition = FloatingButtonPosition.CENTER
                 floatingButtonTint = R.color.red
+                floatingButtonState = false
             }
             R.id.periodFilterFragment -> {
                 appBarTitle = resources.getString(R.string.key_filter_period_label)
-                floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_table
                 floatingButtonPosition = FloatingButtonPosition.END
                 floatingButtonTint = R.color.colorAccent
+                floatingButtonState = true
             }
             R.id.historyFragment -> {
-                floatingButtonState = false
                 floatingButtonImage = R.drawable.ic_left_and_right
                 floatingButtonPosition = FloatingButtonPosition.CENTER
                 floatingButtonTint = R.color.colorAccent
+                floatingButtonState = false
             }
             R.id.pdfViewerFragment -> {
                 appBarTitle = resources.getString(R.string.key_invoice_label)
-                floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_share
                 floatingButtonPosition = FloatingButtonPosition.END
                 floatingButtonTint = R.color.colorAccent
+                floatingButtonState = true
             }
             R.id.filterPaymentsFragment -> {
                 appBarTitle = resources.getString(R.string.key_clients_order_label)
-                floatingButtonState = true
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END
                 floatingButtonTint = R.color.colorAccent
+                floatingButtonState = true
             }
             R.id.QRCodeFragment -> {
                 appBarTitle = resources.getString(R.string.key_qr_code_label)

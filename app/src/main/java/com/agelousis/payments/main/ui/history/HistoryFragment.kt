@@ -5,10 +5,12 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
+import com.agelousis.payments.R
 import com.agelousis.payments.databinding.HistoryFragmentLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.history.adapters.ChartPagerAdapter
 import com.agelousis.payments.main.ui.payments.models.ClientModel
+import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
 import com.agelousis.payments.utils.extensions.addTabDots
 import com.github.mikephil.charting.data.*
@@ -42,6 +44,15 @@ class HistoryFragment: Fragment() {
 
     private fun addObservers() {
         viewModel.paymentsLiveData.observe(viewLifecycleOwner) { payments ->
+            (activity as? MainActivity)?.floatingButtonState = payments.filterIsInstance<ClientModel>().isNotEmpty()
+            if (payments.filterIsInstance<ClientModel>().isEmpty()) {
+                binding.emptyModel = EmptyModel(
+                    title = resources.getString(R.string.key_no_clients_title_message),
+                    message = resources.getString(R.string.key_add_clients_from_home_message),
+                    animationJsonIcon = "empty_animation.json"
+                )
+                return@observe
+            }
             clientModelList.clear()
             clientModelList.addAll(payments.filterIsInstance<ClientModel>())
             configureViewPager()

@@ -9,14 +9,15 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.agelousis.payments.R
 import com.agelousis.payments.databinding.ChartFragmentLayoutBinding
+import com.agelousis.payments.main.ui.history.adapters.GroupDataAdapter
 import com.agelousis.payments.main.ui.history.enumerations.ChartType
 import com.agelousis.payments.main.ui.history.listeners.PaymentLineChartGestureListener
+import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.euroFormattedString
 import com.agelousis.payments.utils.extensions.toast
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.Description
-import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.ValueFormatter
@@ -85,7 +86,8 @@ class ChartFragment: Fragment() {
                         )
                     }?.toList() ?: return
                 )
-            ChartType.PIE_CHART ->
+            ChartType.PIE_CHART -> {
+                configureGroupDataRecyclerView()
                 configurePieChart(
                     colors = clientModelList?.sortedBy {
                         it.groupName
@@ -108,10 +110,12 @@ class ChartFragment: Fragment() {
                                 "${map.value.firstOrNull()?.groupName?.take(n = 5)}..."
                             else
                                 map.value.firstOrNull()?.groupName,
-                            map.value.mapNotNull { it.payments }.flatten().mapNotNull { it.paymentAmount }.sum()
+                            map.value.mapNotNull { it.payments }.flatten()
+                                .mapNotNull { it.paymentAmount }.sum()
                         )
                     } ?: return
                 )
+            }
         }
     }
 
@@ -177,6 +181,17 @@ class ChartFragment: Fragment() {
         binding.lineChart.invalidate()
     }
 
+    private fun configureGroupDataRecyclerView() {
+        binding.groupDataRecyclerView.adapter = GroupDataAdapter(
+            groupModelList = clientModelList?.groupBy { it.groupName }?.map { map ->
+                GroupModel(
+                    color = map.value.first().groupColor,
+                    groupName = map.key
+                )
+            } ?: listOf()
+        )
+    }
+
     private fun configurePieChart(colors: List<Int>, entries: List<PieEntry>) {
         binding.pieChart.isDrawHoleEnabled = true
         binding.pieChart.setUsePercentValues(true)
@@ -188,9 +203,10 @@ class ChartFragment: Fragment() {
         binding.pieChart.setBackgroundColor(Color.TRANSPARENT)
         binding.pieChart.setHoleColor(Color.TRANSPARENT)
         binding.pieChart.setCenterTextColor(ContextCompat.getColor(context ?: return, R.color.dayNightTextOnBackground))
-        binding.pieChart.setTouchEnabled(false)
+        binding.pieChart.isRotationEnabled = false
+        binding.pieChart.holeRadius = 60f
 
-        val legend = binding.pieChart.legend
+        /*val legend = binding.pieChart.legend
         legend.textColor = ContextCompat.getColor(context ?: return, R.color.dayNightTextOnBackground)
         legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
         legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
@@ -198,6 +214,8 @@ class ChartFragment: Fragment() {
         legend.setDrawInside(false)
         legend.form = Legend.LegendForm.CIRCLE
         legend.isEnabled = true
+        binding.pieChart.legend.isWordWrapEnabled = true*/
+        binding.pieChart.legend.isEnabled = false
         loadPieChartData(
             colors = colors,
             entries = entries
@@ -205,7 +223,7 @@ class ChartFragment: Fragment() {
     }
 
     private fun loadPieChartData(colors: List<Int>, entries: List<PieEntry>) {
-        val dataSet = PieDataSet(entries, resources.getString(R.string.key_groups_label))
+        val dataSet = PieDataSet(entries, null)
         dataSet.colors = colors
 
         val data = PieData(dataSet)
