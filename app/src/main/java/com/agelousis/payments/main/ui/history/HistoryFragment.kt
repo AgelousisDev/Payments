@@ -27,11 +27,6 @@ class HistoryFragment: Fragment() {
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
     val clientModelList = arrayListOf<ClientModel>()
-    private val chartPagerAdapter by lazy {
-        ChartPagerAdapter(
-            fragment = this@HistoryFragment
-        )
-    }
     private var indicatorWidth = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -68,6 +63,9 @@ class HistoryFragment: Fragment() {
 
     private fun configureViewPager() {
         binding.chartViewPager.apply {
+            val chartPagerAdapter = ChartPagerAdapter(
+                fragment = this@HistoryFragment
+            )
             adapter = chartPagerAdapter
             offscreenPageLimit = 2
             TabLayoutMediator(

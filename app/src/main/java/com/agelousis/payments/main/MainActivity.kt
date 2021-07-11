@@ -327,7 +327,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
         setContentView(binding.root)
         setupToolbar()
         setupUI()
-        //addInactiveGroup()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -353,37 +352,11 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
 
     private fun setupToolbar() {
         setSupportActionBar(binding.appBarMain.bottomAppBar)
-        /*binding.appBarMain.bottomAppBar.replaceMenu(R.menu.activity_menu_main)
-        binding.appBarMain.bottomAppBar.setNavigationOnClickListener {
-            showMaterialMenuFragment()
-        }*/
     }
-
-    /*private fun showMaterialMenuFragment() {
-        MaterialMenuDialogFragment.show(
-            supportFragmentManager = supportFragmentManager,
-            materialMenuDataModel = materialMenuDataModel,
-            materialMenuFragmentPresenter = this
-        )
-    }*/
 
     private fun setupUI() {
         binding.appBarMain.floatingButton.setOnClickListener(this)
     }
-
-    /*private fun addInactiveGroup() {
-        uiScope.launch {
-            dbManager.insertGroups(
-                userId = userModel?.id,
-                groupModelList = listOf(
-                    GroupModel(
-                        groupName = resources.getString(R.string.key_inactive_label),
-                        color = ContextCompat.getColor(this@MainActivity, R.color.grey)
-                    )
-                )
-            ) {}
-        }
-    }*/
 
     private fun configureGroup(groupModel: GroupModel, successBlock: () -> Unit) {
         uiScope.launch {
