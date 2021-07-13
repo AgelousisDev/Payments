@@ -87,12 +87,15 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                     paymentIndex = adapterPosition,
                     isSelected = !clientModel.isSelected
                 )
-            else ->
+            else -> {
+                if (findNavController().currentDestination?.id != R.id.paymentsFragment)
+                    return
                 findNavController().navigate(
                     PaymentsFragmentDirections.actionPaymentListFragmentToNewPaymentFragment(
                         clientDataModel = clientModel
                     )
                 )
+            }
         }
     }
 
