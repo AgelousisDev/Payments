@@ -315,12 +315,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
         }
     }
 
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (isLandscape)
-            window?.hideSystemUI()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)

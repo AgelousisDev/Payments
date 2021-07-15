@@ -27,12 +27,10 @@ import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.login.presenter.LoginPresenter
 import com.agelousis.payments.login.viewModel.LoginViewModel
 import com.agelousis.payments.main.MainActivity
-import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.userSelection.UserSelectionFragment
 import com.agelousis.payments.userSelection.presenters.UserSelectionPresenter
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
-import com.agelousis.payments.widgets.PaymentsWidgetRemoteViewsFactory
 import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,7 +41,6 @@ import kotlin.collections.ArrayList
 class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, UserSelectionPresenter, GestureDetector.OnGestureListener {
 
     private lateinit var binding: ActivityLoginBinding
-    private val sharedPreferences by lazy { getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE) }
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val userModel by lazy { UserModel() }
     private val viewModel by lazy { ViewModelProvider(this).get(LoginViewModel::class.java) }
@@ -207,12 +204,6 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, UserSe
             else ->
                 super.onBackPressed()
         }
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (isLandscape)
-            window?.hideSystemUI()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
