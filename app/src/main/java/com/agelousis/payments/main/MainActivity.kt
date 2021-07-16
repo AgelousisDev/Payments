@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.DrawableRes
@@ -108,12 +109,14 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 && destination.id != R.id.personalInformationFragment
         when(destination.id) {
             R.id.personalInformationFragment -> {
+                navigationIcon = null
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.CENTER
                 floatingButtonTint = R.color.colorAccent
                 floatingButtonState = true
             }
             R.id.paymentsFragment -> {
+                navigationIcon = null
                 appBarTitle = ""
                 floatingButtonImage = R.drawable.ic_add_group
                 floatingButtonPosition = FloatingButtonPosition.CENTER
@@ -121,6 +124,9 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 floatingButtonState = true
             }
             R.id.newPaymentFragment -> {
+                navigationIcon = getDrawableFromAttribute(
+                    attributeId = R.attr.homeAsUpIndicator
+                )
                 appBarTitle = resources.getString(R.string.key_client_info_label)
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END
@@ -128,6 +134,9 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 floatingButtonState = true
             }
             R.id.newPaymentAmountFragment -> {
+                navigationIcon = getDrawableFromAttribute(
+                    attributeId = R.attr.homeAsUpIndicator
+                )
                 appBarTitle = resources.getString(R.string.key_add_payment_label)
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END
@@ -135,6 +144,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 floatingButtonState = true
             }
             R.id.filesFragment -> {
+                navigationIcon = null
                 appBarTitle = ""
                 floatingButtonImage = R.drawable.ic_delete
                 floatingButtonPosition = FloatingButtonPosition.CENTER
@@ -142,6 +152,9 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 floatingButtonState = false
             }
             R.id.periodFilterFragment -> {
+                navigationIcon = getDrawableFromAttribute(
+                    attributeId = R.attr.homeAsUpIndicator
+                )
                 appBarTitle = resources.getString(R.string.key_filter_period_label)
                 floatingButtonImage = R.drawable.ic_table
                 floatingButtonPosition = FloatingButtonPosition.END
@@ -149,12 +162,16 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 floatingButtonState = true
             }
             R.id.historyFragment -> {
+                navigationIcon = null
                 floatingButtonImage = R.drawable.ic_left_and_right
                 floatingButtonPosition = FloatingButtonPosition.CENTER
                 floatingButtonTint = R.color.colorAccent
                 floatingButtonState = false
             }
             R.id.pdfViewerFragment -> {
+                navigationIcon = getDrawableFromAttribute(
+                    attributeId = R.attr.homeAsUpIndicator
+                )
                 appBarTitle = resources.getString(R.string.key_invoice_label)
                 floatingButtonImage = R.drawable.ic_share
                 floatingButtonPosition = FloatingButtonPosition.END
@@ -162,6 +179,9 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 floatingButtonState = true
             }
             R.id.filterPaymentsFragment -> {
+                navigationIcon = getDrawableFromAttribute(
+                    attributeId = R.attr.homeAsUpIndicator
+                )
                 appBarTitle = resources.getString(R.string.key_clients_order_label)
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END
@@ -169,6 +189,9 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 floatingButtonState = true
             }
             R.id.QRCodeFragment -> {
+                navigationIcon = getDrawableFromAttribute(
+                    attributeId = R.attr.homeAsUpIndicator
+                )
                 appBarTitle = resources.getString(R.string.key_qr_code_label)
                 floatingButtonState = false
             }
@@ -292,6 +315,11 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 0
             )
         }
+    private var navigationIcon: Drawable? = null
+        set(value) {
+            field = value
+            binding.appBarMain.bottomAppBar.navigationIcon = value
+        }
 
     override fun onBackPressed() {
         when(binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().currentDestination?.id) {
@@ -346,6 +374,9 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
 
     private fun setupToolbar() {
         setSupportActionBar(binding.appBarMain.bottomAppBar)
+        binding.appBarMain.bottomAppBar.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun setupUI() {

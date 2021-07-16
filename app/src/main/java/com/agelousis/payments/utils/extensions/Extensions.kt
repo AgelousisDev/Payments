@@ -29,6 +29,7 @@ import android.text.Html
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.BulletSpan
+import android.util.TypedValue
 import android.view.*
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
@@ -936,6 +937,20 @@ fun Context.makeSoundNotification() {
         val ringtone = RingtoneManager.getRingtone(this, notification)
         ringtone.play()
     } catch (e: Exception) {}
+}
+
+fun Context.getDrawableFromAttribute(attributeId: Int, tintColor: Int? = null): Drawable? {
+    val typedValue = TypedValue().also {
+        theme.resolveAttribute(
+            attributeId, it,
+            true
+        )
+    }
+    return ContextCompat.getDrawable(this, typedValue.resourceId).also { drawable ->
+        drawable?.setTint(
+            tintColor ?: return@also
+        )
+    }
 }
 
 @BindingAdapter("picassoImagePath")
