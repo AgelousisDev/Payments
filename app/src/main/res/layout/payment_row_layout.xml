@@ -114,7 +114,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_message"
-            imageTintColor="@{clientModel.groupImage == null ? clientModel.groupColor : @color/colorAccent}"/>
+            imageTintColor="@{clientModel.groupColor != null ? clientModel.groupColor : @color/colorAccent}"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/entryDateTextView"

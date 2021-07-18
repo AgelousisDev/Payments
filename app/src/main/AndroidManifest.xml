@@ -47,9 +47,6 @@
             android:resizeableActivity="true"
             android:theme="@style/MainAppTheme" />
         <activity
-            android:name=".profilePicture.ProfilePictureActivity"
-            android:theme="@style/DraggableAppTheme" />
-        <activity
             android:name=".guide.GuideActivity"
             android:theme="@style/AppTheme"/>
 

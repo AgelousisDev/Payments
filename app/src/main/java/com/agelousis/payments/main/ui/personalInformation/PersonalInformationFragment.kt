@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
@@ -191,7 +192,7 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
     }
 
     override fun onProfilePicturePressed() {
-        (activity as? MainActivity)?.showProfilePicture()
+        redirectToProfilePictureFragment()
     }
 
     private lateinit var binding: FragmentPersonalInformationLayoutBinding
@@ -347,6 +348,16 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
                 activity?.finish()
             }
         }
+    }
+
+    private fun redirectToProfilePictureFragment() {
+        val extras = FragmentNavigatorExtras(
+            binding.profileImageView to resources.getString(R.string.key_shared_profile_picture_transition_name)
+        )
+        findNavController().navigate(
+            PersonalInformationFragmentDirections.actionPersonalInformationFragmentToProfilePictureFragment(),
+            extras
+        )
     }
 
 }

@@ -52,6 +52,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.edit
 import androidx.core.database.getStringOrNull
+import androidx.core.view.WindowCompat
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -904,6 +905,12 @@ fun Window.hideSystemUI() {
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_FULLSCREEN)
 }
+
+var Window.isEdgeToEdge: Boolean
+    set(value) {
+        WindowCompat.setDecorFitsSystemWindows(this, value)
+    }
+    get() = false
 
 var AppCompatActivity.loaderState: Boolean
     get() = supportFragmentManager.fragments.any { it is LoaderDialog && (it as? LoaderDialog)?.isVisible == true }

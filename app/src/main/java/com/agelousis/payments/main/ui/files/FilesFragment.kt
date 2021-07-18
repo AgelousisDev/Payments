@@ -16,7 +16,6 @@ import com.agelousis.payments.R
 import com.agelousis.payments.custom.itemDecoration.HeaderItemDecoration
 import com.agelousis.payments.databinding.FragmentFilesLayoutBinding
 import com.agelousis.payments.main.MainActivity
-import com.agelousis.payments.main.materialMenu.enumerations.MaterialMenuOption
 import com.agelousis.payments.main.ui.files.adapters.FilesAdapter
 import com.agelousis.payments.main.ui.files.enumerations.FileRowState
 import com.agelousis.payments.main.ui.files.models.FileDataModel
@@ -124,9 +123,7 @@ class FilesFragment: Fragment(), FilePresenter, FilesFragmentPresenter {
 
     private fun configureSearchView() {
         binding.searchLayout.onProfileImageClicked {
-            (activity as? MainActivity)?.onMaterialMenuOptionSelected(
-                materialMenuOption = MaterialMenuOption.PROFILE
-            )
+            redirectToPersonalInformationFragment()
         }
         binding.searchLayout.onQueryListener {
             configureFileList(
@@ -312,6 +309,12 @@ class FilesFragment: Fragment(), FilePresenter, FilesFragmentPresenter {
                 resources.getString(R.string.key_files_selected_value_label),
                 selectedFilePositions.size
             )
+    }
+
+    private fun redirectToPersonalInformationFragment() {
+        findNavController().navigate(
+            FilesFragmentDirections.actionGlobalPersonalInformation()
+        )
     }
 
 }

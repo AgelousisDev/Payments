@@ -57,7 +57,15 @@
         android:id="@+id/personalInformationFragment"
         android:name="com.agelousis.payments.main.ui.personalInformation.PersonalInformationFragment"
         android:label="PersonalInformationFragment"
-        tools:layout="@layout/fragment_personal_information_layout"/>
+        tools:layout="@layout/fragment_personal_information_layout">
+        <action
+            android:id="@+id/action_personalInformationFragment_to_profilePictureFragment"
+            app:destination="@id/profilePictureFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
     <fragment
         android:id="@+id/newPaymentFragment"
         android:name="com.agelousis.payments.main.ui.newPayment.NewPaymentFragment"
@@ -190,5 +198,10 @@
             app:argType="com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType"
             android:defaultValue="GENERATE" />
     </fragment>
+    <fragment
+        android:id="@+id/profilePictureFragment"
+        android:name="com.agelousis.payments.main.ui.personalInformation.ProfilePictureFragment"
+        android:label="ProfilePictureFragment"
+        tools:layout="@layout/profile_picture_fragment_layout"/>
 
 </navigation>

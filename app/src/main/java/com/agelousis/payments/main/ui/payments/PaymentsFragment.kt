@@ -19,7 +19,6 @@ import com.agelousis.payments.custom.itemTouchHelper.SwipeItemTouchHelper
 import com.agelousis.payments.databinding.FragmentPaymentsLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.enumerations.SwipeItemType
-import com.agelousis.payments.main.materialMenu.enumerations.MaterialMenuOption
 import com.agelousis.payments.main.menuOptions.PaymentsMenuOptionsBottomSheetFragment
 import com.agelousis.payments.main.ui.files.models.FileDataModel
 import com.agelousis.payments.main.ui.payments.adapters.PaymentsAdapter
@@ -203,9 +202,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
 
     private fun configureSearchView() {
         binding.searchLayout.onProfileImageClicked {
-            (activity as? MainActivity)?.onMaterialMenuOptionSelected(
-                materialMenuOption = MaterialMenuOption.PROFILE
-            )
+            redirectToPersonalInformationFragment()
         }
         binding.searchLayout.onSecondaryIconClicked {
             showPaymentsMenuOptionsFragment()
@@ -556,6 +553,12 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
             sharedPreferences?.clientModelList = list.filterIsInstance<ClientModel>()
             context?.updatePaymentsAppWidget()
         }
+    }
+
+    private fun redirectToPersonalInformationFragment() {
+        findNavController().navigate(
+            PaymentsFragmentDirections.actionGlobalPersonalInformation()
+        )
     }
 
     fun navigateToPeriodFilterFragment() {

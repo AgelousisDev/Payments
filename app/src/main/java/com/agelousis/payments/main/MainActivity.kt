@@ -22,14 +22,12 @@ import com.agelousis.payments.database.SQLiteHelper
 import com.agelousis.payments.databinding.ActivityMainBinding
 import com.agelousis.payments.firebase.models.FirebaseNotificationData
 import com.agelousis.payments.group.GroupActivity
-import com.agelousis.payments.guide.GuideActivity
 import com.agelousis.payments.login.LoginActivity
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.enumerations.FloatingButtonPosition
 import com.agelousis.payments.main.enumerations.FloatingButtonType
 import com.agelousis.payments.main.materialMenu.enumerations.MaterialMenuOption
 import com.agelousis.payments.main.materialMenu.models.MaterialMenuDataModel
-import com.agelousis.payments.main.materialMenu.presenters.MaterialMenuFragmentPresenter
 import com.agelousis.payments.main.ui.clientsSelector.ClientsSelectorDialogFragment
 import com.agelousis.payments.main.ui.files.FilesFragment
 import com.agelousis.payments.main.ui.history.HistoryFragment
@@ -43,7 +41,6 @@ import com.agelousis.payments.main.ui.pdfViewer.PdfViewerFragment
 import com.agelousis.payments.main.ui.periodFilter.PeriodFilterFragment
 import com.agelousis.payments.main.ui.personalInformation.PersonalInformationFragment
 import com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType
-import com.agelousis.payments.profilePicture.ProfilePictureActivity
 import com.agelousis.payments.receivers.NotificationDataReceiver
 import com.agelousis.payments.receivers.interfaces.NotificationListener
 import com.agelousis.payments.utils.constants.Constants
@@ -53,39 +50,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener, View.OnClickListener, MaterialMenuFragmentPresenter, NotificationListener {
+class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener, View.OnClickListener, NotificationListener {
 
     companion object {
         const val USER_MODEL_EXTRA = "MainActivity=userModelExtra"
         const val FIREBASE_NOTIFICATION_DATA_EXTRA = "MainActivity=firebaseNotificatonDataExtra"
         const val QR_CODE_CAMERA_PERMISSION_REQUEST_CODE = 1
-    }
-
-    override fun onMaterialMenuOptionSelected(materialMenuOption: MaterialMenuOption) {
-        when(materialMenuOption) {
-            MaterialMenuOption.HOME -> {
-                binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().popBackStack()
-                binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().navigate(R.id.action_global_paymentsFragment)
-            }
-            MaterialMenuOption.PROFILE -> {
-                binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().popBackStack(R.id.personalInformationFragment, true)
-                binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().navigate(R.id.action_global_personalInformation)
-            }
-            MaterialMenuOption.INVOICES -> {
-                binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().popBackStack(R.id.filesFragment, true)
-                binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().navigate(R.id.action_global_filesFragment)
-            }
-            MaterialMenuOption.HISTORY -> {
-                binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().popBackStack(R.id.historyFragment, true)
-                binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().navigate(R.id.action_global_historyFragment)
-            }
-            MaterialMenuOption.GUIDE ->
-                showGuide()
-        }
-    }
-
-    override fun onMaterialMenuProfileIconClicked() {
-        showProfilePicture()
     }
 
     override fun onNotificationReceived(firebaseNotificationData: FirebaseNotificationData) {
@@ -195,6 +165,8 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 appBarTitle = resources.getString(R.string.key_qr_code_label)
                 floatingButtonState = false
             }
+            R.id.profilePictureFragment ->
+                floatingButtonState = false
         }
     }
 
@@ -441,10 +413,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
         )
     }
 
-    private fun showGuide() {
-        startActivity(Intent(this, GuideActivity::class.java))
-    }
-
     private fun showNewPersonUnsavedFieldsWarning() {
         if ((supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.fieldsHaveChanged == true)
             showTwoButtonsDialog(
@@ -506,17 +474,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                     (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
                 }
         }
-    }
-
-    fun showProfilePicture() {
-        startActivity(
-            Intent(
-                this,
-                ProfilePictureActivity::class.java
-            ).also {
-                it.putExtra(USER_MODEL_EXTRA, userModel)
-            }
-        )
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
