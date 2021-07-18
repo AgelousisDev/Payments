@@ -45,19 +45,24 @@ class FilesFragment: Fragment(), FilePresenter, FilesFragmentPresenter {
         )
     }
 
-    override fun onFileSelected(fileDataModel: FileDataModel) {
-        File(context?.filesDir ?: return, fileDataModel.fileName ?: return).takeIf {
-            it.exists()
-        }?.let {
-            findNavController().navigate(
-                FilesFragmentDirections.actionFilesFragmentToPdfViewerFragment(
-                    fileDataModel = fileDataModel
-                )
+    override fun onFileSelected(fileDataModel: FileDataModel, adapterPosition: Int) {
+        if (filteredList.filterIsInstance<FileDataModel>().any { it.fileRowState == FileRowState.SELECTED })
+            onFileLongPressed(
+                adapterPosition = adapterPosition
             )
-        } ?: context?.showSimpleDialog(
-            title = resources.getString(R.string.key_warning_label),
-            message = resources.getString(R.string.key_file_not_exists_message)
-        )
+        else
+            File(context?.filesDir ?: return, fileDataModel.fileName ?: return).takeIf {
+                it.exists()
+            }?.let {
+                findNavController().navigate(
+                    FilesFragmentDirections.actionFilesFragmentToPdfViewerFragment(
+                        fileDataModel = fileDataModel
+                    )
+                )
+            } ?: context?.showSimpleDialog(
+                title = resources.getString(R.string.key_warning_label),
+                message = resources.getString(R.string.key_file_not_exists_message)
+            )
     }
 
     override fun onFileLongPressed(adapterPosition: Int) {

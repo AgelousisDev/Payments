@@ -7,6 +7,9 @@
             name="fileDataModel"
             type="com.agelousis.payments.main.ui.files.models.FileDataModel" />
         <variable
+            name="adapterPosition"
+            type="Integer" />
+        <variable
             name="presenter"
             type="com.agelousis.payments.main.ui.files.presenter.FilePresenter" />
     </data>
@@ -15,7 +18,7 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
-    android:onClick="@{() -> presenter.onFileSelected(fileDataModel)}"
+    android:onClick="@{() -> presenter.onFileSelected(fileDataModel, adapterPosition)}"
     app:cardUseCompatPadding="true"
     app:cardCornerRadius="16dp"
     app:cardElevation="8dp"
