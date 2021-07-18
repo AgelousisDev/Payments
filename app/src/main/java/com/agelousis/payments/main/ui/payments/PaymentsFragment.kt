@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.R
@@ -236,6 +237,18 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
     }
     
     private fun configureRecyclerView() {
+        if (context?.isLandscape == true)
+            binding.paymentListRecyclerView.layoutManager = GridLayoutManager(
+                context,
+                2
+            ).also { gridLayoutManager ->
+                gridLayoutManager.spanSizeLookup = object: GridLayoutManager.SpanSizeLookup() {
+                    override fun getSpanSize(position: Int) = when(filteredList.getOrNull(index = position)) {
+                        is ClientModel -> 1
+                        else -> 2
+                    }
+                }
+            }
         binding.paymentListRecyclerView.adapter = PaymentsAdapter(
             list = filteredList,
             groupPresenter = this,
@@ -251,9 +264,12 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                         is GroupModel -> {
                             if (adapterPosition > 0)
                                 outRect.top = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
-                            outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
+                            if (context?.isLandscape == false)
+                                outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
                         }
                         is ClientModel -> {
+                            if (context?.isLandscape == true)
+                                outRect.top = resources.getDimensionPixelOffset(R.dimen.nav_header_vertical_spacing)
                             outRect.left = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
                             outRect.right = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
                             if (filteredList isLastAt adapterPosition)
@@ -499,12 +515,19 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                             )
                         )
                         filteredList.addAll(
-                            filteredByQueryPayments.sortedBy { (it getPaymentsFilteringOptionType MainApplication.paymentsFilteringOptionTypes).position  }.also { personModelList ->
-                                if (personModelList.isSizeOne)
-                                    personModelList.firstOrNull()?.backgroundDrawable = R.drawable.payment_row_radius_background
-                                else {
-                                    personModelList.firstOrNull()?.backgroundDrawable = R.drawable.payment_row_header_background
-                                    personModelList.lastOrNull()?.backgroundDrawable = R.drawable.payment_row_footer_background
+                            filteredByQueryPayments.sortedBy { (it getPaymentsFilteringOptionType MainApplication.paymentsFilteringOptionTypes).position  }.also { clientModelList ->
+                                when(context?.isLandscape) {
+                                    true ->
+                                        clientModelList.forEach { clientModel ->
+                                            clientModel.backgroundDrawable = R.drawable.payment_row_radius_background
+                                        }
+                                    else ->
+                                        if (clientModelList.isSizeOne)
+                                            clientModelList.firstOrNull()?.backgroundDrawable = R.drawable.payment_row_radius_background
+                                        else {
+                                            clientModelList.firstOrNull()?.backgroundDrawable = R.drawable.payment_row_header_background
+                                            clientModelList.lastOrNull()?.backgroundDrawable = R.drawable.payment_row_footer_background
+                                        }
                                 }
                             }
                         )

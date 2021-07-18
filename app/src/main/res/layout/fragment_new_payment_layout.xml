@@ -53,10 +53,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/activity_general_horizontal_margin"
                 android:background="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? @drawable/oval_background : null}"
-                android:elevation="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:elevation="16dp">
 
                 <com.google.android.material.textview.MaterialTextView
                     style="@style/TextViewTitle"
