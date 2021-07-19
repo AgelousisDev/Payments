@@ -16,6 +16,7 @@ import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.ui.countrySelector.adapters.CountriesAdapter
 import com.agelousis.payments.main.ui.countrySelector.models.CountryDataModel
 import com.agelousis.payments.main.ui.countrySelector.interfaces.CountrySelectorFragmentPresenter
+import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.countryDataModel
 import com.agelousis.payments.utils.helpers.CountryHelper
@@ -59,7 +60,7 @@ class CountrySelectorDialogFragment: DialogFragment(), CountrySelectorFragmentPr
     private val countryDataModelList by lazy {
         CountryHelper.countryDataModelList
     }
-    private val filteredCountries = arrayListOf<CountryDataModel>()
+    private val filteredItemList = arrayListOf<Any>()
     private var countrySelectorFragmentPresenter: CountrySelectorFragmentPresenter? = null
     private var selectedCountryDataModel: CountryDataModel? = null
     private var userModel: UserModel? = null
@@ -90,7 +91,7 @@ class CountrySelectorDialogFragment: DialogFragment(), CountrySelectorFragmentPr
     }
 
     private fun configureRecyclerView() {
-        filteredCountries.addAll(
+        filteredItemList.addAll(
             countryDataModelList
         )
         binding.countryRecyclerView.layoutManager = FlexboxLayoutManager(context, FlexDirection.ROW).also {
@@ -99,9 +100,9 @@ class CountrySelectorDialogFragment: DialogFragment(), CountrySelectorFragmentPr
             it.alignItems = AlignItems.CENTER
         }
         binding.countryRecyclerView.adapter = CountriesAdapter(
-            countryDataModelList = filteredCountries,
+            itemList = filteredItemList,
             selectedCountryDataIndex = selectedCountryDataModel?.let { countryDataModel ->
-                filteredCountries.indexOf(
+                filteredItemList.indexOf(
                     countryDataModel
                 ).takeIf { it != -1 }
             },
@@ -109,7 +110,7 @@ class CountrySelectorDialogFragment: DialogFragment(), CountrySelectorFragmentPr
         )
         binding.countryRecyclerView.post {
             binding.countryRecyclerView.scrollToPosition(
-                filteredCountries.indexOf(
+                filteredItemList.indexOf(
                     selectedCountryDataModel ?: return@post
                 )
             )
@@ -125,12 +126,22 @@ class CountrySelectorDialogFragment: DialogFragment(), CountrySelectorFragmentPr
     }
 
     private fun filterCountries(query: String?) {
-        filteredCountries.clear()
-        filteredCountries.addAll(
+        filteredItemList.clear()
+        filteredItemList.addAll(
             countryDataModelList.filter { countryDataModel ->
                 countryDataModel.countryName.lowercase().contains(query?.lowercase() ?: "")
             }
         )
+        if (filteredItemList.isEmpty())
+            filteredItemList.add(
+                EmptyModel(
+                    message = String.format(
+                        resources.getString(R.string.key_no_results_found_value),
+                        query ?: ""
+                    ),
+                    imageIconResource = R.drawable.ic_colored_search
+                )
+            )
         (binding.countryRecyclerView.adapter as? CountriesAdapter)?.reloadData()
     }
 

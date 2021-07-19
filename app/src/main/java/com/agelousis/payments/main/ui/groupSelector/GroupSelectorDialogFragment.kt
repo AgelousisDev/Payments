@@ -13,6 +13,7 @@ import com.agelousis.payments.R
 import com.agelousis.payments.databinding.CountrySelectorFragmentLayoutBinding
 import com.agelousis.payments.main.ui.groupSelector.adapters.GroupsSelectionAdapter
 import com.agelousis.payments.main.ui.groupSelector.interfaces.GroupSelectorFragmentPresenter
+import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.utils.constants.Constants
 
@@ -43,7 +44,7 @@ class GroupSelectorDialogFragment: DialogFragment(), GroupSelectorFragmentPresen
 
     private lateinit var binding: CountrySelectorFragmentLayoutBinding
     private var groupModelList: List<GroupModel>? = null
-    private val filteredGroups = arrayListOf<GroupModel>()
+    private val filteredItemList = arrayListOf<Any>()
     private var groupSelectorFragmentPresenter: GroupSelectorFragmentPresenter? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -54,7 +55,7 @@ class GroupSelectorDialogFragment: DialogFragment(), GroupSelectorFragmentPresen
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = CountrySelectorFragmentLayoutBinding.inflate(
             inflater,
             container,
@@ -80,19 +81,29 @@ class GroupSelectorDialogFragment: DialogFragment(), GroupSelectorFragmentPresen
     }
 
     private fun filterGroups(query: String?) {
-        filteredGroups.clear()
-        filteredGroups.addAll(
+        filteredItemList.clear()
+        filteredItemList.addAll(
             groupModelList?.filter { countryDataModel ->
                 countryDataModel.groupName?.lowercase()?.contains(
                     other = query?.lowercase() ?: ""
                 ) == true
             } ?: listOf()
         )
+        if (filteredItemList.isEmpty())
+            filteredItemList.add(
+                EmptyModel(
+                    message = String.format(
+                        resources.getString(R.string.key_no_results_found_value),
+                        query ?: ""
+                    ),
+                    imageIconResource = R.drawable.ic_colored_search
+                )
+            )
         (binding.countryRecyclerView.adapter as? GroupsSelectionAdapter)?.reloadData()
     }
 
     private fun configureRecyclerView() {
-        filteredGroups.addAll(
+        filteredItemList.addAll(
             groupModelList ?: listOf()
         )
         binding.countryRecyclerView.layoutManager = LinearLayoutManager(
@@ -101,13 +112,13 @@ class GroupSelectorDialogFragment: DialogFragment(), GroupSelectorFragmentPresen
             false
         )
         binding.countryRecyclerView.adapter = GroupsSelectionAdapter(
-            groupModelList = filteredGroups,
+            itemList = filteredItemList,
             groupSelectorFragmentPresenter = this
         )
         binding.countryRecyclerView.post {
             binding.countryRecyclerView.scrollToPosition(
-                filteredGroups.indexOfFirst {
-                    it.isSelected
+                filteredItemList.indexOfFirst {
+                    (it as? GroupModel)?.isSelected == true
                 }
             )
         }
