@@ -14,4 +14,6 @@ data class GroupModel(val groupId: Int? = null,
     @IgnoredOnParcel
     var groupImageData: ByteArray? = null
 
+    var isSelected = false
+
 }

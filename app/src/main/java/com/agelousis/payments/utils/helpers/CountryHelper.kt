@@ -2,7 +2,7 @@ package com.agelousis.payments.utils.helpers
 
 import android.content.Context
 import com.agelousis.payments.R
-import com.agelousis.payments.main.ui.countrySelector.enumerations.CountryDataModel
+import com.agelousis.payments.main.ui.countrySelector.models.CountryDataModel
 import com.agelousis.payments.utils.extensions.second
 import java.util.*
 

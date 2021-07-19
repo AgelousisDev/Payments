@@ -30,6 +30,11 @@ class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLa
                 }
             }
         }
+    var searchHint: String? = null
+        set(value) {
+            field = value
+            binding.hint = value ?: return
+        }
 
     init {
         initAttributesAndView(attributeSet = attributeSet)
@@ -43,7 +48,7 @@ class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLa
                 null,
                 false
             )
-            binding.hint = attributes.getString(R.styleable.MaterialSearchView_searchHint)
+            searchHint = attributes.getString(R.styleable.MaterialSearchView_searchHint)
             binding.secondaryImageResourceId = attributes.getResourceId(R.styleable.MaterialSearchView_secondaryIconResource, 0)
             attributes.recycle()
             addView(binding.root)

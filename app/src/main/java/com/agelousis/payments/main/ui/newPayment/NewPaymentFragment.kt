@@ -15,6 +15,8 @@ import com.agelousis.payments.database.DatabaseTriggeringType
 import com.agelousis.payments.databinding.FragmentNewPaymentLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.enumerations.FloatingButtonType
+import com.agelousis.payments.main.ui.groupSelector.GroupSelectorDialogFragment
+import com.agelousis.payments.main.ui.groupSelector.interfaces.GroupSelectorFragmentPresenter
 import com.agelousis.payments.main.ui.newPayment.adapters.PaymentAmountAdapter
 import com.agelousis.payments.main.ui.newPayment.enumerations.PaymentAmountRowState
 import com.agelousis.payments.main.ui.newPayment.presenters.NewPaymentPresenter
@@ -36,7 +38,12 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
-class NewPaymentFragment: Fragment(), NewPaymentPresenter {
+class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragmentPresenter {
+
+    override fun onGroupSelected(groupModel: GroupModel) {
+        binding.groupDetailsLayout.errorState = false
+        binding.groupDetailsLayout.value = groupModel.groupName
+    }
 
     override fun onPaymentAmount(paymentAmountModel: PaymentAmountModel?) {
         restorePaymentsToNormalState()
@@ -164,13 +171,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
             binding.countryCodeLayout.setCountryForNameCode(countryCode)
         }
         binding.groupDetailsLayout.setOnDetailsPressed {
-            context?.showListDialog(
-                title = resources.getString(R.string.key_select_group_label),
-                items = availableGroups.mapNotNull { it.groupName }
-            ) {
-                binding.groupDetailsLayout.errorState = false
-                binding.groupDetailsLayout.value = availableGroups.getOrNull(index = it)?.groupName
-            }
+            showGroupsSelectionFragment()
         }
         binding.activeAppSwitchLayout.setOnClickListener {
             binding.activeAppSwitchLayout.isChecked = binding.activeAppSwitchLayout.isChecked == false
@@ -183,6 +184,17 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter {
                 addPaymentButtonState = !isChecked
             }
         }
+    }
+
+    private fun showGroupsSelectionFragment() {
+        availableGroups.forEach { groupModel ->
+            groupModel.isSelected = groupModel.groupName?.lowercase() == binding.groupDetailsLayout.value?.lowercase()
+        }
+        GroupSelectorDialogFragment.show(
+            supportFragmentManager = childFragmentManager,
+            groupModelList = availableGroups,
+            groupSelectorFragmentPresenter = this
+        )
     }
 
     private fun configureObservers() {

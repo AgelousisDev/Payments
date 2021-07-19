@@ -19,7 +19,7 @@ import com.agelousis.payments.databinding.FragmentPersonalInformationLayoutBindi
 import com.agelousis.payments.login.LoginActivity
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.countrySelector.CountrySelectorDialogFragment
-import com.agelousis.payments.main.ui.countrySelector.enumerations.CountryDataModel
+import com.agelousis.payments.main.ui.countrySelector.models.CountryDataModel
 import com.agelousis.payments.main.ui.countrySelector.interfaces.CountrySelectorFragmentPresenter
 import com.agelousis.payments.main.ui.currencySelector.CurrencySelectorDialogFragment
 import com.agelousis.payments.main.ui.currencySelector.enumerations.CurrencyType

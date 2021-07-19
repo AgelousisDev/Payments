@@ -6,7 +6,7 @@
         <import type="android.view.View" />
         <variable
             name="countryDataModel"
-            type="com.agelousis.payments.main.ui.countrySelector.enumerations.CountryDataModel" />
+            type="com.agelousis.payments.main.ui.countrySelector.models.CountryDataModel" />
         <variable
             name="isSelected"
             type="Boolean" />

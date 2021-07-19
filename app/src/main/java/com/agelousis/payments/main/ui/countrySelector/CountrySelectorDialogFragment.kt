@@ -14,7 +14,7 @@ import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.databinding.CountrySelectorFragmentLayoutBinding
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.ui.countrySelector.adapters.CountriesAdapter
-import com.agelousis.payments.main.ui.countrySelector.enumerations.CountryDataModel
+import com.agelousis.payments.main.ui.countrySelector.models.CountryDataModel
 import com.agelousis.payments.main.ui.countrySelector.interfaces.CountrySelectorFragmentPresenter
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.countryDataModel

@@ -3,7 +3,7 @@ package com.agelousis.payments.application
 import android.app.Application
 import android.content.Context
 import com.agelousis.payments.firebase.FirebaseInstanceHelper
-import com.agelousis.payments.main.ui.countrySelector.enumerations.CountryDataModel
+import com.agelousis.payments.main.ui.countrySelector.models.CountryDataModel
 import com.agelousis.payments.main.ui.paymentsFiltering.enumerations.PaymentsFilteringOptionType
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.countryDataModel

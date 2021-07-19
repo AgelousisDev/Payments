@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="groupModel"
+            type="com.agelousis.payments.main.ui.payments.models.GroupModel" />
+        <variable
+            name="presenter"
+            type="com.agelousis.payments.main.ui.groupSelector.interfaces.GroupSelectorFragmentPresenter" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            style="@style/TextViewTitle"
+            android:id="@+id/groupSelectionOrderNo"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+            android:background="@drawable/oval_background"
+            android:backgroundTint="@{groupModel.color}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/nav_header_vertical_spacing"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="@{() -> presenter.onGroupSelected(groupModel)}"
+            app:cardBackgroundColor="@color/whiteTwo"
+            app:cardCornerRadius="16dp"
+            app:cardUseCompatPadding="false"
+            app:layout_constraintStart_toEndOf="@+id/groupSelectionOrderNo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="@{groupModel.color}"
+                    android:gravity="center"
+                    android:padding="@dimen/activity_general_horizontal_margin"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.7"
+                    tools:background="@color/lightBlue">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="@style/TextViewTitleLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:text="@{groupModel.groupName}"
+                        tools:text="Body Pump"/>
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        style="@style/TextViewTitle"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="end"
+                        android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+                        android:visibility="@{groupModel.groupImage != null ? View.VISIBLE : View.GONE}"
+                        tools:srcCompat="@drawable/ic_group"
+                        picassoGroupImageFromInternalFiles="@{groupModel.groupImage}" />
+
+                </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/groupSelectedIcon"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+                    android:visibility="@{groupModel.selected ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_check"
+                    app:tint="@color/green"
+                    tools:srcCompat="@drawable/ic_check"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

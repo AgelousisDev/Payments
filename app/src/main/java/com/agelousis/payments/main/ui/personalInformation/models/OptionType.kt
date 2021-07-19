@@ -3,7 +3,7 @@ package com.agelousis.payments.main.ui.personalInformation.models
 import android.content.Context
 import com.agelousis.payments.R
 import com.agelousis.payments.login.models.UserModel
-import com.agelousis.payments.main.ui.countrySelector.enumerations.CountryDataModel
+import com.agelousis.payments.main.ui.countrySelector.models.CountryDataModel
 import com.agelousis.payments.main.ui.currencySelector.enumerations.CurrencyType
 
 enum class OptionType {
