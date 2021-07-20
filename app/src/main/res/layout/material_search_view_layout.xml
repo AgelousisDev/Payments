@@ -17,7 +17,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="12dp"
+    app:cardCornerRadius="@dimen/activity_general_horizontal_margin"
     app:cardElevation="8dp"
     app:cardUseCompatPadding="true"
     android:clipToPadding="false">

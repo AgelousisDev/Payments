@@ -37,7 +37,7 @@
             android:focusable="true"
             android:onClick="@{() -> presenter.onGroupSelected(groupModel)}"
             app:cardBackgroundColor="@color/whiteTwo"
-            app:cardCornerRadius="16dp"
+            app:cardCornerRadius="@dimen/activity_general_horizontal_margin"
             app:cardUseCompatPadding="false"
             app:layout_constraintStart_toEndOf="@+id/groupSelectionOrderNo"
             app:layout_constraintBottom_toBottomOf="parent"

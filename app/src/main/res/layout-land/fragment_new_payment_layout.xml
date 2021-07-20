@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <import type="android.view.View" />
         <import type="com.agelousis.payments.main.ui.payments.models.PaymentAmountModel" />
@@ -18,15 +19,17 @@
             name="presenter"
             type="com.agelousis.payments.main.ui.newPayment.presenters.NewPaymentPresenter" />
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
             android:animateLayoutChanges="true"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="@dimen/activity_general_horizontal_margin"
             app:cardElevation="8dp"
             app:cardUseCompatPadding="true"
             app:layout_constraintEnd_toEndOf="parent"
@@ -49,50 +52,6 @@
                         android:orientation="vertical"
                         app:layout_constraintGuide_percent="0.5"/>
 
-                    <FrameLayout
-                        android:id="@+id/paymentRowHeaderFrameLayout"
-                        backgroundDrawableTintColor="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? groupModel.color != null ? groupModel.color : personModel.groupColor : null}"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/activity_general_horizontal_margin"
-                        android:background="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? @drawable/oval_background : null}"
-                        android:elevation="16dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <com.google.android.material.textview.MaterialTextView
-                            style="@style/TextViewTitle"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="@{groupModel.groupName != null ? String.valueOf(groupModel.groupName.charAt(0)).toUpperCase() : String.valueOf(personModel.groupName.charAt(0)).toUpperCase()}"
-                            android:textColor="@color/white"
-                            android:textStyle="normal"
-                            android:visibility="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? View.VISIBLE : View.GONE}" />
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/userRowImageView"
-                            picassoGroupImageFromInternalFiles="@{groupModel.groupImage != null ? groupModel.groupImage : personModel.groupImage}"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop"
-                            android:visibility="@{groupModel.groupImage != null || personModel.groupImage != null ? View.VISIBLE : View.GONE}" />
-
-                    </FrameLayout>
-
-                    <View
-                        android:id="@+id/headerSeparatorLine"
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:layout_marginTop="@dimen/activity_general_horizontal_margin"
-                        android:layout_marginBottom="@dimen/activity_general_horizontal_margin"
-                        android:background="@color/grey"
-                        app:layout_constraintTop_toBottomOf="@+id/paymentRowHeaderFrameLayout"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
-
                     <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
                         android:id="@+id/paymentTypeLayout"
                         personDetailsPicker="@{personModel.paymentType != null ? personModel.paymentType.getLocalizedTitle(context.resources) : PaymentType.CASH_PAYMENT.getLocalizedTitle(context.resources)}"
@@ -103,7 +62,7 @@
                         app:label="@string/key_payment_type_label"
                         app:layout_constraintEnd_toStartOf="@+id/guideline"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/headerSeparatorLine"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:showLine="true" />
 
                     <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
@@ -116,7 +75,7 @@
                         app:label="@string/key_first_name_label"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/guideline"
-                        app:layout_constraintTop_toBottomOf="@+id/headerSeparatorLine"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:showLine="true" />
 
                     <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
@@ -296,5 +255,41 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <FrameLayout
+            android:id="@+id/paymentRowHeaderFrameLayout"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/activity_general_horizontal_margin"
+            android:background="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? @drawable/oval_background : null}"
+            backgroundDrawableTintColor="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? groupModel.color != null ? groupModel.color : personModel.groupColor : null}"
+            android:elevation="16dp"
+            app:layout_anchor="@+id/materialCardView"
+            app:layout_anchorGravity="center|top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/TextViewTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@{groupModel.groupName != null ? String.valueOf(groupModel.groupName.charAt(0)).toUpperCase() : String.valueOf(personModel.groupName.charAt(0)).toUpperCase()}"
+                android:textColor="@color/white"
+                android:textStyle="normal"
+                android:visibility="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? View.VISIBLE : View.GONE}" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/userRowImageView"
+                picassoGroupImageFromInternalFiles="@{groupModel.groupImage != null ? groupModel.groupImage : personModel.groupImage}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:visibility="@{groupModel.groupImage != null || personModel.groupImage != null ? View.VISIBLE : View.GONE}"
+                tools:srcCompat="@drawable/ic_group"/>
+
+        </FrameLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

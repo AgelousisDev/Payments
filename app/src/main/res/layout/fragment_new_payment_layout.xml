@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <import type="android.view.View" />
         <import type="com.agelousis.payments.main.ui.payments.models.PaymentAmountModel" />
@@ -18,229 +19,226 @@
             name="presenter"
             type="com.agelousis.payments.main.ui.newPayment.presenters.NewPaymentPresenter" />
     </data>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:animateLayoutChanges="true"
-        app:cardCornerRadius="8dp"
+        app:cardCornerRadius="@dimen/activity_general_horizontal_margin"
         app:cardElevation="8dp"
-        app:cardUseCompatPadding="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:cardUseCompatPadding="true">
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
-            android:orientation="vertical">
-
-            <FrameLayout
-                android:id="@+id/paymentRowHeaderFrameLayout"
-                backgroundDrawableTintColor="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? groupModel.color != null ? groupModel.color : personModel.groupColor : null}"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/activity_general_horizontal_margin"
-                android:background="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? @drawable/oval_background : null}"
-                android:elevation="16dp">
-
-                <com.google.android.material.textview.MaterialTextView
-                    style="@style/TextViewTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="@{groupModel.groupName != null ? String.valueOf(groupModel.groupName.charAt(0)).toUpperCase() : String.valueOf(personModel.groupName.charAt(0)).toUpperCase()}"
-                    android:textColor="@color/white"
-                    android:textStyle="normal"
-                    android:visibility="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? View.VISIBLE : View.GONE}" />
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/userRowImageView"
-                    picassoGroupImageFromInternalFiles="@{groupModel.groupImage != null ? groupModel.groupImage : personModel.groupImage}"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:visibility="@{groupModel.groupImage != null || personModel.groupImage != null ? View.VISIBLE : View.GONE}" />
-
-            </FrameLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="@dimen/activity_general_horizontal_margin"
-                android:layout_marginBottom="@dimen/activity_general_horizontal_margin"
-                android:background="@color/grey" />
-
-            <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
-                android:id="@+id/paymentTypeLayout"
-                personDetailsPicker="@{personModel.paymentType != null ? personModel.paymentType.getLocalizedTitle(context.resources) : PaymentType.CASH_PAYMENT.getLocalizedTitle(context.resources)}"
+            <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:fieldType="TEXT"
-                app:imeOptionType="actionDone"
-                app:label="@string/key_payment_type_label"
-                app:showLine="true" />
+                android:animateLayoutChanges="true"
+                android:orientation="vertical">
 
-            <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
-                android:id="@+id/firstNameLayout"
-                personDetails='@{personModel.firstName != null ? personModel.firstName : ""}'
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:fieldType="TEXT"
-                app:imeOptionType="actionNext"
-                app:label="@string/key_first_name_label"
-                app:showLine="true" />
-
-            <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
-                android:id="@+id/surnameLayout"
-                personDetails='@{personModel.surname != null ? personModel.surname : ""}'
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:fieldType="TEXT"
-                app:imeOptionType="actionNext"
-                app:label="@string/key_surname_label"
-                app:showLine="true" />
-
-            <com.rilixtech.widget.countrycodepicker.CountryCodePicker
-                android:id="@+id/countryCodeLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"/>
-
-            <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
-                android:id="@+id/phoneLayout"
-                personDetails='@{personModel.phone != null ? personModel.phone : ""}'
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:fieldType="NUMBER"
-                app:imeOptionType="actionNext"
-                app:label="@string/key_phone_label"
-                app:showLine="true" />
-
-            <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
-                android:id="@+id/parentNameLayout"
-                personDetails='@{personModel.parentName != null ? personModel.parentName : ""}'
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:fieldType="TEXT"
-                app:imeOptionType="actionNext"
-                app:label="@string/key_parent_name_label"
-                app:showLine="true" />
-
-            <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
-                android:id="@+id/parentPhoneLayout"
-                personDetails='@{personModel.parentPhone != null ? personModel.parentPhone : ""}'
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:fieldType="NUMBER"
-                app:imeOptionType="actionNext"
-                app:label="@string/key_parent_phone_label"
-                app:showLine="true" />
-
-            <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
-                android:id="@+id/emailLayout"
-                personDetails='@{personModel.email != null ? personModel.email : ""}'
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:fieldType="EMAIL"
-                app:imeOptionType="actionDone"
-                app:label="@string/key_email_label"
-                app:showLine="true" />
-
-            <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
-                android:id="@+id/groupDetailsLayout"
-                personDetailsPicker="@{groupModel.groupName != null ? groupModel.groupName : personModel.groupName != null ? personModel.groupName : @string/key_empty_field_label}"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:fieldType="TEXT"
-                app:imeOptionType="actionDone"
-                app:label="@string/key_group_label"
-                app:showLine="true" />
-
-            <com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
-                android:id="@+id/activeAppSwitchLayout"
-                appSwitchIsChecked="@{personModel.active != null ? personModel.active : true}"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
-                app:appSwitchLabel="@string/key_is_active_label"
-                app:appSwitchShowLine="true" />
-
-            <com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
-                android:id="@+id/freeAppSwitchLayout"
-                appSwitchIsChecked="@{personModel.free == true}"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
-                app:appSwitchLabel="@string/key_is_free_label"
-                app:appSwitchShowLine="true" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/messageTemplateInputLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_general_horizontal_margin"
-                android:hint="@string/key_share_message_template_hint"
-                app:endIconMode="clear_text"
-                app:hintEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/messageTemplateField"
-                    style="@style/TextViewTitleLabel"
+                <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
+                    android:id="@+id/paymentTypeLayout"
+                    personDetailsPicker="@{personModel.paymentType != null ? personModel.paymentType.getLocalizedTitle(context.resources) : PaymentType.CASH_PAYMENT.getLocalizedTitle(context.resources)}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textLongMessage"
-                    android:text="@{personModel.messageTemplate != null &amp;&amp; personModel.messageTemplate.empty == false ? personModel.messageTemplate : userModel.defaultMessageTemplate}" />
+                    app:fieldType="TEXT"
+                    app:imeOptionType="actionDone"
+                    app:label="@string/key_payment_type_label"
+                    app:showLine="true" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+                <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
+                    android:id="@+id/firstNameLayout"
+                    personDetails='@{personModel.firstName != null ? personModel.firstName : ""}'
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:fieldType="TEXT"
+                    app:imeOptionType="actionNext"
+                    app:label="@string/key_first_name_label"
+                    app:showLine="true" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/addPaymentButton"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_marginStart="@dimen/activity_general_horizontal_margin"
-                android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
-                android:onClick="@{() -> presenter.onPaymentAmount((PaymentAmountModel) null)}"
-                android:text="@string/key_add_payment_label"
-                android:textAllCaps="false"
-                android:fontFamily="@font/ubuntu"
-                android:textColor="@color/dayNightTextOnBackground"
-                app:cornerRadius="8dp"
-                app:icon="@drawable/ic_add" />
+                <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
+                    android:id="@+id/surnameLayout"
+                    personDetails='@{personModel.surname != null ? personModel.surname : ""}'
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:fieldType="TEXT"
+                    app:imeOptionType="actionNext"
+                    app:label="@string/key_surname_label"
+                    app:showLine="true" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/paymentAmountRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/nav_header_vertical_spacing"
-                android:layoutAnimation="@anim/layout_animation_fall_down"
-                android:nestedScrollingEnabled="false"
-                android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                <com.rilixtech.widget.countrycodepicker.CountryCodePicker
+                    android:id="@+id/countryCodeLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end" />
 
-        </LinearLayout>
+                <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
+                    android:id="@+id/phoneLayout"
+                    personDetails='@{personModel.phone != null ? personModel.phone : ""}'
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:fieldType="NUMBER"
+                    app:imeOptionType="actionNext"
+                    app:label="@string/key_phone_label"
+                    app:showLine="true" />
+
+                <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
+                    android:id="@+id/parentNameLayout"
+                    personDetails='@{personModel.parentName != null ? personModel.parentName : ""}'
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:fieldType="TEXT"
+                    app:imeOptionType="actionNext"
+                    app:label="@string/key_parent_name_label"
+                    app:showLine="true" />
+
+                <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
+                    android:id="@+id/parentPhoneLayout"
+                    personDetails='@{personModel.parentPhone != null ? personModel.parentPhone : ""}'
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:fieldType="NUMBER"
+                    app:imeOptionType="actionNext"
+                    app:label="@string/key_parent_phone_label"
+                    app:showLine="true" />
+
+                <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
+                    android:id="@+id/emailLayout"
+                    personDetails='@{personModel.email != null ? personModel.email : ""}'
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:fieldType="EMAIL"
+                    app:imeOptionType="actionDone"
+                    app:label="@string/key_email_label"
+                    app:showLine="true" />
+
+                <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
+                    android:id="@+id/groupDetailsLayout"
+                    personDetailsPicker="@{groupModel.groupName != null ? groupModel.groupName : personModel.groupName != null ? personModel.groupName : @string/key_empty_field_label}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:fieldType="TEXT"
+                    app:imeOptionType="actionDone"
+                    app:label="@string/key_group_label"
+                    app:showLine="true" />
+
+                <com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
+                    android:id="@+id/activeAppSwitchLayout"
+                    appSwitchIsChecked="@{personModel.active != null ? personModel.active : true}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    app:appSwitchLabel="@string/key_is_active_label"
+                    app:appSwitchShowLine="true" />
+
+                <com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
+                    android:id="@+id/freeAppSwitchLayout"
+                    appSwitchIsChecked="@{personModel.free == true}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    app:appSwitchLabel="@string/key_is_free_label"
+                    app:appSwitchShowLine="true" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/messageTemplateInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/activity_general_horizontal_margin"
+                    android:hint="@string/key_share_message_template_hint"
+                    app:endIconMode="clear_text"
+                    app:hintEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/messageTemplateField"
+                        style="@style/TextViewTitleLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textLongMessage"
+                        android:text="@{personModel.messageTemplate != null &amp;&amp; personModel.messageTemplate.empty == false ? personModel.messageTemplate : userModel.defaultMessageTemplate}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/addPaymentButton"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+                    android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
+                    android:fontFamily="@font/ubuntu"
+                    android:onClick="@{() -> presenter.onPaymentAmount((PaymentAmountModel) null)}"
+                    android:text="@string/key_add_payment_label"
+                    android:textAllCaps="false"
+                    android:textColor="@color/dayNightTextOnBackground"
+                    app:cornerRadius="8dp"
+                    app:icon="@drawable/ic_add" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/paymentAmountRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/nav_header_vertical_spacing"
+                    android:layoutAnimation="@anim/layout_animation_fall_down"
+                    android:nestedScrollingEnabled="false"
+                    android:orientation="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
 
     </com.google.android.material.card.MaterialCardView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <FrameLayout
+        android:id="@+id/paymentRowHeaderFrameLayout"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="@dimen/activity_general_horizontal_margin"
+        android:background="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? @drawable/oval_background : null}"
+        backgroundDrawableTintColor="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? groupModel.color != null ? groupModel.color : personModel.groupColor : null}"
+        android:elevation="16dp"
+        app:layout_anchor="@+id/materialCardView"
+        app:layout_anchorGravity="center|top"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextViewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@{groupModel.groupName != null ? String.valueOf(groupModel.groupName.charAt(0)).toUpperCase() : String.valueOf(personModel.groupName.charAt(0)).toUpperCase()}"
+            android:textColor="@color/white"
+            android:textStyle="normal"
+            android:visibility="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? View.VISIBLE : View.GONE}" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/userRowImageView"
+            picassoGroupImageFromInternalFiles="@{groupModel.groupImage != null ? groupModel.groupImage : personModel.groupImage}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:visibility="@{groupModel.groupImage != null || personModel.groupImage != null ? View.VISIBLE : View.GONE}"
+            tools:srcCompat="@drawable/ic_group" />
+
+    </FrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

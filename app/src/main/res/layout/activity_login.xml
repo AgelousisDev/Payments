@@ -172,7 +172,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_general_horizontal_margin"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="@dimen/activity_general_horizontal_margin"
             app:cardElevation="8dp"
             app:cardUseCompatPadding="true"
             app:contentPadding="@dimen/activity_general_horizontal_margin">
