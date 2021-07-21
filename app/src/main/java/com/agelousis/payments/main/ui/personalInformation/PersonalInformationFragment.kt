@@ -17,6 +17,7 @@ import com.agelousis.payments.custom.itemDecoration.HeaderItemDecoration
 import com.agelousis.payments.database.DBManager
 import com.agelousis.payments.databinding.FragmentPersonalInformationLayoutBinding
 import com.agelousis.payments.login.LoginActivity
+import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.countrySelector.CountrySelectorDialogFragment
 import com.agelousis.payments.main.ui.countrySelector.models.CountryDataModel
@@ -312,22 +313,30 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
     }
 
     private fun updateUser() {
-        if ((activity as? MainActivity)?.userModel != newUserModel) {
+        if ((activity as? MainActivity)?.userModel != newUserModel)
             uiScope.launch {
                 dbManager?.updateUser(
                     userModel = newUserModel ?: return@launch
-                ) {
-                    startActivity(Intent(context, LoginActivity::class.java))
-                    activity?.finish()
+                ) { newUserModel ->
+                    this@PersonalInformationFragment restartMainActivityOrPopBackStack newUserModel
                 }
             }
-        }
-        else {
-            context?.toast(
-                message = resources.getString(R.string.key_no_changes_message)
+        else
+            this restartMainActivityOrPopBackStack null
+    }
+
+    private infix fun restartMainActivityOrPopBackStack(userModel: UserModel?) {
+        userModel?.let {
+            startActivity(
+                Intent(
+                    context,
+                    MainActivity::class.java
+                ).also {
+                    it.putExtra(MainActivity.USER_MODEL_EXTRA, userModel)
+                }
             )
-            findNavController().popBackStack()
-        }
+            activity?.finish()
+        } ?: findNavController().popBackStack()
     }
 
     private fun initializeUserDeletion() {
