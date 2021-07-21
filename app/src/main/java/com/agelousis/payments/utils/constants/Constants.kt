@@ -66,4 +66,8 @@ object Constants {
         )
     }
 
+    object Years {
+        val availableYears = (2000..2030).toList()
+    }
+
 }

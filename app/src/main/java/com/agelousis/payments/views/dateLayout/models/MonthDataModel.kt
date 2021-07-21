@@ -1,5 +1,6 @@
 package com.agelousis.payments.views.dateLayout.models
 
 data class MonthDataModel(
-    val monthValue: Int
+    val monthValue: Int,
+    var isSelected: Boolean
 )

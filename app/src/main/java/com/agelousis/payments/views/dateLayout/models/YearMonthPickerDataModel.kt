@@ -5,5 +5,5 @@ import java.util.*
 
 data class YearMonthPickerDataModel(
     val calendar: Calendar,
-    val yearMonthPickerListener: YearMonthPickerListener
+    var yearMonthPickerListener: YearMonthPickerListener
 )

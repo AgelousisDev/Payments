@@ -18,7 +18,6 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/whiteTwo"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="@dimen/activity_general_horizontal_margin"
@@ -42,12 +41,13 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/yearsViewPager"
-        android:layout_width="0dp"
+        android:id="@+id/yearMonthPickerRecyclerView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layoutAnimation="@anim/layout_animation_fall_down"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
@@ -67,7 +67,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/yearsViewPager" />
+        app:layout_constraintTop_toBottomOf="@+id/yearMonthPickerRecyclerView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

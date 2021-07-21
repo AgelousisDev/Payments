@@ -7,12 +7,21 @@
             name="monthDataModel"
             type="com.agelousis.payments.views.dateLayout.models.MonthDataModel" />
         <variable
+            name="adapterPosition"
+            type="Integer" />
+        <variable
             name="presenter"
             type="com.agelousis.payments.views.dateLayout.interfaces.YearMonthPickerFragmentPresenter" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_width="60dp"
+    android:layout_height="60dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:onClick="@{() -> presenter.onMonthSet(monthDataModel.monthValue, adapterPosition)}"
+    android:background="@{monthDataModel.selected ? @drawable/oval_background : null}"
+    android:backgroundTint="@{@color/colorAccent}"
+    tools:background="@drawable/oval_background">
 
     <com.google.android.material.textview.MaterialTextView
         style="@style/TextViewValueLabel"
@@ -20,10 +29,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_general_horizontal_margin"
         android:text="@{@stringArray/key_months_cut_array[monthDataModel.monthValue]}"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:onClick="@{() -> presenter.onMonthSet(monthDataModel.monthValue)}"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="@{monthDataModel.selected ? @color/white : @color/dayNightTextOnBackground}"
         tools:text="Jun"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

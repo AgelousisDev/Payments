@@ -8,12 +8,16 @@ import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import com.agelousis.payments.R
 import com.agelousis.payments.databinding.DateFieldLayoutBinding
+import com.agelousis.payments.main.MainActivity
+import com.agelousis.payments.utils.extensions.calendar
 import com.agelousis.payments.views.dateLayout.interfaces.DatePickerPresenter
+import com.agelousis.payments.views.dateLayout.interfaces.YearMonthPickerListener
+import com.agelousis.payments.views.dateLayout.models.YearMonthPickerDataModel
 import com.agelousis.payments.views.personDetailsLayout.models.PersonDetailsViewDataModel
-import com.whiteelephant.monthpicker.MonthPickerDialog
 import java.util.*
 
-class YearMonthPickerFieldLayout(context: Context, attributeSet: AttributeSet?): FrameLayout(context, attributeSet), DatePickerPresenter, MonthPickerDialog.OnDateSetListener {
+class YearMonthPickerFieldLayout(context: Context, attributeSet: AttributeSet?): FrameLayout(context, attributeSet),
+    DatePickerPresenter, YearMonthPickerListener {
 
     private lateinit var binding: DateFieldLayoutBinding
     var dateValue: String? = null
@@ -26,34 +30,36 @@ class YearMonthPickerFieldLayout(context: Context, attributeSet: AttributeSet?):
         }
         get() = if (binding.dateView.text?.toString()?.isEmpty() == true) null else binding.dateView.text?.toString()
 
-    var errorState = false
+    private var errorState = false
         set(value) {
             field = value
             binding.lineSeparator.setBackgroundColor(ContextCompat.getColor(context, if (value) R.color.red else R.color.grey))
-            //dateIcon.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(context, if (value) R.color.red else R.color.dayNightTextOnBackground))
         }
-    var dateSelectionClosure: DateSelectionClosure? = null
+    private var dateSelectionClosure: DateSelectionClosure? = null
 
-    override fun onDateSet(selectedMonth: Int, selectedYear: Int) {
+    override fun onYearMonthSet(year: Int, month: Int) {
         errorState = false
         dateValue = String.format(
             "%s %s",
-            context.resources.getStringArray(R.array.key_months_array).getOrNull(index = selectedMonth) ?: "",
-            selectedYear
+            context.resources.getStringArray(R.array.key_months_array).getOrNull(index = month) ?: "",
+            year
         )
     }
 
     override fun onDatePickerShow() {
-        val builder = MonthPickerDialog.Builder(context, this , Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH))
-        builder.setMinYear(1990)
-            .setMaxYear(2030)
-            .setTitle(context.resources.getString(R.string.key_payment_month_label))
-            .build()
-            .show()
+        YearMonthPickerBottomSheetFragment.show(
+            supportFragmentManager = (context as? MainActivity)?.supportFragmentManager ?: return,
+            yearMonthPickerDataModel = YearMonthPickerDataModel(
+                calendar = Date().calendar,
+                yearMonthPickerListener = this
+            )
+        )
     }
 
     init {
-        initAttributesAndView(attributeSet = attributeSet)
+        initAttributesAndView(
+            attributeSet = attributeSet
+        )
     }
 
     @SuppressLint("CustomViewStyleable")
