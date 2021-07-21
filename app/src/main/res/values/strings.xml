@@ -231,6 +231,7 @@
     <string name="key_add_clients_from_home_message">Navigate to clients ⇨ tab and add your clients</string>
     <string name="key_shared_profile_picture_transition_name" translatable="false">profile_picture_transition</string>
     <string name="key_search_in_groups_label">Search in Groups</string>
+    <string name="key_apply_label">Apply</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>
@@ -256,6 +257,21 @@
         <item>October</item>
         <item>November</item>
         <item>December</item>
+    </string-array>
+
+    <string-array name="key_months_cut_array">
+        <item>Jan</item>
+        <item>Feb</item>
+        <item>Mar</item>
+        <item>Apr</item>
+        <item>May</item>
+        <item>Jun</item>
+        <item>Jul</item>
+        <item>Aug</item>
+        <item>Sep</item>
+        <item>Oct</item>
+        <item>Nov</item>
+        <item>Dec</item>
     </string-array>
 
     <string-array name="CountryCodes">
