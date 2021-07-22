@@ -36,6 +36,7 @@ class YearMonthPickerFieldLayout(context: Context, attributeSet: AttributeSet?):
             binding.lineSeparator.setBackgroundColor(ContextCompat.getColor(context, if (value) R.color.red else R.color.grey))
         }
     private var dateSelectionClosure: DateSelectionClosure? = null
+    var selectedCalendar: Calendar? = null
 
     override fun onYearMonthSet(year: Int, month: Int) {
         errorState = false
@@ -50,7 +51,7 @@ class YearMonthPickerFieldLayout(context: Context, attributeSet: AttributeSet?):
         YearMonthPickerBottomSheetFragment.show(
             supportFragmentManager = (context as? MainActivity)?.supportFragmentManager ?: return,
             yearMonthPickerDataModel = YearMonthPickerDataModel(
-                calendar = Date().calendar,
+                calendar = selectedCalendar ?: Date().calendar,
                 yearMonthPickerListener = this
             )
         )

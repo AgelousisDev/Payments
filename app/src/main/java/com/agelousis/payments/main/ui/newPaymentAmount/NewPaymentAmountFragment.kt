@@ -92,7 +92,8 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
             }
         }
         args.lastPaymentMonthDate?.let { lastPaymentMonthDate ->
-            val paymentMonthCalendar = lastPaymentMonthDate.toCalendar(plusMonths = 1)
+            val paymentMonthCalendar = args.lastPaymentMonthDate?.calendar ?: lastPaymentMonthDate.toCalendar(plusMonths = 1)
+            binding.paymentMonthDetailsLayout.selectedCalendar = paymentMonthCalendar
             binding.paymentMonthDetailsLayout.dateValue = String.format(
                 "%s %s",
                 resources.getStringArray(R.array.key_months_array).getOrNull(index = paymentMonthCalendar.get(Calendar.MONTH)) ?: "",

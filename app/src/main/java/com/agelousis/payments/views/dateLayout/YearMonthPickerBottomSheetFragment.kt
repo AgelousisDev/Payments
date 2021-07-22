@@ -41,6 +41,7 @@ class YearMonthPickerBottomSheetFragment: BottomSheetDialogFragment(), YearMonth
             Calendar.YEAR,
             year
         )
+        binding.yearMonthPickerDataModel = yearMonthPickerDataModel
     }
 
     override fun onMonthSet(month: Int, adapterPosition: Int) {
@@ -55,6 +56,7 @@ class YearMonthPickerBottomSheetFragment: BottomSheetDialogFragment(), YearMonth
             Calendar.MONTH,
             month
         )
+        binding.yearMonthPickerDataModel = yearMonthPickerDataModel
     }
 
     override fun onApply() {
