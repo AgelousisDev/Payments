@@ -58,7 +58,11 @@ class CountrySelectorDialogFragment: DialogFragment(), CountrySelectorFragmentPr
     private lateinit var binding: CountrySelectorFragmentLayoutBinding
     private val sharedPreferences by lazy { context?.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE) }
     private val countryDataModelList by lazy {
-        CountryHelper.countryDataModelList
+        context?.let {
+            CountryHelper.getCountryDataModelList(
+                context = it
+            )
+        }
     }
     private val filteredItemList = arrayListOf<Any>()
     private var countrySelectorFragmentPresenter: CountrySelectorFragmentPresenter? = null
@@ -92,7 +96,7 @@ class CountrySelectorDialogFragment: DialogFragment(), CountrySelectorFragmentPr
 
     private fun configureRecyclerView() {
         filteredItemList.addAll(
-            countryDataModelList
+            countryDataModelList ?: return
         )
         binding.countryRecyclerView.layoutManager = FlexboxLayoutManager(context, FlexDirection.ROW).also {
             it.flexDirection = FlexDirection.ROW
@@ -128,9 +132,9 @@ class CountrySelectorDialogFragment: DialogFragment(), CountrySelectorFragmentPr
     private fun filterCountries(query: String?) {
         filteredItemList.clear()
         filteredItemList.addAll(
-            countryDataModelList.filter { countryDataModel ->
+            countryDataModelList?.filter { countryDataModel ->
                 countryDataModel.countryName.lowercase().contains(query?.lowercase() ?: "")
-            }
+            } ?: listOf()
         )
         if (filteredItemList.isEmpty())
             filteredItemList.add(

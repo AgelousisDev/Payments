@@ -21,18 +21,42 @@
     android:background="@{isSelected == true ? @color/grey : 0}"
     android:foreground="?attr/selectableItemBackground">
 
-    <com.google.android.material.textview.MaterialTextView
-        style="@style/TextViewTitleLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_margin="@dimen/activity_general_horizontal_margin"
-        android:text='@{String.format("%s, %s", countryDataModel.countryName, countryDataModel.countryCode)}'
-        tools:text="Cyprus, CY"
+        app:cardPreventCornerOverlap="true"
+        app:cardElevation="8dp"
+        app:cardCornerRadius="17.5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            picassoUrlImage="@{countryDataModel.countryFlagUrl}"
+            tools:srcCompat="@drawable/ic_european_union"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextViewTitleLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_general_horizontal_margin"
+        android:text='@{String.format("%s, %s\n%s", countryDataModel.countryName, countryDataModel.countryCode, countryDataModel.countryZipCode)}'
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/countryCheckedIcon"
+        app:layout_constraintStart_toEndOf="@+id/materialCardView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Cyprus, CY" />
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/countryCheckedIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
@@ -41,7 +65,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_check"
-        app:tint="@color/colorAccent"/>
+        app:tint="@color/colorAccent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

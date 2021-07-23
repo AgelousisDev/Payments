@@ -16,6 +16,9 @@
             name="userModel"
             type="com.agelousis.payments.login.models.UserModel" />
         <variable
+            name="selectedCountryDataModel"
+            type="com.agelousis.payments.main.ui.countrySelector.models.CountryDataModel" />
+        <variable
             name="presenter"
             type="com.agelousis.payments.main.ui.newPayment.presenters.NewPaymentPresenter" />
     </data>
@@ -104,11 +107,15 @@
                         app:layout_constraintTop_toBottomOf="@+id/firstNameLayout"
                         app:showLine="true" />
 
-                    <com.rilixtech.widget.countrycodepicker.CountryCodePicker
+                    <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
                         android:id="@+id/countryCodeLayout"
-                        android:layout_width="wrap_content"
+                        personDetailsPicker="@{selectedCountryDataModel.countryZipCode != null ? selectedCountryDataModel.countryZipCode : @string/key_empty_field_label}"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="end"
+                        app:fieldType="TEXT"
+                        app:imeOptionType="actionDone"
+                        app:label="@string/key_country_code_label"
+                        app:showLine="true"
                         app:layout_constraintTop_toBottomOf="@+id/surnameLayout"
                         app:layout_constraintEnd_toStartOf="@+id/guideline"/>
 

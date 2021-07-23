@@ -9,6 +9,7 @@ import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.countryDataModel
 import com.agelousis.payments.utils.extensions.currencySymbol
 import com.agelousis.payments.utils.extensions.paymentsFilteringOptionTypes
+import com.agelousis.payments.utils.helpers.CountryHelper
 import java.util.*
 
 class MainApplication: Application() {
@@ -31,7 +32,7 @@ class MainApplication: Application() {
 
     private fun setLocaleCurrency() {
         currencySymbol = sharedPreferences.currencySymbol ?: Currency.getInstance(Locale.getDefault()).symbol
-        countryDataModel = sharedPreferences.countryDataModel
+        countryDataModel = sharedPreferences.countryDataModel ?: CountryHelper getCurrentCountryData applicationContext
     }
 
     private fun setPaymentsFilteringOptionTypes() {

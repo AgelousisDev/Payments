@@ -232,6 +232,7 @@
     <string name="key_shared_profile_picture_transition_name" translatable="false">profile_picture_transition</string>
     <string name="key_search_in_groups_label">Search in Groups</string>
     <string name="key_apply_label">Apply</string>
+    <string name="key_country_code_label">Country Code</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>

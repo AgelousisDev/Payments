@@ -983,6 +983,11 @@ fun setPicassoGroupImageFromInternalFiles(appCompatImageView: AppCompatImageView
     }
 }
 
+@BindingAdapter("picassoUrlImage")
+fun setPicassoUrlImage(appCompatImageView: AppCompatImageView, imageUrl: String?) {
+    Picasso.get().load(imageUrl ?: return).into(appCompatImageView)
+}
+
 @BindingAdapter("switchStateChanged")
 fun switchStateChanged(switchMaterial: SwitchMaterial, optionPresenter: OptionPresenter) {
     switchMaterial.setOnCheckedChangeListener { _, isChecked ->

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -15,6 +14,9 @@ import com.agelousis.payments.database.DatabaseTriggeringType
 import com.agelousis.payments.databinding.FragmentNewPaymentLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.enumerations.FloatingButtonType
+import com.agelousis.payments.main.ui.countrySelector.CountrySelectorDialogFragment
+import com.agelousis.payments.main.ui.countrySelector.interfaces.CountrySelectorFragmentPresenter
+import com.agelousis.payments.main.ui.countrySelector.models.CountryDataModel
 import com.agelousis.payments.main.ui.groupSelector.GroupSelectorDialogFragment
 import com.agelousis.payments.main.ui.groupSelector.interfaces.GroupSelectorFragmentPresenter
 import com.agelousis.payments.main.ui.newPayment.adapters.PaymentAmountAdapter
@@ -28,7 +30,6 @@ import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
-import com.agelousis.payments.utils.helpers.CountryHelper
 import com.agelousis.payments.utils.models.CalendarDataModel
 import com.agelousis.payments.utils.models.NotificationDataModel
 import com.agelousis.payments.views.detailsSwitch.interfaces.AppSwitchListener
@@ -38,7 +39,19 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
-class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragmentPresenter {
+class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragmentPresenter, CountrySelectorFragmentPresenter {
+
+    override fun onCountrySelected(countryDataModel: CountryDataModel) {
+        binding.phoneLayout.value = String.format(
+            "%s %s",
+            countryDataModel.countryZipCode ?: "",
+            binding.phoneLayout.value?.split(
+                " "
+            )?.second()
+        )
+        selectedCountryDataModel = countryDataModel
+        binding.selectedCountryDataModel = countryDataModel
+    }
 
     override fun onGroupSelected(groupModel: GroupModel) {
         binding.groupDetailsLayout.errorState = false
@@ -117,6 +130,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             fillCurrentPersonModel()
             currentClientModel != it
         } ?: true
+    private var selectedCountryDataModel = MainApplication.countryDataModel
 
     override fun onResume() {
         super.onResume()
@@ -134,6 +148,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             it.groupModel = args.groupDataModel
             it.personModel = args.clientDataModel
             it.userModel = (activity as? MainActivity)?.userModel
+            it.selectedCountryDataModel = selectedCountryDataModel
             it.presenter = this
         }
         return binding.root
@@ -161,14 +176,8 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
                 )
             }
         }
-        binding.countryCodeLayout.registerPhoneNumberTextView(binding.phoneLayout.binding.personDetailField)
-        binding.countryCodeLayout.typeFace = ResourcesCompat.getFont(context ?: return, R.font.ubuntu)
-        args.clientDataModel?.phone?.split(" ")?.firstOrNull()?.let { countryZipCode ->
-            binding.countryCodeLayout.setCountryForPhoneCode(countryZipCode.replace("+", "").toIntOrNull() ?: return@let )
-        } ?: MainApplication.countryDataModel?.let { countryDataModel ->
-            binding.countryCodeLayout.setCountryForNameCode(countryDataModel.countryCode)
-        } ?: CountryHelper.getCountryCode(context = context ?: return)?.let { countryCode ->
-            binding.countryCodeLayout.setCountryForNameCode(countryCode)
+        binding.countryCodeLayout.setOnDetailsPressed {
+            showCountryCodesSelector()
         }
         binding.groupDetailsLayout.setOnDetailsPressed {
             showGroupsSelectionFragment()
@@ -194,6 +203,15 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             supportFragmentManager = childFragmentManager,
             groupModelList = availableGroups,
             groupSelectorFragmentPresenter = this
+        )
+    }
+
+    private fun showCountryCodesSelector() {
+        CountrySelectorDialogFragment.show(
+            supportFragmentManager = childFragmentManager,
+            countrySelectorFragmentPresenter = this,
+            selectedCountryDataModel = selectedCountryDataModel,
+            userModel = (activity as? MainActivity)?.userModel
         )
     }
 
@@ -346,11 +364,11 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
 
     private fun fillCurrentPersonModel(saveState: Boolean = false) {
         var phone = binding.phoneLayout.value
-        binding.countryCodeLayout.selectedCountryCode?.let {
-            if (binding.phoneLayout.value?.startsWith("+$it") == false)
+        selectedCountryDataModel?.countryZipCode?.let { zipCode ->
+            if (binding.phoneLayout.value?.startsWith("+$zipCode") == false)
                 phone = String.format(
                     "%s%s",
-                    "+$it ",
+                    "+$zipCode ",
                     binding.phoneLayout.value
                 )
         }

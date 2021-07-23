@@ -247,7 +247,7 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
                 it.currencyType = CurrencyType.values().firstOrNull { currencyType -> currencyType.symbol == MainApplication.currencySymbol }
             },
             OptionType.CHANGE_COUNTRY.also {
-                it.countryDataModel = CountryHelper.countryDataModelList.firstOrNull { countryDataModel -> countryDataModel == MainApplication.countryDataModel }
+                it.countryDataModel = CountryHelper.getCountryDataModelList(context = context ?: return@also).firstOrNull { countryDataModel -> countryDataModel == MainApplication.countryDataModel }
             },
             OptionType.VAT.also {
                 it.userModel = newUserModel
