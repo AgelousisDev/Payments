@@ -63,6 +63,13 @@ object CountryHelper {
             )
         )
 
+    fun getCountryDataFromZipCode(context: Context, zipCode: String?) =
+        getCountryDataModelList(
+            context = context
+        ).firstOrNull { countryDataModel ->
+            countryDataModel.countryZipCode == zipCode
+        }
+
     fun getCountryCode(context: Context): String? {
         return context.resources.getStringArray(R.array.CountryCodes)
             .firstOrNull { it.contains(context.resources.configuration.locales[0].country ?: "") }?.split(",")?.second()

@@ -80,7 +80,7 @@
 
                 <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
                     android:id="@+id/countryCodeLayout"
-                    personDetailsPicker="@{selectedCountryDataModel.countryZipCode != null ? selectedCountryDataModel.countryZipCode : @string/key_empty_field_label}"
+                    personDetailsPicker='@{selectedCountryDataModel.countryZipCode != null  &amp;&amp; selectedCountryDataModel.countryName != null ? String.format("%s %s", selectedCountryDataModel.countryZipCode, selectedCountryDataModel.countryName) : @string/key_empty_field_label}'
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:fieldType="TEXT"

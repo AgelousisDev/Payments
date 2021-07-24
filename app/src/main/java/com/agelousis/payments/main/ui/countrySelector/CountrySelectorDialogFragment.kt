@@ -33,12 +33,14 @@ class CountrySelectorDialogFragment: DialogFragment(), CountrySelectorFragmentPr
             supportFragmentManager: FragmentManager,
             countrySelectorFragmentPresenter: CountrySelectorFragmentPresenter,
             selectedCountryDataModel: CountryDataModel?,
-            userModel: UserModel?
+            userModel: UserModel?,
+            updateGlobalCountryState: Boolean = true
         ) {
             CountrySelectorDialogFragment().also {
                 it.countrySelectorFragmentPresenter = countrySelectorFragmentPresenter
                 it.selectedCountryDataModel = selectedCountryDataModel
                 it.userModel = userModel
+                it.updateGlobalCountryState = updateGlobalCountryState
             }.show(
                 supportFragmentManager,
                 Constants.COUNTRY_SELECTOR_FRAGMENT_TAG
@@ -47,8 +49,10 @@ class CountrySelectorDialogFragment: DialogFragment(), CountrySelectorFragmentPr
     }
 
     override fun onCountrySelected(countryDataModel: CountryDataModel) {
-        sharedPreferences?.countryDataModel = countryDataModel
-        MainApplication.countryDataModel = countryDataModel
+        if (updateGlobalCountryState) {
+            sharedPreferences?.countryDataModel = countryDataModel
+            MainApplication.countryDataModel = countryDataModel
+        }
         countrySelectorFragmentPresenter?.onCountrySelected(
             countryDataModel = countryDataModel
         )
@@ -68,6 +72,7 @@ class CountrySelectorDialogFragment: DialogFragment(), CountrySelectorFragmentPr
     private var countrySelectorFragmentPresenter: CountrySelectorFragmentPresenter? = null
     private var selectedCountryDataModel: CountryDataModel? = null
     private var userModel: UserModel? = null
+    private var updateGlobalCountryState = true
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return super.onCreateDialog(savedInstanceState).also {

@@ -30,6 +30,7 @@ import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
+import com.agelousis.payments.utils.helpers.CountryHelper
 import com.agelousis.payments.utils.models.CalendarDataModel
 import com.agelousis.payments.utils.models.NotificationDataModel
 import com.agelousis.payments.views.detailsSwitch.interfaces.AppSwitchListener
@@ -42,13 +43,20 @@ import kotlin.collections.ArrayList
 class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragmentPresenter, CountrySelectorFragmentPresenter {
 
     override fun onCountrySelected(countryDataModel: CountryDataModel) {
-        binding.phoneLayout.value = String.format(
-            "%s %s",
-            countryDataModel.countryZipCode ?: "",
-            binding.phoneLayout.value?.split(
-                " "
-            )?.second()
-        )
+        if (binding.phoneLayout.value?.contains(" ") == true)
+            binding.phoneLayout.value = String.format(
+                "%s %s",
+                countryDataModel.countryZipCode ?: "",
+                binding.phoneLayout.value?.split(
+                    " "
+                )?.second()
+            )
+        else
+            binding.phoneLayout.value = String.format(
+                "%s %s",
+                countryDataModel.countryZipCode ?: "",
+                binding.phoneLayout.value
+            )
         selectedCountryDataModel = countryDataModel
         binding.selectedCountryDataModel = countryDataModel
     }
@@ -130,7 +138,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             fillCurrentPersonModel()
             currentClientModel != it
         } ?: true
-    private var selectedCountryDataModel = MainApplication.countryDataModel
+    private var selectedCountryDataModel: CountryDataModel? = null
 
     override fun onResume() {
         super.onResume()
@@ -148,7 +156,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             it.groupModel = args.groupDataModel
             it.personModel = args.clientDataModel
             it.userModel = (activity as? MainActivity)?.userModel
-            it.selectedCountryDataModel = selectedCountryDataModel
             it.presenter = this
         }
         return binding.root
@@ -161,6 +168,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
         initializeGroups()
         initializeNewPayments()
         configureObservers()
+        initializeCountryDataModel()
     }
 
     private fun setupUI() {
@@ -211,7 +219,8 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             supportFragmentManager = childFragmentManager,
             countrySelectorFragmentPresenter = this,
             selectedCountryDataModel = selectedCountryDataModel,
-            userModel = (activity as? MainActivity)?.userModel
+            userModel = (activity as? MainActivity)?.userModel,
+            updateGlobalCountryState = false
         )
     }
 
@@ -228,6 +237,16 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
                 findNavController().popBackStack()
             }
         }
+    }
+
+    private fun initializeCountryDataModel() {
+        selectedCountryDataModel = args.clientDataModel?.phone?.let { currentPhoneValue ->
+            CountryHelper.getCountryDataFromZipCode(
+                context = context ?: return,
+                zipCode = currentPhoneValue.split(" ").firstOrNull()
+            )
+        } ?: MainApplication.countryDataModel
+        binding.selectedCountryDataModel = selectedCountryDataModel
     }
 
     private fun redirectToSMSAppIf(payment: PaymentAmountModel, predicate: () -> Boolean) {
@@ -365,10 +384,10 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
     private fun fillCurrentPersonModel(saveState: Boolean = false) {
         var phone = binding.phoneLayout.value
         selectedCountryDataModel?.countryZipCode?.let { zipCode ->
-            if (binding.phoneLayout.value?.startsWith("+$zipCode") == false)
+            if (binding.phoneLayout.value?.startsWith(zipCode) == false)
                 phone = String.format(
                     "%s%s",
-                    "+$zipCode ",
+                    "$zipCode ",
                     binding.phoneLayout.value
                 )
         }
