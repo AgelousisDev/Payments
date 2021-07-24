@@ -317,6 +317,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window?.isEdgeToEdge = true
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar()
@@ -329,6 +330,12 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
         NavigationUI.setupWithNavController(
             binding.appBarMain.bottomNavigationView,
             binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController()
+        )
+        binding.appBarMain.contentMain.root.applyWindowInsets(
+            withTop = true
+        )
+        binding.appBarMain.floatingButton.applyWindowInsets(
+            withBottom = true
         )
     }
 
