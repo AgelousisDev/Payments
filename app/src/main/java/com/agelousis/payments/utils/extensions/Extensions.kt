@@ -82,6 +82,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textview.MaterialTextView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import java.io.ByteArrayOutputStream
@@ -1011,7 +1012,23 @@ fun setPicassoGroupImageFromInternalFiles(appCompatImageView: AppCompatImageView
 
 @BindingAdapter("picassoUrlImage")
 fun setPicassoUrlImage(appCompatImageView: AppCompatImageView, imageUrl: String?) {
-    Picasso.get().load(imageUrl ?: return).into(appCompatImageView)
+    Picasso.get().load(imageUrl ?: return).into(
+        appCompatImageView,
+        object: Callback {
+            override fun onSuccess() {
+                appCompatImageView.alpha = 0f
+                appCompatImageView.animate().alpha(1f)
+            }
+
+            override fun onError(e: java.lang.Exception?) {
+                appCompatImageView.alpha = 0f
+                appCompatImageView.setImageResource(
+                    R.drawable.ic_no_wifi
+                )
+                appCompatImageView.animate().alpha(1f)
+            }
+        }
+    )
 }
 
 @BindingAdapter("switchStateChanged")
