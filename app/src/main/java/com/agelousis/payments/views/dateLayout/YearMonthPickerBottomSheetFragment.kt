@@ -10,15 +10,15 @@ import com.agelousis.payments.R
 import com.agelousis.payments.databinding.YearMonthPickerFragmentLayoutBinding
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.calendar
+import com.agelousis.payments.views.bottomSheet.BasicBottomSheetDialogFragment
 import com.agelousis.payments.views.dateLayout.adapters.YearMonthPickerAdapter
 import com.agelousis.payments.views.dateLayout.interfaces.YearMonthPickerFragmentPresenter
 import com.agelousis.payments.views.dateLayout.models.MonthDataModel
 import com.agelousis.payments.views.dateLayout.models.YearDataModel
 import com.agelousis.payments.views.dateLayout.models.YearMonthPickerDataModel
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.util.*
 
-class YearMonthPickerBottomSheetFragment: BottomSheetDialogFragment(), YearMonthPickerFragmentPresenter {
+class YearMonthPickerBottomSheetFragment: BasicBottomSheetDialogFragment(), YearMonthPickerFragmentPresenter {
 
     companion object {
 
