@@ -49,6 +49,7 @@ object Constants {
     const val SHARED_PREFERENCES_CLIENT_MODEL_DATA = "client_model_data"
     const val GROUP_SELECTOR_FRAGMENT_TAG = "groupSelectorFragmentTag"
     const val YEAR_MONTH_PICKER_FRAGMENT_TAG = "yearMonthPickerFragmentTag"
+    const val COLOR_SELECTOR_FRAGMENT_TAG = "colorSelectorFragmentTag"
 
     object Colors {
         val colorPickerColors = intArrayOf(

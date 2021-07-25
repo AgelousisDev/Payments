@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.DrawableRes
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
@@ -45,6 +46,7 @@ import com.agelousis.payments.receivers.NotificationDataReceiver
 import com.agelousis.payments.receivers.interfaces.NotificationListener
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
+import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -69,6 +71,9 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
 
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
         binding.appBarMain.bottomAppBar.performShow()
+        ((binding.appBarMain.floatingButton.layoutParams as? CoordinatorLayout.LayoutParams)?.behavior as? HideBottomViewOnScrollBehavior)?.slideUp(
+            binding.appBarMain.floatingButton
+        )
         bottomNavigationViewIsVisible = destination.id == R.id.paymentsFragment
                 || destination.id == R.id.filesFragment
                 || destination.id == R.id.historyFragment
@@ -333,9 +338,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
         )
         binding.appBarMain.contentMain.root.applyWindowInsets(
             withTop = true
-        )
-        binding.appBarMain.floatingButton.applyWindowInsets(
-            withBottom = true
         )
     }
 

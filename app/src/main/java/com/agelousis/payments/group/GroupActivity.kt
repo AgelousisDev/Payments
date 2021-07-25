@@ -11,23 +11,23 @@ import com.agelousis.payments.R
 import com.agelousis.payments.base.BaseActivity
 import com.agelousis.payments.databinding.ActivityGroupBinding
 import com.agelousis.payments.group.presenter.GroupActivityPresenter
+import com.agelousis.payments.main.ui.colorSelector.ColorSelectorBottomSheetFragment
+import com.agelousis.payments.main.ui.colorSelector.presenters.ColorSelectorPresenter
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
-import dev.sasikanth.colorsheet.ColorPickerListener
-import dev.sasikanth.colorsheet.ColorSheet
 
-class GroupActivity : BaseActivity(), GroupActivityPresenter, ColorPickerListener {
+class GroupActivity : BaseActivity(), GroupActivityPresenter, ColorSelectorPresenter {
 
     companion object {
         const val GROUP_MODEL_EXTRA = "GroupActivity=groupModelExtra"
     }
 
     override fun onColorPalette() {
-        ColorSheet().colorPicker(
-            colors = Constants.Colors.colorPickerColors,
-            listener = this
-        ).show(supportFragmentManager)
+        ColorSelectorBottomSheetFragment.show(
+            supportFragmentManager = supportFragmentManager,
+            colorSelectorPresenter = this
+        )
     }
 
     override fun onGroupAdd() {
@@ -69,7 +69,7 @@ class GroupActivity : BaseActivity(), GroupActivityPresenter, ColorPickerListene
         }
     }
 
-    override fun invoke(color: Int) {
+    override fun onColorSelected(color: Int) {
         uiBarColor = color
     }
 
