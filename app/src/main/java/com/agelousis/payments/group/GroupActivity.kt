@@ -26,7 +26,8 @@ class GroupActivity : BaseActivity(), GroupActivityPresenter, ColorSelectorPrese
     override fun onColorPalette() {
         ColorSelectorBottomSheetFragment.show(
             supportFragmentManager = supportFragmentManager,
-            colorSelectorPresenter = this
+            colorSelectorPresenter = this,
+            selectedColor = uiBarColor
         )
     }
 

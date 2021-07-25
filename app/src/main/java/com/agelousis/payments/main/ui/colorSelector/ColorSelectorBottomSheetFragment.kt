@@ -22,10 +22,12 @@ class ColorSelectorBottomSheetFragment: BasicBottomSheetDialogFragment(), ColorS
 
         fun show(
             supportFragmentManager: FragmentManager,
-            colorSelectorPresenter: ColorSelectorPresenter
+            colorSelectorPresenter: ColorSelectorPresenter,
+            selectedColor: Int?
         ) {
             ColorSelectorBottomSheetFragment().also { colorSelectorBottomSheetFragment ->
                 colorSelectorBottomSheetFragment.colorSelectorPresenter = colorSelectorPresenter
+                colorSelectorBottomSheetFragment.selectedColor = selectedColor
             }.show(
                 supportFragmentManager,
                 Constants.COLOR_SELECTOR_FRAGMENT_TAG
@@ -42,7 +44,16 @@ class ColorSelectorBottomSheetFragment: BasicBottomSheetDialogFragment(), ColorS
     }
 
     private lateinit var binding: ColorSelectorFragmentLayoutBinding
+    private val colorDataModelList by lazy {
+        Constants.Colors.colorPickerColors.map {
+            ColorDataModel(
+                color = it,
+                selected = it == selectedColor
+            )
+        }
+    }
     private var colorSelectorPresenter: ColorSelectorPresenter? = null
+    private var selectedColor: Int? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = ColorSelectorFragmentLayoutBinding.inflate(
@@ -65,11 +76,7 @@ class ColorSelectorBottomSheetFragment: BasicBottomSheetDialogFragment(), ColorS
             it.alignItems = AlignItems.CENTER
         }
         binding.colorPickerRecyclerView.adapter = ColorSelectorAdapter(
-            colorDataModelList = Constants.Colors.colorPickerColors.map {
-                ColorDataModel(
-                    color = it
-                )
-            },
+            colorDataModelList = colorDataModelList,
             colorSelectorPresenter = this
         )
     }
