@@ -92,7 +92,7 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
             }
         }
         args.lastPaymentMonthDate?.let { lastPaymentMonthDate ->
-            val paymentMonthCalendar = args.lastPaymentMonthDate?.calendar ?: lastPaymentMonthDate.toCalendar(plusMonths = 1)
+            val paymentMonthCalendar = lastPaymentMonthDate.toCalendar(plusMonths = 1)
             binding.paymentMonthDetailsLayout.selectedCalendar = paymentMonthCalendar
             binding.paymentMonthDetailsLayout.dateValue = String.format(
                 "%s %s",

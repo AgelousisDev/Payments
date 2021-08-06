@@ -337,8 +337,13 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
             binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController()
         )
         binding.appBarMain.contentMain.root.applyWindowInsets(
-            withTop = true
+            withTop = true,
+            withBottom = !isEdgeToEdgeEnabled
         )
+        if (!isEdgeToEdgeEnabled)
+            binding.appBarMain.bottomAppBar.applyWindowInsets(
+                withBottom = true
+            )
     }
 
     override fun onResume() {

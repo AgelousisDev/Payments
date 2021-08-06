@@ -995,6 +995,17 @@ fun AppCompatImageView.loadImagePath(fileName: String?) {
     }
 }
 
+val Context.isEdgeToEdgeEnabled: Boolean
+    get() {
+        return try {
+            val resourceId = resources.getIdentifier("config_navBarInteractionMode", "integer", "android")
+            resources.getInteger(resourceId) > 1
+        }
+        catch (e: Exception) {
+            false
+        }
+    }
+
 @BindingAdapter("picassoImageFromInternalFiles")
 fun setPicassoImageFromInternalFiles(appCompatImageView: AppCompatImageView, fileName: String?) {
     fileName?.let {
