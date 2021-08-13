@@ -344,6 +344,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
             binding.appBarMain.bottomAppBar.applyWindowInsets(
                 withBottom = true
             )
+        binding.appBarMain.contentMain.navHostFragmentContainerView.applyAnimationOnKeyboard()
     }
 
     override fun onResume() {

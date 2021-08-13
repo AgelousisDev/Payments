@@ -52,10 +52,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.edit
 import androidx.core.database.getStringOrNull
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updateLayoutParams
+import androidx.core.view.*
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -1005,6 +1002,28 @@ val Context.isEdgeToEdgeEnabled: Boolean
             false
         }
     }
+
+fun View.applyAnimationOnKeyboard() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+        setWindowInsetsAnimationCallback(
+            object : WindowInsetsAnimation.Callback(DISPATCH_MODE_STOP) {
+                //3
+                override fun onProgress(insets: WindowInsets, animations: MutableList<WindowInsetsAnimation>): WindowInsets {
+                    //4
+                    val posBottom = insets.getInsets(
+                        WindowInsetsCompat.Type.ime()).bottom + insets.getInsets(WindowInsetsCompat.Type.systemBars()
+                    ).bottom
+                    //5
+                    updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                        updateMargins(
+                            bottom = posBottom
+                        )
+                    }
+                    return insets
+                }
+            }
+        )
+}
 
 @BindingAdapter("picassoImageFromInternalFiles")
 fun setPicassoImageFromInternalFiles(appCompatImageView: AppCompatImageView, fileName: String?) {

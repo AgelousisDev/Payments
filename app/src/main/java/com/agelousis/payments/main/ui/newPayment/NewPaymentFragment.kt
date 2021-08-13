@@ -55,7 +55,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             binding.phoneLayout.value = String.format(
                 "%s %s",
                 countryDataModel.countryZipCode ?: "",
-                binding.phoneLayout.value
+                binding.phoneLayout.value ?: ""
             )
         selectedCountryDataModel = countryDataModel
         binding.selectedCountryDataModel = countryDataModel

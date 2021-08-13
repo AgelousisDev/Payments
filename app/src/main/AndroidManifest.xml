@@ -35,8 +35,7 @@
         <activity
             android:name=".main.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/MainAppTheme"
-            android:windowSoftInputMode="adjustPan" />
+            android:theme="@style/MainAppTheme" />
         <activity
             android:name=".group.GroupActivity"
             android:theme="@style/GroupAppTheme" />

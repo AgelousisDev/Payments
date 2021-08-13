@@ -40,7 +40,7 @@
     </style>
 
     <style name="ShapeAppearanceOverlay.MaterialAlertDialog.Rounded" parent="">
-        <item name="cornerSize">12dp</item>
+        <item name="cornerSize">24dp</item>
     </style>
 
     <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button">
