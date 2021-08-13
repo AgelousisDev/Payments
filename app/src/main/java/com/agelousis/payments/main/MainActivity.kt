@@ -6,8 +6,10 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.annotation.DrawableRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
@@ -322,7 +324,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window?.isEdgeToEdge = true
+        window?.isEdgeToEdge = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar()
@@ -344,7 +346,14 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
             binding.appBarMain.bottomAppBar.applyWindowInsets(
                 withBottom = true
             )
-        binding.appBarMain.contentMain.navHostFragmentContainerView.applyAnimationOnKeyboard()
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R
+            || !isEdgeToEdgeEnabled
+        )
+            window?.setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
+            )
+        else if (isEdgeToEdgeEnabled)
+            binding.appBarMain.contentMain.navHostFragmentContainerView.applyAnimationOnKeyboard()
     }
 
     override fun onResume() {

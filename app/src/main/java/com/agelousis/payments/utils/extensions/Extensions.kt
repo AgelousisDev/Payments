@@ -1011,7 +1011,7 @@ fun View.applyAnimationOnKeyboard() {
                 override fun onProgress(insets: WindowInsets, animations: MutableList<WindowInsetsAnimation>): WindowInsets {
                     //4
                     val posBottom = insets.getInsets(
-                        WindowInsetsCompat.Type.ime()).bottom + insets.getInsets(WindowInsetsCompat.Type.systemBars()
+                        WindowInsetsCompat.Type.ime()
                     ).bottom
                     //5
                     updateLayoutParams<ViewGroup.MarginLayoutParams> {
