@@ -101,21 +101,29 @@ class ChartFragment: Fragment() {
                     }?.groupBy {
                         it.groupName
                     }?.map { map ->
-                        val groupNamePercentage = (clientModelList?.filter {
+                        val groupPaymentAmountPercentage = (clientModelList?.asSequence()?.filter {
                             it.groupName == map.key
-                        }?.payments?.flatten()?.mapNotNull { paymentAmountModel ->
+                        }?.mapNotNull { clientModel ->
+                            clientModel.payments
+                        }?.flatten()?.mapNotNull { paymentAmountModel ->
                             paymentAmountModel.paymentAmount
-                        }?.sum()?.toFloat() ?: 0f) / (clientModelList?.payments?.flatten()?.mapNotNull { paymentAmountModel ->
+                        }?.sum()?.toFloat() ?: 0f) / (clientModelList?.mapNotNull { paymentAmountModel ->
+                            paymentAmountModel.payments
+                        }?.flatten()?.mapNotNull { paymentAmountModel ->
                             paymentAmountModel.paymentAmount
                         }?.sum()?.toFloat() ?: 0f) * 100
+                        val groupName = when {
+                            groupPaymentAmountPercentage <= 4f ->
+                                null
+                            else ->
+                                if ((map.value.firstOrNull()?.groupName?.length ?: 0) > 12)
+                                    "${map.value.firstOrNull()?.groupName?.take(n = 9)}..."
+                                else
+                                    map.value.firstOrNull()?.groupName
+                        }
                         PieEntry(
-                            groupNamePercentage,
-                            if ((map.value.firstOrNull()?.groupName?.length ?: 0) > 8)
-                                "${map.value.firstOrNull()?.groupName?.take(n = 5)}..."
-                            else
-                                map.value.firstOrNull()?.groupName,
-                            map.value.mapNotNull { it.payments }.flatten()
-                                .mapNotNull { it.paymentAmount }.sum()
+                            groupPaymentAmountPercentage,
+                            groupName
                         )
                     } ?: return
                 )
@@ -243,7 +251,7 @@ class ChartFragment: Fragment() {
         data.setValueFormatter(
             object: ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
-                    return String.format("%.1f%%", value)
+                    return if (value > 4f) String.format("%.1f%%", value) else ""
                 }
             }
         )
