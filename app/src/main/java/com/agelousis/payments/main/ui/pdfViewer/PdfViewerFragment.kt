@@ -63,8 +63,6 @@ class PdfViewerFragment: Fragment(), PdfViewerPresenter {
         binding = PdfViewerFragmentLayoutBinding.inflate(inflater, container, false).also {
             it.presenter = this
         }
-        binding.previousButtonState = (pdfRenderer?.pageCount ?: 0) > 1
-        binding.nextButtonState = (pdfRenderer?.pageCount ?: 0) > 1
         return binding.root
     }
 
@@ -107,7 +105,6 @@ class PdfViewerFragment: Fragment(), PdfViewerPresenter {
         val pageCount = pdfRenderer?.pageCount
         binding.previousButtonState = index != 0
         binding.nextButtonState = index + 1 < (pageCount ?: 0)
-        binding.pageNumber = (index + 1).toString()
     }
 
     @Throws(IOException::class)

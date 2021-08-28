@@ -19,7 +19,8 @@
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/pdfView"
@@ -58,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginStart="@dimen/activity_general_horizontal_margin"
-        android:layout_marginBottom="?attr/actionBarSize"
+        android:layout_marginBottom="72dp"
         android:visibility="@{previousButtonState ? View.VISIBLE : View.GONE}"
         android:enabled="@{previousButtonState}"
         android:fontFamily="@font/ubuntu"
@@ -68,18 +69,17 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         app:cornerRadius="8dp"
-        app:iconSize="24dp"
-        app:iconTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/nextPageButton"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
-        android:layout_marginBottom="?attr/actionBarSize"
+        android:layout_marginBottom="72dp"
         android:fontFamily="@font/ubuntu"
         android:onClick="@{() -> presenter.onNextPage()}"
         android:text="@string/key_next_label"
@@ -89,21 +89,8 @@
         android:visibility="@{nextButtonState ? View.VISIBLE : View.GONE}"
         android:enabled="@{nextButtonState}"
         app:cornerRadius="8dp"
-        app:iconSize="24dp"
-        app:iconTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
-    <com.google.android.material.textview.MaterialTextView
-        style="@style/TextViewValueLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@{pageNumber}"
-        app:layout_constraintBottom_toBottomOf="@+id/previousPageButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/previousPageButton"
-        tools:text="1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

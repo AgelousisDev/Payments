@@ -151,7 +151,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 )
                 appBarTitle = resources.getString(R.string.key_invoice_label)
                 floatingButtonImage = R.drawable.ic_share
-                floatingButtonPosition = FloatingButtonPosition.END
+                floatingButtonPosition = FloatingButtonPosition.CENTER
                 floatingButtonTint = R.color.colorAccent
                 floatingButtonState = true
             }
