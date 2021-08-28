@@ -103,7 +103,11 @@ class ChartFragment: Fragment() {
                     }?.map { map ->
                         val groupNamePercentage = (clientModelList?.filter {
                             it.groupName == map.key
-                        }?.size?.toFloat() ?: 0f) / (clientModelList?.size ?: 0) * 100
+                        }?.payments?.flatten()?.mapNotNull { paymentAmountModel ->
+                            paymentAmountModel.paymentAmount
+                        }?.sum()?.toFloat() ?: 0f) / (clientModelList?.payments?.flatten()?.mapNotNull { paymentAmountModel ->
+                            paymentAmountModel.paymentAmount
+                        }?.sum()?.toFloat() ?: 0f) * 100
                         PieEntry(
                             groupNamePercentage,
                             if ((map.value.firstOrNull()?.groupName?.length ?: 0) > 8)
