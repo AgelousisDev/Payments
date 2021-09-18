@@ -89,6 +89,14 @@ class PaymentsViewModel: ViewModel() {
         )
     }
 
+    suspend fun updateUserBalance(context: Context, userModel: UserModel?, balance: Double) {
+        val dbManager = DBManager(context = context)
+        dbManager.updateUserBalance(
+            userId = userModel?.id,
+            balance = balance
+        )
+    }
+
     fun sendClientDataRequestNotification(firebaseMessageModel: FirebaseMessageModel) {
         FirebaseMessageRepository.sendFirebaseMessage(
             firebaseMessageModel = firebaseMessageModel,

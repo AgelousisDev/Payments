@@ -3,24 +3,22 @@ package com.agelousis.payments.main.ui.payments.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.agelousis.payments.databinding.EmptyRowLayoutBinding
-import com.agelousis.payments.databinding.GroupRowLayoutBinding
-import com.agelousis.payments.databinding.PaymentAmountSumLayoutBinding
-import com.agelousis.payments.databinding.PaymentRowLayoutBinding
+import com.agelousis.payments.databinding.*
 import com.agelousis.payments.main.ui.payments.enumerations.PaymentsAdapterViewType
-import com.agelousis.payments.main.ui.payments.models.EmptyModel
-import com.agelousis.payments.main.ui.payments.models.GroupModel
-import com.agelousis.payments.main.ui.payments.models.PaymentAmountSumModel
-import com.agelousis.payments.main.ui.payments.models.ClientModel
+import com.agelousis.payments.main.ui.payments.models.*
+import com.agelousis.payments.main.ui.payments.presenters.BalanceOverviewPresenter
 import com.agelousis.payments.main.ui.payments.presenters.GroupPresenter
 import com.agelousis.payments.main.ui.payments.presenters.PaymentAmountSumPresenter
 import com.agelousis.payments.main.ui.payments.presenters.PaymentPresenter
-import com.agelousis.payments.main.ui.payments.viewHolders.EmptyViewHolder
-import com.agelousis.payments.main.ui.payments.viewHolders.GroupViewHolder
-import com.agelousis.payments.main.ui.payments.viewHolders.PaymentAmountSumViewHolder
-import com.agelousis.payments.main.ui.payments.viewHolders.PaymentViewHolder
+import com.agelousis.payments.main.ui.payments.viewHolders.*
 
-class PaymentsAdapter(private val list: ArrayList<Any>, private val groupPresenter: GroupPresenter, private val paymentPresenter: PaymentPresenter, private val paymentAmountSumPresenter: PaymentAmountSumPresenter): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PaymentsAdapter(
+    private val list: ArrayList<Any>,
+    private val groupPresenter: GroupPresenter,
+    private val paymentPresenter: PaymentPresenter,
+    private val paymentAmountSumPresenter: PaymentAmountSumPresenter,
+    private val balanceOverviewPresenter: BalanceOverviewPresenter
+): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -32,6 +30,15 @@ class PaymentsAdapter(private val list: ArrayList<Any>, private val groupPresent
                         parent,
                         false
                     )
+                )
+            PaymentsAdapterViewType.BALANCE_VIEW.type ->
+                BalanceOverviewViewHolder(
+                    binding = BalanceOverviewRowLayoutBinding.inflate(
+                        inflater,
+                        parent,
+                        false
+                    ),
+                    balanceOverviewPresenter = balanceOverviewPresenter
                 )
             PaymentsAdapterViewType.GROUP_VIEW.type ->
                 GroupViewHolder(
@@ -76,6 +83,11 @@ class PaymentsAdapter(private val list: ArrayList<Any>, private val groupPresent
                 index = position
             ) as? EmptyModel ?: return
         )
+        (holder as? BalanceOverviewViewHolder)?.bind(
+            balanceOverviewDataModel = list.getOrNull(
+                index = position
+            ) as? BalanceOverviewDataModel ?: return
+        )
         (holder as? GroupViewHolder)?.bind(
             groupModel = list.getOrNull(
                 index = position
@@ -98,6 +110,7 @@ class PaymentsAdapter(private val list: ArrayList<Any>, private val groupPresent
 
     override fun getItemViewType(position: Int): Int {
         (list.getOrNull(index = position) as? EmptyModel)?.let { return PaymentsAdapterViewType.EMPTY_VIEW.type }
+        (list.getOrNull(index = position) as? BalanceOverviewDataModel)?.let { return PaymentsAdapterViewType.BALANCE_VIEW.type }
         (list.getOrNull(index = position) as? GroupModel)?.let { return PaymentsAdapterViewType.GROUP_VIEW.type }
         (list.getOrNull(index = position) as? ClientModel)?.let { return PaymentsAdapterViewType.PAYMENT_VIEW.type }
         (list.getOrNull(index = position) as? PaymentAmountSumModel)?.let { return PaymentsAdapterViewType.PAYMENT_AMOUNT_SUM_VIEW.type }
@@ -112,37 +125,5 @@ class PaymentsAdapter(private val list: ArrayList<Any>, private val groupPresent
         super.onViewDetachedFromWindow(holder)
         (holder as? PaymentViewHolder)?.clearAnimation()
     }
-
-    /*fun removeItemAndUpdate(context: Context, position: Int): Boolean {
-        list.removeAt(position)
-        notifyItemRemoved(position)
-        //notifyItemRangeChanged(position, list.size)
-
-        val uselessHeaderRow = list.filterIsInstance<GroupModel>().firstOrNull { headerModel ->
-            list.filterIsInstance<PersonModel>().all { headerModel.groupId != it.groupId }
-        }
-        uselessHeaderRow?.let {
-            val headerPosition = list.indexOf(it)
-            list.removeAt(headerPosition)
-            notifyItemRemoved(headerPosition)
-            //notifyItemRangeChanged(headerPosition, list.size)
-        }
-        addEmptyViewIf(emptyRow = EmptyModel(
-            title = context.resources.getString(R.string.key_no_clients_title_message),
-            message = context.resources.getString(R.string.key_no_clients_message),
-            imageIconResource = R.drawable.ic_invoice
-        )) {
-            list.isEmpty()
-        }
-        return list.any { it is EmptyModel }
-    }
-
-    private fun addEmptyViewIf(emptyRow: EmptyModel, predicate: () -> Boolean) {
-        if (predicate()) {
-            list.add(emptyRow)
-            notifyItemInserted(0)
-            notifyItemRangeChanged(0, list.size)
-        }
-    }*/
 
 }

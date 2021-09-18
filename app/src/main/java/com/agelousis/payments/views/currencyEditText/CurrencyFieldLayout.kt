@@ -36,7 +36,7 @@ class CurrencyFieldLayout(context: Context, attrs: AttributeSet?): FrameLayout(c
             }
     }
 
-    private lateinit var binding: CurrencyEditTextLayoutBinding
+    lateinit var binding: CurrencyEditTextLayoutBinding
     var amountListener: AmountListener? = null
     var errorState = false
         set(value) {

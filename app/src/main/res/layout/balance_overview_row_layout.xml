@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View"/>
+        <import type="com.agelousis.payments.main.ui.payments.enumerations.BalanceOverviewState"/>
+        <variable
+            name="balanceOverviewDataModel"
+            type="com.agelousis.payments.main.ui.payments.models.BalanceOverviewDataModel" />
+        <variable
+            name="presenter"
+            type="com.agelousis.payments.main.ui.payments.presenters.BalanceOverviewPresenter" />
+    </data>
+<com.google.android.material.card.MaterialCardView
+    android:id="@+id/guideCardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:onClick="@{() -> presenter.onBalanceOverviewState()}"
+    app:elevation="16dp"
+    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="@dimen/activity_general_horizontal_margin"
+    app:cardPreventCornerOverlap="true"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/balance_overview_background"
+        android:paddingTop="0dp"
+        android:paddingBottom="@dimen/activity_general_horizontal_margin"
+        android:animateLayoutChanges="true">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/balanceOverviewIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="@dimen/activity_general_horizontal_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@{balanceOverviewDataModel.icon}"
+            tools:srcCompat="@drawable/ic_monthly_salary" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/materialTextView4"
+            style="@style/TextViewTitleLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+            android:text="@{balanceOverviewDataModel.title}"
+            app:layout_constraintStart_toEndOf="@+id/balanceOverviewIcon"
+            app:layout_constraintTop_toTopOf="@+id/balanceOverviewIcon"
+            tools:text="@string/key_balance_overview_label" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextViewLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+            android:text="@{balanceOverviewDataModel.subtitle}"
+            app:layout_constraintBottom_toBottomOf="@+id/balanceOverviewIcon"
+            app:layout_constraintStart_toEndOf="@+id/balanceOverviewIcon"
+            tools:text="@string/key_set_your_monthly_balance_label" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="@dimen/activity_general_horizontal_margin"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="@{() -> presenter.onBalanceOverviewState()}"
+            app:srcCompat="@{balanceOverviewDataModel.currentBalanceOverviewState.icon}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@drawable/ic_baseline_keyboard_arrow_down_24" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/footerConstraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_general_horizontal_margin"
+            android:visibility="@{balanceOverviewDataModel.currentBalanceOverviewState == BalanceOverviewState.EXPANDED ? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/balanceOverviewIcon">
+
+            <View
+                android:id="@+id/headerLineSeparator"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+                android:background="@color/grey"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <com.agelousis.payments.views.currencyEditText.CurrencyFieldLayout
+                android:id="@+id/currencyFieldLayout"
+                currencyAmount="@{balanceOverviewDataModel.currentBalance}"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+                app:fieldType="NUMBER"
+                app:imeOptionType="actionDone"
+                app:label="@string/key_amount_label"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/headerLineSeparator"
+                app:showLine="false" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
+</layout>

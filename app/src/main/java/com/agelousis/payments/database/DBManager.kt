@@ -78,7 +78,7 @@ class DBManager(context: Context) {
         withContext(Dispatchers.Default) {
             val cursor = database?.query(
                 SQLiteHelper.USERS_TABLE_NAME,
-                arrayOf(SQLiteHelper.ID, SQLiteHelper.USERNAME, SQLiteHelper.PASSWORD, SQLiteHelper.BIOMETRICS, SQLiteHelper.PROFILE_IMAGE, SQLiteHelper.ADDRESS, SQLiteHelper.ID_CARD_NUMBER, SQLiteHelper.SOCIAL_INSURANCE_NUMBER, SQLiteHelper.FIRST_NAME, SQLiteHelper.SURNAME, SQLiteHelper.PROFILE_IMAGE_DATA, SQLiteHelper.VAT, SQLiteHelper.DEFAULT_PAYMENT_AMOUNT, SQLiteHelper.DEFAULT_MESSAGE_TEMPLATE, SQLiteHelper.PASSWORD_PIN),
+                arrayOf(SQLiteHelper.ID, SQLiteHelper.USERNAME, SQLiteHelper.PASSWORD, SQLiteHelper.BIOMETRICS, SQLiteHelper.PROFILE_IMAGE, SQLiteHelper.ADDRESS, SQLiteHelper.ID_CARD_NUMBER, SQLiteHelper.SOCIAL_INSURANCE_NUMBER, SQLiteHelper.FIRST_NAME, SQLiteHelper.SURNAME, SQLiteHelper.PROFILE_IMAGE_DATA, SQLiteHelper.VAT, SQLiteHelper.DEFAULT_PAYMENT_AMOUNT, SQLiteHelper.DEFAULT_MESSAGE_TEMPLATE, SQLiteHelper.PASSWORD_PIN, SQLiteHelper.BALANCE),
                 "${SQLiteHelper.USERNAME}=? AND ${SQLiteHelper.PASSWORD}=?",
                 arrayOf(userModel.username, userModel.password),
                 null,
@@ -119,7 +119,7 @@ class DBManager(context: Context) {
     suspend fun checkUsers(usersBlock: UsersBlock) {
         withContext(Dispatchers.Default) {
             val usersList = arrayListOf<UserModel>()
-            val cursor = database?.query(SQLiteHelper.USERS_TABLE_NAME, arrayOf(SQLiteHelper.ID, SQLiteHelper.USERNAME, SQLiteHelper.PASSWORD, SQLiteHelper.BIOMETRICS, SQLiteHelper.PROFILE_IMAGE, SQLiteHelper.ADDRESS, SQLiteHelper.ID_CARD_NUMBER, SQLiteHelper.SOCIAL_INSURANCE_NUMBER, SQLiteHelper.FIRST_NAME, SQLiteHelper.SURNAME, SQLiteHelper.PROFILE_IMAGE_DATA, SQLiteHelper.VAT, SQLiteHelper.DEFAULT_PAYMENT_AMOUNT, SQLiteHelper.DEFAULT_MESSAGE_TEMPLATE, SQLiteHelper.PASSWORD_PIN), null, null, null, null, null)
+            val cursor = database?.query(SQLiteHelper.USERS_TABLE_NAME, arrayOf(SQLiteHelper.ID, SQLiteHelper.USERNAME, SQLiteHelper.PASSWORD, SQLiteHelper.BIOMETRICS, SQLiteHelper.PROFILE_IMAGE, SQLiteHelper.ADDRESS, SQLiteHelper.ID_CARD_NUMBER, SQLiteHelper.SOCIAL_INSURANCE_NUMBER, SQLiteHelper.FIRST_NAME, SQLiteHelper.SURNAME, SQLiteHelper.PROFILE_IMAGE_DATA, SQLiteHelper.VAT, SQLiteHelper.DEFAULT_PAYMENT_AMOUNT, SQLiteHelper.DEFAULT_MESSAGE_TEMPLATE, SQLiteHelper.PASSWORD_PIN, SQLiteHelper.BALANCE), null, null, null, null, null)
             if (cursor?.moveToFirst() == true)
                 do {
                     usersList.add(
@@ -167,19 +167,16 @@ class DBManager(context: Context) {
         }
     }
 
-    suspend fun updateUserBalance(userId: Int, balance: Double?, updateSuccessClosure: UpdateSuccessClosure) {
+    suspend fun updateUserBalance(userId: Int?, balance: Double?) {
         withContext(Dispatchers.Default) {
-            val status = database?.update(
+            database?.update(
                 SQLiteHelper.USERS_TABLE_NAME,
                 ContentValues().also { contentValues ->
                     contentValues.put(SQLiteHelper.BALANCE, balance)
                 },
                 "${SQLiteHelper.ID}=?",
-                arrayOf(userId.toString())
+                arrayOf(userId?.toString() ?: return@withContext)
             )
-            withContext(Dispatchers.Main) {
-                updateSuccessClosure(status ?: 0 > 0)
-            }
         }
     }
 

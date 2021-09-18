@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.custom.enumerations.SwipeAction
+import com.agelousis.payments.custom.itemDecoration.HeaderItemDecoration
 import com.agelousis.payments.custom.itemTouchHelper.SwipeItemTouchHelper
 import com.agelousis.payments.databinding.FragmentPaymentsLayoutBinding
 import com.agelousis.payments.main.MainActivity
@@ -23,14 +24,8 @@ import com.agelousis.payments.main.enumerations.SwipeItemType
 import com.agelousis.payments.main.menuOptions.PaymentsMenuOptionsBottomSheetFragment
 import com.agelousis.payments.main.ui.files.models.FileDataModel
 import com.agelousis.payments.main.ui.payments.adapters.PaymentsAdapter
-import com.agelousis.payments.main.ui.payments.models.EmptyModel
-import com.agelousis.payments.main.ui.payments.models.GroupModel
-import com.agelousis.payments.main.ui.payments.models.PaymentAmountSumModel
-import com.agelousis.payments.main.ui.payments.models.ClientModel
-import com.agelousis.payments.main.ui.payments.presenters.GroupPresenter
-import com.agelousis.payments.main.ui.payments.presenters.PaymentAmountSumPresenter
-import com.agelousis.payments.main.ui.payments.presenters.PaymentPresenter
-import com.agelousis.payments.main.ui.payments.presenters.PaymentsFragmentPresenter
+import com.agelousis.payments.main.ui.payments.models.*
+import com.agelousis.payments.main.ui.payments.presenters.*
 import com.agelousis.payments.main.ui.payments.viewHolders.GroupViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.PaymentViewHolder
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
@@ -52,7 +47,7 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 
-class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAmountSumPresenter, PaymentsFragmentPresenter {
+class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAmountSumPresenter, PaymentsFragmentPresenter, BalanceOverviewPresenter {
 
     override fun onDeletePayments() {
         configureMultipleDeleteAction(
@@ -146,6 +141,30 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
             supportFragmentManager = childFragmentManager,
             paymentAmountSumModel = paymentAmountSumModel
         )
+    }
+
+    override fun onBalanceOverviewState() {
+        filteredList.firstNotNullOfOrNull {
+            it as? BalanceOverviewDataModel
+        }?.currentBalanceOverviewState = filteredList.firstNotNullOfOrNull {
+            it as? BalanceOverviewDataModel
+        }?.currentBalanceOverviewState?.other
+        binding.paymentListRecyclerView.adapter?.notifyItemChanged(
+            filteredList.indexOfFirst {
+                it is BalanceOverviewDataModel
+            }
+        )
+    }
+
+    override fun onSaveBalance(balance: Double) {
+        (activity as? MainActivity)?.userModel?.balance = balance
+        uiScope.launch {
+            viewModel.updateUserBalance(
+                context = context ?: return@launch,
+                userModel = (activity as? MainActivity)?.userModel,
+                balance = balance
+            )
+        }
     }
 
     private lateinit var binding: FragmentPaymentsLayoutBinding
@@ -253,7 +272,8 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
             list = filteredList,
             groupPresenter = this,
             paymentPresenter = this,
-            paymentAmountSumPresenter = this
+            paymentAmountSumPresenter = this,
+            balanceOverviewPresenter = this
         )
         binding.paymentListRecyclerView.addItemDecoration(
             object: RecyclerView.ItemDecoration() {
@@ -503,6 +523,9 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
     private fun configurePayments(list: List<Any>, query: String? = null) {
         filteredList.clear()
         list.filterIsInstance<ClientModel>().takeIf { it.isNotEmpty() }?.let { payments ->
+            filteredList.add(
+                BalanceOverviewDataModel getBalanceOverviewDataModelWith (activity as? MainActivity)?.userModel?.balance
+            )
             payments.groupBy { it.groupName ?: "" }.toSortedMap().forEach { map ->
                 map.value.filter { it.fullName.lowercase().contains(query?.replace(" ", "")?.lowercase() ?: "") || it.groupName?.lowercase()?.contains(query?.replace(" ", "")?.lowercase() ?: "") == true }
                     .takeIf { it.isNotEmpty() }?.let inner@ { filteredByQueryPayments ->

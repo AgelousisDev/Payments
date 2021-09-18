@@ -28,4 +28,9 @@
     <color name="lightYellow">#FFD365</color>
     <color name="fadedRed">#fd907e</color>
 
+    <color name="yellowDarker">#FCE293</color>
+    <color name="yellowLighter">#FEEDBF</color>
+    <color name="petrolDarker">#46526D</color>
+    <color name="petrolLighter">#505A6E</color>
+
 </resources>
