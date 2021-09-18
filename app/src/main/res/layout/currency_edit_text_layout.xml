@@ -13,14 +13,16 @@
             name="presenter"
             type="com.agelousis.payments.views.currencyEditText.presenters.CurrencyLayoutPresenter" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/currencyLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:background="?attr/selectableItemBackground"
-        android:animateLayoutChanges="true">
+        tools:ignore="TouchTargetSizeCheck">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/label"
@@ -40,9 +42,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_general_horizontal_margin"
-            android:visibility="gone"
             android:textColor="@color/red"
             android:textSize="10sp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/label"
             tools:ignore="SmallSp" />
@@ -80,9 +82,9 @@
                 android:id="@+id/increaseButton"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
                 android:onClick="@{() -> presenter.onIncrease()}"
                 app:srcCompat="@drawable/ic_add"
                 app:tint="@color/colorAccent" />
@@ -97,9 +99,9 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
                 android:onClick="@{() -> presenter.onDecrease()}"
                 app:srcCompat="@drawable/ic_minus_sign"
                 app:tint="@color/colorAccent" />

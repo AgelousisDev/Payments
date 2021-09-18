@@ -236,6 +236,7 @@
     <string name="key_pick_color_label">Pick a color</string>
     <string name="key_previous_label">Previous</string>
     <string name="key_next_label">Next</string>
+    <string name="key_amount_value_hint">%s0,00</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>

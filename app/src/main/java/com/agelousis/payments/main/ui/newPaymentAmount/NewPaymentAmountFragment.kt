@@ -10,12 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.agelousis.payments.R
+import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.databinding.DismissibleChipBinding
 import com.agelousis.payments.databinding.FragmentNewPaymentAmountLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
+import com.agelousis.payments.utils.helpers.CurrencyHelper
 import com.agelousis.payments.views.currencyEditText.interfaces.AmountListener
 import com.agelousis.payments.views.detailsSwitch.interfaces.AppSwitchListener
 import com.google.android.material.chip.Chip
@@ -76,6 +78,7 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
 
     private fun setupUI() {
         binding.amountLayout.amountListener = this
+        binding.amountLayout.currency = CurrencyHelper getCurrencyFromCurrencySymbol MainApplication.currencySymbol
         binding.dateDetailsLayout.dateSelectionClosure = {
             if (it.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.isDatePassed == true)
             binding.paymentDateNotificationSwitchLayout.isChecked = false
