@@ -20,7 +20,8 @@ data class UserModel(var id: Int? = null,
                      var vat: Int? = null,
                      var defaultPaymentAmount: Double? = null,
                      var defaultMessageTemplate: String? = null,
-                     var passwordPin: String? = null
+                     var passwordPin: String? = null,
+                     var balance: Double? = null
 ): Parcelable {
 
     @IgnoredOnParcel

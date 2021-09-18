@@ -32,6 +32,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         const val DEFAULT_PAYMENT_AMOUNT = "default_payment_amount"
         const val DEFAULT_MESSAGE_TEMPLATE = "default_message_template"
         const val PASSWORD_PIN = "password_pin"
+        const val BALANCE = "balance"
 
         // Groups Table Columns
         const val GROUP_NAME = "group_name"
@@ -74,13 +75,13 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         const val DB_NAME_EXTENSION = ".db"
 
         // database version
-        private const val DB_VERSION = 3
+        private const val DB_VERSION = 4
 
         // Creating users table query
         private const val USERS_TABLE_CREATION_QUERY = "CREATE TABLE $USERS_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "$USERNAME TEXT, $PASSWORD TEXT, $BIOMETRICS BOOLEAN, $PROFILE_IMAGE TEXT, $ADDRESS TEXT, $ID_CARD_NUMBER TEXT, " +
                 "$SOCIAL_INSURANCE_NUMBER TEXT, $FIRST_NAME TEXT, $SURNAME TEXT, $PROFILE_IMAGE_DATA BLOB, $VAT INTEGER," +
-                "$DEFAULT_PAYMENT_AMOUNT DOUBLE, $DEFAULT_MESSAGE_TEMPLATE TEXT, $PASSWORD_PIN TEXT);"
+                "$DEFAULT_PAYMENT_AMOUNT DOUBLE, $DEFAULT_MESSAGE_TEMPLATE TEXT, $PASSWORD_PIN TEXT, $BALANCE DOUBLE);"
 
         //Creating groups table query
         private const val GROUPS_TABLE_CREATION_QUERY = "CREATE TABLE $GROUPS_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -120,7 +121,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         when {
             newVersion > oldVersion ->
                 db?.execSQL(
-                    "ALTER TABLE $PAYMENTS_TABLE_NAME ADD COLUMN $SINGLE_PAYMENT_PRODUCTS TEXT"
+                    "ALTER TABLE $USERS_TABLE_NAME ADD COLUMN $BALANCE DOUBLE"
                 )
         }
     }

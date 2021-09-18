@@ -62,6 +62,7 @@ class DBManager(context: Context) {
                     contentValue.put(SQLiteHelper.DEFAULT_PAYMENT_AMOUNT, userModel.defaultPaymentAmount)
                     contentValue.put(SQLiteHelper.DEFAULT_MESSAGE_TEMPLATE, userModel.defaultMessageTemplate)
                     contentValue.put(SQLiteHelper.PASSWORD_PIN, userModel.passwordPin)
+                    contentValue.put(SQLiteHelper.BALANCE, userModel.balance)
                     database?.insert(SQLiteHelper.USERS_TABLE_NAME, null, contentValue)
                 }
                 cursor?.close()
@@ -101,7 +102,8 @@ class DBManager(context: Context) {
                     vat = cursor?.getIntOrNull(cursor.getColumnIndex(SQLiteHelper.VAT)),
                     defaultPaymentAmount = cursor?.getDoubleOrNull(cursor.getColumnIndex(SQLiteHelper.DEFAULT_PAYMENT_AMOUNT)),
                     defaultMessageTemplate = cursor?.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.DEFAULT_MESSAGE_TEMPLATE)),
-                    passwordPin = cursor?.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.PASSWORD_PIN))
+                    passwordPin = cursor?.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.PASSWORD_PIN)),
+                    balance = cursor?.getDoubleOrNull(cursor.getColumnIndex(SQLiteHelper.BALANCE))
                 ).also {
                     it.profileImageData = cursor?.getBlobOrNull(cursor.getColumnIndex(SQLiteHelper.PROFILE_IMAGE_DATA))
                 }
@@ -135,7 +137,8 @@ class DBManager(context: Context) {
                             vat = cursor.getIntOrNull(cursor.getColumnIndex(SQLiteHelper.VAT)),
                             defaultPaymentAmount = cursor.getDoubleOrNull(cursor.getColumnIndex(SQLiteHelper.DEFAULT_PAYMENT_AMOUNT)),
                             defaultMessageTemplate = cursor.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.DEFAULT_MESSAGE_TEMPLATE)),
-                            passwordPin = cursor.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.PASSWORD_PIN))
+                            passwordPin = cursor.getStringOrNull(cursor.getColumnIndex(SQLiteHelper.PASSWORD_PIN)),
+                            balance = cursor.getDoubleOrNull(cursor.getColumnIndex(SQLiteHelper.BALANCE))
                         ).also {
                             it.profileImageData = cursor.getBlobOrNull(cursor.getColumnIndex(SQLiteHelper.PROFILE_IMAGE_DATA))
                         }
@@ -164,6 +167,22 @@ class DBManager(context: Context) {
         }
     }
 
+    suspend fun updateUserBalance(userId: Int, balance: Double?, updateSuccessClosure: UpdateSuccessClosure) {
+        withContext(Dispatchers.Default) {
+            val status = database?.update(
+                SQLiteHelper.USERS_TABLE_NAME,
+                ContentValues().also { contentValues ->
+                    contentValues.put(SQLiteHelper.BALANCE, balance)
+                },
+                "${SQLiteHelper.ID}=?",
+                arrayOf(userId.toString())
+            )
+            withContext(Dispatchers.Main) {
+                updateSuccessClosure(status ?: 0 > 0)
+            }
+        }
+    }
+
     suspend fun updateUser(userModel: UserModel, userBlock: UserBlock) {
         withContext(Dispatchers.Default) {
             database?.update(
@@ -183,6 +202,7 @@ class DBManager(context: Context) {
                     contentValues.put(SQLiteHelper.DEFAULT_PAYMENT_AMOUNT, userModel.defaultPaymentAmount)
                     contentValues.put(SQLiteHelper.DEFAULT_MESSAGE_TEMPLATE, userModel.defaultMessageTemplate)
                     contentValues.put(SQLiteHelper.PASSWORD_PIN, userModel.passwordPin)
+                    contentValues.put(SQLiteHelper.BALANCE, userModel.balance)
                 },
                 "${SQLiteHelper.ID}=?",
                 arrayOf(userModel.id?.toString())
