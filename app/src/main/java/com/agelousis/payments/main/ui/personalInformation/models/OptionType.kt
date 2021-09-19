@@ -17,6 +17,7 @@ enum class OptionType {
     CHANGE_ADDRESS,
     CHANGE_ID_CARD_NUMBER,
     CHANGE_SOCIAL_INSURANCE_NUMBER,
+    CHANGE_BALANCE_OVERVIEW_STATE,
     CHANGE_CURRENCY,
     CHANGE_COUNTRY,
     VAT,
@@ -37,6 +38,7 @@ enum class OptionType {
             CHANGE_ADDRESS -> context.resources.getString(R.string.key_address_label)
             CHANGE_ID_CARD_NUMBER -> context.resources.getString(R.string.key_id_card_number_label)
             CHANGE_SOCIAL_INSURANCE_NUMBER -> context.resources.getString(R.string.key_social_insurance_number_label)
+            CHANGE_BALANCE_OVERVIEW_STATE -> context.resources.getString(R.string.key_balance_overview_label)
             CHANGE_CURRENCY -> context.resources.getString(R.string.key_select_currency_label)
             CHANGE_COUNTRY -> context.resources.getString(R.string.key_select_country_label)
             VAT -> context.resources.getString(R.string.key_vat_percent_label)
@@ -50,5 +52,6 @@ enum class OptionType {
     var biometricAvailability = false
     var currencyType: CurrencyType? = null
     var countryDataModel: CountryDataModel? = null
+    var balanceOverviewAvailability = false
 
 }

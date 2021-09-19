@@ -66,6 +66,7 @@ import com.agelousis.payments.login.enumerations.UIMode
 import com.agelousis.payments.main.ui.countrySelector.models.CountryDataModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.paymentsFiltering.enumerations.PaymentsFilteringOptionType
+import com.agelousis.payments.main.ui.personalInformation.models.OptionType
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.custom.ImprovedBulletSpan
@@ -836,6 +837,14 @@ var SharedPreferences.paymentsFilteringOptionTypes: List<PaymentsFilteringOption
     }
     get() = Gson().fromJson<List<PaymentsFilteringOptionType>>(getString(Constants.SHARED_PREFERENCES_PAYMENTS_FILTERING_DATA_KEY, null), object: TypeToken<List<PaymentsFilteringOptionType>>() {}.type)
 
+var SharedPreferences.balanceOverviewState: Boolean?
+    set(value) {
+        edit() {
+            putBoolean(Constants.SHARED_PREFERENCES_BALANCE_OVERVIEW_DATA_KEY, value == true)
+        }
+    }
+    get() = getBoolean(Constants.SHARED_PREFERENCES_BALANCE_OVERVIEW_DATA_KEY, true)
+
 fun ViewGroup.addTabDots(currentPage: Int, totalPages: Int) {
     val dots = arrayOfNulls<TextView>(totalPages)
     removeAllViews()
@@ -1061,12 +1070,20 @@ fun setPicassoUrlImage(appCompatImageView: AppCompatImageView, imageUrl: String?
     )
 }
 
-@BindingAdapter("switchStateChanged")
-fun switchStateChanged(switchMaterial: SwitchMaterial, optionPresenter: OptionPresenter) {
+@BindingAdapter("optionType", "switchStateChanged")
+fun switchStateChanged(switchMaterial: SwitchMaterial, optionType: OptionType, optionPresenter: OptionPresenter) {
     switchMaterial.setOnCheckedChangeListener { _, isChecked ->
-        optionPresenter.onBiometricsState(
-            state = isChecked
-        )
+        when(optionType) {
+            OptionType.CHANGE_BIOMETRICS_STATE ->
+                optionPresenter.onBiometricsState(
+                    state = isChecked
+                )
+            OptionType.CHANGE_BALANCE_OVERVIEW_STATE ->
+                optionPresenter.onBalanceOverviewStateChange(
+                    state = isChecked
+                )
+            else -> {}
+        }
     }
 }
 

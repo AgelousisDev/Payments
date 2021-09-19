@@ -9,6 +9,7 @@ interface OptionPresenter {
     fun onAddressChange(newAddress: String)
     fun onIdCardNumberChange(newIdCardNumber: String)
     fun onSocialInsuranceNumberChange(newSocialInsuranceNumber: String)
+    fun onBalanceOverviewStateChange(state: Boolean)
     fun onFirstNameChange(newFirstName: String)
     fun onLastNameChange(newLastName: String)
     fun onVatChange(newVat: Int)

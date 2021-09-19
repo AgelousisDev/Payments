@@ -50,6 +50,7 @@ object Constants {
     const val GROUP_SELECTOR_FRAGMENT_TAG = "groupSelectorFragmentTag"
     const val YEAR_MONTH_PICKER_FRAGMENT_TAG = "yearMonthPickerFragmentTag"
     const val COLOR_SELECTOR_FRAGMENT_TAG = "colorSelectorFragmentTag"
+    const val SHARED_PREFERENCES_BALANCE_OVERVIEW_DATA_KEY = "balanceOverview"
 
     object Colors {
         val colorPickerColors = intArrayOf(

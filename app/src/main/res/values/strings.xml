@@ -237,7 +237,7 @@
     <string name="key_previous_label">Previous</string>
     <string name="key_next_label">Next</string>
     <string name="key_amount_value_hint">%s0,00</string>
-    <string name="key_balance_overview_label">Balance Overview</string>
+    <string name="key_balance_overview_label">Balance &amp; Last payments Overview</string>
     <string name="key_set_your_monthly_balance_label">Set your monthly balance</string>
     <string name="key_available_balance_value_label">Available Balance: %s</string>
 

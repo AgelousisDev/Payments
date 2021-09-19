@@ -20,6 +20,7 @@
         <entry key="app/src/main/res/layout/fragment_new_payment_amount_layout.xml" value="0.15577507598784193" />
         <entry key="app/src/main/res/layout/guide_basic_fragment_layout.xml" value="0.15577507598784193" />
         <entry key="app/src/main/res/layout/history_fragment_layout.xml" value="0.22780797101449277" />
+        <entry key="app/src/main/res/layout/option_type_row_layout.xml" value="0.19882246376811594" />
         <entry key="app/src/main/res/layout/payment_amount_sum_layout.xml" value="0.20199275362318841" />
         <entry key="app/src/main/res/layout/payment_row_layout.xml" value="0.20199275362318841" />
         <entry key="app/src/main/res/layout/payments_menu_option_row_layout.xml" value="0.20199275362318841" />

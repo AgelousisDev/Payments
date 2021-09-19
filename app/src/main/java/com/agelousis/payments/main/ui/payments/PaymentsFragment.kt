@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.custom.enumerations.SwipeAction
-import com.agelousis.payments.custom.itemDecoration.HeaderItemDecoration
 import com.agelousis.payments.custom.itemTouchHelper.SwipeItemTouchHelper
 import com.agelousis.payments.databinding.FragmentPaymentsLayoutBinding
 import com.agelousis.payments.main.MainActivity
@@ -26,6 +25,7 @@ import com.agelousis.payments.main.ui.files.models.FileDataModel
 import com.agelousis.payments.main.ui.payments.adapters.PaymentsAdapter
 import com.agelousis.payments.main.ui.payments.models.*
 import com.agelousis.payments.main.ui.payments.presenters.*
+import com.agelousis.payments.main.ui.payments.viewHolders.BalanceOverviewViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.GroupViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.PaymentViewHolder
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
@@ -311,29 +311,37 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         val swipeItemTouchHelper = ItemTouchHelper(
             SwipeItemTouchHelper(
                 context = context ?: return,
-                swipeItemType = SwipeItemType.PERSON_ITEM,
                 marginStart = resources.getDimension(R.dimen.activity_general_horizontal_margin),
                 swipePredicateBlock = {
-                    it is GroupViewHolder || it is PaymentViewHolder
+                    it is GroupViewHolder || it is PaymentViewHolder || it is BalanceOverviewViewHolder
                 }
-            ) innerBlock@ { swipeAction, position ->
-                when(swipeAction) {
-                    SwipeAction.RIGHT -> {
-                        configurePDFAction(
-                            position = position
-                        )
-                        (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.restoreItem(
-                            position = position
-                        )
-                    }
-                    SwipeAction.LEFT ->
-                        configureDeleteAction(
-                            position = position
-                        )
+            ) innerBlock@ { swipeAction, swipeItemType, position ->
+                when(swipeItemType) {
+                    SwipeItemType.BALANCE_OVERVIEW_ITEM ->
+                        disableBalanceOverview()
+                    else ->
+                        when(swipeAction) {
+                            SwipeAction.RIGHT -> {
+                                configurePDFAction(
+                                    position = position
+                                )
+                                (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.restoreItem(
+                                    position = position
+                                )
+                            }
+                            SwipeAction.LEFT ->
+                                configureDeleteAction(
+                                    position = position
+                                )
+                        }
                 }
             }
         )
         swipeItemTouchHelper.attachToRecyclerView(binding.paymentListRecyclerView)
+    }
+
+    private fun disableBalanceOverview() {
+        sharedPreferences?.balanceOverviewState = false
     }
 
     private fun configurePDFAction(position: Int) {
@@ -523,9 +531,12 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
     private fun configurePayments(list: List<Any>, query: String? = null) {
         filteredList.clear()
         list.filterIsInstance<ClientModel>().takeIf { it.isNotEmpty() }?.let { payments ->
-            filteredList.add(
-                BalanceOverviewDataModel getBalanceOverviewDataModelWith (activity as? MainActivity)?.userModel?.balance
+            if (sharedPreferences?.balanceOverviewState == true
+                && query == null
             )
+                filteredList.add(
+                    BalanceOverviewDataModel getBalanceOverviewDataModelWith (activity as? MainActivity)?.userModel?.balance
+                )
             payments.groupBy { it.groupName ?: "" }.toSortedMap().forEach { map ->
                 map.value.filter { it.fullName.lowercase().contains(query?.replace(" ", "")?.lowercase() ?: "") || it.groupName?.lowercase()?.contains(query?.replace(" ", "")?.lowercase() ?: "") == true }
                     .takeIf { it.isNotEmpty() }?.let inner@ { filteredByQueryPayments ->

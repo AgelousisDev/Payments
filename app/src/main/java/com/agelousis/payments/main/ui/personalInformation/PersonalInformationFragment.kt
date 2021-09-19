@@ -2,6 +2,7 @@ package com.agelousis.payments.main.ui.personalInformation
 
 import android.animation.Animator
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -30,6 +31,7 @@ import com.agelousis.payments.main.ui.personalInformation.adapters.OptionTypesAd
 import com.agelousis.payments.main.ui.personalInformation.models.OptionType
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.payments.main.ui.personalInformation.presenter.PersonalInformationPresenter
+import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.CountryHelper
 import kotlinx.coroutines.CoroutineScope
@@ -192,11 +194,18 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
         )
     }
 
+    override fun onBalanceOverviewStateChange(state: Boolean) {
+        sharedPreferences?.balanceOverviewState = state
+    }
+
     override fun onProfilePicturePressed() {
         redirectToProfilePictureFragment()
     }
 
     private lateinit var binding: FragmentPersonalInformationLayoutBinding
+    private val sharedPreferences by lazy {
+        context?.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+    }
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val dbManager by lazy { context?.let { DBManager(context = it) } }
     private val newUserModel by lazy { (activity as? MainActivity)?.userModel?.copy() }
@@ -236,6 +245,9 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
             },
             OptionType.CHANGE_SOCIAL_INSURANCE_NUMBER.also {
                 it.userModel = newUserModel
+            },
+            OptionType.CHANGE_BALANCE_OVERVIEW_STATE.also {
+                it.balanceOverviewAvailability = sharedPreferences?.balanceOverviewState == true
             },
             OptionType.EXPORT_DATABASE,
             OptionType.DELETE_USER,
