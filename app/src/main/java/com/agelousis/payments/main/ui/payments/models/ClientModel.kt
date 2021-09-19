@@ -11,6 +11,8 @@ import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import java.time.LocalDate
+import java.time.YearMonth
 import java.util.*
 
 @Parcelize
@@ -119,5 +121,18 @@ data class PaymentAmountModel(val paymentId: Int? = null,
 
     val paymentMonthDate
         get() = paymentMonth?.toDateWith(pattern = Constants.MONTH_DATE_FORMAT, locale = Locale.US)
+
+    val paymentMonthLocalDate
+        get() = paymentMonthDate?.toCalendar()?.let { calendar ->
+            LocalDate.of(
+                calendar.get(
+                    Calendar.YEAR
+                ),
+                calendar.get(
+                    Calendar.MONTH
+                ),
+                1
+            )
+        }
 
 }

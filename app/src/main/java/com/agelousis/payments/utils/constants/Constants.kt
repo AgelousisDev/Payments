@@ -5,7 +5,7 @@ import android.graphics.Color
 object Constants {
     const val IMAGE_MIME_TYPE = "image/*"
     const val PROFILE_IMAGE_NAME = "profile_image"
-    const val EURO_VALUE = "€"
+    const val EURO_SYMBOL = "€"
     const val DATE_FORMAT_VALUE = "%d/%d/%d"
     const val GENERAL_MIME_TYPE = "*/*"
     const val BIN_FILE_EXTENSION = "bin"

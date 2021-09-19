@@ -12,6 +12,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import com.agelousis.payments.R
 import com.agelousis.payments.databinding.CurrencyEditTextLayoutBinding
+import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.hideKeyboard
 import com.agelousis.payments.utils.extensions.isZero
 import com.agelousis.payments.utils.extensions.showKeyboard
@@ -43,7 +44,7 @@ class CurrencyFieldLayout(context: Context, attrs: AttributeSet?): FrameLayout(c
             field = value
             binding.lineSeparator.setBackgroundColor(ContextCompat.getColor(context, if (value) R.color.red else R.color.grey))
         }
-    private var currencySymbol = "€"
+    private var currencySymbol = Constants.EURO_SYMBOL
     var currency: String? by Delegates.observable("EUR") { _, _, newValue ->
         currencySymbol = CurrencyHelper getSymbolFromCurrencyCode newValue
         binding.currencyField.hint = String.format(

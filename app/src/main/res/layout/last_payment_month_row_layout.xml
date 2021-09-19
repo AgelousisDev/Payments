@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="com.agelousis.payments.utils.extensions.ExtensionsKt"/>
+        <variable
+            name="lastPaymentMonthDataModel"
+            type="com.agelousis.payments.main.ui.payments.models.LastPaymentMonthDataModel" />
+    </data>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextViewTitleLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_general_horizontal_margin"
+        android:text="@{lastPaymentMonthDataModel.monthLabel}"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="November" />
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextViewValueLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_general_horizontal_margin"
+        android:text="@{lastPaymentMonthDataModel.amount != null ? ExtensionsKt.getEuroFormattedString(lastPaymentMonthDataModel.amount) : @string/key_empty_field_label}"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="€1.000,00" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

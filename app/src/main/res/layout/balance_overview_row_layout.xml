@@ -83,7 +83,6 @@
             android:id="@+id/footerConstraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_general_horizontal_margin"
             android:visibility="@{balanceOverviewDataModel.currentBalanceOverviewState == BalanceOverviewState.EXPANDED ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -91,11 +90,11 @@
 
             <View
                 android:id="@+id/headerLineSeparator"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginStart="@dimen/activity_general_horizontal_margin"
-                android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
-                android:background="@color/grey"
+                android:layout_width="30dp"
+                android:layout_height="3dp"
+                android:layout_margin="@dimen/activity_general_horizontal_margin"
+                android:background="@drawable/group_header_line"
+                android:backgroundTint="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -105,15 +104,40 @@
                 currencyAmount="@{balanceOverviewDataModel.currentBalance}"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginStart="@dimen/activity_general_horizontal_margin"
                 android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
                 app:fieldType="NUMBER"
                 app:imeOptionType="actionDone"
-                app:label="@string/key_amount_label"
+                app:label="@string/key_balance_label"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/headerLineSeparator"
                 app:showLine="false" />
+
+            <View
+                android:id="@+id/footerLineSeparator"
+                android:layout_width="30dp"
+                android:layout_height="3dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/group_header_line"
+                android:backgroundTint="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/currencyFieldLayout"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/lastPaymentMonthsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layoutAnimation="@anim/layout_animation_fall_down"
+                android:orientation="vertical"
+                lastPaymentMonthsAdapter="@{balanceOverviewDataModel.lastPaymentMonthList}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/footerLineSeparator" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

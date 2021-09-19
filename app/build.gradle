@@ -17,7 +17,7 @@ android {
 
     defaultConfig {
         applicationId "com.agelousis.payments"
-        minSdkVersion 24
+        minSdkVersion 26
         targetSdkVersion 31
         versionCode 34
         versionName "3.7"

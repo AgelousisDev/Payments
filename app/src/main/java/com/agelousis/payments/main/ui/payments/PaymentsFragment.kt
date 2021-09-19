@@ -23,6 +23,7 @@ import com.agelousis.payments.main.enumerations.SwipeItemType
 import com.agelousis.payments.main.menuOptions.PaymentsMenuOptionsBottomSheetFragment
 import com.agelousis.payments.main.ui.files.models.FileDataModel
 import com.agelousis.payments.main.ui.payments.adapters.PaymentsAdapter
+import com.agelousis.payments.main.ui.payments.extensions.getThreeLastPaymentMonths
 import com.agelousis.payments.main.ui.payments.models.*
 import com.agelousis.payments.main.ui.payments.presenters.*
 import com.agelousis.payments.main.ui.payments.viewHolders.BalanceOverviewViewHolder
@@ -535,7 +536,12 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                 && query == null
             )
                 filteredList.add(
-                    BalanceOverviewDataModel getBalanceOverviewDataModelWith (activity as? MainActivity)?.userModel?.balance
+                    BalanceOverviewDataModel.getBalanceOverviewDataModelWith(
+                        currentBalance = (activity as? MainActivity)?.userModel?.balance,
+                        lastPaymentMonthList = payments.getThreeLastPaymentMonths(
+                            context = context ?: return@let
+                        )
+                    )
                 )
             payments.groupBy { it.groupName ?: "" }.toSortedMap().forEach { map ->
                 map.value.filter { it.fullName.lowercase().contains(query?.replace(" ", "")?.lowercase() ?: "") || it.groupName?.lowercase()?.contains(query?.replace(" ", "")?.lowercase() ?: "") == true }
