@@ -104,6 +104,7 @@
             app:layout_constraintTop_toBottomOf="@+id/uiModeImageView">
 
             <LinearLayout
+                android:id="@+id/linearLayout2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -129,6 +130,20 @@
                     android:background="@drawable/line_background" />
 
             </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/profileImageView"
+                picassoImageFromInternalFiles="@{userModel.profileImage}"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@{signInState == SignInState.SIGN_UP ? @drawable/profile_background : null}"
+                android:enabled="@{signInState == SignInState.SIGN_UP}"
+                android:onClick="@{() -> presenter.onProfileSelect()}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/importLayout"
+                app:layout_constraintStart_toEndOf="@+id/linearLayout2"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_person" />
 
             <LinearLayout
                 android:id="@+id/importLayout"
@@ -224,25 +239,14 @@
             app:cardElevation="8dp"
             app:cardUseCompatPadding="true"
             app:contentPadding="@dimen/activity_general_horizontal_margin"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/loginButton"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/profileImageView"
-                    picassoImageFromInternalFiles="@{userModel.profileImage}"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:background="@{signInState == SignInState.SIGN_UP ? @drawable/profile_background : null}"
-                    android:enabled="@{signInState == SignInState.SIGN_UP}"
-                    android:onClick="@{() -> presenter.onProfileSelect()}"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_person" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/usernameTextInputLayout"
@@ -255,7 +259,7 @@
                     app:hintEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/profileImageView">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/usernameField"
@@ -294,19 +298,20 @@
                         android:text="@{userModel.biometrics == true &amp;&amp; biometricsActive == true ? userModel.password : null}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/nav_header_vertical_spacing"
-                    android:text="@string/key_forgot_password_label"
-                    android:textSize="10sp"
-                    android:onClick="@{() -> presenter.onForgotPassword(userModel.id)}"
-                    android:visibility="@{signInState == SignInState.LOGIN &amp;&amp; userModel != null &amp;&amp; userModel.passwordPin != null ? View.VISIBLE : View.GONE}"
+                    android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
-                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{() -> presenter.onForgotPassword(userModel.id)}"
+                    android:text="@string/key_forgot_password_label"
+                    android:textSize="10sp"
+                    android:visibility="@{signInState == SignInState.LOGIN &amp;&amp; userModel != null &amp;&amp; userModel.passwordPin != null ? View.VISIBLE : View.GONE}"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/passwordTextInputLayout"/>
+                    app:layout_constraintTop_toBottomOf="@+id/passwordTextInputLayout" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -317,14 +322,15 @@
             style="@style/BasicMaterialButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+            android:layout_marginBottom="10dp"
             android:alpha="@{loginButtonState ? 1.0f : 0.5f}"
             android:enabled="@{loginButtonState}"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
             android:onClick="@{() -> presenter.onSignIn()}"
             android:text="@{signInState.getTitle(context)}"
             app:backgroundTint="@color/colorAccent"
-            app:cornerRadius="0dp"
+            app:cornerRadius="@dimen/activity_general_horizontal_margin"
             app:layout_constraintVertical_bias="1.0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/signUnButton"
@@ -336,13 +342,14 @@
             style="@style/BasicMaterialButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
+            android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+            android:layout_marginBottom="10dp"
             android:onClick="@{() -> presenter.onSignUp()}"
             android:text="@string/key_sign_up_label"
             android:visibility="@{signInState == SignInState.LOGIN ? View.VISIBLE : View.GONE}"
             app:backgroundTint="@color/grey"
-            app:cornerRadius="0dp"
+            app:cornerRadius="@dimen/activity_general_horizontal_margin"
             app:layout_constraintVertical_bias="1.0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

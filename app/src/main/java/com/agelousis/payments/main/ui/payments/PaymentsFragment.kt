@@ -264,7 +264,8 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
             ).also { gridLayoutManager ->
                 gridLayoutManager.spanSizeLookup = object: GridLayoutManager.SpanSizeLookup() {
                     override fun getSpanSize(position: Int) = when(filteredList.getOrNull(index = position)) {
-                        is ClientModel -> 1
+                        is ClientModel,
+                        is BalanceOverviewDataModel -> 1
                         else -> 2
                     }
                 }

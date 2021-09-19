@@ -839,7 +839,9 @@ var SharedPreferences.paymentsFilteringOptionTypes: List<PaymentsFilteringOption
 
 var SharedPreferences.balanceOverviewState: Boolean?
     set(value) {
-        edit() {
+        edit(
+            commit = true
+        ) {
             putBoolean(Constants.SHARED_PREFERENCES_BALANCE_OVERVIEW_DATA_KEY, value == true)
         }
     }

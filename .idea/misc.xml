@@ -10,7 +10,8 @@
         <entry key="app/src/main/res/drawable/ic_baseline_arrow_forward.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/ic_baseline_keyboard_arrow_down_24.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/ic_baseline_keyboard_arrow_up_24.xml" value="0.33645833333333336" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.15577507598784193" />
+        <entry key="app/src/main/res/layout-land/activity_login.xml" value="0.22552083333333334" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.21302083333333333" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.24320652173913043" />
         <entry key="app/src/main/res/layout/balance_overview_row_layout.xml" value="0.5" />
