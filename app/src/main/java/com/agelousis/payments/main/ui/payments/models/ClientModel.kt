@@ -12,7 +12,6 @@ import com.agelousis.payments.utils.extensions.*
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
-import java.time.YearMonth
 import java.util.*
 
 @Parcelize
@@ -130,7 +129,7 @@ data class PaymentAmountModel(val paymentId: Int? = null,
                 ),
                 calendar.get(
                     Calendar.MONTH
-                ),
+                ) + 1,
                 1
             )
         }

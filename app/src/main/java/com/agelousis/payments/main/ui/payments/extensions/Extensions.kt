@@ -14,7 +14,7 @@ import java.util.*
 fun List<ClientModel>.getThreeLastPaymentMonths(context: Context): List<LastPaymentMonthDataModel> {
     val lastPaymentMonthList = arrayListOf<LastPaymentMonthDataModel>()
     val calendar = Date().toCalendar()
-    val currentMonth = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), 1)
+    val currentMonth = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, 1)
     val lastMonth = currentMonth.minusMonths(1)
     val twoMonthsAgo = currentMonth.minusMonths(2)
     val paymentAmountModelList = mapNotNull { clientModel ->
@@ -30,7 +30,7 @@ fun List<ClientModel>.getThreeLastPaymentMonths(context: Context): List<LastPaym
         lastPaymentMonthList.add(
             LastPaymentMonthDataModel(
                 monthLabel = context.resources.getStringArray(R.array.key_months_array)
-                    .getOrNull(index = currentMonth.monthValue) ?: "",
+                    .getOrNull(index = currentMonth.monthValue - 1) ?: "",
                 amount = payments.mapNotNull { paymentAmountModel ->
                     paymentAmountModel.paymentAmount
                 }.sum()
@@ -39,7 +39,7 @@ fun List<ClientModel>.getThreeLastPaymentMonths(context: Context): List<LastPaym
     } ?: lastPaymentMonthList.add(
         LastPaymentMonthDataModel(
             monthLabel = context.resources.getStringArray(R.array.key_months_array)
-                .getOrNull(index = currentMonth.monthValue) ?: ""
+                .getOrNull(index = currentMonth.monthValue - 1) ?: ""
         )
     )
 
@@ -52,7 +52,7 @@ fun List<ClientModel>.getThreeLastPaymentMonths(context: Context): List<LastPaym
         lastPaymentMonthList.add(
             LastPaymentMonthDataModel(
                 monthLabel = context.resources.getStringArray(R.array.key_months_array)
-                    .getOrNull(index = lastMonth.monthValue) ?: "",
+                    .getOrNull(index = lastMonth.monthValue - 1) ?: "",
                 amount = payments.mapNotNull { paymentAmountModel ->
                     paymentAmountModel.paymentAmount
                 }.sum()
@@ -61,7 +61,7 @@ fun List<ClientModel>.getThreeLastPaymentMonths(context: Context): List<LastPaym
     } ?: lastPaymentMonthList.add(
         LastPaymentMonthDataModel(
             monthLabel = context.resources.getStringArray(R.array.key_months_array)
-                .getOrNull(index = lastMonth.monthValue) ?: ""
+                .getOrNull(index = lastMonth.monthValue - 1) ?: ""
         )
     )
 
@@ -74,7 +74,7 @@ fun List<ClientModel>.getThreeLastPaymentMonths(context: Context): List<LastPaym
         lastPaymentMonthList.add(
             LastPaymentMonthDataModel(
                 monthLabel = context.resources.getStringArray(R.array.key_months_array)
-                    .getOrNull(index = twoMonthsAgo.monthValue) ?: "",
+                    .getOrNull(index = twoMonthsAgo.monthValue - 1) ?: "",
                 amount = payments.mapNotNull { paymentAmountModel ->
                     paymentAmountModel.paymentAmount
                 }.sum()
@@ -83,7 +83,7 @@ fun List<ClientModel>.getThreeLastPaymentMonths(context: Context): List<LastPaym
     } ?: lastPaymentMonthList.add(
         LastPaymentMonthDataModel(
             monthLabel = context.resources.getStringArray(R.array.key_months_array)
-                .getOrNull(index = twoMonthsAgo.monthValue) ?: ""
+                .getOrNull(index = twoMonthsAgo.monthValue - 1) ?: ""
         )
     )
 
