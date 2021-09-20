@@ -344,6 +344,12 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
 
     private fun disableBalanceOverview() {
         sharedPreferences?.balanceOverviewState = false
+        filteredList.indexOfFirst {
+            it is BalanceOverviewDataModel
+        }.takeIf { it > -1 }?.let { balanceOverviewDataModelIndex ->
+            filteredList.removeAt(balanceOverviewDataModelIndex)
+            binding.paymentListRecyclerView.adapter?.notifyItemRemoved(balanceOverviewDataModelIndex)
+        }
     }
 
     private fun configurePDFAction(position: Int) {
