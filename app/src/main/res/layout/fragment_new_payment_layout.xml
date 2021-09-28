@@ -187,7 +187,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:layout_marginStart="@dimen/activity_general_horizontal_margin"
-                    android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
                     android:fontFamily="@font/ubuntu"
                     android:onClick="@{() -> presenter.onPaymentAmount((PaymentAmountModel) null)}"
                     android:text="@string/key_add_payment_label"
@@ -195,6 +194,20 @@
                     android:textColor="@color/dayNightTextOnBackground"
                     app:cornerRadius="8dp"
                     app:icon="@drawable/ic_add" />
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+                    android:fontFamily="@font/ubuntu"
+                    android:onClick="@{() -> presenter.onContactSelection()}"
+                    android:text="@string/key_import_from_contact_label"
+                    android:textAllCaps="false"
+                    android:textColor="@color/dayNightTextOnBackground"
+                    app:cornerRadius="8dp"
+                    app:icon="@drawable/ic_baseline_import_contacts_24"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/paymentAmountRecyclerView"

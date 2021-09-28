@@ -241,6 +241,7 @@
     <string name="key_set_your_monthly_balance_label">Set your monthly balance</string>
     <string name="key_available_balance_value_label">Available Balance: %s</string>
     <string name="key_balance_label">Balance</string>
+    <string name="key_import_from_contact_label">Import from contact</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>

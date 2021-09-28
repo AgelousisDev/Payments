@@ -53,7 +53,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.5"/>
+                        app:layout_constraintGuide_begin="329dp" />
 
                     <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
                         android:id="@+id/paymentTypeLayout"
@@ -241,6 +241,23 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:cornerRadius="8dp"
                         app:icon="@drawable/ic_add" />
+
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+                        android:fontFamily="@font/ubuntu"
+                        android:onClick="@{() -> presenter.onContactSelection()}"
+                        android:text="@string/key_import_from_contact_label"
+                        android:textAllCaps="false"
+                        android:textColor="@color/dayNightTextOnBackground"
+                        app:cornerRadius="8dp"
+                        app:icon="@drawable/ic_baseline_import_contacts_24"
+                        app:layout_constraintTop_toBottomOf="@+id/messageTemplateInputLayout"
+                        app:layout_constraintEnd_toEndOf="parent"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/paymentAmountRecyclerView"

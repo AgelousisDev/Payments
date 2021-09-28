@@ -1,9 +1,11 @@
 package com.agelousis.payments.main.ui.newPayment
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -32,6 +34,7 @@ import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.CountryHelper
 import com.agelousis.payments.utils.models.CalendarDataModel
+import com.agelousis.payments.utils.models.ContactDataModel
 import com.agelousis.payments.utils.models.NotificationDataModel
 import com.agelousis.payments.views.detailsSwitch.interfaces.AppSwitchListener
 import kotlinx.coroutines.CoroutineScope
@@ -114,6 +117,20 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
         )
     }
 
+    override fun onContactSelection() {
+        if (ActivityCompat.checkSelfPermission(
+                context ?: return,
+                android.Manifest.permission.READ_CONTACTS
+        ) != PackageManager.PERMISSION_GRANTED)
+            (activity as? MainActivity)?.permissionLauncher?.launch(
+                android.Manifest.permission.READ_CONTACTS
+            )
+        else
+            (activity as? MainActivity)?.selectContact { contactDataModel ->
+                this.contactDataModel = contactDataModel
+            }
+    }
+
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by lazy { ViewModelProvider(this).get(NewPaymentViewModel::class.java) }
     private val args: NewPaymentFragmentArgs by navArgs()
@@ -139,6 +156,14 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             currentClientModel != it
         } ?: true
     private var selectedCountryDataModel: CountryDataModel? = null
+    private var contactDataModel: ContactDataModel? = null
+        set(value) {
+            field = value
+            binding.firstNameLayout.value = value?.firstName
+            binding.surnameLayout.value = value?.lastName
+            binding.emailLayout.value = value?.email
+            binding.phoneLayout.value = value?.phoneNumber
+        }
 
     override fun onResume() {
         super.onResume()
@@ -169,6 +194,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
         initializeNewPayments()
         configureObservers()
         initializeCountryDataModel()
+        configureContactPermissionResult()
     }
 
     private fun setupUI() {
@@ -247,6 +273,12 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             )
         } ?: MainApplication.countryDataModel
         binding.selectedCountryDataModel = selectedCountryDataModel
+    }
+
+    private fun configureContactPermissionResult() {
+        (activity as? MainActivity)?.permissionResultBlock = {
+            onContactSelection()
+        }
     }
 
     private fun redirectToSMSAppIf(payment: PaymentAmountModel, predicate: () -> Boolean) {

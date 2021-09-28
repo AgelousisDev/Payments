@@ -7,6 +7,7 @@ import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -23,6 +24,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.CalendarContract
+import android.provider.ContactsContract
 import android.provider.OpenableColumns
 import android.telephony.TelephonyManager
 import android.text.Html
@@ -60,6 +62,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.BuildConfig
 import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
+import com.agelousis.payments.base.BaseActivity
 import com.agelousis.payments.custom.picasso.CircleTransformation
 import com.agelousis.payments.database.SQLiteHelper
 import com.agelousis.payments.login.enumerations.UIMode
@@ -72,6 +75,7 @@ import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.custom.ImprovedBulletSpan
 import com.agelousis.payments.utils.custom.LoaderDialog
 import com.agelousis.payments.utils.models.CalendarDataModel
+import com.agelousis.payments.utils.models.ContactDataModel
 import com.agelousis.payments.utils.models.NotificationDataModel
 import com.agelousis.payments.utils.receivers.NotificationReceiver
 import com.airbnb.lottie.LottieAnimationView
@@ -86,6 +90,7 @@ import com.squareup.picasso.Target
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
@@ -657,9 +662,20 @@ infix fun Context.scheduleNotification(notificationDataModel: NotificationDataMo
             it.putParcelable(NotificationReceiver.NOTIFICATION_DATA_MODEL_EXTRA, notificationDataModel)
         }
     )
-    val pendingIntent = PendingIntent.getBroadcast(this, getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE).notificationRequestCode, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+    val pendingIntent = PendingIntent.getBroadcast(this, getSharedPreferences(
+        Constants.SHARED_PREFERENCES_NAME,
+        Context.MODE_PRIVATE).notificationRequestCode,
+        notificationIntent,
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
     val alarmManager = getSystemService(Context. ALARM_SERVICE) as? AlarmManager
-    alarmManager?.setAlarmClock(AlarmManager.AlarmClockInfo(notificationDataModel.calendar.timeInMillis, pendingIntent), pendingIntent)
+    alarmManager?.setAlarmClock(
+        AlarmManager.AlarmClockInfo(
+            notificationDataModel.calendar.timeInMillis,
+            pendingIntent
+        ),
+        pendingIntent
+    )
 }
 
 infix fun Context.createCalendarEventWith(calendarDataModel: CalendarDataModel) {
@@ -736,34 +752,29 @@ var isNightMode: Boolean = false
         )
     }
 
-/*fun AppCompatActivity.searchContact(readContactsPermissionRequestCode: Int, contactsSelectorRequestCode: Int) {
-    if (hasPermissions(android.Manifest.permission.READ_CONTACTS))
-        startActivityForResult(
-            Intent(
-                Intent.ACTION_PICK
-            ).also {
-                   it.type = ContactsContract.Contacts.CONTENT_TYPE
-            },
-            contactsSelectorRequestCode
+typealias ContactSelectionBlock = (ContactDataModel) -> Unit
+fun BaseActivity.selectContact(contactSelectionBlock: ContactSelectionBlock) {
+    activityLauncher?.launch(
+        input = Intent(
+            Intent.ACTION_PICK
+        ).also {
+            it.type = ContactsContract.Contacts.CONTENT_TYPE
+        }
+    ) { result ->
+        contactSelectionBlock(
+            (this contactModelFrom result.data?.data) ?: return@launch
         )
-    else
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(
-                android.Manifest.permission.READ_CONTACTS
-            ),
-            readContactsPermissionRequestCode
-        )
-}*/
+    }
+}
 
-/*infix fun Context.contactModelFrom(uri: Uri?) =
+infix fun Context.contactModelFrom(uri: Uri?) =
     uri?.let { unwrappedUri ->
         val cursor = contentResolver.query(unwrappedUri, null, null, null, null) ?: return@let null
         if (cursor.count <= 0)
             return@let null
         cursor.moveToFirst()
         val id = cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.Contacts._ID))
-        val phoneNumber = if (cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) == "1") {
+        val phoneNumber = if (cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) == "1") {
             val contentCursor = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,"${ContactsContract.CommonDataKinds.Phone.CONTACT_ID}=?", arrayOf(id), null)
             contentCursor?.moveToFirst()
             val phone = contentCursor?.getStringOrNull(contentCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
@@ -788,13 +799,13 @@ var isNightMode: Boolean = false
         } catch (e: IOException) {
             null
         }
-        val contactModel = ContactModel(
-            firstName = cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))?.takeIf { it.contains(" ") }?.let {
-                it.split(" ").firstOrNull()
-            } ?: cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)),
-            lastName = cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))?.takeIf { it.contains(" ") }?.let {
-                it.split(" ").second()
-            } ?: cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)),
+        val contactModel = ContactDataModel(
+            firstName = cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))?.takeIf { it.contains(" ") }
+                ?.split(" ")?.firstOrNull()
+                ?: cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)),
+            lastName = cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))?.takeIf { it.contains(" ") }
+                ?.split(" ")?.second()
+                ?: cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)),
             phoneNumber = phoneNumber,
             email = email,
             photoUri = photoUri
@@ -802,7 +813,6 @@ var isNightMode: Boolean = false
         cursor.close()
         contactModel
     }
- */
 
 val Resources.isLandscape
     get() = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
