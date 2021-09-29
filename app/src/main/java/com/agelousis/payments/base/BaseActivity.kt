@@ -10,17 +10,25 @@ typealias PermissionResultBlock = (isGranted: Boolean) -> Unit
 open class BaseActivity: AppCompatActivity() {
 
     var activityLauncher: BaseActivityResult<Intent, ActivityResult>? = null
-    val permissionLauncher = registerForActivityResult(
+    private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         permissionResultBlock?.invoke(isGranted)
+        permissionResultBlock = null
     }
-    var permissionResultBlock: PermissionResultBlock? = null
+    private var permissionResultBlock: PermissionResultBlock? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityLauncher = BaseActivityResult.registerForActivityResult<Intent, ActivityResult>(
             caller = this
+        )
+    }
+
+    fun requestPermission(permission: String, permissionResultBlock: PermissionResultBlock) {
+        this.permissionResultBlock = permissionResultBlock
+        permissionLauncher.launch(
+            permission
         )
     }
 

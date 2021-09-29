@@ -122,9 +122,12 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
                 context ?: return,
                 android.Manifest.permission.READ_CONTACTS
         ) != PackageManager.PERMISSION_GRANTED)
-            (activity as? MainActivity)?.permissionLauncher?.launch(
-                android.Manifest.permission.READ_CONTACTS
-            )
+            (activity as? MainActivity)?.requestPermission(
+                permission = android.Manifest.permission.READ_CONTACTS
+            ) { isGranted ->
+                if (isGranted)
+                    onContactSelection()
+            }
         else
             (activity as? MainActivity)?.selectContact { contactDataModel ->
                 this.contactDataModel = contactDataModel
@@ -194,7 +197,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
         initializeNewPayments()
         configureObservers()
         initializeCountryDataModel()
-        configureContactPermissionResult()
     }
 
     private fun setupUI() {
@@ -273,12 +275,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             )
         } ?: MainApplication.countryDataModel
         binding.selectedCountryDataModel = selectedCountryDataModel
-    }
-
-    private fun configureContactPermissionResult() {
-        (activity as? MainActivity)?.permissionResultBlock = {
-            onContactSelection()
-        }
     }
 
     private fun redirectToSMSAppIf(payment: PaymentAmountModel, predicate: () -> Boolean) {
