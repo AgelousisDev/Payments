@@ -119,11 +119,18 @@ class FilesFragment: Fragment(), FilePresenter, FilesFragmentPresenter {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        configureToolbar()
         configureSearchView()
         configureRecyclerView()
         initializeFiles()
         configureObservers()
         selectedFilePositions.clear()
+    }
+
+    private fun configureToolbar() {
+        binding.paymentsToolbar.setNavigationOnClickListener {
+            clearSelectedFiles()
+        }
     }
 
     private fun configureSearchView() {
@@ -320,6 +327,19 @@ class FilesFragment: Fragment(), FilePresenter, FilesFragmentPresenter {
         findNavController().navigate(
             FilesFragmentDirections.actionGlobalPersonalInformation()
         )
+    }
+
+    private fun clearSelectedFiles() {
+        selectedFilePositions.clear()
+        filteredList.forEachIfEach(
+            predicate = {
+                it is FileDataModel
+            }
+        ) {
+            (it as? FileDataModel)?.fileRowState = FileRowState.NORMAL
+        }
+        (binding.filesListRecyclerView.adapter as? FilesAdapter)?.reloadData()
+        configureAppBar()
     }
 
 }
