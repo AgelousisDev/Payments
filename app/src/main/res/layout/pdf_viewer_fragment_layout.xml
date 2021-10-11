@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="android.view.View"/>
+        <import type="com.agelousis.payments.login.enumerations.UIMode"/>
         <variable
             name="presenter"
             type="com.agelousis.payments.main.ui.pdfViewer.presenters.PdfViewerPresenter" />
@@ -16,6 +16,9 @@
         <variable
             name="nextButtonState"
             type="Boolean" />
+        <variable
+            name="uiMode"
+            type="com.agelousis.payments.login.enumerations.UIMode" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -26,7 +29,8 @@
         android:id="@+id/pdfView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="?attr/actionBarSize"
+        android:layout_marginBottom="66dp"
+        android:background="@{uiMode == UIMode.DARK_MODE ? @color/white : 0}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginStart="@dimen/activity_general_horizontal_margin"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="80dp"
         android:visibility="@{previousButtonState ? View.VISIBLE : View.GONE}"
         android:enabled="@{previousButtonState}"
         android:fontFamily="@font/ubuntu"
@@ -79,7 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="80dp"
         android:fontFamily="@font/ubuntu"
         android:onClick="@{() -> presenter.onNextPage()}"
         android:text="@string/key_next_label"

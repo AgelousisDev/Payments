@@ -3,29 +3,35 @@ package com.agelousis.payments.main.ui.pdfViewer
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.net.toUri
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.agelousis.payments.R
+import com.agelousis.payments.base.BaseBindingFragment
 import com.agelousis.payments.databinding.PdfViewerFragmentLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.pdfViewer.presenters.PdfViewerPresenter
 import com.agelousis.payments.utils.extensions.sharePDF
 import com.agelousis.payments.utils.extensions.showSimpleDialog
+import com.agelousis.payments.utils.extensions.uiMode
 import com.agelousis.payments.utils.helpers.PrinterHelper
 import java.io.File
 import java.io.IOException
 
-class PdfViewerFragment: Fragment(), PdfViewerPresenter {
+class PdfViewerFragment: BaseBindingFragment<PdfViewerFragmentLayoutBinding>(
+    inflate = PdfViewerFragmentLayoutBinding::inflate
+), PdfViewerPresenter {
 
-    private lateinit var binding: PdfViewerFragmentLayoutBinding
     private val args: PdfViewerFragmentArgs by navArgs()
     private var pdfRenderer: PdfRenderer? = null
     private var currentPage: PdfRenderer.Page? = null
     private var currentPageNumber = 0
+
+    override fun onBindData(binding: PdfViewerFragmentLayoutBinding?) {
+        super.onBindData(binding)
+        binding?.uiMode = context?.uiMode
+        binding?.presenter = this
+    }
 
     override fun onPrint() {
         PrinterHelper.initialize(
@@ -57,13 +63,6 @@ class PdfViewerFragment: Fragment(), PdfViewerPresenter {
                 index = currentPageNumber
             )
         } catch (ioException: IOException) {}
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = PdfViewerFragmentLayoutBinding.inflate(inflater, container, false).also {
-            it.presenter = this
-        }
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -100,11 +99,11 @@ class PdfViewerFragment: Fragment(), PdfViewerPresenter {
         val bitmap = Bitmap.createBitmap((currentPage?.width ?: return) * 2, (currentPage?.height ?: return) * 2, Bitmap.Config.ARGB_8888)
 
         currentPage?.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-        binding.pdfView.setImageBitmap(bitmap)
+        binding?.pdfView?.setImageBitmap(bitmap)
 
         val pageCount = pdfRenderer?.pageCount
-        binding.previousButtonState = index != 0
-        binding.nextButtonState = index + 1 < (pageCount ?: 0)
+        binding?.previousButtonState = index != 0
+        binding?.nextButtonState = index + 1 < (pageCount ?: 0)
     }
 
     @Throws(IOException::class)
