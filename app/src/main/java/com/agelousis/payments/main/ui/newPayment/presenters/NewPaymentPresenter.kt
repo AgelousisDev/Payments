@@ -7,4 +7,5 @@ interface NewPaymentPresenter {
     fun onPaymentAmountLongPressed(adapterPosition: Int)
     fun onCalendarEvent(paymentAmountModel: PaymentAmountModel?)
     fun onContactSelection()
+    fun onClearPayments()
 }

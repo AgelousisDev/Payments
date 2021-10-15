@@ -26,6 +26,15 @@ fun setPersonPickerDetails(personDetailsPickerLayout: PersonDetailsPickerLayout,
     }
 }
 
+@BindingAdapter("personDetailsClickListener")
+fun setPersonDetailsClickListener(personDetailsPickerLayout: PersonDetailsPickerLayout, block: () -> Unit) {
+    personDetailsPickerLayout.setOnDetailsPressed(
+        listener = {
+            block()
+        }
+    )
+}
+
 @BindingAdapter("currencyAmount")
 fun setCurrencyAmount(currencyFieldLayout: CurrencyFieldLayout, amount: Double?) {
     amount?.let {

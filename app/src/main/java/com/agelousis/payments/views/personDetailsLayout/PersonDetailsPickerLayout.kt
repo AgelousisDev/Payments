@@ -48,7 +48,8 @@ class PersonDetailsPickerLayout(context: Context, attributeSet: AttributeSet?): 
         }
     }
 
-    fun setOnDetailsPressed(listener: OnClickListener) =
+    fun setOnDetailsPressed(listener: OnClickListener) {
         binding.personDetailsPickerLayout.setOnClickListener(listener)
+    }
 
 }

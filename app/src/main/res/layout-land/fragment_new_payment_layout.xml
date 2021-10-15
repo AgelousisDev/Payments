@@ -53,7 +53,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        app:layout_constraintGuide_begin="329dp" />
+                        app:layout_constraintGuide_percent="0.5"/>
+
+                    <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
+                        android:id="@+id/importFromContactLayout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        personDetailsClickListener="@{() -> presenter.onContactSelection()}"
+                        app:label="@string/key_import_from_contact_label"
+                        app:showLine="true"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
 
                     <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
                         android:id="@+id/paymentTypeLayout"
@@ -65,7 +76,7 @@
                         app:label="@string/key_payment_type_label"
                         app:layout_constraintEnd_toStartOf="@+id/guideline"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/importFromContactLayout"
                         app:showLine="true" />
 
                     <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
@@ -78,7 +89,7 @@
                         app:label="@string/key_first_name_label"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/guideline"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/importFromContactLayout"
                         app:showLine="true" />
 
                     <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
@@ -229,6 +240,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
+                        android:layout_marginStart="@dimen/activity_general_horizontal_margin"
                         android:layout_marginTop="@dimen/nav_header_vertical_spacing"
                         android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
                         android:onClick="@{() -> presenter.onPaymentAmount((PaymentAmountModel) null)}"
@@ -238,26 +250,26 @@
                         android:textColor="@color/dayNightTextOnBackground"
                         app:layout_constraintTop_toBottomOf="@+id/messageTemplateInputLayout"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:cornerRadius="8dp"
                         app:icon="@drawable/ic_add" />
 
-                    <com.google.android.material.button.MaterialButton
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="start"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
                         android:fontFamily="@font/ubuntu"
-                        android:onClick="@{() -> presenter.onContactSelection()}"
-                        android:text="@string/key_import_from_contact_label"
+                        android:onClick="@{() -> presenter.onClearPayments()}"
+                        android:text="@string/key_clear_payments_label"
                         android:textAllCaps="false"
-                        android:textColor="@color/dayNightTextOnBackground"
+                        android:textColor="@color/white"
+                        android:visibility="@{paymentsAreAvailable ? View.VISIBLE : View.GONE}"
+                        app:backgroundTint="@color/red"
                         app:cornerRadius="8dp"
-                        app:icon="@drawable/ic_baseline_import_contacts_24"
-                        app:layout_constraintTop_toBottomOf="@+id/messageTemplateInputLayout"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                        app:icon="@drawable/ic_add"
+                        app:iconTint="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/messageTemplateInputLayout" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/paymentAmountRecyclerView"

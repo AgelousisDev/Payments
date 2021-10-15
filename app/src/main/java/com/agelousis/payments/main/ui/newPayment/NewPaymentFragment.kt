@@ -83,7 +83,9 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
 
     override fun onPaymentAmountLongPressed(adapterPosition: Int) {
         availablePayments.getOrNull(index = adapterPosition)?.paymentAmountRowState = availablePayments.getOrNull(index = adapterPosition)?.paymentAmountRowState?.otherState ?: PaymentAmountRowState.NORMAL
-        (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
+        (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.notifyItemChanged(
+            adapterPosition
+        )
         when((activity as? MainActivity)?.floatingButtonType) {
             FloatingButtonType.NORMAL ->
                 if (availablePayments.any { it.paymentAmountRowState == PaymentAmountRowState.CAN_BE_DISMISSED })
@@ -132,6 +134,16 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             (activity as? MainActivity)?.selectContact { contactDataModel ->
                 this.contactDataModel = contactDataModel
             }
+    }
+
+    override fun onClearPayments() {
+        availablePayments.apply {
+            (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.notifyItemRangeRemoved(
+                0,
+                size
+            )
+            clear()
+        }
     }
 
     private val uiScope = CoroutineScope(Dispatchers.Main)
@@ -184,6 +196,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             it.groupModel = args.groupDataModel
             it.personModel = args.clientDataModel
             it.userModel = (activity as? MainActivity)?.userModel
+            it.paymentsAreAvailable = availablePayments.isNotEmpty()
             it.presenter = this
         }
         return binding.root
@@ -319,23 +332,25 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
     }
 
     private fun initializeNewPayments() {
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<PaymentAmountModel>(NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA)
-            ?.observe(viewLifecycleOwner) { paymentAmountModel ->
-                paymentAmountUpdateIndex?.let { index ->
-                    availablePayments.set(
-                        index = index,
-                        paymentAmountModel
-                    )
-                } ?: run {
-                    availablePayments.add(paymentAmountModel)
-                    redirectToSMSAppIf(
-                        payment = paymentAmountModel
-                    ) {
-                        !currentClientModel?.phone.isNullOrEmpty()
-                    }
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<PaymentAmountModel>(
+            NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA
+        )?.observe(viewLifecycleOwner) { paymentAmountModel ->
+            paymentAmountUpdateIndex?.let { index ->
+                availablePayments.set(
+                    index = index,
+                    paymentAmountModel
+                )
+            } ?: run {
+                availablePayments.add(paymentAmountModel)
+                redirectToSMSAppIf(
+                    payment = paymentAmountModel
+                ) {
+                    !currentClientModel?.phone.isNullOrEmpty()
                 }
-                (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
             }
+            (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
+            binding.paymentsAreAvailable = availablePayments.isNotEmpty()
+        }
     }
 
     private fun configureRecyclerView() {
@@ -344,8 +359,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             vat = (activity as? MainActivity)?.userModel?.vat,
             presenter = this
         )
-        binding.paymentAmountRecyclerView.scheduleLayoutAnimation()
-        (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
     }
 
     private fun initializeGroups() {
@@ -405,6 +418,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             }
             (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
             paymentReadyForDeletionIndexArray.clear()
+            binding.paymentsAreAvailable = availablePayments.isNotEmpty()
             (activity as? MainActivity)?.returnFloatingButtonBackToNormal()
         }
     }
@@ -448,6 +462,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             (activity as? MainActivity)?.returnFloatingButtonBackToNormal()
         }
         paymentReadyForDeletionIndexArray.clear()
+        binding.paymentsAreAvailable = availablePayments.isNotEmpty()
     }
 
 }

@@ -106,9 +106,13 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         (filteredList.getOrNull(
             index = paymentIndex
         ) as? ClientModel)?.isSelected = isSelected
-        appBarIsVisible = filteredList.filterIsInstance<ClientModel>().any { it.isSelected }
-        selectedPayments = filteredList.filterIsInstance<ClientModel>().count { it.isSelected }
-        (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.restoreItem(
+        appBarIsVisible = filteredList.filterIsInstance<ClientModel>().any {
+            it.isSelected
+        }
+        selectedPayments = filteredList.filterIsInstance<ClientModel>().count {
+            it.isSelected
+        }
+        (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.updateIn(
             position = paymentIndex
         )
     }
@@ -327,7 +331,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                                 configurePDFAction(
                                     position = position
                                 )
-                                (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.restoreItem(
+                                (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.updateIn(
                                     position = position
                                 )
                             }
@@ -441,7 +445,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                 else
                     resources.getString(R.string.key_delete_payment_message),
             negativeButtonBlock = {
-                (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.restoreItem(
+                (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.updateIn(
                     position = position
                 )
             },

@@ -38,7 +38,10 @@ class PaymentAmountAdapter(private val paymentModelList: ArrayList<PaymentAmount
 
     fun reloadData() {
         sortPayments()
-        notifyDataSetChanged()
+        notifyItemRangeChanged(
+            0,
+            paymentModelList.size
+        )
     }
 
     private fun sortPayments() {

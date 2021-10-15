@@ -19,6 +19,9 @@
             name="selectedCountryDataModel"
             type="com.agelousis.payments.main.ui.countrySelector.models.CountryDataModel" />
         <variable
+            name="paymentsAreAvailable"
+            type="Boolean" />
+        <variable
             name="presenter"
             type="com.agelousis.payments.main.ui.newPayment.presenters.NewPaymentPresenter" />
     </data>
@@ -47,6 +50,13 @@
                 android:layout_height="wrap_content"
                 android:animateLayoutChanges="true"
                 android:orientation="vertical">
+
+                <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    personDetailsClickListener="@{() -> presenter.onContactSelection()}"
+                    app:label="@string/key_import_from_contact_label"
+                    app:showLine="true" />
 
                 <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
                     android:id="@+id/paymentTypeLayout"
@@ -195,19 +205,20 @@
                     app:cornerRadius="8dp"
                     app:icon="@drawable/ic_add" />
 
-                <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="start"
                     android:layout_marginStart="@dimen/activity_general_horizontal_margin"
                     android:fontFamily="@font/ubuntu"
-                    android:onClick="@{() -> presenter.onContactSelection()}"
-                    android:text="@string/key_import_from_contact_label"
+                    android:onClick="@{() -> presenter.onClearPayments()}"
+                    android:text="@string/key_clear_payments_label"
                     android:textAllCaps="false"
-                    android:textColor="@color/dayNightTextOnBackground"
+                    android:textColor="@color/white"
+                    android:visibility="@{paymentsAreAvailable ? View.VISIBLE : View.GONE}"
+                    app:backgroundTint="@color/red"
+                    app:iconTint="@color/white"
                     app:cornerRadius="8dp"
-                    app:icon="@drawable/ic_baseline_import_contacts_24"/>
+                    app:icon="@drawable/ic_add"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/paymentAmountRecyclerView"

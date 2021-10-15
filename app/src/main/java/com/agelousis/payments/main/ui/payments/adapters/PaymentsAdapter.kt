@@ -1,5 +1,6 @@
 package com.agelousis.payments.main.ui.payments.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -117,13 +118,18 @@ class PaymentsAdapter(
         return super.getItemViewType(position)
     }
 
-    fun reloadData() = notifyDataSetChanged()
+    @SuppressLint("NotifyDataSetChanged")
+    fun reloadData() {
+        notifyDataSetChanged()
+    }
 
-    fun restoreItem(position: Int) = notifyItemChanged(position)
+    infix fun updateIn(position: Int) {
+        notifyItemChanged(position)
+    }
 
-    override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+    /*override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
         super.onViewDetachedFromWindow(holder)
         (holder as? PaymentViewHolder)?.clearAnimation()
-    }
+    }*/
 
 }
