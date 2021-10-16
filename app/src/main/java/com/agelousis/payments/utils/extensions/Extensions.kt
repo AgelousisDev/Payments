@@ -543,9 +543,11 @@ fun Context.hasPermissions(vararg permissions: String): Boolean {
 
 fun Context.call(phone: String) = startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phone")))
 
-fun Context.textEmail(email: String, content: String? = null) {
+fun Context.textEmail(
+    vararg emails: String, content: String? = null
+) {
     startActivity(Intent(Intent.ACTION_SEND).also {
-        it.putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+        it.putExtra(Intent.EXTRA_EMAIL, emails)
         it.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.app_name))
         it.putExtra(Intent.EXTRA_TEXT, content)
         it.type = "text/plain"

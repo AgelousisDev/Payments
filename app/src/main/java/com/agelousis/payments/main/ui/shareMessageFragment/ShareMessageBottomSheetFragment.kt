@@ -126,7 +126,7 @@ class ShareMessageBottomSheetFragment: BasicBottomSheetDialogFragment(), ShareMe
                 )
             ShareMessageType.EMAIL ->
                 context?.textEmail(
-                    email = personModel?.email ?: return,
+                    personModel?.email ?: return,
                     content = personModel?.messageTemplate ?: ""
                 )
 
