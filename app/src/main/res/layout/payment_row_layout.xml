@@ -23,8 +23,7 @@
         viewBackground="@{clientModel.backgroundDrawable}"
         android:alpha="@{clientModel.active == true ? 1.0f : 0.5f}"
         android:onClick="@{() -> presenter.onPaymentSelected(clientModel, adapterPosition)}"
-        android:animateLayoutChanges="true"
-        tools:targetApi="M">
+        android:animateLayoutChanges="true">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/selectedPaymentIcon"

@@ -115,6 +115,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.updateIn(
             position = paymentIndex
         )
+        (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
     }
 
     override fun onPersonAdd(groupModel: GroupModel) {
@@ -596,7 +597,6 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         filteredList.addAll(
             list.filterIsInstance<GroupModel>().filter {
                 it.groupName?.lowercase()?.contains(query?.lowercase() ?: "") == true
-                        //&& it.groupName != resources.getString(R.string.key_inactive_label)
             }
         )
 
