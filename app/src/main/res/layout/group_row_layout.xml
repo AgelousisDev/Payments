@@ -43,27 +43,41 @@
             android:text="@{groupModel.groupName}"
             android:textColor="@{(groupModel.color != null) ? groupModel.color : @color/grey}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/appCompatImageView3"
+            app:layout_constraintEnd_toStartOf="@+id/sendEmailIcon"
             app:layout_constraintStart_toEndOf="@+id/groupHeaderLine"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Group 1" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/appCompatImageView3"
+            android:id="@+id/sendEmailIcon"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="@{() -> presenter.onGroupLongPressed(groupModel)}"
+            android:onClick="@{() -> presenter.onGroupEmail(groupModel)}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/addClientButton"
+            app:layout_constraintEnd_toStartOf="@+id/sendSmsIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_alternate_email_24" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/sendSmsIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="@{() -> presenter.onGroupSms(groupModel)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/addClientIcon"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_speech_bubble" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/addClientButton"
+            android:id="@+id/addClientIcon"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="@dimen/activity_general_horizontal_margin"

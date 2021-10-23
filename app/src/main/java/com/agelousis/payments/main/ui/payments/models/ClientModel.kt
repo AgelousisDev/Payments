@@ -54,6 +54,9 @@ data class ClientModel(val personId: Int? = null,
 
     infix fun getPaymentsFilteringOptionType(paymentsFilteringOptionTypes: List<PaymentsFilteringOptionType>?) =
         when {
+            active == false -> PaymentsFilteringOptionType.INACTIVE.also { paymentsFilteringOptionType ->
+                paymentsFilteringOptionType.position = paymentsFilteringOptionTypes?.firstOrNull { it == PaymentsFilteringOptionType.INACTIVE }?.position ?: return@also
+            }
             free == true -> PaymentsFilteringOptionType.FREE.also { paymentsFilteringOptionType ->
                 paymentsFilteringOptionType.position = paymentsFilteringOptionTypes?.firstOrNull { it == PaymentsFilteringOptionType.FREE }?.position ?: return@also
             }

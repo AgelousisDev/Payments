@@ -11,6 +11,7 @@ import com.agelousis.payments.utils.extensions.currencySymbol
 import com.agelousis.payments.utils.extensions.paymentsFilteringOptionTypes
 import com.agelousis.payments.utils.helpers.CountryHelper
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainApplication: Application() {
 
@@ -39,23 +40,32 @@ class MainApplication: Application() {
         if (sharedPreferences.paymentsFilteringOptionTypes.isNullOrEmpty()) {
             paymentsFilteringOptionTypes = listOf(
                 PaymentsFilteringOptionType.FREE.also {
-                    it.position = 0
+                    it.position = it.ordinal
                 },
                 PaymentsFilteringOptionType.CHARGE.also {
-                    it.position = 1
+                    it.position = it.ordinal
                 },
                 PaymentsFilteringOptionType.EXPIRED.also {
-                    it.position = 2
+                    it.position = it.ordinal
                 },
                 PaymentsFilteringOptionType.SINGLE_PAYMENT.also {
-                    it.position = 3
+                    it.position = it.ordinal
+                },
+                PaymentsFilteringOptionType.INACTIVE.also {
+                    it.position = it.ordinal
                 }
             )
             sharedPreferences.paymentsFilteringOptionTypes = paymentsFilteringOptionTypes
         }
         else {
-            val paymentsFilteringOptionTypes = sharedPreferences.paymentsFilteringOptionTypes
-            paymentsFilteringOptionTypes?.forEachIndexed { index, paymentsFilteringOptionType ->
+            val paymentsFilteringOptionTypes = ArrayList(sharedPreferences.paymentsFilteringOptionTypes ?: listOf())
+            if (PaymentsFilteringOptionType.INACTIVE !in paymentsFilteringOptionTypes) {
+                paymentsFilteringOptionTypes.add(
+                    PaymentsFilteringOptionType.INACTIVE
+                )
+                sharedPreferences.paymentsFilteringOptionTypes = paymentsFilteringOptionTypes
+            }
+            paymentsFilteringOptionTypes.forEachIndexed { index, paymentsFilteringOptionType ->
                 paymentsFilteringOptionType.position = index
             }
             MainApplication.paymentsFilteringOptionTypes = paymentsFilteringOptionTypes

@@ -5,5 +5,6 @@ import com.agelousis.payments.main.ui.payments.models.GroupModel
 interface GroupPresenter {
     fun onGroupSelected(groupModel: GroupModel)
     fun onPersonAdd(groupModel: GroupModel)
-    fun onGroupLongPressed(groupModel: GroupModel)
+    fun onGroupSms(groupModel: GroupModel)
+    fun onGroupEmail(groupModel: GroupModel)
 }

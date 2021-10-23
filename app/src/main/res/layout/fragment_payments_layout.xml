@@ -101,6 +101,29 @@
                 android:gravity="center"
                 android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="@{() -> presenter.onPaymentsSendEmail()}">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/ic_baseline_alternate_email_24"
+                    app:tint="@color/dayNightTextOnBackground" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextViewLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/key_email_label"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:onClick="@{() -> presenter.onPaymentsSendSms()}">
 
             <androidx.appcompat.widget.AppCompatImageView

@@ -21,12 +21,7 @@ class FilterPaymentsFragment: Fragment() {
 
     private lateinit var binding: FilterPaymentsFragmentLayoutBinding
     private val paymentsFilteringOptionTypeList
-        get() = MainApplication.paymentsFilteringOptionTypes ?: listOf(
-            PaymentsFilteringOptionType.FREE,
-            PaymentsFilteringOptionType.CHARGE,
-            PaymentsFilteringOptionType.EXPIRED,
-            PaymentsFilteringOptionType.SINGLE_PAYMENT
-        )
+        get() = MainApplication.paymentsFilteringOptionTypes ?: PaymentsFilteringOptionType.values().toList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FilterPaymentsFragmentLayoutBinding.inflate(

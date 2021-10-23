@@ -11,24 +11,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
-import com.agelousis.payments.custom.enumerations.SwipeAction
-import com.agelousis.payments.custom.itemTouchHelper.SwipeItemTouchHelper
 import com.agelousis.payments.databinding.FragmentPaymentsLayoutBinding
 import com.agelousis.payments.main.MainActivity
-import com.agelousis.payments.main.enumerations.SwipeItemType
 import com.agelousis.payments.main.menuOptions.PaymentsMenuOptionsBottomSheetFragment
 import com.agelousis.payments.main.ui.files.models.FileDataModel
 import com.agelousis.payments.main.ui.payments.adapters.PaymentsAdapter
-import com.agelousis.payments.main.ui.payments.extensions.getThreeLastPaymentMonths
+import com.agelousis.payments.main.ui.payments.extensions.*
 import com.agelousis.payments.main.ui.payments.models.*
 import com.agelousis.payments.main.ui.payments.presenters.*
-import com.agelousis.payments.main.ui.payments.viewHolders.BalanceOverviewViewHolder
-import com.agelousis.payments.main.ui.payments.viewHolders.GroupViewHolder
-import com.agelousis.payments.main.ui.payments.viewHolders.PaymentViewHolder
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
 import com.agelousis.payments.main.ui.paymentsFiltering.FilterPaymentsFragment
 import com.agelousis.payments.main.ui.paymentsFiltering.enumerations.PaymentsFilteringOptionType
@@ -38,22 +31,18 @@ import com.agelousis.payments.main.ui.shareMessageFragment.ShareMessageBottomShe
 import com.agelousis.payments.main.ui.totalPaymentsAmount.TotalPaymentsAmountDialogFragment
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
-import com.agelousis.payments.utils.helpers.PDFHelper
 import com.agelousis.payments.widgets.extensions.clientModelList
 import com.agelousis.payments.widgets.extensions.updatePaymentsAppWidget
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 
-class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAmountSumPresenter, PaymentsFragmentPresenter, BalanceOverviewPresenter {
+class PaymentsFragment: Fragment(), GroupPresenter, PaymentPresenter, PaymentAmountSumPresenter, PaymentsFragmentPresenter, BalanceOverviewPresenter {
 
     override fun onDeletePayments() {
-        configureMultipleDeleteAction(
-            positions = filteredList.filterIsInstance<ClientModel>().filter { it.isSelected }.mapNotNull { it.personId }
-        )
+        this configureMultipleDeleteActionWith filteredList.filterIsInstance<ClientModel>().filter { it.isSelected }.mapNotNull { it.personId }
     }
 
     override fun onExportInvoice() {
@@ -67,6 +56,13 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         context?.sendSMSMessage(
             mobileNumbers = itemsList.filterIsInstance<ClientModel>().filter { it.isSelected }.mapNotNull { it.phone },
             message = (activity as? MainActivity)?.userModel?.defaultMessageTemplate ?: ""
+        )
+    }
+
+    override fun onPaymentsSendEmail() {
+        context?.textEmail(
+            *itemsList.filterIsInstance<ClientModel>().filter { it.isSelected }.mapNotNull { it.email }.toTypedArray(),
+            content = (activity as? MainActivity)?.userModel?.defaultMessageTemplate ?: ""
         )
     }
 
@@ -126,20 +122,12 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         )
     }
 
-    override fun onGroupLongPressed(groupModel: GroupModel) {
-        context?.showSimpleDialog(
-            title = resources.getString(R.string.key_sms_label),
-            message = String.format(
-                resources.getString(R.string.key_send_sms_to_group_value_message),
-                groupModel.groupName ?: ""
-            ),
-            positiveButtonText = resources.getString(R.string.key_send_label)
-        ) {
-            context?.sendSMSMessage(
-                mobileNumbers = itemsList.filterIsInstance<ClientModel>().filter { it.groupId == groupModel.groupId }.mapNotNull { it.phone },
-                message = (activity as? MainActivity)?.userModel?.defaultMessageTemplate ?: ""
-            )
-        }
+    override fun onGroupSms(groupModel: GroupModel) {
+        this sendGroupSms groupModel
+    }
+
+    override fun onGroupEmail(groupModel: GroupModel) {
+        this sendGroupEmail groupModel
     }
 
     override fun onPaymentAmountSumSelected(paymentAmountSumModel: PaymentAmountSumModel) {
@@ -173,12 +161,12 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         }
     }
 
-    private lateinit var binding: FragmentPaymentsLayoutBinding
-    private val uiScope = CoroutineScope(Dispatchers.Main)
-    private val sharedPreferences by lazy { context?.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE) }
-    private val viewModel: PaymentsViewModel by viewModels()
-    private val itemsList by lazy { arrayListOf<Any>() }
-    private val filteredList by lazy { arrayListOf<Any>() }
+    lateinit var binding: FragmentPaymentsLayoutBinding
+    val uiScope = CoroutineScope(Dispatchers.Main)
+    val sharedPreferences by lazy { context?.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE) }
+    val viewModel: PaymentsViewModel by viewModels()
+    val itemsList by lazy { arrayListOf<Any>() }
+    val filteredList by lazy { arrayListOf<Any>() }
     private var searchViewState: Boolean = false
         set(value) {
             field  = value
@@ -314,115 +302,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         configureSwipeEvents()
     }
 
-    private fun configureSwipeEvents() {
-        val swipeItemTouchHelper = ItemTouchHelper(
-            SwipeItemTouchHelper(
-                context = context ?: return,
-                marginStart = resources.getDimension(R.dimen.activity_general_horizontal_margin),
-                swipePredicateBlock = {
-                    it is GroupViewHolder || it is PaymentViewHolder || it is BalanceOverviewViewHolder
-                }
-            ) innerBlock@ { swipeAction, swipeItemType, position ->
-                when(swipeItemType) {
-                    SwipeItemType.BALANCE_OVERVIEW_ITEM ->
-                        disableBalanceOverview()
-                    else ->
-                        when(swipeAction) {
-                            SwipeAction.RIGHT -> {
-                                configurePDFAction(
-                                    position = position
-                                )
-                                (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.updateIn(
-                                    position = position
-                                )
-                            }
-                            SwipeAction.LEFT ->
-                                configureDeleteAction(
-                                    position = position
-                                )
-                        }
-                }
-            }
-        )
-        swipeItemTouchHelper.attachToRecyclerView(binding.paymentListRecyclerView)
-    }
-
-    private fun disableBalanceOverview() {
-        sharedPreferences?.balanceOverviewState = false
-        filteredList.indexOfFirst {
-            it is BalanceOverviewDataModel
-        }.takeIf { it > -1 }?.let { balanceOverviewDataModelIndex ->
-            filteredList.removeAt(balanceOverviewDataModelIndex)
-            binding.paymentListRecyclerView.adapter?.notifyItemRemoved(balanceOverviewDataModelIndex)
-        }
-    }
-
-    private fun configurePDFAction(position: Int) {
-        uiScope.launch {
-            filteredList.getOrNull(index = position)?.asIs<GroupModel> { groupModel ->
-                viewModel.initializePayments(
-                    context = context ?: return@asIs,
-                    userModel = (activity as? MainActivity)?.userModel,
-                    groupModel = groupModel
-                ) {
-                    initializePDFCreation(
-                        clients = it
-                    )
-                }
-            }
-            filteredList.getOrNull(index = position)?.asIs<ClientModel> { personModel ->
-                initializePDFCreation(
-                    clients = listOf(personModel)
-                )
-            }
-        }
-    }
-
-    private fun initializePDFCreation(
-        clients: List<ClientModel>,
-        fromMultipleSelection: Boolean = false
-    ) {
-        PDFHelper.shared.initializePDF(
-            context = context ?: return,
-            userModel = (activity as? MainActivity)?.userModel,
-            clients = clients,
-        ) { pdfFile ->
-            uiScope.launch {
-                viewModel.insertFile(
-                    context = context ?: return@launch,
-                    userModel = (activity as? MainActivity)?.userModel,
-                    file = pdfFile,
-                    description = if (clients.isSizeOne)
-                        clients.firstOrNull()?.fullName ?: ""
-                    else
-                        clients.groupBy { it.groupName }.mapNotNull { it.key }.joinToString(
-                            separator = " - "
-                        )
-                )
-                if (fromMultipleSelection)
-                    clearSelectedPayments()
-                uiScope.launch {
-                    delay(
-                        timeMillis = 1000L
-                    )
-                    redirectToPdfViewer(
-                        pdfFile = pdfFile,
-                        description = if (clients.isSizeOne)
-                            clients.firstOrNull()?.fullName ?: ""
-                        else
-                            clients.groupBy { it.groupName }.mapNotNull { it.key }.joinToString(
-                                separator = " - "
-                            )
-                    )
-                }
-                context?.message(
-                    message = resources.getString(R.string.key_file_saved_message)
-                )
-            }
-        }
-    }
-
-    private fun redirectToPdfViewer(pdfFile: File, description: String) {
+    fun redirectToPdfViewer(pdfFile: File, description: String) {
         findNavController().navigate(
             PaymentsFragmentDirections.actionPaymentsFragmentToPdfViewerFragment(
                 fileDataModel = FileDataModel(
@@ -433,49 +313,6 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
                     it.fileData = pdfFile.readBytes()
                 }
             )
-        )
-    }
-
-    private fun configureDeleteAction(position: Int) {
-        context?.showTwoButtonsDialog(
-            isCancellable = false,
-            title = resources.getString(R.string.key_warning_label),
-            message =
-                if (filteredList.getOrNull(index = position) is GroupModel)
-                    String.format(resources.getString(R.string.key_delete_group_message_value), (filteredList.getOrNull(index = position) as? GroupModel)?.groupName)
-                else
-                    resources.getString(R.string.key_delete_payment_message),
-            negativeButtonBlock = {
-                (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.updateIn(
-                    position = position
-                )
-            },
-            positiveButtonText = resources.getString(R.string.key_delete_label),
-            positiveButtonBlock = {
-                uiScope.launch {
-                    viewModel.deleteItem(
-                        context = context ?: return@launch,
-                        item = filteredList.getOrNull(index = position)
-                    )
-                }
-            }
-        )
-    }
-
-    private fun configureMultipleDeleteAction(positions: List<Int>) {
-        context?.showTwoButtonsDialog(
-            isCancellable = false,
-            title = resources.getString(R.string.key_warning_label),
-            message = resources.getString(R.string.key_delete_selected_payments_message),
-            positiveButtonText = resources.getString(R.string.key_delete_label),
-            positiveButtonBlock = {
-                uiScope.launch {
-                    viewModel.deletePayments(
-                        context = context ?: return@launch,
-                        personIds = positions
-                    )
-                }
-            }
         )
     }
 
@@ -499,7 +336,7 @@ class PaymentsFragment : Fragment(), GroupPresenter, PaymentPresenter, PaymentAm
         }
     }
 
-    private fun clearSelectedPayments() {
+    fun clearSelectedPayments() {
         this setSelectedPaymentsAppBarState false
         filteredList.forEachIfEach(
             predicate = {
