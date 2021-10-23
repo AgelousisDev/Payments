@@ -15,6 +15,7 @@ import com.agelousis.payments.utils.extensions.sharePDF
 import com.agelousis.payments.utils.extensions.showSimpleDialog
 import com.agelousis.payments.utils.extensions.uiMode
 import com.agelousis.payments.utils.helpers.PrinterHelper
+import com.agelousis.payments.utils.models.SimpleDialogDataModel
 import java.io.File
 import java.io.IOException
 
@@ -120,8 +121,10 @@ class PdfViewerFragment: BaseBindingFragment<PdfViewerFragmentLayoutBinding>(
                 pdfFile = it
             )
         } ?: context?.showSimpleDialog(
-            title = resources.getString(R.string.key_warning_label),
-            message = resources.getString(R.string.key_file_not_exists_message)
+            SimpleDialogDataModel(
+                title = resources.getString(R.string.key_warning_label),
+                message = resources.getString(R.string.key_file_not_exists_message)
+            )
         )
     }
 

@@ -11,12 +11,15 @@ import com.agelousis.payments.utils.extensions.toCalendar
 import java.time.LocalDate
 import java.util.*
 
-fun List<ClientModel>.getThreeLastPaymentMonths(context: Context): List<LastPaymentMonthDataModel> {
+infix fun List<ClientModel>.getSixLastPaymentMonths(context: Context): List<LastPaymentMonthDataModel> {
     val lastPaymentMonthList = arrayListOf<LastPaymentMonthDataModel>()
     val calendar = Date().toCalendar()
     val currentMonth = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, 1)
     val lastMonth = currentMonth.minusMonths(1)
     val twoMonthsAgo = currentMonth.minusMonths(2)
+    val threeMonthsAgo = currentMonth.minusMonths(3)
+    val fourMonthsAgo = currentMonth.minusMonths(4)
+    val fiveMonthsAgo = currentMonth.minusMonths(5)
     val paymentAmountModelList = mapNotNull { clientModel ->
         clientModel.payments
     }.flatten()
@@ -84,6 +87,72 @@ fun List<ClientModel>.getThreeLastPaymentMonths(context: Context): List<LastPaym
         LastPaymentMonthDataModel(
             monthLabel = context.resources.getStringArray(R.array.key_months_array)
                 .getOrNull(index = twoMonthsAgo.monthValue - 1) ?: ""
+        )
+    )
+
+    /** Three Months Ago **/
+    paymentAmountModelList.filter { paymentAmountModel ->
+        paymentAmountModel.paymentMonthLocalDate == threeMonthsAgo
+    }.takeIf { payments ->
+        payments.isNotEmpty()
+    }?.let { payments ->
+        lastPaymentMonthList.add(
+            LastPaymentMonthDataModel(
+                monthLabel = context.resources.getStringArray(R.array.key_months_array)
+                    .getOrNull(index = threeMonthsAgo.monthValue - 1) ?: "",
+                amount = payments.mapNotNull { paymentAmountModel ->
+                    paymentAmountModel.paymentAmount
+                }.sum()
+            )
+        )
+    } ?: lastPaymentMonthList.add(
+        LastPaymentMonthDataModel(
+            monthLabel = context.resources.getStringArray(R.array.key_months_array)
+                .getOrNull(index = threeMonthsAgo.monthValue - 1) ?: ""
+        )
+    )
+
+    /** Four Months Ago **/
+    paymentAmountModelList.filter { paymentAmountModel ->
+        paymentAmountModel.paymentMonthLocalDate == fourMonthsAgo
+    }.takeIf { payments ->
+        payments.isNotEmpty()
+    }?.let { payments ->
+        lastPaymentMonthList.add(
+            LastPaymentMonthDataModel(
+                monthLabel = context.resources.getStringArray(R.array.key_months_array)
+                    .getOrNull(index = fourMonthsAgo.monthValue - 1) ?: "",
+                amount = payments.mapNotNull { paymentAmountModel ->
+                    paymentAmountModel.paymentAmount
+                }.sum()
+            )
+        )
+    } ?: lastPaymentMonthList.add(
+        LastPaymentMonthDataModel(
+            monthLabel = context.resources.getStringArray(R.array.key_months_array)
+                .getOrNull(index = fourMonthsAgo.monthValue - 1) ?: ""
+        )
+    )
+
+    /** Five Months Ago **/
+    paymentAmountModelList.filter { paymentAmountModel ->
+        paymentAmountModel.paymentMonthLocalDate == fiveMonthsAgo
+    }.takeIf { payments ->
+        payments.isNotEmpty()
+    }?.let { payments ->
+        lastPaymentMonthList.add(
+            LastPaymentMonthDataModel(
+                monthLabel = context.resources.getStringArray(R.array.key_months_array)
+                    .getOrNull(index = fiveMonthsAgo.monthValue - 1) ?: "",
+                amount = payments.mapNotNull { paymentAmountModel ->
+                    paymentAmountModel.paymentAmount
+                }.sum()
+            )
+        )
+    } ?: lastPaymentMonthList.add(
+        LastPaymentMonthDataModel(
+            monthLabel = context.resources.getStringArray(R.array.key_months_array)
+                .getOrNull(index = fiveMonthsAgo.monthValue - 1) ?: ""
         )
     )
 

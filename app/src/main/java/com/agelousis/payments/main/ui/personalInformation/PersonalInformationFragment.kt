@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
@@ -34,6 +35,7 @@ import com.agelousis.payments.main.ui.personalInformation.presenter.PersonalInfo
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.CountryHelper
+import com.agelousis.payments.utils.models.SimpleDialogDataModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -353,10 +355,13 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
 
     private fun initializeUserDeletion() {
         context?.showTwoButtonsDialog(
-            title = resources.getString(R.string.key_delete_label),
-            message = resources.getString(R.string.key_delete_user_message),
-            positiveButtonText = resources.getString(R.string.key_delete_label),
-            positiveButtonBlock = this::deleteUser
+            SimpleDialogDataModel(
+                title = resources.getString(R.string.key_delete_label),
+                message = resources.getString(R.string.key_delete_user_message),
+                positiveButtonText = resources.getString(R.string.key_delete_label),
+                positiveButtonBackgroundColor = ContextCompat.getColor(context ?: return, R.color.red),
+                positiveButtonBlock = this::deleteUser
+            )
         )
     }
 

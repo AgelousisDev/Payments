@@ -48,6 +48,7 @@ import com.agelousis.payments.receivers.NotificationDataReceiver
 import com.agelousis.payments.receivers.interfaces.NotificationListener
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
+import com.agelousis.payments.utils.models.SimpleDialogDataModel
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.coroutines.CoroutineScope
@@ -123,10 +124,10 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
             R.id.filesFragment -> {
                 navigationIcon = null
                 appBarTitle = ""
+                floatingButtonState = false
                 floatingButtonImage = R.drawable.ic_delete
                 floatingButtonPosition = FloatingButtonPosition.CENTER
                 floatingButtonTint = R.color.red
-                floatingButtonState = false
             }
             R.id.periodFilterFragment -> {
                 navigationIcon = getDrawableFromAttribute(
@@ -301,22 +302,26 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
         }
 
     override fun onBackPressed() {
-        when(binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().currentDestination?.id) {
+        when (binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().currentDestination?.id) {
             R.id.historyFragment ->
                 showSimpleDialog(
-                    title = resources.getString(R.string.key_logout_label),
-                    message = resources.getString(R.string.key_logout_message),
-                    icon = R.drawable.ic_logout
-                ) {
-                    startActivity(Intent(this, LoginActivity::class.java))
-                    finish()
-                }
+                    SimpleDialogDataModel(
+                        title = resources.getString(R.string.key_logout_label),
+                        message = resources.getString(R.string.key_logout_message),
+                        icon = R.drawable.ic_logout
+                    ) {
+                        startActivity(Intent(this, LoginActivity::class.java))
+                        finish()
+                    }
+                )
             R.id.newPaymentFragment ->
                 showNewPersonUnsavedFieldsWarning()
             R.id.newPaymentAmountFragment ->
                 showNewPaymentUnsavedFieldsWarning()
             else -> {
-                binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().previousBackStackEntry?.savedStateHandle?.remove<PaymentAmountModel>(NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA)
+                binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().previousBackStackEntry?.savedStateHandle?.remove<PaymentAmountModel>(
+                    NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA
+                )
                 super.onBackPressed()
             }
         }
@@ -399,57 +404,64 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
 
     fun initializeDatabaseExport() {
         showTwoButtonsDialog(
-            title = resources.getString(R.string.key_export_database_label),
-            message = resources.getString(R.string.key_export_message),
-            icon = R.drawable.ic_export,
-            positiveButtonText = resources.getString(R.string.key_proceed_label),
-            positiveButtonBlock = {
-                activityLauncher?.launch(
-                    input = createDocumentIntentWith(
-                        fileName = Constants.EXPORT_DATABASE_FILE_NAME,
-                        mimeType = Constants.GENERAL_MIME_TYPE
-                    )
-                ) { result ->
-                    alterFile(
-                        uri = result.data?.data,
-                        file = getDatabasePath(SQLiteHelper.DB_NAME)
-                    )
+            SimpleDialogDataModel(
+                title = resources.getString(R.string.key_export_database_label),
+                message = resources.getString(R.string.key_export_message),
+                icon = R.drawable.ic_export,
+                positiveButtonText = resources.getString(R.string.key_proceed_label),
+                positiveButtonBlock = {
+                    activityLauncher?.launch(
+                        input = createDocumentIntentWith(
+                            fileName = Constants.EXPORT_DATABASE_FILE_NAME,
+                            mimeType = Constants.GENERAL_MIME_TYPE
+                        )
+                    ) { result ->
+                        alterFile(
+                            uri = result.data?.data,
+                            file = getDatabasePath(SQLiteHelper.DB_NAME)
+                        )
+                    }
                 }
-            }
+            )
         )
     }
 
     fun triggerPaymentsClearance() {
         showTwoButtonsDialog(
-            title = resources.getString(R.string.key_warning_label),
-            message = resources.getString(R.string.key_clear_all_payments_message),
-            icon = R.drawable.ic_clear_all,
-            positiveButtonText = resources.getString(R.string.key_clear_label),
-            positiveButtonBlock = {
-                uiScope.launch {
-                    dbManager.clearPayments(
-                        userId = userModel?.id
-                    ) {
-                        (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
+            SimpleDialogDataModel(
+                title = resources.getString(R.string.key_warning_label),
+                message = resources.getString(R.string.key_clear_all_payments_message),
+                icon = R.drawable.ic_clear_all,
+                positiveButtonText = resources.getString(R.string.key_clear_label),
+                positiveButtonBackgroundColor = ContextCompat.getColor(this, R.color.red),
+                positiveButtonBlock = {
+                    uiScope.launch {
+                        dbManager.clearPayments(
+                            userId = userModel?.id
+                        ) {
+                            (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
+                        }
                     }
                 }
-            }
+            )
         )
     }
 
     private fun showNewPersonUnsavedFieldsWarning() {
         if ((supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.fieldsHaveChanged == true)
             showTwoButtonsDialog(
-                title = resources.getString(R.string.key_warning_label),
-                message = resources.getString(R.string.key_unsaved_changes_message),
-                negativeButtonText = resources.getString(R.string.key_discard_label),
-                negativeButtonBlock = {
-                    super.onBackPressed()
-                },
-                positiveButtonText = resources.getString(R.string.key_save_label),
-                positiveButtonBlock = {
-                    (supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.checkInputFields()
-                }
+                SimpleDialogDataModel(
+                    title = resources.getString(R.string.key_warning_label),
+                    message = resources.getString(R.string.key_unsaved_changes_message),
+                    negativeButtonText = resources.getString(R.string.key_discard_label),
+                    negativeButtonBlock = {
+                        super.onBackPressed()
+                    },
+                    positiveButtonText = resources.getString(R.string.key_save_label),
+                    positiveButtonBlock = {
+                        (supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.checkInputFields()
+                    }
+                )
             )
         else
             super.onBackPressed()
@@ -458,16 +470,18 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
     private fun showNewPaymentUnsavedFieldsWarning() {
         if ((supportFragmentManager.currentNavigationFragment as? NewPaymentAmountFragment)?.fieldsHaveChanged == true)
             showTwoButtonsDialog(
-                title = resources.getString(R.string.key_warning_label),
-                message = resources.getString(R.string.key_unsaved_changes_message),
-                negativeButtonText = resources.getString(R.string.key_discard_label),
-                negativeButtonBlock = {
-                    super.onBackPressed()
-                },
-                positiveButtonText = resources.getString(R.string.key_save_label),
-                positiveButtonBlock = {
-                    (supportFragmentManager.currentNavigationFragment as? NewPaymentAmountFragment)?.checkInputFields()
-                }
+                SimpleDialogDataModel(
+                    title = resources.getString(R.string.key_warning_label),
+                    message = resources.getString(R.string.key_unsaved_changes_message),
+                    negativeButtonText = resources.getString(R.string.key_discard_label),
+                    negativeButtonBlock = {
+                        super.onBackPressed()
+                    },
+                    positiveButtonText = resources.getString(R.string.key_save_label),
+                    positiveButtonBlock = {
+                        (supportFragmentManager.currentNavigationFragment as? NewPaymentAmountFragment)?.checkInputFields()
+                    }
+                )
             )
         else
             super.onBackPressed()

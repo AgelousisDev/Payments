@@ -31,6 +31,7 @@ import com.agelousis.payments.userSelection.UserSelectionFragment
 import com.agelousis.payments.userSelection.presenters.UserSelectionPresenter
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
+import com.agelousis.payments.utils.models.SimpleDialogDataModel
 import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -233,15 +234,17 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, UserSe
     private fun showBiometricsAlert(predicate: () -> Boolean, closure: (Boolean) -> Unit) {
         if (predicate())
             showTwoButtonsDialog(
-                title = resources.getString(R.string.key_biometrics_label),
-                message = resources.getString(R.string.key_enable_biometrics_label),
-                icon = R.drawable.ic_fingerprint,
-                negativeButtonBlock = {
-                    closure(false)
-                },
-                positiveButtonBlock = {
-                    closure(true)
-                }
+                SimpleDialogDataModel(
+                    title = resources.getString(R.string.key_biometrics_label),
+                    message = resources.getString(R.string.key_enable_biometrics_label),
+                    icon = R.drawable.ic_fingerprint,
+                    negativeButtonBlock = {
+                        closure(false)
+                    },
+                    positiveButtonBlock = {
+                        closure(true)
+                    }
+                )
             )
         else closure(false)
     }
@@ -353,21 +356,23 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, UserSe
 
     private fun initializeDatabaseImport() {
         showTwoButtonsDialog(
-            title = resources.getString(R.string.key_import_label),
-            message = resources.getString(R.string.key_import_message),
-            icon = R.drawable.ic_import,
-            positiveButtonText = resources.getString(R.string.key_proceed_label),
-            positiveButtonBlock = {
-                activityLauncher?.launch(
-                    input = this getContentIntent Constants.GENERAL_MIME_TYPE
-                ) { result ->
-                    if (result.resultCode != Activity.RESULT_OK)
-                        return@launch
-                    makeDatabaseImport(
-                        uri = result.data?.data
-                    )
+            SimpleDialogDataModel(
+                title = resources.getString(R.string.key_import_label),
+                message = resources.getString(R.string.key_import_message),
+                icon = R.drawable.ic_import,
+                positiveButtonText = resources.getString(R.string.key_proceed_label),
+                positiveButtonBlock = {
+                    activityLauncher?.launch(
+                        input = this getContentIntent Constants.GENERAL_MIME_TYPE
+                    ) { result ->
+                        if (result.resultCode != Activity.RESULT_OK)
+                            return@launch
+                        makeDatabaseImport(
+                            uri = result.data?.data
+                        )
+                    }
                 }
-            }
+            )
         )
     }
 
@@ -406,13 +411,14 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, UserSe
     private fun checkProductDate() {
         if (!Date().isValidProductDate)
             showSimpleDialog(
-                isCancellable = false,
-                title = resources.getString(R.string.key_warning_label),
-                message = resources.getString(R.string.key_license_expired_message),
-                icon = R.drawable.ic_license
-            ) {
-                this@LoginActivity.finish()
-            }
+                SimpleDialogDataModel(
+                    isCancellable = false,
+                    title = resources.getString(R.string.key_warning_label),
+                    message = resources.getString(R.string.key_license_expired_message),
+                    icon = R.drawable.ic_license,
+                    positiveButtonBlock = this::finish
+                )
+            )
     }
 
     private fun showGuideIf(predicate: () -> Boolean) {

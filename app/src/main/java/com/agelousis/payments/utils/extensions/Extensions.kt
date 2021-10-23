@@ -12,7 +12,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.*
@@ -28,20 +27,16 @@ import android.provider.ContactsContract
 import android.provider.OpenableColumns
 import android.telephony.TelephonyManager
 import android.text.Html
-import android.text.SpannableStringBuilder
 import android.text.Spanned
-import android.text.style.BulletSpan
 import android.util.TypedValue
 import android.view.*
 import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.webkit.MimeTypeMap
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatEditText
@@ -55,7 +50,6 @@ import androidx.core.content.FileProvider
 import androidx.core.content.edit
 import androidx.core.database.getStringOrNull
 import androidx.core.view.*
-import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
@@ -67,24 +61,15 @@ import com.agelousis.payments.custom.picasso.CircleTransformation
 import com.agelousis.payments.database.SQLiteHelper
 import com.agelousis.payments.login.enumerations.UIMode
 import com.agelousis.payments.main.ui.countrySelector.models.CountryDataModel
-import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.paymentsFiltering.enumerations.PaymentsFilteringOptionType
-import com.agelousis.payments.main.ui.personalInformation.models.OptionType
-import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.payments.utils.constants.Constants
-import com.agelousis.payments.utils.custom.ImprovedBulletSpan
 import com.agelousis.payments.utils.custom.LoaderDialog
 import com.agelousis.payments.utils.models.CalendarDataModel
 import com.agelousis.payments.utils.models.ContactDataModel
 import com.agelousis.payments.utils.models.NotificationDataModel
 import com.agelousis.payments.utils.receivers.NotificationReceiver
-import com.airbnb.lottie.LottieAnimationView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.switchmaterial.SwitchMaterial
-import com.google.android.material.textview.MaterialTextView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import java.io.ByteArrayOutputStream
@@ -98,8 +83,6 @@ import java.util.*
 import kotlin.NoSuchElementException
 import kotlin.math.max
 
-typealias PositiveButtonBlock = () -> Unit
-typealias ItemPositionDialogBlock = (Int) -> Unit
 typealias CompletionSuccessBlock = (Boolean) -> Unit
 typealias CircularAnimationCompletionBlock = () -> Unit
 typealias BitmapBlock = (Bitmap?) -> Unit
@@ -212,53 +195,6 @@ infix fun Context.byteArrayFromInternalImage(imageName: String?) =
         bitmap.recycle()
         bytesArray
     }
-
-fun Context.showTwoButtonsDialog(title: String, message: String, icon: Int? = null, isCancellable: Boolean? = null, negativeButtonText: String? = null, negativeButtonBlock: PositiveButtonBlock? = null,
-                                 positiveButtonText: String? = null, positiveButtonBlock: PositiveButtonBlock) {
-    val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog)
-        .setTitle(title)
-        .setMessage(message)
-        .setIcon(icon ?: 0)
-        .setCancelable(isCancellable ?: true)
-        .setNegativeButton(negativeButtonText ?: resources.getString(R.string.key_cancel_label)) { dialogInterface, _ ->
-            dialogInterface.dismiss()
-            negativeButtonBlock?.invoke()
-        }
-        .setPositiveButton(positiveButtonText ?: resources.getString(R.string.key_ok_label)) { _, _ ->
-            positiveButtonBlock()
-        }
-    val materialDialog = materialAlertDialogBuilder.create()
-    materialDialog.show()
-    materialDialog.getButton(AlertDialog.BUTTON_NEGATIVE).isAllCaps = false
-    materialDialog.getButton(AlertDialog.BUTTON_POSITIVE).isAllCaps = false
-}
-
-fun Context.showSimpleDialog(title: String, message: String, icon: Int? = null, isCancellable: Boolean = true, positiveButtonText: String? = null, positiveButtonBlock: PositiveButtonBlock? = null) {
-    val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog)
-        .setTitle(title)
-        .setCancelable(isCancellable)
-        .setMessage(message)
-        .setIcon(icon ?: 0)
-        .setPositiveButton(positiveButtonText ?: resources.getString(R.string.key_ok_label)) { dialogInterface, _ ->
-            dialogInterface.dismiss()
-            positiveButtonBlock?.invoke()
-        }
-    val materialDialog = materialAlertDialogBuilder.create()
-    materialDialog.show()
-    materialDialog.getButton(AlertDialog.BUTTON_POSITIVE).isAllCaps = false
-}
-
-fun Context.showListDialog(title: String, items: List<String>, isCancellable: Boolean = true, itemPositionDialogBlock: ItemPositionDialogBlock) {
-    val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog)
-        .setTitle(title)
-        .setCancelable(isCancellable)
-        .setItems(items.toTypedArray()) { p0, p1 ->
-            p0.dismiss()
-            itemPositionDialogBlock(p1)
-        }
-    val materialDialog = materialAlertDialogBuilder.create()
-    materialDialog.show()
-}
 
 val Context.hasBiometrics: Boolean
     get() = BiometricManager.from(this).canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS
@@ -1007,14 +943,6 @@ fun Context.getDrawableFromAttribute(attributeId: Int, tintColor: Int? = null): 
     }
 }
 
-@BindingAdapter("picassoImagePath")
-fun AppCompatImageView.loadImagePath(fileName: String?) {
-    fileName?.let {
-        Picasso.get().load(File(context.filesDir, it)).placeholder(R.drawable.ic_person)
-            .resize(60.px, 60.px).transform(CircleTransformation()).centerCrop().into(this)
-    }
-}
-
 val Context.isEdgeToEdgeEnabled: Boolean
     get() {
         return try {
@@ -1046,245 +974,4 @@ fun View.applyAnimationOnKeyboard() {
                 }
             }
         )
-}
-
-@BindingAdapter("picassoImageFromInternalFiles")
-fun setPicassoImageFromInternalFiles(appCompatImageView: AppCompatImageView, fileName: String?) {
-    fileName?.let {
-        Picasso.get().load(File(appCompatImageView.context.filesDir, it)).placeholder(R.drawable.ic_person)
-            .transform(CircleTransformation()).into(appCompatImageView)
-    } ?: appCompatImageView.setImageResource(R.drawable.ic_person)
-}
-
-@BindingAdapter("picassoGroupImageFromInternalFiles")
-fun setPicassoGroupImageFromInternalFiles(appCompatImageView: AppCompatImageView, fileName: String?) {
-    fileName?.let {
-        Picasso.get().load(File(appCompatImageView.context.filesDir, it)).transform(CircleTransformation()).into(appCompatImageView)
-    }
-}
-
-@BindingAdapter("picassoUrlImage")
-fun setPicassoUrlImage(appCompatImageView: AppCompatImageView, imageUrl: String?) {
-    Picasso.get().load(imageUrl ?: return).into(
-        appCompatImageView,
-        object: Callback {
-            override fun onSuccess() {
-                appCompatImageView.alpha = 0f
-                appCompatImageView.animate().alpha(1f)
-            }
-
-            override fun onError(e: java.lang.Exception?) {
-                appCompatImageView.alpha = 0f
-                appCompatImageView.setImageResource(
-                    R.drawable.ic_no_wifi
-                )
-                appCompatImageView.animate().alpha(1f)
-            }
-        }
-    )
-}
-
-@BindingAdapter("optionType", "switchStateChanged")
-fun switchStateChanged(switchMaterial: SwitchMaterial, optionType: OptionType, optionPresenter: OptionPresenter) {
-    switchMaterial.setOnCheckedChangeListener { _, isChecked ->
-        when(optionType) {
-            OptionType.CHANGE_BIOMETRICS_STATE ->
-                optionPresenter.onBiometricsState(
-                    state = isChecked
-                )
-            OptionType.CHANGE_BALANCE_OVERVIEW_STATE ->
-                optionPresenter.onBalanceOverviewStateChange(
-                    state = isChecked
-                )
-            else -> {}
-        }
-    }
-}
-
-@BindingAdapter("srcCompat")
-fun setSrcCompat(appCompatImageView: AppCompatImageView, resourceId: Int?) {
-    resourceId?.let {
-        appCompatImageView.setImageResource(it)
-    }
-}
-
-@BindingAdapter("backgroundDrawableTintColor")
-fun setBackgroundDrawableTintColor(viewGroup: ViewGroup, color: Int?) {
-    color?.let {
-        viewGroup.background?.setTint(it)
-    }
-}
-
-@BindingAdapter("backgroundDrawableTintColor")
-fun setBackgroundDrawableTintColor(view: View, color: Int?) {
-    color?.let {
-        view.background?.setTint(it)
-    }
-}
-
-@BindingAdapter("backgroundViewColor")
-fun setBackgroundViewColor(view: View, color: Int?) {
-    color?.let {
-        view.setBackgroundColor(ContextCompat.getColor(view.context, it))
-    }
-}
-
-@BindingAdapter("backgroundViewContextColor")
-fun setBackgroundViewContextColor(viewGroup: ViewGroup, resourceId: Int?) {
-    resourceId?.let {
-        viewGroup.setBackgroundColor(resourceId)
-    }
-}
-
-@BindingAdapter("backgroundViewTintColor")
-fun setBackgroundViewTintColor(view: View, color: Int?) {
-    color?.let {
-        view.background?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(view.context, it), PorterDuff.Mode.SRC_IN)
-    }
-}
-
-@BindingAdapter("imageFromByteArray")
-fun setImageFromByteArray(appCompatImageView: AppCompatImageView, byteArray: ByteArray?) {
-    byteArray?.let {
-        val bitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
-        appCompatImageView.setImageBitmap(bitmap)
-    }
-}
-
-@BindingAdapter("viewBackground")
-fun setViewBackground(viewGroup: ViewGroup, resourceId: Int?) {
-    resourceId?.let {
-        viewGroup.setBackgroundResource(resourceId)
-    }
-}
-
-@BindingAdapter("textViewColorByPaymentDate")
-fun setTextViewColorByPaymentDate(materialTextView: MaterialTextView, payments: List<PaymentAmountModel?>?) {
-    payments?.takeIf { it.isNotEmpty() } ?: return
-    if (payments.mapNotNull {
-            it?.paymentMonthDate
-        }.all {
-            val paymentMonthDate = it.toCalendar(plusMonths = 1)
-            paymentMonthDate.time.isDatePassed
-        })
-        materialTextView.setTextColor(
-            ContextCompat.getColor(materialTextView.context,
-                 R.color.red
-            )
-        )
-    else
-        materialTextView.setTextColor(
-            ContextCompat.getColor(
-                materialTextView.context,
-                R.color.green
-            )
-        )
-}
-
-@BindingAdapter("layoutWidth")
-fun setLayoutWidth(view: View, width: Float) {
-    view.layoutParams.apply {
-        this.width = 0
-    }
-    val valueAnimator = ValueAnimator.ofInt(0, width.toInt())
-    valueAnimator.addUpdateListener {
-        view.layoutParams.apply {
-            this.width = it.animatedValue as? Int ?: return@apply
-        }
-        view.requestLayout()
-    }
-    valueAnimator.duration = 1000L
-    valueAnimator.start()
-}
-
-@BindingAdapter("lottieAnimation")
-fun setLottieAnimation(lottieAnimationView: LottieAnimationView, animatedJsonFile: String?) {
-    animatedJsonFile?.let {
-        lottieAnimationView.setAnimation(it)
-    }
-}
-
-@BindingAdapter("animatedText")
-fun setAnimatedText(materialTextView: MaterialTextView, text: String?) {
-    text?.let {
-        val anim = AlphaAnimation(1.0f, 0.0f)
-        anim.duration = 200
-        anim.repeatCount = 1
-        anim.repeatMode = Animation.REVERSE
-        anim.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationEnd(animation: Animation?) { }
-            override fun onAnimationStart(animation: Animation?) { }
-            override fun onAnimationRepeat(animation: Animation?) {
-                materialTextView.text = it
-            }
-        })
-        materialTextView.startAnimation(anim)
-    }
-}
-
-@BindingAdapter("picassoResourceDrawable")
-fun setPicassoDrawable(appCompatImageView: AppCompatImageView, resourceId: Int?) {
-    resourceId?.let {
-        appCompatImageView.post {
-            Picasso.get().load(it).resize(appCompatImageView.width * 2, 0).into(appCompatImageView)
-        }
-    }
-}
-
-@BindingAdapter("bulletsHtmlText")
-fun setHtmlTextWithBullets(materialTextView: MaterialTextView, htmlTextResourceId: Int?) {
-    htmlTextResourceId?.let { htmlResource ->
-        val htmlSpannable = Html.fromHtml(materialTextView.resources.getString(htmlResource), Html.FROM_HTML_MODE_LEGACY)
-        val spannableBuilder = SpannableStringBuilder(htmlSpannable)
-        val bulletSpans = spannableBuilder.getSpans(0, spannableBuilder.length, BulletSpan::class.java)
-        bulletSpans.forEach {
-            val start = spannableBuilder.getSpanStart(it)
-            val end = spannableBuilder.getSpanEnd(it)
-            spannableBuilder.removeSpan(it)
-            spannableBuilder.setSpan(
-                ImprovedBulletSpan(bulletRadius = 3.px, gapWidth = 8.px),
-                start,
-                end,
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
-            )
-        }
-        materialTextView.text = spannableBuilder
-    }
-}
-
-@BindingAdapter("imageTintColor")
-fun setImageViewTint(appCompatImageView: AppCompatImageView, tintColor: Int?) {
-    tintColor?.let {
-        appCompatImageView.imageTintList = ColorStateList.valueOf(it)
-    }
-}
-
-@BindingAdapter("imageViewBitmap")
-fun setImageViewBitmap(appCompatImageView: AppCompatImageView, bitmap: Bitmap?) {
-    appCompatImageView.setImageBitmap(bitmap ?: return)
-}
-
-@BindingAdapter("nullableTextResource")
-fun setNullableTextResource(materialTextView: MaterialTextView, resourceId: Int?) {
-    materialTextView.text = materialTextView.context.resources.getString(resourceId ?: return)
-}
-
-@BindingAdapter("alphaOrBlurEffectViewGroup")
-fun setAlphaOrBlurEffectViewGroup(viewGroup: ViewGroup, state: Boolean) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-        if (state)
-            viewGroup.setRenderEffect(
-                RenderEffect.createBlurEffect(
-                    5f,
-                    5f,
-                    Shader.TileMode.CLAMP
-                )
-            )
-        else
-            viewGroup.setRenderEffect(
-                null
-            )
-    else
-        viewGroup.alpha = if (state) 0.5f else 1.0f
-
 }

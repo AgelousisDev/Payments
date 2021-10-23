@@ -22,7 +22,7 @@ data class BalanceOverviewDataModel(
                 icon = R.drawable.ic_monthly_salary,
                 title = R.string.key_balance_overview_label,
                 subtitle = R.string.key_set_your_monthly_balance_label,
-                currentBalanceOverviewState = if (currentBalance != null) BalanceOverviewState.EXPANDED else BalanceOverviewState.NORMAL,
+                currentBalanceOverviewState = BalanceOverviewState.NORMAL,
                 currentBalance = currentBalance,
                 lastPaymentMonthList = lastPaymentMonthList
             )

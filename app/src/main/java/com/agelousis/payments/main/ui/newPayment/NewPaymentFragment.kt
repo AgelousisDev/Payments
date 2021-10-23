@@ -36,6 +36,7 @@ import com.agelousis.payments.utils.helpers.CountryHelper
 import com.agelousis.payments.utils.models.CalendarDataModel
 import com.agelousis.payments.utils.models.ContactDataModel
 import com.agelousis.payments.utils.models.NotificationDataModel
+import com.agelousis.payments.utils.models.SimpleDialogDataModel
 import com.agelousis.payments.views.detailsSwitch.interfaces.AppSwitchListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -293,23 +294,25 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
     private fun redirectToSMSAppIf(payment: PaymentAmountModel, predicate: () -> Boolean) {
         if (predicate())
             context?.showTwoButtonsDialog(
-                title = resources.getString(R.string.key_sms_label),
-                message = resources.getString(R.string.key_send_sms_message),
-                icon = R.drawable.ic_sms,
-                positiveButtonText = resources.getString(R.string.key_send_label),
-                positiveButtonBlock = {
-                    context?.sendSMSMessage(
-                        mobileNumbers = listOf(
-                            binding.phoneLayout.value ?: ""
-                        ),
-                        message = String.format(
-                            "%s\n%s",
-                            binding.messageTemplateField.text?.toString() ?: "",
-                            payment.paymentMonth ?: payment.paymentDate ?: ""
+                SimpleDialogDataModel(
+                    title = resources.getString(R.string.key_sms_label),
+                    message = resources.getString(R.string.key_send_sms_message),
+                    icon = R.drawable.ic_sms,
+                    positiveButtonText = resources.getString(R.string.key_send_label),
+                    positiveButtonBlock = {
+                        context?.sendSMSMessage(
+                            mobileNumbers = listOf(
+                                binding.phoneLayout.value ?: ""
+                            ),
+                            message = String.format(
+                                "%s\n%s",
+                                binding.messageTemplateField.text?.toString() ?: "",
+                                payment.paymentMonth ?: payment.paymentDate ?: ""
+                            )
                         )
-                    )
-                },
-                isCancellable = false
+                    },
+                    isCancellable = false
+                )
             )
     }
 

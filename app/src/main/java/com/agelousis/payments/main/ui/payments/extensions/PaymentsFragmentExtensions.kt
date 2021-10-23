@@ -2,6 +2,7 @@ package com.agelousis.payments.main.ui.payments.extensions
 
 import android.graphics.Rect
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.R
@@ -20,6 +21,7 @@ import com.agelousis.payments.main.ui.payments.viewHolders.GroupViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.PaymentViewHolder
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.PDFHelper
+import com.agelousis.payments.utils.models.SimpleDialogDataModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -54,76 +56,89 @@ fun PaymentsFragment.configureSwipeEvents() {
 
 infix fun PaymentsFragment.sendGroupSms(groupModel: GroupModel) {
     context?.showSimpleDialog(
-        title = resources.getString(R.string.key_sms_label),
-        message = String.format(
-            resources.getString(R.string.key_send_sms_to_group_value_message),
-            groupModel.groupName ?: ""
-        ),
-        positiveButtonText = resources.getString(R.string.key_send_label)
-    ) {
-        context?.sendSMSMessage(
-            mobileNumbers = itemsList.filterIsInstance<ClientModel>().filter { it.groupId == groupModel.groupId }.mapNotNull { it.phone },
-            message = (activity as? MainActivity)?.userModel?.defaultMessageTemplate ?: ""
-        )
-    }
+        SimpleDialogDataModel(
+            title = resources.getString(R.string.key_sms_label),
+            message = String.format(
+                resources.getString(R.string.key_send_sms_to_group_value_message),
+                groupModel.groupName ?: ""
+            ),
+            positiveButtonText = resources.getString(R.string.key_send_label)
+        ) {
+            context?.sendSMSMessage(
+                mobileNumbers = itemsList.filterIsInstance<ClientModel>()
+                    .filter { it.groupId == groupModel.groupId }.mapNotNull { it.phone },
+                message = (activity as? MainActivity)?.userModel?.defaultMessageTemplate ?: ""
+            )
+        }
+    )
 }
 
 infix fun PaymentsFragment.sendGroupEmail(groupModel: GroupModel) {
     context?.showSimpleDialog(
-        title = resources.getString(R.string.key_email_label),
-        message = String.format(
-            resources.getString(R.string.key_send_email_to_group_value_message),
-            groupModel.groupName ?: ""
-        ),
-        positiveButtonText = resources.getString(R.string.key_send_label)
-    ) {
-        context?.textEmail(
-            *itemsList.filterIsInstance<ClientModel>().filter { it.groupId == groupModel.groupId }.mapNotNull { it.email }.toTypedArray(),
-            content = (activity as? MainActivity)?.userModel?.defaultMessageTemplate ?: ""
-        )
-    }
+        SimpleDialogDataModel(
+            title = resources.getString(R.string.key_email_label),
+            message = String.format(
+                resources.getString(R.string.key_send_email_to_group_value_message),
+                groupModel.groupName ?: ""
+            ),
+            positiveButtonText = resources.getString(R.string.key_send_label)
+        ) {
+            context?.textEmail(
+                *itemsList.filterIsInstance<ClientModel>()
+                    .filter { it.groupId == groupModel.groupId }.mapNotNull { it.email }
+                    .toTypedArray(),
+                content = (activity as? MainActivity)?.userModel?.defaultMessageTemplate ?: ""
+            )
+        }
+    )
 }
 
 private infix fun PaymentsFragment.deletePaymentWith(position: Int) {
     context?.showTwoButtonsDialog(
-        isCancellable = false,
-        title = resources.getString(R.string.key_warning_label),
-        message =
-        if (filteredList.getOrNull(index = position) is GroupModel)
-            String.format(resources.getString(R.string.key_delete_group_message_value), (filteredList.getOrNull(index = position) as? GroupModel)?.groupName)
-        else
-            resources.getString(R.string.key_delete_payment_message),
-        negativeButtonBlock = {
-            (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.updateIn(
-                position = position
-            )
-        },
-        positiveButtonText = resources.getString(R.string.key_delete_label),
-        positiveButtonBlock = {
-            uiScope.launch {
-                viewModel.deleteItem(
-                    context = context ?: return@launch,
-                    item = filteredList.getOrNull(index = position)
+        SimpleDialogDataModel(
+            isCancellable = false,
+            title = resources.getString(R.string.key_warning_label),
+            message =
+            if (filteredList.getOrNull(index = position) is GroupModel)
+                String.format(resources.getString(R.string.key_delete_group_message_value), (filteredList.getOrNull(index = position) as? GroupModel)?.groupName)
+            else
+                resources.getString(R.string.key_delete_payment_message),
+            negativeButtonBlock = {
+                (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.updateIn(
+                    position = position
                 )
+            },
+            positiveButtonText = resources.getString(R.string.key_delete_label),
+            positiveButtonBackgroundColor = ContextCompat.getColor(context ?: return, R.color.red),
+            positiveButtonBlock = {
+                uiScope.launch {
+                    viewModel.deleteItem(
+                        context = context ?: return@launch,
+                        item = filteredList.getOrNull(index = position)
+                    )
+                }
             }
-        }
+        )
     )
 }
 
 infix fun PaymentsFragment.configureMultipleDeleteActionWith(positions: List<Int>) {
     context?.showTwoButtonsDialog(
-        isCancellable = false,
-        title = resources.getString(R.string.key_warning_label),
-        message = resources.getString(R.string.key_delete_selected_payments_message),
-        positiveButtonText = resources.getString(R.string.key_delete_label),
-        positiveButtonBlock = {
-            uiScope.launch {
-                viewModel.deletePayments(
-                    context = context ?: return@launch,
-                    personIds = positions
-                )
+        SimpleDialogDataModel(
+            isCancellable = false,
+            title = resources.getString(R.string.key_warning_label),
+            message = resources.getString(R.string.key_delete_selected_payments_message),
+            positiveButtonText = resources.getString(R.string.key_delete_label),
+            positiveButtonBackgroundColor = ContextCompat.getColor(context ?: return, R.color.red),
+            positiveButtonBlock = {
+                uiScope.launch {
+                    viewModel.deletePayments(
+                        context = context ?: return@launch,
+                        personIds = positions
+                    )
+                }
             }
-        }
+        )
     )
 }
 

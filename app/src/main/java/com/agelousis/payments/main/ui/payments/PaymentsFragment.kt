@@ -357,9 +357,7 @@ class PaymentsFragment: Fragment(), GroupPresenter, PaymentPresenter, PaymentAmo
                 filteredList.add(
                     BalanceOverviewDataModel.getBalanceOverviewDataModelWith(
                         currentBalance = (activity as? MainActivity)?.userModel?.balance,
-                        lastPaymentMonthList = payments.getThreeLastPaymentMonths(
-                            context = context ?: return@let
-                        )
+                        lastPaymentMonthList = payments getSixLastPaymentMonths (context ?: return@let)
                     )
                 )
             payments.groupBy { it.groupName ?: "" }.toSortedMap().forEach { map ->

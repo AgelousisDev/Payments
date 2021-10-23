@@ -23,6 +23,7 @@ import com.agelousis.payments.main.ui.files.presenter.FilesFragmentPresenter
 import com.agelousis.payments.main.ui.files.viewModel.FilesViewModel
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.utils.extensions.*
+import com.agelousis.payments.utils.models.SimpleDialogDataModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -60,8 +61,10 @@ class FilesFragment: BaseBindingFragment<FragmentFilesLayoutBinding>(
                     )
                 )
             } ?: context?.showSimpleDialog(
-                title = resources.getString(R.string.key_warning_label),
-                message = resources.getString(R.string.key_file_not_exists_message)
+                SimpleDialogDataModel(
+                    title = resources.getString(R.string.key_warning_label),
+                    message = resources.getString(R.string.key_file_not_exists_message)
+                )
             )
     }
 
@@ -184,27 +187,30 @@ class FilesFragment: BaseBindingFragment<FragmentFilesLayoutBinding>(
 
     private fun configureDeleteAction(clearAllState: Boolean) {
         context?.showTwoButtonsDialog(
-            title = resources.getString(R.string.key_warning_label),
-            message = resources.getString(
-                if (clearAllState)
-                    R.string.key_clear_all_invoices_question
-                else
-                    R.string.key_delete_selected_invoices_message
-            ),
-            positiveButtonText = resources.getString(
-                if (clearAllState)
-                    R.string.key_clear_label
-                else
-                    R.string.key_delete_label
-            ),
-            positiveButtonBlock = {
-                uiScope.launch {
-                    viewModel.deleteFiles(
-                        context = context ?: return@launch,
-                        fileDataModelList = selectedFilePositions
-                    )
+            SimpleDialogDataModel(
+                title = resources.getString(R.string.key_warning_label),
+                message = resources.getString(
+                    if (clearAllState)
+                        R.string.key_clear_all_invoices_question
+                    else
+                        R.string.key_delete_selected_invoices_message
+                ),
+                positiveButtonText = resources.getString(
+                    if (clearAllState)
+                        R.string.key_clear_label
+                    else
+                        R.string.key_delete_label
+                ),
+                positiveButtonBackgroundColor = ContextCompat.getColor(context ?: return, R.color.red),
+                positiveButtonBlock = {
+                    uiScope.launch {
+                        viewModel.deleteFiles(
+                            context = context ?: return@launch,
+                            fileDataModelList = selectedFilePositions
+                        )
+                    }
                 }
-            }
+            )
         )
     }
 
