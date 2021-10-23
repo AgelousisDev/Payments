@@ -308,11 +308,12 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                     SimpleDialogDataModel(
                         title = resources.getString(R.string.key_logout_label),
                         message = resources.getString(R.string.key_logout_message),
-                        icon = R.drawable.ic_logout
-                    ) {
-                        startActivity(Intent(this, LoginActivity::class.java))
-                        finish()
-                    }
+                        icon = R.drawable.ic_logout,
+                        positiveButtonBlock = {
+                            startActivity(Intent(this, LoginActivity::class.java))
+                            finish()
+                        }
+                    )
                 )
             R.id.newPaymentFragment ->
                 showNewPersonUnsavedFieldsWarning()

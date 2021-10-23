@@ -62,14 +62,15 @@ infix fun PaymentsFragment.sendGroupSms(groupModel: GroupModel) {
                 resources.getString(R.string.key_send_sms_to_group_value_message),
                 groupModel.groupName ?: ""
             ),
-            positiveButtonText = resources.getString(R.string.key_send_label)
-        ) {
-            context?.sendSMSMessage(
-                mobileNumbers = itemsList.filterIsInstance<ClientModel>()
-                    .filter { it.groupId == groupModel.groupId }.mapNotNull { it.phone },
-                message = (activity as? MainActivity)?.userModel?.defaultMessageTemplate ?: ""
-            )
-        }
+            positiveButtonText = resources.getString(R.string.key_send_label),
+            positiveButtonBlock = {
+                context?.sendSMSMessage(
+                    mobileNumbers = itemsList.filterIsInstance<ClientModel>()
+                        .filter { it.groupId == groupModel.groupId }.mapNotNull { it.phone },
+                    message = (activity as? MainActivity)?.userModel?.defaultMessageTemplate ?: ""
+                )
+            }
+        )
     )
 }
 
@@ -81,15 +82,16 @@ infix fun PaymentsFragment.sendGroupEmail(groupModel: GroupModel) {
                 resources.getString(R.string.key_send_email_to_group_value_message),
                 groupModel.groupName ?: ""
             ),
-            positiveButtonText = resources.getString(R.string.key_send_label)
-        ) {
-            context?.textEmail(
-                *itemsList.filterIsInstance<ClientModel>()
-                    .filter { it.groupId == groupModel.groupId }.mapNotNull { it.email }
-                    .toTypedArray(),
-                content = (activity as? MainActivity)?.userModel?.defaultMessageTemplate ?: ""
-            )
-        }
+            positiveButtonText = resources.getString(R.string.key_send_label),
+            positiveButtonBlock = {
+                context?.textEmail(
+                    *itemsList.filterIsInstance<ClientModel>()
+                        .filter { it.groupId == groupModel.groupId }.mapNotNull { it.email }
+                        .toTypedArray(),
+                    content = (activity as? MainActivity)?.userModel?.defaultMessageTemplate ?: ""
+                )
+            }
+        )
     )
 }
 
