@@ -1,6 +1,9 @@
 package com.agelousis.payments.main.ui.payments.extensions
 
+import android.graphics.Rect
+import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.R
 import com.agelousis.payments.custom.enumerations.SwipeAction
 import com.agelousis.payments.custom.itemTouchHelper.SwipeItemTouchHelper
@@ -11,6 +14,7 @@ import com.agelousis.payments.main.ui.payments.adapters.PaymentsAdapter
 import com.agelousis.payments.main.ui.payments.models.BalanceOverviewDataModel
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.models.GroupModel
+import com.agelousis.payments.main.ui.payments.models.PaymentAmountSumModel
 import com.agelousis.payments.main.ui.payments.viewHolders.BalanceOverviewViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.GroupViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.PaymentViewHolder
@@ -196,4 +200,36 @@ fun PaymentsFragment.disableBalanceOverview() {
         filteredList.removeAt(balanceOverviewDataModelIndex)
         binding.paymentListRecyclerView.adapter?.notifyItemRemoved(balanceOverviewDataModelIndex)
     }
+}
+
+fun PaymentsFragment.addRecyclerViewItemDecoration() {
+    binding.paymentListRecyclerView.addItemDecoration(
+        object: RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+                super.getItemOffsets(outRect, view, parent, state)
+                val adapterPosition = parent.getChildAdapterPosition(view)
+                when(filteredList.getOrNull(adapterPosition)) {
+                    is GroupModel -> {
+                        if (adapterPosition > 0)
+                            outRect.top = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
+                        if (context?.isLandscape == false)
+                            outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
+                    }
+                    is ClientModel -> {
+                        if (context?.isLandscape == true)
+                            outRect.top = resources.getDimensionPixelOffset(R.dimen.nav_header_vertical_spacing)
+                        outRect.left = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
+                        outRect.right = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
+                        if (filteredList isLastAt adapterPosition)
+                            outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
+                    }
+                    is PaymentAmountSumModel -> {
+                        outRect.top = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
+                        if (filteredList isLastAt adapterPosition)
+                            outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
+                    }
+                }
+            }
+        }
+    )
 }

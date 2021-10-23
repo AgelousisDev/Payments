@@ -1,7 +1,6 @@
 package com.agelousis.payments.main.ui.payments
 
 import android.content.Context
-import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.databinding.FragmentPaymentsLayoutBinding
@@ -270,35 +268,7 @@ class PaymentsFragment: Fragment(), GroupPresenter, PaymentPresenter, PaymentAmo
             paymentAmountSumPresenter = this,
             balanceOverviewPresenter = this
         )
-        binding.paymentListRecyclerView.addItemDecoration(
-            object: RecyclerView.ItemDecoration() {
-                override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-                    super.getItemOffsets(outRect, view, parent, state)
-                    val adapterPosition = parent.getChildAdapterPosition(view)
-                    when(filteredList.getOrNull(adapterPosition)) {
-                        is GroupModel -> {
-                            if (adapterPosition > 0)
-                                outRect.top = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
-                            if (context?.isLandscape == false)
-                                outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
-                        }
-                        is ClientModel -> {
-                            if (context?.isLandscape == true)
-                                outRect.top = resources.getDimensionPixelOffset(R.dimen.nav_header_vertical_spacing)
-                            outRect.left = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
-                            outRect.right = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
-                            if (filteredList isLastAt adapterPosition)
-                                outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
-                        }
-                        is PaymentAmountSumModel -> {
-                            outRect.top = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
-                            if (filteredList isLastAt adapterPosition)
-                                outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
-                        }
-                    }
-                }
-            }
-        )
+        addRecyclerViewItemDecoration()
         configureSwipeEvents()
     }
 

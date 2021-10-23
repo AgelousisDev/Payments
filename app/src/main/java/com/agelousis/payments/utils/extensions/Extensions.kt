@@ -1268,3 +1268,23 @@ fun setImageViewBitmap(appCompatImageView: AppCompatImageView, bitmap: Bitmap?) 
 fun setNullableTextResource(materialTextView: MaterialTextView, resourceId: Int?) {
     materialTextView.text = materialTextView.context.resources.getString(resourceId ?: return)
 }
+
+@BindingAdapter("alphaOrBlurEffectViewGroup")
+fun setAlphaOrBlurEffectViewGroup(viewGroup: ViewGroup, state: Boolean) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+        if (state)
+            viewGroup.setRenderEffect(
+                RenderEffect.createBlurEffect(
+                    5f,
+                    5f,
+                    Shader.TileMode.CLAMP
+                )
+            )
+        else
+            viewGroup.setRenderEffect(
+                null
+            )
+    else
+        viewGroup.alpha = if (state) 0.5f else 1.0f
+
+}

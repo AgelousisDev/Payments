@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.*
 import android.widget.FrameLayout
 import androidx.core.view.updateLayoutParams
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.agelousis.payments.R
+import com.agelousis.payments.base.BaseViewBindingFragment
 import com.agelousis.payments.databinding.HistoryFragmentLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.history.adapters.ChartPagerAdapter
@@ -21,22 +21,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
-class HistoryFragment: Fragment() {
+class HistoryFragment: BaseViewBindingFragment<HistoryFragmentLayoutBinding>(
+    inflate = HistoryFragmentLayoutBinding::inflate
+) {
 
-    private lateinit var binding: HistoryFragmentLayoutBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
-    private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
+    private val viewModel by viewModels<PaymentsViewModel>()
     val clientModelList = arrayListOf<ClientModel>()
     private var indicatorWidth = 0
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = HistoryFragmentLayoutBinding.inflate(
-            layoutInflater,
-            container,
-            false
-        )
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,7 +40,7 @@ class HistoryFragment: Fragment() {
         viewModel.paymentsLiveData.observe(viewLifecycleOwner) { payments ->
             (activity as? MainActivity)?.floatingButtonState = payments.filterIsInstance<ClientModel>().isNotEmpty()
             if (payments.filterIsInstance<ClientModel>().isEmpty()) {
-                binding.emptyModel = EmptyModel(
+                binding?.emptyModel = EmptyModel(
                     title = resources.getString(R.string.key_no_clients_title_message),
                     message = resources.getString(R.string.key_add_clients_from_home_message),
                     animationJsonIcon = "empty_animation.json"
@@ -62,14 +54,14 @@ class HistoryFragment: Fragment() {
     }
 
     private fun configureViewPager() {
-        binding.chartViewPager.apply {
+        binding?.chartViewPager?.apply {
             val chartPagerAdapter = ChartPagerAdapter(
                 fragment = this@HistoryFragment
             )
             adapter = chartPagerAdapter
             offscreenPageLimit = 2
             TabLayoutMediator(
-                binding.materialTabLayout,
+                binding?.materialTabLayout ?: return@apply,
                 this
             ) { tab, index ->
                 tab.setIcon(
@@ -78,11 +70,11 @@ class HistoryFragment: Fragment() {
                     )
                 )
             }.attach()
-            binding.materialTabLayout.post {
-                indicatorWidth = binding.materialTabLayout.width / binding.materialTabLayout.tabCount
+            binding?.materialTabLayout?.post {
+                indicatorWidth = (binding?.materialTabLayout?.width ?: 0) / (binding?.materialTabLayout?.tabCount ?: 0)
 
                 //Assign new width
-                binding.indicator.updateLayoutParams<FrameLayout.LayoutParams> {
+                binding?.indicator?.updateLayoutParams<FrameLayout.LayoutParams> {
                     width = indicatorWidth
                 }
             }
@@ -90,7 +82,7 @@ class HistoryFragment: Fragment() {
                 object: ViewPager2.OnPageChangeCallback() {
                     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                         super.onPageScrolled(position, positionOffset, positionOffsetPixels)
-                        binding.indicator.updateLayoutParams<FrameLayout.LayoutParams> {
+                        binding?.indicator?.updateLayoutParams<FrameLayout.LayoutParams> {
                             //Multiply positionOffset with indicatorWidth to get translation
                             val translationOffset =  (positionOffset + position) * indicatorWidth
                             leftMargin = translationOffset.toInt()
@@ -111,7 +103,7 @@ class HistoryFragment: Fragment() {
     }
 
     fun switchChart() {
-        binding.chartViewPager.currentItem = if (binding.chartViewPager.currentItem == 0) 1 else 0
+        binding?.chartViewPager?.currentItem = if (binding?.chartViewPager?.currentItem == 0) 1 else 0
     }
 
 }
