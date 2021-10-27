@@ -12,6 +12,7 @@
             type="com.agelousis.payments.main.ui.payments.presenters.PaymentsFragmentPresenter" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"

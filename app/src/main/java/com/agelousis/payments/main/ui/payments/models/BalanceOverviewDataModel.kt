@@ -8,7 +8,7 @@ data class BalanceOverviewDataModel(
     val title: Int,
     val subtitle: Int,
     var currentBalanceOverviewState: BalanceOverviewState?,
-    val currentBalance: Double?,
+    var currentBalance: Double?,
     val lastPaymentMonthList: List<LastPaymentMonthDataModel>
 ) {
 

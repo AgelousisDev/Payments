@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.agelousis.payments.R
 import com.agelousis.payments.databinding.CountrySelectorFragmentLayoutBinding
+import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.groupSelector.adapters.GroupsSelectionAdapter
 import com.agelousis.payments.main.ui.groupSelector.interfaces.GroupSelectorFragmentPresenter
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
@@ -60,8 +61,10 @@ class GroupSelectorDialogFragment: DialogFragment(), GroupSelectorFragmentPresen
             inflater,
             container,
             false
-        )
-        binding.headerTitle = resources.getString(R.string.key_select_group_label)
+        ).also {
+            it.userModel = (activity as? MainActivity)?.userModel
+            it.headerTitle = resources.getString(R.string.key_select_group_label)
+        }
         return binding.root
     }
 

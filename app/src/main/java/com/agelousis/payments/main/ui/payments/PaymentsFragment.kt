@@ -9,7 +9,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.databinding.FragmentPaymentsLayoutBinding
@@ -150,6 +149,9 @@ class PaymentsFragment: Fragment(), GroupPresenter, PaymentPresenter, PaymentAmo
 
     override fun onSaveBalance(balance: Double) {
         (activity as? MainActivity)?.userModel?.balance = balance
+        filteredList.firstNotNullOfOrNull {
+            it as? BalanceOverviewDataModel
+        }?.currentBalance = balance
         uiScope.launch {
             viewModel.updateUserBalance(
                 context = context ?: return@launch,
@@ -248,26 +250,7 @@ class PaymentsFragment: Fragment(), GroupPresenter, PaymentPresenter, PaymentAmo
     }
     
     private fun configureRecyclerView() {
-        if (context?.isLandscape == true)
-            binding.paymentListRecyclerView.layoutManager = GridLayoutManager(
-                context,
-                2
-            ).also { gridLayoutManager ->
-                gridLayoutManager.spanSizeLookup = object: GridLayoutManager.SpanSizeLookup() {
-                    override fun getSpanSize(position: Int) = when(filteredList.getOrNull(index = position)) {
-                        is ClientModel,
-                        is BalanceOverviewDataModel -> 1
-                        else -> 2
-                    }
-                }
-            }
-        binding.paymentListRecyclerView.adapter = PaymentsAdapter(
-            list = filteredList,
-            groupPresenter = this,
-            paymentPresenter = this,
-            paymentAmountSumPresenter = this,
-            balanceOverviewPresenter = this
-        )
+        configureRecyclerViewAdapterAndLayoutManager()
         addRecyclerViewItemDecoration()
         configureSwipeEvents()
     }

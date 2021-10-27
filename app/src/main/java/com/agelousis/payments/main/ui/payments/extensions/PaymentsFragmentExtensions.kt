@@ -3,6 +3,7 @@ package com.agelousis.payments.main.ui.payments.extensions
 import android.graphics.Rect
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.R
@@ -217,6 +218,29 @@ fun PaymentsFragment.disableBalanceOverview() {
         filteredList.removeAt(balanceOverviewDataModelIndex)
         binding.paymentListRecyclerView.adapter?.notifyItemRemoved(balanceOverviewDataModelIndex)
     }
+}
+
+fun PaymentsFragment.configureRecyclerViewAdapterAndLayoutManager() {
+    if (context?.isLandscape == true)
+        binding.paymentListRecyclerView.layoutManager = GridLayoutManager(
+            context,
+            2
+        ).also { gridLayoutManager ->
+            gridLayoutManager.spanSizeLookup = object: GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int) = when(filteredList.getOrNull(index = position)) {
+                    is ClientModel,
+                    is BalanceOverviewDataModel -> 1
+                    else -> 2
+                }
+            }
+        }
+    binding.paymentListRecyclerView.adapter = PaymentsAdapter(
+        list = filteredList,
+        groupPresenter = this,
+        paymentPresenter = this,
+        paymentAmountSumPresenter = this,
+        balanceOverviewPresenter = this
+    )
 }
 
 fun PaymentsFragment.addRecyclerViewItemDecoration() {
