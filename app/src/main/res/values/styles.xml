@@ -65,6 +65,7 @@
 
     <style name="CustomBottomSheet" parent="Widget.MaterialComponents.BottomSheet">
         <item name="shapeAppearanceOverlay">@style/CustomShapeAppearanceBottomSheetDialog</item>
+        <item name="backgroundTint">@color/colorPrimaryLighter</item>
     </style>
 
     <style name="CustomShapeAppearanceBottomSheetDialog" parent="">

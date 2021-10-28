@@ -11,16 +11,24 @@
         <variable
             name="secondaryImageResourceId"
             type="Integer" />
+        <variable
+            name="backgroundColor"
+            type="Integer" />
+        <variable
+            name="cardElevation"
+            type="Float" />
     </data>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="@dimen/activity_general_horizontal_margin"
-    app:cardElevation="8dp"
+    app:cardBackgroundColor="@{backgroundColor}"
+    app:cardCornerRadius="42dp"
+    app:cardElevation="@{cardElevation}"
     app:cardUseCompatPadding="true"
-    android:clipToPadding="false">
+    android:clipToPadding="false"
+    android:id="@+id/materialCardView">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
