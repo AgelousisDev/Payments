@@ -30,6 +30,7 @@ import com.agelousis.payments.main.ui.payments.enumerations.PaymentType
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.models.ClientModel
+import com.agelousis.payments.main.ui.shareMessageFragment.ShareMessageBottomSheetFragment
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.CountryHelper
@@ -145,6 +146,13 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             )
             clear()
         }
+    }
+
+    override fun onClientShareMessage() {
+        ShareMessageBottomSheetFragment.show(
+            supportFragmentManager = activity?.supportFragmentManager ?: return,
+            clientModel = args.clientDataModel ?: return
+        )
     }
 
     private val uiScope = CoroutineScope(Dispatchers.Main)

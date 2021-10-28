@@ -8,4 +8,5 @@ interface NewPaymentPresenter {
     fun onCalendarEvent(paymentAmountModel: PaymentAmountModel?)
     fun onContactSelection()
     fun onClearPayments()
+    fun onClientShareMessage()
 }

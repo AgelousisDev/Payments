@@ -24,7 +24,6 @@ import com.agelousis.payments.main.ui.paymentsFiltering.FilterPaymentsFragment
 import com.agelousis.payments.main.ui.paymentsFiltering.enumerations.PaymentsFilteringOptionType
 import com.agelousis.payments.main.ui.periodFilter.models.PeriodFilterDataModel
 import com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType
-import com.agelousis.payments.main.ui.shareMessageFragment.ShareMessageBottomSheetFragment
 import com.agelousis.payments.main.ui.totalPaymentsAmount.TotalPaymentsAmountDialogFragment
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
@@ -36,7 +35,8 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 
-class PaymentsFragment: Fragment(), GroupPresenter, PaymentPresenter, PaymentAmountSumPresenter, PaymentsFragmentPresenter, BalanceOverviewPresenter {
+class PaymentsFragment: Fragment(), GroupPresenter, PaymentPresenter, PaymentAmountSumPresenter,
+    PaymentsFragmentPresenter, BalanceOverviewPresenter {
 
     override fun onDeletePayments() {
         this configureMultipleDeleteActionWith filteredList.filterIsInstance<ClientModel>().filter { it.isSelected }.mapNotNull { it.personId }
@@ -86,13 +86,6 @@ class PaymentsFragment: Fragment(), GroupPresenter, PaymentPresenter, PaymentAmo
                 )
             }
         }
-    }
-
-    override fun onPaymentShareMessage(clientModel: ClientModel) {
-        ShareMessageBottomSheetFragment.show(
-            supportFragmentManager = activity?.supportFragmentManager ?: return,
-            clientModel = clientModel
-        )
     }
 
     override fun onPaymentLongPressed(paymentIndex: Int, isSelected: Boolean) {

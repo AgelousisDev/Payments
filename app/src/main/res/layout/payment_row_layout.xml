@@ -99,22 +99,9 @@
             android:textColor="@{clientModel.free == true ? @color/fateBlue :  clientModel.groupColor}"
             textViewColorByPaymentDate="@{clientModel.free == true ? null : clientModel.payments}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/sharePaymentButton"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="40$" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/sharePaymentButton"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:onClick="@{() -> presenter.onPaymentShareMessage(clientModel)}"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_message"
-            imageTintColor="@{clientModel.groupColor != null ? clientModel.groupColor : @color/colorAccent}"/>
+            tools:text="40$" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/entryDateTextView"

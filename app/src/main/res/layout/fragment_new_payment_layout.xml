@@ -29,11 +29,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="end"
+        android:layout_margin="@dimen/activity_general_horizontal_margin"
+        app:srcCompat="@drawable/ic_message"
+        app:tint="@color/colorAccent"
+        tools:tint="@color/petrolDarker"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:onClick="@{() -> presenter.onClientShareMessage()}"/>
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="45dp"
         android:animateLayoutChanges="true"
         app:cardCornerRadius="@dimen/activity_general_horizontal_margin"
         app:cardElevation="8dp"
