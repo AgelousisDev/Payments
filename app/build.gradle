@@ -7,10 +7,11 @@ apply plugin: 'com.google.gms.google-services'
 
 def navVersion = '2.3.5'
 def materialVersion = '1.4.0'
-def ktxCoreVersion = '1.6.0'
-def activityVersion = '1.3.1'
+def ktxCoreVersion = '1.7.0'
+def activityVersion = '1.4.0'
 def fragmentVersion = '1.3.6'
 def firebaseBomVersion = '28.0.1'
+def liveDataViewModelVersion = '2.4.0'
 
 android {
     compileSdkVersion 31
@@ -59,7 +60,7 @@ dependencies {
     implementation "androidx.activity:activity-ktx:$activityVersion"
     implementation "androidx.fragment:fragment-ktx:$fragmentVersion"
     implementation "androidx.viewpager2:viewpager2:1.0.0"
-    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
@@ -69,8 +70,8 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation "androidx.navigation:navigation-fragment-ktx:$navVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navVersion"
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$liveDataViewModelVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$liveDataViewModelVersion"
     implementation platform("com.google.firebase:firebase-bom:$firebaseBomVersion")
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-messaging-ktx'
