@@ -2,15 +2,11 @@ package com.agelousis.payments.main.ui.periodFilter
 
 import android.app.Activity
 import android.net.Uri
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.agelousis.payments.R
+import com.agelousis.payments.base.BaseBindingFragment
 import com.agelousis.payments.databinding.PeriodFilterFragmentLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.files.models.FileDataModel
@@ -29,41 +25,36 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 
-class PeriodFilterFragment: Fragment(), PeriodFilterFragmentPresenter {
+class PeriodFilterFragment: BaseBindingFragment<PeriodFilterFragmentLayoutBinding>(
+    inflate = PeriodFilterFragmentLayoutBinding::inflate
+), PeriodFilterFragmentPresenter {
 
     companion object {
         private const val LOADING_TIME = 5000L
     }
 
     override fun onPdfInvoice() {
-        val minimumMonthDate = binding.periodFilterMinimumPaymentMonthLayout.dateValue?.toDateWith(pattern = Constants.MONTH_DATE_FORMAT, locale = Locale.US) ?: return
-        val maximumMonthDate = binding.periodFilterMaximumPaymentMonthLayout.dateValue?.toDateWith(pattern = Constants.MONTH_DATE_FORMAT, locale = Locale.US) ?: return
+        val minimumMonthDate = binding?.periodFilterMinimumPaymentMonthLayout?.dateValue?.toDateWith(pattern = Constants.MONTH_DATE_FORMAT, locale = Locale.US) ?: return
+        val maximumMonthDate = binding?.periodFilterMaximumPaymentMonthLayout?.dateValue?.toDateWith(pattern = Constants.MONTH_DATE_FORMAT, locale = Locale.US) ?: return
         initializePDFCreation(
             payments = args.paymentListData.filter { it.paymentMonthDate ?: Date() in minimumMonthDate..maximumMonthDate }.sortedBy { it.paymentMonthDate }
         )
     }
 
+    override fun onBindData(binding: PeriodFilterFragmentLayoutBinding?) {
+        super.onBindData(binding)
+        binding?.periodFilterDataModel = args.periodFilterData
+        binding?.isLoading = false
+        binding?.presenter = this
+    }
+
     private val args: PeriodFilterFragmentArgs by navArgs()
     private val uiScope = CoroutineScope(Dispatchers.Main)
-    private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
-    private lateinit var binding: PeriodFilterFragmentLayoutBinding
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = PeriodFilterFragmentLayoutBinding.inflate(
-            inflater,
-            container,
-            false
-        ).also {
-            it.periodFilterDataModel = args.periodFilterData
-            it.isLoading = false
-            it.presenter = this
-        }
-        return binding.root
-    }
+    private val viewModel by viewModels<PaymentsViewModel>()
 
     fun initializeExportToExcelOperation() {
         (activity as? MainActivity)?.floatingButtonState = false
-        binding.isLoading = true
+        binding?.isLoading = true
         after(
             millis = LOADING_TIME
         ) {
@@ -85,8 +76,8 @@ class PeriodFilterFragment: Fragment(), PeriodFilterFragmentPresenter {
     }
 
     private fun triggerCsvCreation(uri: Uri) {
-        val minimumMonthDate = binding.periodFilterMinimumPaymentMonthLayout.dateValue?.toDateWith(pattern = Constants.MONTH_DATE_FORMAT, locale = Locale.US) ?: return
-        val maximumMonthDate = binding.periodFilterMaximumPaymentMonthLayout.dateValue?.toDateWith(pattern = Constants.MONTH_DATE_FORMAT, locale = Locale.US) ?: return
+        val minimumMonthDate = binding?.periodFilterMinimumPaymentMonthLayout?.dateValue?.toDateWith(pattern = Constants.MONTH_DATE_FORMAT, locale = Locale.US) ?: return
+        val maximumMonthDate = binding?.periodFilterMaximumPaymentMonthLayout?.dateValue?.toDateWith(pattern = Constants.MONTH_DATE_FORMAT, locale = Locale.US) ?: return
         val filteredPayments = args.paymentListData.filter { it.paymentMonthDate ?: Date() in minimumMonthDate..maximumMonthDate }
         PaymentCsvHelper.createPaymentsCsv(
             context = context ?: return,
@@ -119,8 +110,8 @@ class PeriodFilterFragment: Fragment(), PeriodFilterFragmentPresenter {
                     file = pdfFile,
                     description = String.format(
                         "%s - %s",
-                        binding.periodFilterMinimumPaymentMonthLayout.dateValue ?: "",
-                        binding.periodFilterMaximumPaymentMonthLayout.dateValue ?: ""
+                        binding?.periodFilterMinimumPaymentMonthLayout?.dateValue ?: "",
+                        binding?.periodFilterMaximumPaymentMonthLayout?.dateValue ?: ""
                     )
                 )
                 uiScope.launch {
@@ -131,8 +122,8 @@ class PeriodFilterFragment: Fragment(), PeriodFilterFragmentPresenter {
                         pdfFile = pdfFile,
                         description = String.format(
                             "%s - %s",
-                            binding.periodFilterMinimumPaymentMonthLayout.dateValue ?: "",
-                            binding.periodFilterMaximumPaymentMonthLayout.dateValue ?: ""
+                            binding?.periodFilterMinimumPaymentMonthLayout?.dateValue ?: "",
+                            binding?.periodFilterMaximumPaymentMonthLayout?.dateValue ?: ""
                         )
                     )
                 }
