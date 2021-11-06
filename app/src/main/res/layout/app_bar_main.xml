@@ -16,16 +16,16 @@
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
-        android:layout_height="66dp"
+        android:layout_height="80dp"
         android:layout_gravity="bottom"
         app:contentInsetStart="0dp"
         app:contentInsetEnd="0dp"
         app:paddingBottomSystemWindowInsets="false"
-        app:backgroundTint="@color/alphaNativeBackgroundColor"
         app:hideOnScroll="true"
         app:layout_scrollFlags="scroll|enterAlways"
         app:fabAnimationMode="scale"
         app:fabAlignmentMode="center"
+        app:fabCradleMargin="8dp"
         app:fabCradleRoundedCornerRadius="12dp">
 
         <com.google.android.material.textview.MaterialTextView
@@ -42,10 +42,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
+            app:labelVisibilityMode="unlabeled"
             app:elevation="0dp"
-            app:menu="@menu/bottom_navigation_main_menu"
-            app:itemTextAppearanceActive="@style/BottomNavigationViewTextStyle"
-            app:itemRippleColor="@color/colorAccent"/>
+            app:menu="@menu/bottom_navigation_main_menu"/>
 
     </com.google.android.material.bottomappbar.BottomAppBar>
 

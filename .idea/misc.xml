@@ -26,7 +26,7 @@
         <entry key="app/src/main/res/layout-land/activity_login.xml" value="0.22552083333333334" />
         <entry key="app/src/main/res/layout-land/fragment_new_payment_layout.xml" value="0.26145833333333335" />
         <entry key="app/src/main/res/layout/activity_group.xml" value="0.3532608695652174" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.21302083333333333" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.24320652173913043" />
         <entry key="app/src/main/res/layout/balance_overview_row_layout.xml" value="0.5" />
@@ -34,6 +34,7 @@
         <entry key="app/src/main/res/layout/content_main.xml" value="0.24320652173913043" />
         <entry key="app/src/main/res/layout/country_selector_fragment_layout.xml" value="0.19972826086956522" />
         <entry key="app/src/main/res/layout/currency_edit_text_layout.xml" value="0.3197463768115942" />
+        <entry key="app/src/main/res/layout/details_app_switch_layout.xml" value="0.3203125" />
         <entry key="app/src/main/res/layout/fragment_files_layout.xml" value="0.22056159420289856" />
         <entry key="app/src/main/res/layout/fragment_new_payment_amount_layout.xml" value="0.15577507598784193" />
         <entry key="app/src/main/res/layout/fragment_new_payment_layout.xml" value="0.33" />

@@ -232,6 +232,7 @@
         android:layout_weight="0.5">
 
         <com.google.android.material.card.MaterialCardView
+            style="@style/FilledMaterialCardView"
             android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -330,7 +331,6 @@
             android:onClick="@{() -> presenter.onSignIn()}"
             android:text="@{signInState.getTitle(context)}"
             app:backgroundTint="@color/colorAccent"
-            app:cornerRadius="@dimen/activity_general_horizontal_margin"
             app:layout_constraintVertical_bias="1.0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/signUnButton"
@@ -349,7 +349,6 @@
             android:text="@string/key_sign_up_label"
             android:visibility="@{signInState == SignInState.LOGIN ? View.VISIBLE : View.GONE}"
             app:backgroundTint="@color/grey"
-            app:cornerRadius="@dimen/activity_general_horizontal_margin"
             app:layout_constraintVertical_bias="1.0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

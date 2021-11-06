@@ -1,16 +1,13 @@
 package com.agelousis.payments.views.searchLayout
 
 import android.content.Context
-import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
-import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
 import com.agelousis.payments.R
 import com.agelousis.payments.databinding.MaterialSearchViewLayoutBinding
-import com.agelousis.payments.utils.extensions.inPixel
 import com.agelousis.payments.utils.extensions.infiniteAlphaAnimation
 import com.agelousis.payments.utils.extensions.initializeField
 import com.agelousis.payments.utils.extensions.setAnimatedImageResourceId
@@ -38,16 +35,6 @@ class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLa
             field = value
             binding.hint = value ?: return
         }
-    private var backgroundColor: Int? = null
-        set(value) {
-            field = value
-            binding.backgroundColor = value ?: return
-        }
-    private var cardElevation: Float? = null
-        set(value) {
-            field = value
-            binding.cardElevation = value ?: return
-        }
 
     init {
         initAttributesAndView(attributeSet = attributeSet)
@@ -63,11 +50,6 @@ class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLa
             )
             searchHint = attributes.getString(R.styleable.MaterialSearchView_searchHint)
             binding.secondaryImageResourceId = attributes.getResourceId(R.styleable.MaterialSearchView_secondaryIconResource, 0)
-            backgroundColor = ContextCompat.getColor(context, R.color.colorPrimaryLighter)
-            cardElevation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-                0f
-            else
-                8.inPixel
             attributes.recycle()
             addView(binding.root)
         }

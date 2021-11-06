@@ -168,6 +168,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.card.MaterialCardView
+            style="@style/FilledMaterialCardView"
             android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -324,7 +325,6 @@
         android:onClick="@{() -> presenter.onSignIn()}"
         android:text="@{signInState.getTitle(context)}"
         app:backgroundTint="@color/colorAccent"
-        app:cornerRadius="@dimen/activity_general_horizontal_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/signUnButton"
         app:layout_constraintStart_toStartOf="parent"
@@ -342,7 +342,6 @@
         android:visibility="@{signInState == SignInState.LOGIN ? View.VISIBLE : View.GONE}"
         android:onClick="@{() -> presenter.onSignUp()}"
         app:backgroundTint="@color/grey"
-        app:cornerRadius="@dimen/activity_general_horizontal_margin"
         app:layout_constraintStart_toEndOf="@+id/loginButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
