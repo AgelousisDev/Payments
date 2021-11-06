@@ -39,6 +39,7 @@
         <entry key="app/src/main/res/layout/fragment_new_payment_amount_layout.xml" value="0.15577507598784193" />
         <entry key="app/src/main/res/layout/fragment_new_payment_layout.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_payments_layout.xml" value="0.20833333333333334" />
+        <entry key="app/src/main/res/layout/fragment_personal_information_layout.xml" value="0.15577507598784193" />
         <entry key="app/src/main/res/layout/group_row_layout.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/group_selection_row_layout.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/guide_basic_fragment_layout.xml" value="0.15577507598784193" />
@@ -51,6 +52,7 @@
         <entry key="app/src/main/res/layout/payments_menu_option_row_layout.xml" value="0.20199275362318841" />
         <entry key="app/src/main/res/layout/payments_menu_options_fragment_layout.xml" value="0.22554347826086957" />
         <entry key="app/src/main/res/layout/pdf_viewer_fragment_layout.xml" value="0.22780797101449277" />
+        <entry key="app/src/main/res/layout/period_filter_fragment_layout.xml" value="0.15577507598784193" />
         <entry key="app/src/main/res/layout/person_details_picker_layout.xml" value="0.3203125" />
         <entry key="app/src/main/res/menu/main_menu.xml" value="0.3203125" />
       </map>

@@ -324,7 +324,6 @@
         android:enabled="@{loginButtonState}"
         android:onClick="@{() -> presenter.onSignIn()}"
         android:text="@{signInState.getTitle(context)}"
-        app:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/signUnButton"
         app:layout_constraintStart_toStartOf="parent"

@@ -330,7 +330,6 @@
             android:enabled="@{loginButtonState}"
             android:onClick="@{() -> presenter.onSignIn()}"
             android:text="@{signInState.getTitle(context)}"
-            app:backgroundTint="@color/colorAccent"
             app:layout_constraintVertical_bias="1.0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/signUnButton"

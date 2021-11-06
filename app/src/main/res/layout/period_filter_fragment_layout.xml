@@ -21,6 +21,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:clipToPadding="false"
+        android:clipChildren="false"
+        android:paddingTop="0dp"
+        android:paddingBottom="8dp"
         android:animateLayoutChanges="true">
 
         <com.airbnb.lottie.LottieAnimationView
@@ -72,7 +76,6 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/addPaymentButton"
-            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -82,7 +85,6 @@
             android:textAllCaps="false"
             android:fontFamily="@font/ubuntu"
             android:visibility="@{isLoading ? View.GONE : View.VISIBLE}"
-            app:cornerRadius="8dp"
             app:icon="@drawable/ic_invoice"
             app:iconSize="24dp"/>
 
