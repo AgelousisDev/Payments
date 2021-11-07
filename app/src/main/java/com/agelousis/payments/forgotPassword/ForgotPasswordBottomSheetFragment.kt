@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.agelousis.payments.R
 import com.agelousis.payments.databinding.ForgotPasswordFragmentLayoutBinding
 import com.agelousis.payments.forgotPassword.viewModels.ForgotPasswordViewModel
@@ -46,7 +46,7 @@ class ForgotPasswordBottomSheetFragment: BasicBottomSheetDialogFragment(), Forgo
     }
 
     private val uiScope = CoroutineScope(Dispatchers.Main)
-    private val viewModel by lazy { ViewModelProvider(this).get(ForgotPasswordViewModel::class.java) }
+    private val viewModel by viewModels<ForgotPasswordViewModel>()
     private val userId by lazy { arguments?.getInt(USER_ID_EXTRA) }
     private lateinit var binding: ForgotPasswordFragmentLayoutBinding
 
