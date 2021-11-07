@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.agelousis.payments.R
@@ -156,7 +156,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
     }
 
     private val uiScope = CoroutineScope(Dispatchers.Main)
-    private val viewModel by lazy { ViewModelProvider(this).get(NewPaymentViewModel::class.java) }
+    private val viewModel by viewModels<NewPaymentViewModel>()
     private val args: NewPaymentFragmentArgs by navArgs()
     private val databaseTriggeringType by lazy {
         args.groupDataModel?.let { DatabaseTriggeringType.INSERT } ?: DatabaseTriggeringType.UPDATE
