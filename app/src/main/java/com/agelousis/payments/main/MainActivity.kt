@@ -300,6 +300,14 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
             field = value
             binding.appBarMain.bottomAppBar.navigationIcon = value
         }
+    var paymentsSize: Int? = null
+        set(value) {
+            field = value
+            binding.appBarMain.bottomNavigationView.getOrCreateBadge(R.id.paymentsFragment).apply {
+                isVisible = value != null
+                number = value ?: return@apply
+            }
+        }
 
     override fun onBackPressed() {
         when (binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().currentDestination?.id) {
