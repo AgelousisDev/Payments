@@ -305,7 +305,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
                 SimpleDialogDataModel(
                     title = resources.getString(R.string.key_sms_label),
                     message = resources.getString(R.string.key_send_sms_message),
-                    icon = R.drawable.ic_sms,
                     positiveButtonText = resources.getString(R.string.key_send_label),
                     positiveButtonBlock = {
                         context?.sendSMSMessage(

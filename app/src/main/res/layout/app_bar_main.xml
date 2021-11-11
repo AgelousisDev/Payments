@@ -52,6 +52,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
         android:layout_marginBottom="102dp"
+        app:backgroundTint="?attr/colorPrimaryContainer"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
         app:srcCompat="@drawable/ic_add"
         app:tint="@color/white"
