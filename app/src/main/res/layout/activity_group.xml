@@ -59,7 +59,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_group_white"/>
+        app:srcCompat="@drawable/ic_group_white"
+        app:tint="@color/white"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/groupTextInputLayout"
@@ -69,10 +70,10 @@
         android:layout_margin="@dimen/activity_general_horizontal_margin"
         android:hint="@string/key_group_name_label"
         app:hintTextColor="@{groupModel.color != null ? groupModel.color : @color/colorAccent}"
-        app:boxBackgroundColor="@color/colorPrimaryDark"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
         app:startIconDrawable="@drawable/ic_group"
+        app:startIconTint="@color/colorAccent"
         app:endIconMode="clear_text"
         app:hintEnabled="true"
         app:boxCornerRadiusTopStart="8dp"

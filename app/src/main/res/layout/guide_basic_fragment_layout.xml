@@ -16,6 +16,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.card.MaterialCardView
+        style="@style/FilledMaterialCardView"
         android:id="@+id/guideCardView"
         android:layout_width="0dp"
         android:layout_height="0dp"

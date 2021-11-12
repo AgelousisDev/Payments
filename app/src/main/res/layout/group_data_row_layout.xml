@@ -8,6 +8,7 @@
             type="com.agelousis.payments.main.ui.payments.models.GroupModel" />
     </data>
 <com.google.android.material.card.MaterialCardView
+    style="@style/FilledMaterialCardView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:cardCornerRadius="@dimen/activity_general_horizontal_margin"

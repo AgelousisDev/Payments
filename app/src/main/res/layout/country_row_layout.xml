@@ -22,6 +22,7 @@
     android:foreground="?attr/selectableItemBackground">
 
     <com.google.android.material.card.MaterialCardView
+        style="@style/FilledMaterialCardView"
         android:id="@+id/materialCardView"
         android:layout_width="35dp"
         android:layout_height="35dp"

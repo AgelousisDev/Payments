@@ -267,7 +267,10 @@ class PaymentsFragment: Fragment(), GroupPresenter, PaymentPresenter, PaymentAmo
             after(
                 millis = 1000
             ) {
-                searchViewState = list.filterIsInstance<ClientModel>().isNotEmpty()
+                list.filterIsInstance<ClientModel>().apply {
+                    searchViewState = isNotEmpty()
+                    (activity as? MainActivity)?.paymentsSize = size.takeIf { it > 0 }
+                }
             }
             itemsList.clear()
             itemsList.addAll(list)

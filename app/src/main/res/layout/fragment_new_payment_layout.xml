@@ -43,6 +43,7 @@
         android:onClick="@{() -> presenter.onClientShareMessage()}"/>
 
     <com.google.android.material.card.MaterialCardView
+        style="@style/FilledMaterialCardView"
         android:id="@+id/materialCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -219,6 +220,7 @@
                     app:icon="@drawable/ic_add" />
 
                 <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                    android:id="@+id/clearPaymentsButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/activity_general_horizontal_margin"
@@ -228,10 +230,11 @@
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:visibility="@{paymentsAreAvailable ? View.VISIBLE : View.GONE}"
+
                     app:backgroundTint="@color/red"
                     app:iconTint="@color/white"
                     app:cornerRadius="8dp"
-                    app:icon="@drawable/ic_add"/>
+                    app:icon="@drawable/ic_close"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/paymentAmountRecyclerView"

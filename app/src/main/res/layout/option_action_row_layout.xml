@@ -33,6 +33,7 @@
         tools:text="Delete User" />
 
     <com.google.android.material.card.MaterialCardView
+        style="@style/FilledMaterialCardView"
         android:layout_width="50dp"
         android:layout_height="38dp"
         android:layout_marginEnd="@dimen/activity_general_horizontal_margin"

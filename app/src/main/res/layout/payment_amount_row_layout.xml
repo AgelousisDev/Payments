@@ -20,6 +20,7 @@
             type="com.agelousis.payments.main.ui.newPayment.presenters.NewPaymentPresenter" />
     </data>
  <com.google.android.material.card.MaterialCardView
+     style="@style/FilledMaterialCardView"
      android:layout_width="match_parent"
      android:layout_height="wrap_content"
      android:onClick="@{() -> presenter.onPaymentAmount(paymentAmountModel)}"

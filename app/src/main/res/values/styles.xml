@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/whiteTwo</item>
@@ -12,7 +12,7 @@
         <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
     </style>
 
-    <style name="MainAppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="MainAppTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -32,26 +32,20 @@
     </style>
 
     <!-- Alert Dialog -->
-    <style name="MaterialAlertDialog" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+    <style name="MaterialAlertDialog" parent="@style/ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="android:clipToPadding">false</item>
         <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
         <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
-        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MaterialAlertDialog.Rounded</item>
     </style>
 
-    <style name="ShapeAppearanceOverlay.MaterialAlertDialog.Rounded" parent="">
-        <item name="cornerSize">24dp</item>
-    </style>
-
-    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button">
+    <style name="PositiveButtonStyle" parent="Widget.Material3.Button">
         <item name="android:layout_marginEnd">8dp</item>
         <item name="android:textColor">#FFFFFF</item>
-        <item name="backgroundTint">@color/colorAccent</item>
     </style>
 
-    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+    <style name="NegativeButtonStyle" parent="Widget.Material3.Button.TextButton.Dialog">
         <item name="android:layout_marginEnd">8dp</item>
-        <item name="android:textColor">@color/colorAccent</item>
     </style>
 
     <style name="DialogAnimation">
@@ -59,11 +53,11 @@
         <item name="android:windowExitAnimation">@anim/slide_bottom</item>
     </style>
 
-    <style name="CustomBottomSheetDialog" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
+    <style name="CustomBottomSheetDialog" parent="@style/ThemeOverlay.Material3.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
     </style>
 
-    <style name="CustomBottomSheet" parent="Widget.MaterialComponents.BottomSheet">
+    <style name="CustomBottomSheet" parent="Widget.Material3.BottomSheet">
         <item name="shapeAppearanceOverlay">@style/CustomShapeAppearanceBottomSheetDialog</item>
         <item name="backgroundTint">@color/colorPrimaryLighter</item>
     </style>
@@ -74,8 +68,10 @@
         <item name="cornerSizeTopRight">16dp</item>
     </style>
 
-    <style name="BottomNavigationViewTextStyle" parent="@style/TextAppearance.MaterialComponents.Caption">
+    <style name="BottomNavigationViewTextStyle" parent="@style/TextAppearance.Material3.LabelMedium">
         <item name="android:fontFamily">@font/ubuntu_regular</item>
     </style>
+
+    <style name="FilledMaterialCardView" parent="Widget.Material3.CardView.Filled"/>
 
 </resources>

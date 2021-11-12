@@ -12,6 +12,7 @@
     </data>
 
 <com.google.android.material.card.MaterialCardView
+    style="@style/FilledMaterialCardView"
     android:layout_width="70dp"
     android:layout_height="50dp"
     android:clickable="true"

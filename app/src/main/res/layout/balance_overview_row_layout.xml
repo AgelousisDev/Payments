@@ -13,6 +13,7 @@
             type="com.agelousis.payments.main.ui.payments.presenters.BalanceOverviewPresenter" />
     </data>
 <com.google.android.material.card.MaterialCardView
+    style="@style/FilledMaterialCardView"
     android:id="@+id/guideCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

@@ -14,6 +14,7 @@
             type="com.agelousis.payments.main.ui.files.presenter.FilePresenter" />
     </data>
 <com.google.android.material.card.MaterialCardView
+    style="@style/FilledMaterialCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"

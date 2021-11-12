@@ -5,15 +5,14 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
+import com.agelousis.payments.base.BaseBindingFragment
 import com.agelousis.payments.custom.itemDecoration.DividerItemRecyclerViewDecorator
 import com.agelousis.payments.custom.itemDecoration.HeaderItemDecoration
 import com.agelousis.payments.database.DBManager
@@ -40,7 +39,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.AnimatorListener, PersonalInformationPresenter {
+class PersonalInformationFragment: BaseBindingFragment<FragmentPersonalInformationLayoutBinding>(
+    inflate = FragmentPersonalInformationLayoutBinding::inflate
+), OptionPresenter, Animator.AnimatorListener, PersonalInformationPresenter {
 
     override fun onAnimationCancel(animation: Animator?) {}
     override fun onAnimationRepeat(animation: Animator?) {}
@@ -76,8 +77,8 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
                     ) {
                         it is OptionType
                     }?.userModel?.profileImage = newUserModel?.profileImage
-                    binding.optionRecyclerView.scheduleLayoutAnimation()
-                    (binding.optionRecyclerView.adapter as? OptionTypesAdapter)?.reloadData()
+                    binding?.optionRecyclerView?.scheduleLayoutAnimation()
+                    (binding?.optionRecyclerView?.adapter as? OptionTypesAdapter)?.reloadData()
                 }
             }
         }
@@ -160,8 +161,8 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
                             it == OptionType.CHANGE_CURRENCY
                         }
                     )?.currencyType = currencyType
-                    binding.optionRecyclerView.scheduleLayoutAnimation()
-                    (binding.optionRecyclerView.adapter as? OptionTypesAdapter)?.reloadData()
+                    binding?.optionRecyclerView?.scheduleLayoutAnimation()
+                    (binding?.optionRecyclerView?.adapter as? OptionTypesAdapter)?.reloadData()
                 }
             }
         )
@@ -180,8 +181,8 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
                             it == OptionType.CHANGE_COUNTRY
                         }
                     )?.countryDataModel = countryDataModel
-                    binding.optionRecyclerView.scheduleLayoutAnimation()
-                    (binding.optionRecyclerView.adapter as? OptionTypesAdapter)?.reloadData()
+                    binding?.optionRecyclerView?.scheduleLayoutAnimation()
+                    (binding?.optionRecyclerView?.adapter as? OptionTypesAdapter)?.reloadData()
                 }
             },
             selectedCountryDataModel = optionList.firstOrNullWithType(
@@ -204,7 +205,12 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
         redirectToProfilePictureFragment()
     }
 
-    private lateinit var binding: FragmentPersonalInformationLayoutBinding
+    override fun onBindData(binding: FragmentPersonalInformationLayoutBinding?) {
+        super.onBindData(binding)
+        binding?.userModel = (activity as? MainActivity)?.userModel
+        binding?.presenter = this
+    }
+
     private val sharedPreferences by lazy {
         context?.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
     }
@@ -275,18 +281,6 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
         )
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentPersonalInformationLayoutBinding.inflate(
-            inflater,
-            container,
-            false
-        ).also {
-            it.userModel = (activity as? MainActivity)?.userModel
-            it.presenter = this
-        }
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
@@ -294,36 +288,36 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
     }
 
     private fun setupUI() {
-        binding.materialTextViewTitle.isSelected = true
+        binding?.materialTextViewTitle?.isSelected = true
     }
 
     private fun configureRecyclerView() {
-        binding.optionRecyclerView.adapter = OptionTypesAdapter(
+        binding?.optionRecyclerView?.adapter = OptionTypesAdapter(
             list = optionList,
             optionPresenter = this
         )
-        binding.optionRecyclerView.addItemDecoration(DividerItemRecyclerViewDecorator(
+        binding?.optionRecyclerView?.addItemDecoration(DividerItemRecyclerViewDecorator(
             context = context ?: return,
             margin = resources.getDimension(R.dimen.activity_general_horizontal_margin).toInt()
         ) {
             optionList.getOrNull(index = it) !is HeaderModel && optionList.getOrNull(index = it) != OptionType.DELETE_USER
         })
-        binding.optionRecyclerView.addItemDecoration(
+        binding?.optionRecyclerView?.addItemDecoration(
             HeaderItemDecoration(
-                parent = binding.optionRecyclerView
+                parent = binding?.optionRecyclerView ?: return
             ) {
                 optionList.getOrNull(index = it) is HeaderModel
             }
         )
-        binding.optionRecyclerView.setOnScrollChangeListener { _, _, _, _, _ ->
-            binding.headerConstraintLayout.elevation = if (binding.optionRecyclerView.canScrollVertically(-1)) 8.inPixel else 0.0f
+        binding?.optionRecyclerView?.setOnScrollChangeListener { _, _, _, _, _ ->
+            binding?.headerConstraintLayout?.elevation = if (binding?.optionRecyclerView?.canScrollVertically(-1) == true) 8.inPixel else 0.0f
         }
     }
 
     fun playProfileSuccessAnimation() {
-        binding.profileAnimationView.visibility = View.VISIBLE
-        binding.profileAnimationView.playAnimation()
-        binding.profileAnimationView.addAnimatorListener(this)
+        binding?.profileAnimationView?.isVisible = true
+        binding?.profileAnimationView?.playAnimation()
+        binding?.profileAnimationView?.addAnimatorListener(this)
     }
 
     private fun updateUser() {
@@ -378,7 +372,7 @@ class PersonalInformationFragment: Fragment(), OptionPresenter, Animator.Animato
 
     private fun redirectToProfilePictureFragment() {
         val extras = FragmentNavigatorExtras(
-            binding.profileImageView to resources.getString(R.string.key_shared_profile_picture_transition_name)
+            (binding?.profileImageView ?: return) to resources.getString(R.string.key_shared_profile_picture_transition_name)
         )
         findNavController().navigate(
             PersonalInformationFragmentDirections.actionPersonalInformationFragmentToProfilePictureFragment(),
