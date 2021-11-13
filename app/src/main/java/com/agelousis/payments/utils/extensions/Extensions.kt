@@ -50,6 +50,7 @@ import androidx.core.content.FileProvider
 import androidx.core.content.edit
 import androidx.core.database.getStringOrNull
 import androidx.core.view.*
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
@@ -974,4 +975,11 @@ fun View.applyAnimationOnKeyboard() {
                 }
             }
         )
+}
+
+infix fun NestedScrollView.hideHeaderViewOnScroll(headerView: View) {
+    viewTreeObserver.addOnScrollChangedListener {
+        headerView.isVisible = getChildAt(0).top >= scrollY
+        //headerView.isGone = getChildAt(0).bottom <= (height + scrollY)
+    }
 }

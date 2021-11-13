@@ -163,7 +163,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
     }
     private val availableGroups by lazy { arrayListOf<GroupModel>() }
     private val availablePayments by lazy { ArrayList(args.clientDataModel?.payments ?: listOf()) }
-    private lateinit var binding: FragmentNewPaymentLayoutBinding
+    lateinit var binding: FragmentNewPaymentLayoutBinding
     private var currentClientModel: ClientModel? = null
     private var paymentReadyForDeletionIndexArray = arrayListOf<Int>()
     private var paymentAmountUpdateIndex: Int? = null
@@ -222,6 +222,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
     }
 
     private fun setupUI() {
+        binding.nestedScrollView hideHeaderViewOnScroll binding.headerConstraintLayout
         binding.paymentTypeLayout.setOnDetailsPressed {
             context?.showListDialog(
                 title = resources.getString(R.string.key_payment_type_label),

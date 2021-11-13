@@ -9,55 +9,100 @@
         <variable
             name="personModel"
             type="com.agelousis.payments.main.ui.payments.models.ClientModel" />
+
         <variable
             name="groupModel"
             type="com.agelousis.payments.main.ui.payments.models.GroupModel" />
+
         <variable
             name="userModel"
             type="com.agelousis.payments.login.models.UserModel" />
+
         <variable
             name="selectedCountryDataModel"
             type="com.agelousis.payments.main.ui.countrySelector.models.CountryDataModel" />
+
         <variable
             name="paymentsAreAvailable"
             type="Boolean" />
+
         <variable
             name="presenter"
             type="com.agelousis.payments.main.ui.newPayment.presenters.NewPaymentPresenter" />
     </data>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginBottom="90dp">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_gravity="end"
-        android:layout_margin="@dimen/activity_general_horizontal_margin"
-        app:srcCompat="@drawable/ic_message"
-        app:tint="@color/colorAccent"
-        tools:tint="@color/petrolDarker"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:onClick="@{() -> presenter.onClientShareMessage()}"/>
-
-    <com.google.android.material.card.MaterialCardView
-        style="@style/FilledMaterialCardView"
-        android:id="@+id/materialCardView"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
-        android:animateLayoutChanges="true"
-        app:cardCornerRadius="@dimen/activity_general_horizontal_margin"
-        app:cardElevation="8dp"
-        app:cardUseCompatPadding="true">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/headerConstraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <FrameLayout
+                android:id="@+id/paymentRowHeaderFrameLayout"
+                backgroundDrawableTintColor="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? groupModel.color != null ? groupModel.color : personModel.groupColor : null}"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="@dimen/activity_general_horizontal_margin"
+                android:background="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? @drawable/oval_background : null}"
+                android:elevation="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextViewTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@{groupModel.groupName != null ? String.valueOf(groupModel.groupName.charAt(0)).toUpperCase() : String.valueOf(personModel.groupName.charAt(0)).toUpperCase()}"
+                    android:textColor="@color/white"
+                    android:textStyle="normal"
+                    android:visibility="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? View.VISIBLE : View.GONE}" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/userRowImageView"
+                    picassoGroupImageFromInternalFiles="@{groupModel.groupImage != null ? groupModel.groupImage : personModel.groupImage}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:visibility="@{groupModel.groupImage != null || personModel.groupImage != null ? View.VISIBLE : View.GONE}"
+                    tools:srcCompat="@drawable/ic_group" />
+
+            </FrameLayout>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="end"
+                android:layout_margin="@dimen/activity_general_horizontal_margin"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="@{() -> presenter.onClientShareMessage()}"
+                app:layout_constraintBottom_toBottomOf="@+id/paymentRowHeaderFrameLayout"
+                app:layout_constraintStart_toEndOf="@+id/paymentRowHeaderFrameLayout"
+                app:layout_constraintTop_toTopOf="@+id/paymentRowHeaderFrameLayout"
+                app:srcCompat="@drawable/ic_message"
+                app:tint="@color/colorAccent"
+                tools:tint="@color/petrolDarker" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headerConstraintLayout">
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -67,9 +112,9 @@
                 android:orientation="vertical">
 
                 <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
+                    personDetailsClickListener="@{() -> presenter.onContactSelection()}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    personDetailsClickListener="@{() -> presenter.onContactSelection()}"
                     app:label="@string/key_import_from_contact_label"
                     app:showLine="true" />
 
@@ -233,9 +278,9 @@
                     android:visibility="@{paymentsAreAvailable ? View.VISIBLE : View.GONE}"
 
                     app:backgroundTint="@color/red"
-                    app:iconTint="@color/white"
                     app:cornerRadius="8dp"
-                    app:icon="@drawable/ic_close"/>
+                    app:icon="@drawable/ic_close"
+                    app:iconTint="@color/white" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/paymentAmountRecyclerView"
@@ -251,42 +296,5 @@
 
         </androidx.core.widget.NestedScrollView>
 
-    </com.google.android.material.card.MaterialCardView>
-
-    <FrameLayout
-        android:id="@+id/paymentRowHeaderFrameLayout"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="@dimen/activity_general_horizontal_margin"
-        android:background="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? @drawable/oval_background : null}"
-        backgroundDrawableTintColor="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? groupModel.color != null ? groupModel.color : personModel.groupColor : null}"
-        android:elevation="16dp"
-        app:layout_anchor="@+id/materialCardView"
-        app:layout_anchorGravity="center|top"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.google.android.material.textview.MaterialTextView
-            style="@style/TextViewTitle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@{groupModel.groupName != null ? String.valueOf(groupModel.groupName.charAt(0)).toUpperCase() : String.valueOf(personModel.groupName.charAt(0)).toUpperCase()}"
-            android:textColor="@color/white"
-            android:textStyle="normal"
-            android:visibility="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? View.VISIBLE : View.GONE}" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/userRowImageView"
-            picassoGroupImageFromInternalFiles="@{groupModel.groupImage != null ? groupModel.groupImage : personModel.groupImage}"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:visibility="@{groupModel.groupImage != null || personModel.groupImage != null ? View.VISIBLE : View.GONE}"
-            tools:srcCompat="@drawable/ic_group" />
-
-    </FrameLayout>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

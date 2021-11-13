@@ -1,213 +1,211 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <import type="android.view.View" />
+
         <import type="com.agelousis.payments.views.extensions.ExtensionsKt" />
+
         <variable
             name="paymentAmountModel"
             type="com.agelousis.payments.main.ui.payments.models.PaymentAmountModel" />
+
         <variable
             name="defaultPaymentAmount"
             type="Double" />
+
         <variable
             name="singlePaymentState"
             type="Boolean" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.card.MaterialCardView
-            style="@style/FilledMaterialCardView"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="@dimen/activity_general_horizontal_margin"
-            app:cardElevation="8dp"
-            app:cardUseCompatPadding="true"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.core.widget.NestedScrollView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:animateLayoutChanges="true">
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guideline"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.5"/>
+                <com.agelousis.payments.views.currencyEditText.CurrencyFieldLayout
+                    android:id="@+id/amountLayout"
+                    currencyAmount="@{paymentAmountModel.paymentAmount != null ? paymentAmountModel.paymentAmount : defaultPaymentAmount}"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:fieldType="NUMBER"
+                    app:imeOptionType="actionDone"
+                    app:label="@string/key_amount_label"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:showLine="true" />
 
-                    <com.agelousis.payments.views.currencyEditText.CurrencyFieldLayout
-                        android:id="@+id/amountLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        currencyAmount="@{paymentAmountModel.paymentAmount != null ? paymentAmountModel.paymentAmount : defaultPaymentAmount}"
-                        app:fieldType="NUMBER"
-                        app:imeOptionType="actionDone"
-                        app:label="@string/key_amount_label"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline"
-                        app:showLine="true"/>
+                <com.agelousis.payments.views.dateLayout.YearMonthPickerFieldLayout
+                    android:id="@+id/paymentMonthDetailsLayout"
+                    monthYearValue="@{paymentAmountModel.paymentMonth}"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{paymentAmountModel.singlePayment == true ? singlePaymentState == false ? View.VISIBLE : View.GONE : singlePaymentState == true ? View.GONE : View.VISIBLE}"
+                    app:iconResource="@drawable/ic_payment_month"
+                    app:label="@string/key_payment_month_label"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/guideline"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:showLine="true" />
 
-                    <com.agelousis.payments.views.dateLayout.YearMonthPickerFieldLayout
-                        android:id="@+id/paymentMonthDetailsLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:visibility="@{paymentAmountModel.singlePayment == true ? singlePaymentState == false ? View.VISIBLE : View.GONE : singlePaymentState == true ? View.GONE : View.VISIBLE}"
-                        monthYearValue="@{paymentAmountModel.paymentMonth}"
-                        app:label="@string/key_payment_month_label"
-                        app:showLine="true"
-                        app:iconResource="@drawable/ic_payment_month"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/guideline"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                <com.agelousis.payments.views.dateLayout.DateFieldLayout
+                    android:id="@+id/dateDetailsLayout"
+                    dateValue="@{paymentAmountModel.paymentDate != null ? paymentAmountModel.paymentDate : ExtensionsKt.getShowingCurrentDate()}"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:iconResource="@drawable/ic_payment_day"
+                    app:label="@string/key_execution_date_label"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/amountLayout"
+                    app:showLine="true" />
 
-                    <com.agelousis.payments.views.dateLayout.DateFieldLayout
-                        android:id="@+id/dateDetailsLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        dateValue="@{paymentAmountModel.paymentDate != null ? paymentAmountModel.paymentDate : ExtensionsKt.getShowingCurrentDate()}"
-                        app:label="@string/key_execution_date_label"
-                        app:showLine="true"
-                        app:iconResource="@drawable/ic_payment_day"
-                        app:layout_constraintTop_toBottomOf="@+id/amountLayout"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline"/>
+                <com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
+                    android:id="@+id/paymentDateNotificationSwitchLayout"
+                    appSwitchIsChecked="@{paymentAmountModel.paymentDateNotification == true}"
+                    appSwitchIsEnabled="@{paymentAmountModel.paymentDateNotification == false}"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    app:appSwitchLabel="@string/key_payment_date_notification_label"
+                    app:appSwitchShowLine="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/guideline"
+                    app:layout_constraintTop_toBottomOf="@+id/paymentMonthDetailsLayout" />
 
-                    <com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
-                        android:id="@+id/paymentDateNotificationSwitchLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:focusable="true"
-                        android:clickable="true"
-                        android:foreground="?attr/selectableItemBackgroundBorderless"
-                        app:appSwitchLabel="@string/key_payment_date_notification_label"
-                        app:appSwitchShowLine="true"
-                        appSwitchIsEnabled="@{paymentAmountModel.paymentDateNotification == false}"
-                        appSwitchIsChecked="@{paymentAmountModel.paymentDateNotification == true}"
-                        app:layout_constraintTop_toBottomOf="@+id/paymentMonthDetailsLayout"
-                        app:layout_constraintStart_toEndOf="@+id/guideline"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                <com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
+                    android:id="@+id/skipPaymentAppSwitchLayout"
+                    appSwitchIsChecked="@{paymentAmountModel.skipPayment}"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    app:appSwitchLabel="@string/key_skip_payment_label"
+                    app:appSwitchShowLine="true"
+                    app:layout_constraintEnd_toStartOf="@id/guideline"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dateDetailsLayout" />
 
-                    <com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
-                        android:id="@+id/skipPaymentAppSwitchLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:focusable="true"
-                        android:clickable="true"
-                        android:foreground="?attr/selectableItemBackgroundBorderless"
-                        appSwitchIsChecked="@{paymentAmountModel.skipPayment}"
-                        app:appSwitchLabel="@string/key_skip_payment_label"
-                        app:appSwitchShowLine="true"
-                        app:layout_constraintTop_toBottomOf="@+id/dateDetailsLayout"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/guideline"/>
+                <com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
+                    android:id="@+id/singlePaymentAppSwitchLayout"
+                    appSwitchIsChecked="@{paymentAmountModel.singlePayment}"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    app:appSwitchLabel="@string/key_single_payment_label"
+                    app:appSwitchShowLine="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/guideline"
+                    app:layout_constraintTop_toBottomOf="@+id/paymentDateNotificationSwitchLayout" />
 
-                    <com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
-                        android:id="@+id/singlePaymentAppSwitchLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:focusable="true"
-                        android:clickable="true"
-                        android:foreground="?attr/selectableItemBackgroundBorderless"
-                        appSwitchIsChecked="@{paymentAmountModel.singlePayment}"
-                        app:appSwitchLabel="@string/key_single_payment_label"
-                        app:appSwitchShowLine="true"
-                        app:layout_constraintTop_toBottomOf="@+id/paymentDateNotificationSwitchLayout"
-                        app:layout_constraintStart_toEndOf="@+id/guideline"
-                        app:layout_constraintEnd_toEndOf="parent"/>
-
-                    <LinearLayout
-                        android:id="@+id/singlePaymentProductsLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="@{singlePaymentState == true ? View.VISIBLE : View.GONE}"
-                        app:layout_constraintTop_toBottomOf="@+id/skipPaymentAppSwitchLayout"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent">
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/activity_general_horizontal_margin"
-                            android:hint="@string/key_products_label"
-                            app:hintEnabled="true"
-                            app:endIconMode="clear_text">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/singlePaymentProductsField"
-                                style="@style/TextViewTitleLabel"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="text"
-                                android:singleLine="true"
-                                android:imeOptions="actionDone"
-                                android:text="@{paymentAmountModel.paymentNote}"/>
-
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.chip.ChipGroup
-                            android:id="@+id/singlePaymentProductsChipGroup"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/activity_general_horizontal_margin"
-                            android:layout_marginEnd="@dimen/activity_general_horizontal_margin" />
-
-                    </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/singlePaymentProductsLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="@{singlePaymentState == true ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/skipPaymentAppSwitchLayout">
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:id="@+id/notesTextInputLayout"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/activity_general_horizontal_margin"
-                        android:hint="@string/key_note_label"
-                        app:hintEnabled="true"
+                        android:hint="@string/key_products_label"
                         app:endIconMode="clear_text"
-                        app:layout_constraintTop_toBottomOf="@+id/singlePaymentProductsLayout"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent">
+                        app:hintEnabled="true">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/notesField"
+                            android:id="@+id/singlePaymentProductsField"
                             style="@style/TextViewTitleLabel"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textLongMessage"
-                            android:text="@{paymentAmountModel.paymentNote}"/>
+                            android:imeOptions="actionDone"
+                            android:inputType="text"
+                            android:singleLine="true"
+                            android:text="@{paymentAmountModel.paymentNote}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textview.MaterialTextView
-                        style="@style/TextViewLabel"
-                        android:layout_width="0dp"
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/singlePaymentProductsChipGroup"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/activity_general_horizontal_margin"
                         android:layout_marginStart="@dimen/activity_general_horizontal_margin"
-                        android:layout_marginBottom="@dimen/activity_general_horizontal_margin"
-                        android:layout_marginEnd="112dp"
-                        android:text="@string/key_payment_date_notification_not_able_to_cancel_message"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/notesTextInputLayout" />
+                        android:layout_marginEnd="@dimen/activity_general_horizontal_margin" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
-            </androidx.core.widget.NestedScrollView>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/notesTextInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/activity_general_horizontal_margin"
+                    android:hint="@string/key_note_label"
+                    app:endIconMode="clear_text"
+                    app:hintEnabled="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/singlePaymentProductsLayout">
 
-        </com.google.android.material.card.MaterialCardView>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/notesField"
+                        style="@style/TextViewTitleLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textLongMessage"
+                        android:text="@{paymentAmountModel.paymentNote}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextViewLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_general_horizontal_margin"
+                    android:layout_marginEnd="112dp"
+                    android:layout_marginBottom="@dimen/activity_general_horizontal_margin"
+                    android:text="@string/key_payment_date_notification_not_able_to_cancel_message"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/notesTextInputLayout" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

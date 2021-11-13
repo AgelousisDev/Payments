@@ -18,7 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="90dp"
         android:layout_gravity="bottom"
-        app:layout_behavior="com.google.android.material.bottomappbar.BottomAppBar$Behavior"
         app:contentInsetStart="0dp"
         app:contentInsetEnd="0dp"
         app:paddingBottomSystemWindowInsets="false"
