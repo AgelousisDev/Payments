@@ -10,6 +10,7 @@ import com.agelousis.payments.utils.extensions.countryDataModel
 import com.agelousis.payments.utils.extensions.currencySymbol
 import com.agelousis.payments.utils.extensions.paymentsFilteringOptionTypes
 import com.agelousis.payments.utils.helpers.CountryHelper
+import com.google.android.material.color.DynamicColors
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -26,6 +27,7 @@ class MainApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
+        DynamicColors.applyToActivitiesIfAvailable(this)
         setLocaleCurrency()
         setPaymentsFilteringOptionTypes()
         initializeFirebase()

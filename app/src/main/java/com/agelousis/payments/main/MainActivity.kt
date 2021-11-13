@@ -71,7 +71,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
     }
 
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
-        binding.appBarMain.bottomAppBar.performShow()
+        bottomAppBarState = true
         ((binding.appBarMain.floatingButton.layoutParams as? CoordinatorLayout.LayoutParams)?.behavior as? HideBottomViewOnScrollBehavior)?.slideUp(
             binding.appBarMain.floatingButton
         )
@@ -305,6 +305,14 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 isVisible = value != null
                 number = value ?: return@apply
             }
+        }
+    private var bottomAppBarState: Boolean = true
+        set(value) {
+            field = value
+            if (value)
+                binding.appBarMain.bottomAppBar.performShow()
+            else
+                binding.appBarMain.bottomAppBar.performHide()
         }
 
     override fun onBackPressed() {
