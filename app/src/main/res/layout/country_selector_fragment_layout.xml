@@ -24,28 +24,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <com.google.android.material.textview.MaterialTextView
-                style="@style/TextViewTitle"
                 android:id="@+id/selectorFragmentHeader"
+                style="@style/TextViewTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_general_horizontal_margin"
-                android:textColor="@color/white"
                 android:text="@{headerTitle != null ? headerTitle : @string/key_select_country_label}"
-                tools:text="@string/key_select_country_label"/>
+                android:textColor="@color/white"
+                tools:text="@string/key_select_country_label" />
 
             <com.agelousis.payments.views.searchLayout.MaterialSearchView
                 android:id="@+id/searchLayout"
+                materialSearchProfile="@{userModel.profileImage}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                materialSearchProfile="@{userModel.profileImage}"
-                app:searchHint="@string/key_search_in_countries_label"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:searchHint="@string/key_search_in_countries_label" />
 
         </LinearLayout>
 
@@ -58,10 +58,10 @@
                 android:id="@+id/countryRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

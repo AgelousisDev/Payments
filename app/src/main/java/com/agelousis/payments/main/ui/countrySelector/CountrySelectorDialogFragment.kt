@@ -1,13 +1,10 @@
 package com.agelousis.payments.main.ui.countrySelector
 
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
@@ -20,13 +17,14 @@ import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.countryDataModel
 import com.agelousis.payments.utils.helpers.CountryHelper
+import com.agelousis.payments.views.dialogFragment.FullScreenDialogFragment
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import java.util.*
 
-class CountrySelectorDialogFragment: DialogFragment(), CountrySelectorFragmentPresenter {
+class CountrySelectorDialogFragment: FullScreenDialogFragment(), CountrySelectorFragmentPresenter {
 
     companion object {
         fun show(
@@ -73,14 +71,6 @@ class CountrySelectorDialogFragment: DialogFragment(), CountrySelectorFragmentPr
     private var selectedCountryDataModel: CountryDataModel? = null
     private var userModel: UserModel? = null
     private var updateGlobalCountryState = true
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return super.onCreateDialog(savedInstanceState).also {
-            it.window?.requestFeature(Window.FEATURE_NO_TITLE)
-            it.window?.setBackgroundDrawableResource(android.R.color.transparent)
-            it.window?.attributes?.windowAnimations = R.style.DialogAnimation
-        }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = CountrySelectorFragmentLayoutBinding.inflate(

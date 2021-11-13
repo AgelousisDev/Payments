@@ -2,10 +2,7 @@ package com.agelousis.payments.main.ui.history
 
 import android.os.Bundle
 import android.view.*
-import android.widget.FrameLayout
-import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
-import androidx.viewpager2.widget.ViewPager2
 import com.agelousis.payments.R
 import com.agelousis.payments.base.BaseViewBindingFragment
 import com.agelousis.payments.databinding.HistoryFragmentLayoutBinding
@@ -28,7 +25,6 @@ class HistoryFragment: BaseViewBindingFragment<HistoryFragmentLayoutBinding>(
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by viewModels<PaymentsViewModel>()
     val clientModelList = arrayListOf<ClientModel>()
-    private var indicatorWidth = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -70,26 +66,6 @@ class HistoryFragment: BaseViewBindingFragment<HistoryFragmentLayoutBinding>(
                     )
                 )
             }.attach()
-            binding?.materialTabLayout?.post {
-                indicatorWidth = (binding?.materialTabLayout?.width ?: 0) / (binding?.materialTabLayout?.tabCount ?: 0)
-
-                //Assign new width
-                binding?.indicator?.updateLayoutParams<FrameLayout.LayoutParams> {
-                    width = indicatorWidth
-                }
-            }
-            registerOnPageChangeCallback(
-                object: ViewPager2.OnPageChangeCallback() {
-                    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                        super.onPageScrolled(position, positionOffset, positionOffsetPixels)
-                        binding?.indicator?.updateLayoutParams<FrameLayout.LayoutParams> {
-                            //Multiply positionOffset with indicatorWidth to get translation
-                            val translationOffset =  (positionOffset + position) * indicatorWidth
-                            leftMargin = translationOffset.toInt()
-                        }
-                    }
-                }
-            )
         }
     }
 
