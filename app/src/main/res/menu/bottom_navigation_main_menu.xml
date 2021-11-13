@@ -11,10 +11,10 @@
         android:title="@string/key_clients_label"
         android:icon="@drawable/ic_client" />
 
-    <!--<item
+    <item
         android:id="@+id/placeholder"
         android:title=""
-        android:enabled="false"/>-->
+        android:enabled="false"/>
 
     <item
         android:id="@+id/filesFragment"

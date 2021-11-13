@@ -18,11 +18,15 @@
         android:layout_width="match_parent"
         android:layout_height="90dp"
         android:layout_gravity="bottom"
+        app:layout_behavior="com.google.android.material.bottomappbar.BottomAppBar$Behavior"
         app:contentInsetStart="0dp"
         app:contentInsetEnd="0dp"
         app:paddingBottomSystemWindowInsets="false"
         app:hideOnScroll="true"
-        app:layout_scrollFlags="scroll|enterAlways">
+        app:fabAnimationMode="scale"
+        app:fabAlignmentMode="center"
+        app:fabCradleMargin="8dp"
+        app:fabCradleRoundedCornerRadius="12dp">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/bottomAppBarTitle"
@@ -49,21 +53,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/key_payments_label"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
-        android:layout_marginBottom="102dp"
-        app:backgroundTint="?attr/colorPrimaryContainer"
+        app:layout_anchorGravity="center"
+        app:layout_anchor="@id/bottomAppBar"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
         app:srcCompat="@drawable/ic_add"
         app:tint="@color/white"
         app:elevation="8dp"/>
-
-    <!--
-    app:fabAnimationMode="scale"
-        app:fabAlignmentMode="center"
-        app:fabCradleMargin="8dp"
-        app:fabCradleRoundedCornerRadius="12dp"
-        app:layout_anchor="@+id/bottomAppBar"
-        -->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -27,6 +27,7 @@ import com.agelousis.payments.firebase.models.FirebaseNotificationData
 import com.agelousis.payments.group.GroupActivity
 import com.agelousis.payments.login.LoginActivity
 import com.agelousis.payments.login.models.UserModel
+import com.agelousis.payments.main.enumerations.FloatingButtonPosition
 import com.agelousis.payments.main.enumerations.FloatingButtonType
 import com.agelousis.payments.main.materialMenu.enumerations.MaterialMenuOption
 import com.agelousis.payments.main.materialMenu.models.MaterialMenuDataModel
@@ -49,6 +50,7 @@ import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.models.SimpleDialogDataModel
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
+import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -87,7 +89,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
             R.id.personalInformationFragment -> {
                 navigationIcon = null
                 floatingButtonImage = R.drawable.ic_check
-                //floatingButtonPosition = FloatingButtonPosition.CENTER
+                floatingButtonPosition = FloatingButtonPosition.CENTER
                 floatingButtonTint = R.color.colorAccent
                 floatingButtonState = true
             }
@@ -95,7 +97,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 navigationIcon = null
                 appBarTitle = ""
                 floatingButtonImage = R.drawable.ic_add_group
-                //floatingButtonPosition = FloatingButtonPosition.CENTER
+                floatingButtonPosition = FloatingButtonPosition.CENTER
                 floatingButtonTint = R.color.colorAccent
                 floatingButtonState = true
             }
@@ -105,7 +107,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 )
                 appBarTitle = resources.getString(R.string.key_client_info_label)
                 floatingButtonImage = R.drawable.ic_check
-                //floatingButtonPosition = FloatingButtonPosition.END
+                floatingButtonPosition = FloatingButtonPosition.END
                 floatingButtonTint = R.color.colorAccent
                 floatingButtonState = true
             }
@@ -115,7 +117,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 )
                 appBarTitle = resources.getString(R.string.key_add_payment_label)
                 floatingButtonImage = R.drawable.ic_check
-                //floatingButtonPosition = FloatingButtonPosition.END
+                floatingButtonPosition = FloatingButtonPosition.END
                 floatingButtonTint = R.color.colorAccent
                 floatingButtonState = true
             }
@@ -123,7 +125,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 navigationIcon = null
                 appBarTitle = ""
                 floatingButtonImage = R.drawable.ic_delete
-                //floatingButtonPosition = FloatingButtonPosition.CENTER
+                floatingButtonPosition = FloatingButtonPosition.CENTER
                 floatingButtonTint = R.color.red
             }
             R.id.periodFilterFragment -> {
@@ -132,14 +134,14 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 )
                 appBarTitle = resources.getString(R.string.key_filter_period_label)
                 floatingButtonImage = R.drawable.ic_table
-                //floatingButtonPosition = FloatingButtonPosition.END
+                floatingButtonPosition = FloatingButtonPosition.END
                 floatingButtonTint = R.color.colorAccent
                 floatingButtonState = true
             }
             R.id.historyFragment -> {
                 navigationIcon = null
                 floatingButtonImage = R.drawable.ic_left_and_right
-                //floatingButtonPosition = FloatingButtonPosition.CENTER
+                floatingButtonPosition = FloatingButtonPosition.CENTER
                 floatingButtonTint = R.color.colorAccent
                 floatingButtonState = false
             }
@@ -149,7 +151,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 )
                 appBarTitle = resources.getString(R.string.key_invoice_label)
                 floatingButtonImage = R.drawable.ic_share
-                //floatingButtonPosition = FloatingButtonPosition.END
+                floatingButtonPosition = FloatingButtonPosition.END
                 floatingButtonTint = R.color.colorAccent
                 floatingButtonState = true
             }
@@ -159,7 +161,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 )
                 appBarTitle = resources.getString(R.string.key_clients_order_label)
                 floatingButtonImage = R.drawable.ic_check
-                //floatingButtonPosition = FloatingButtonPosition.END
+                floatingButtonPosition = FloatingButtonPosition.END
                 floatingButtonTint = R.color.colorAccent
                 floatingButtonState = true
             }
@@ -251,7 +253,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 binding.appBarMain.floatingButton.hide()
         }
     var floatingButtonType = FloatingButtonType.NORMAL
-    /*private var floatingButtonPosition = FloatingButtonPosition.END
+    private var floatingButtonPosition = FloatingButtonPosition.END
         set(value) {
             field = value
             when(value) {
@@ -260,7 +262,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 FloatingButtonPosition.END ->
                     binding.appBarMain.bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_END
             }
-        }*/
+        }
     private var floatingButtonTint: Int = 0
         set(value) {
             field = value
