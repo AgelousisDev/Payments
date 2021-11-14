@@ -16,7 +16,6 @@ import com.agelousis.payments.databinding.QrCodeFragmentLayoutBinding
 import com.agelousis.payments.firebase.models.FirebaseMessageModel
 import com.agelousis.payments.firebase.models.FirebaseNotificationData
 import com.agelousis.payments.main.MainActivity
-import com.agelousis.payments.main.ui.payments.PaymentsFragment
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
 import com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType
