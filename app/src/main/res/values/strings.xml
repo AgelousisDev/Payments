@@ -217,7 +217,7 @@
     <string name="key_clients_payments_generate_qr_code_label">Generate QRCode</string>
     <string name="key_clients_payments_generate_qr_code__message">To be able to share your id and receive clients &amp; their payments from another device</string>
     <string name="key_scan_qr_code_label">QRCode Scanner</string>
-    <string name="key_scan_qr_code_message">Share your clients &amp; their payments by scanning another devices\'s QRCode</string>
+    <string name="key_scan_qr_code_message">Share your selected clients &amp; their payments by scanning another devices\'s QRCode</string>
     <string name="key_qr_code_label">QRCode</string>
     <string name="key_share_id_and_receive_payments_message">Share your device id through the QRCode below and receive the clients &amp; their payments from the device you scan it</string>
     <string name="key_select_clients_label">Select clients</string>
@@ -244,6 +244,7 @@
     <string name="key_import_from_contact_label">Import from contact</string>
     <string name="key_clear_payments_label">Clear payments</string>
     <string name="key_send_email_to_group_value_message">Do you want to send email to the %s group?</string>
+    <string name="key_large_client_data_notification_warning_message">There are too many clients! Select less clients</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>

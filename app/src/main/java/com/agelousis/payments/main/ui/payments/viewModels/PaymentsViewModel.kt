@@ -11,6 +11,7 @@ import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.network.repositories.FirebaseMessageRepository
 import com.agelousis.payments.network.responses.ErrorModel
+import com.agelousis.payments.network.responses.FirebaseResponseModel
 import com.agelousis.payments.utils.extensions.pdfFormattedCurrentDate
 import java.io.File
 import java.util.*
@@ -19,7 +20,7 @@ class PaymentsViewModel: ViewModel() {
 
     val paymentsLiveData by lazy { MutableLiveData<List<Any>>() }
     val deletionLiveData by lazy { MutableLiveData<Boolean>() }
-    val firebaseResponseLiveData by lazy { MutableLiveData<String?>() }
+    val firebaseResponseLiveData by lazy { MutableLiveData<FirebaseResponseModel>() }
     val firebaseErrorLiveData by lazy { MutableLiveData<ErrorModel>() }
 
     suspend fun initializePayments(context: Context, userModel: UserModel?) {

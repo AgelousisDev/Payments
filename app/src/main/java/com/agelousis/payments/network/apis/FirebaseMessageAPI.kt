@@ -1,6 +1,7 @@
 package com.agelousis.payments.network.apis
 
 import com.agelousis.payments.firebase.models.FirebaseMessageModel
+import com.agelousis.payments.network.responses.FirebaseResponseModel
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Headers
@@ -15,6 +16,6 @@ interface FirebaseMessageAPI {
     @POST(value = "send")
     fun sendFirebaseMessage(
         @Body firebaseMessageModel: FirebaseMessageModel
-    ): Call<String?>
+    ): Call<FirebaseResponseModel?>
 
 }

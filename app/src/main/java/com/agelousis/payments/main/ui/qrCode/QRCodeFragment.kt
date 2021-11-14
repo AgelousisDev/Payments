@@ -19,7 +19,9 @@ import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
 import com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType
+import com.agelousis.payments.network.responses.FirebaseResponseModel
 import com.agelousis.payments.utils.extensions.loaderState
+import com.agelousis.payments.utils.extensions.toast
 import com.agelousis.payments.utils.helpers.QRCodeHelper
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
@@ -83,8 +85,7 @@ class QRCodeFragment: Fragment(), ZXingScannerView.ResultHandler {
             this requestClientData list.filterIsInstance<ClientModel>()
         }
         viewModel.firebaseResponseLiveData.observe(viewLifecycleOwner) {
-            loaderState = false
-            findNavController().popBackStack()
+            this configureFirebaseResponse it
         }
         viewModel.firebaseErrorLiveData.observe(viewLifecycleOwner) {
             loaderState = false
@@ -125,6 +126,16 @@ class QRCodeFragment: Fragment(), ZXingScannerView.ResultHandler {
                 )
             )
         )
+    }
+
+    private infix fun configureFirebaseResponse(firebaseResponseModel: FirebaseResponseModel) {
+        if (!firebaseResponseModel.isSuccessful)
+            context?.toast(
+                message = resources.getString(R.string.key_large_client_data_notification_warning_message)
+            )
+        loaderState = false
+        findNavController().popBackStack()
+
     }
 
     override fun onPause() {
