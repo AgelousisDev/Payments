@@ -197,6 +197,11 @@
             android:name="qrCodeSelectionType"
             app:argType="com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType"
             android:defaultValue="GENERATE" />
+        <argument
+            android:name="selectedClients"
+            app:argType="com.agelousis.payments.main.ui.payments.models.ClientModel[]"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/profilePictureFragment"

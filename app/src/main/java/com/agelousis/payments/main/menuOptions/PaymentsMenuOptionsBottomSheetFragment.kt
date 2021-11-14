@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.custom.itemDecoration.DividerItemRecyclerViewDecorator
@@ -73,7 +73,9 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
             QRCodeSelectionType.SCAN ->
                 if (context?.hasPermissions(android.Manifest.permission.CAMERA) == true)
                     (activity?.supportFragmentManager?.currentNavigationFragment as? PaymentsFragment)?.redirectToQrCodeFragment(
-                        qrCodeSelectionType = qrCodeSelectionType
+                        qrCodeSelectionType = qrCodeSelectionType,
+                        selectedClients = (parentFragment as? PaymentsFragment)?.filteredList?.filterIsInstance<ClientModel>()
+                            ?.takeWhile { clientModel -> clientModel.isSelected }
                     )
                 else
                     ActivityCompat.requestPermissions(
@@ -89,7 +91,7 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
 
     private lateinit var binding: PaymentsMenuOptionsFragmentLayoutBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
-    private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
+    private val viewModel by viewModels<PaymentsViewModel>()
     private val personModelList by lazy { arrayListOf<ClientModel>() }
     private val optionList by lazy {
         arrayListOf(
@@ -104,7 +106,8 @@ class PaymentsMenuOptionsBottomSheetFragment: BasicBottomSheetDialogFragment(), 
             PaymentsMenuOptionType.SEND_SMS_GLOBALLY,
             PaymentsMenuOptionType.QR_CODE_GENERATOR,
             PaymentsMenuOptionType.SCAN_QR_CODE.also {
-                it.isEnabled = true
+                it.isEnabled = (parentFragment as? PaymentsFragment)?.filteredList?.filterIsInstance<ClientModel>()
+                    ?.takeWhile { clientModel -> clientModel.isSelected }?.isNotEmpty() == true
             }
         )
     }

@@ -77,8 +77,18 @@ class PersonalInformationFragment: BaseBindingFragment<FragmentPersonalInformati
                     ) {
                         it is OptionType
                     }?.userModel?.profileImage = newUserModel?.profileImage
-                    binding?.optionRecyclerView?.scheduleLayoutAnimation()
-                    (binding?.optionRecyclerView?.adapter as? OptionTypesAdapter)?.reloadData()
+                    binding?.optionRecyclerView?.adapter?.notifyItemChanged(
+                        optionList.indexOfWithType(
+                            typeBlock = {
+                                it as? OptionType
+                            },
+                            predicate = { optionType ->
+                                optionType == OptionType.CHANGE_PROFILE_IMAGE
+                            }
+                        ).takeIf {
+                            it > -1
+                        } ?: return@loadImageBitmap
+                    )
                 }
             }
         }
@@ -161,8 +171,18 @@ class PersonalInformationFragment: BaseBindingFragment<FragmentPersonalInformati
                             it == OptionType.CHANGE_CURRENCY
                         }
                     )?.currencyType = currencyType
-                    binding?.optionRecyclerView?.scheduleLayoutAnimation()
-                    (binding?.optionRecyclerView?.adapter as? OptionTypesAdapter)?.reloadData()
+                    binding?.optionRecyclerView?.adapter?.notifyItemChanged(
+                        optionList.indexOfWithType(
+                            typeBlock = {
+                                it as? OptionType
+                            },
+                            predicate = { optionType ->
+                                optionType == OptionType.CHANGE_CURRENCY
+                            }
+                        ).takeIf {
+                            it > -1
+                        } ?: return
+                    )
                 }
             }
         )
@@ -181,8 +201,18 @@ class PersonalInformationFragment: BaseBindingFragment<FragmentPersonalInformati
                             it == OptionType.CHANGE_COUNTRY
                         }
                     )?.countryDataModel = countryDataModel
-                    binding?.optionRecyclerView?.scheduleLayoutAnimation()
-                    (binding?.optionRecyclerView?.adapter as? OptionTypesAdapter)?.reloadData()
+                    binding?.optionRecyclerView?.adapter?.notifyItemChanged(
+                        optionList.indexOfWithType(
+                            typeBlock = {
+                                it as? OptionType
+                            },
+                            predicate = { optionType ->
+                                optionType == OptionType.CHANGE_COUNTRY
+                            }
+                        ).takeIf {
+                            it > -1
+                        } ?: return
+                    )
                 }
             },
             selectedCountryDataModel = optionList.firstOrNullWithType(
@@ -216,7 +246,9 @@ class PersonalInformationFragment: BaseBindingFragment<FragmentPersonalInformati
     }
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val dbManager by lazy { context?.let { DBManager(context = it) } }
-    private val newUserModel by lazy { (activity as? MainActivity)?.userModel?.copy() }
+    private val newUserModel by lazy {
+        (activity as? MainActivity)?.userModel?.copy()
+    }
     private val optionList by lazy {
         arrayListOf(
             HeaderModel(

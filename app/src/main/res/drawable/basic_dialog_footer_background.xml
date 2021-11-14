@@ -5,7 +5,7 @@
     <solid android:color="@color/nativeBackgroundColor" />
 
     <corners
-        android:bottomLeftRadius="8dp"
-        android:bottomRightRadius="8dp" />
+        android:bottomLeftRadius="@dimen/activity_general_horizontal_margin"
+        android:bottomRightRadius="@dimen/activity_general_horizontal_margin" />
 
 </shape>

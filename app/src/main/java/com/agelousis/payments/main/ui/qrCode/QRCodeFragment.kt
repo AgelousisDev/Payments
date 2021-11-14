@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.agelousis.payments.R
@@ -16,6 +16,7 @@ import com.agelousis.payments.databinding.QrCodeFragmentLayoutBinding
 import com.agelousis.payments.firebase.models.FirebaseMessageModel
 import com.agelousis.payments.firebase.models.FirebaseNotificationData
 import com.agelousis.payments.main.MainActivity
+import com.agelousis.payments.main.ui.payments.PaymentsFragment
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
 import com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType
@@ -25,9 +26,6 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import com.itextpdf.xmp.impl.Base64
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 
 class QRCodeFragment: Fragment(), ZXingScannerView.ResultHandler {
@@ -38,12 +36,11 @@ class QRCodeFragment: Fragment(), ZXingScannerView.ResultHandler {
 
     private lateinit var binding: QrCodeFragmentLayoutBinding
     private val args: QRCodeFragmentArgs by navArgs()
-    private val uiScope = CoroutineScope(Dispatchers.Main)
-    private val viewModel by lazy { ViewModelProvider(this).get(PaymentsViewModel::class.java) }
+    private val viewModel by viewModels<PaymentsViewModel>()
     private var destinationFirebaseToken: String? = null
         set(value) {
             field = value
-            initializePayments()
+            this requestClientData (args.selectedClients?.toList() ?: return)
         }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -93,15 +90,6 @@ class QRCodeFragment: Fragment(), ZXingScannerView.ResultHandler {
         viewModel.firebaseErrorLiveData.observe(viewLifecycleOwner) {
             loaderState = false
             findNavController().popBackStack()
-        }
-    }
-
-    private fun initializePayments() {
-        uiScope.launch {
-            viewModel.initializePayments(
-                context = context ?: return@launch,
-                userModel = (activity as? MainActivity)?.userModel
-            )
         }
     }
 

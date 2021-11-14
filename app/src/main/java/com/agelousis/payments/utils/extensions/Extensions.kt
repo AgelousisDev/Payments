@@ -983,3 +983,15 @@ infix fun NestedScrollView.hideHeaderViewOnScroll(headerView: View) {
         //headerView.isGone = getChildAt(0).bottom <= (height + scrollY)
     }
 }
+
+inline fun <T, J> List<J>.indexOfWithType(
+    typeBlock: (J) -> T?,
+    predicate: (T?) -> Boolean
+): Int {
+    for ((index, item) in this.withIndex()) {
+        val block = typeBlock(item)
+        if (predicate(block))
+            return index
+    }
+    return -1
+}

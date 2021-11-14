@@ -13,8 +13,7 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/activity_general_horizontal_margin"
-    android:background="@drawable/basic_dialog_background">
+    android:layout_margin="@dimen/activity_general_horizontal_margin">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@drawable/basic_dialog_background">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/selectorFragmentHeader"
@@ -58,6 +58,8 @@
                 android:id="@+id/countryRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

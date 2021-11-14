@@ -5,6 +5,7 @@
     <solid android:color="@color/colorAccent"/>
 
     <corners
-        android:radius="8dp"/>
+        android:topLeftRadius="@dimen/activity_general_horizontal_margin"
+        android:topRightRadius="@dimen/activity_general_horizontal_margin"/>
 
 </shape>

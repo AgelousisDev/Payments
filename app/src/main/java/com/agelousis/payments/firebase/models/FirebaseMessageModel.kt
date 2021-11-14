@@ -11,4 +11,4 @@ data class FirebaseMessageModel(
 )
 
 @Parcelize
-data class FirebaseNotificationData(@SerializedName(value = "clients") val clientModelList: List< ClientModel>): Parcelable
+data class FirebaseNotificationData(@SerializedName(value = "clients") val clientModelList: List<ClientModel>): Parcelable

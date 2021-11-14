@@ -234,10 +234,14 @@ class PaymentsFragment: Fragment(), GroupPresenter, PaymentPresenter, PaymentAmo
         )
     }
 
-    fun redirectToQrCodeFragment(qrCodeSelectionType: QRCodeSelectionType) {
+    fun redirectToQrCodeFragment(
+        qrCodeSelectionType: QRCodeSelectionType,
+        selectedClients: List<ClientModel>? = null
+    ) {
         findNavController().navigate(
             PaymentsFragmentDirections.actionPaymentsFragmentToQRCodeFragment(
-                qrCodeSelectionType = qrCodeSelectionType
+                qrCodeSelectionType = qrCodeSelectionType,
+                selectedClients = selectedClients?.toTypedArray()
             )
         )
     }
