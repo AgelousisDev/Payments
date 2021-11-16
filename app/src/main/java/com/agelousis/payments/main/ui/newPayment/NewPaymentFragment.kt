@@ -95,6 +95,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             FloatingButtonType.NEGATIVE ->
                 if (availablePayments.all { it.paymentAmountRowState == PaymentAmountRowState.NORMAL })
                     (activity as? MainActivity)?.returnFloatingButtonBackToNormal()
+            else -> {}
         }
         if (availablePayments.getOrNull(index = adapterPosition)?.paymentAmountRowState == PaymentAmountRowState.CAN_BE_DISMISSED)
             paymentReadyForDeletionIndexArray.add(adapterPosition)

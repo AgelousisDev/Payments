@@ -90,6 +90,7 @@ class FilesFragment: BaseBindingFragment<FragmentFilesLayoutBinding>(
                         index = adapterPosition
                     ) as? FileDataModel
                 )
+            else -> {}
         }
         configureAppBar()
 

@@ -128,6 +128,7 @@ class ChartFragment: Fragment() {
                     } ?: return
                 )
             }
+            else -> {}
         }
     }
 
