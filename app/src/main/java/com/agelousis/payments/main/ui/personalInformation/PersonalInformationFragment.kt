@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
@@ -403,12 +402,8 @@ class PersonalInformationFragment: BaseBindingFragment<FragmentPersonalInformati
     }
 
     private fun redirectToProfilePictureFragment() {
-        val extras = FragmentNavigatorExtras(
-            (binding?.profileImageView ?: return) to resources.getString(R.string.key_shared_profile_picture_transition_name)
-        )
         findNavController().navigate(
             PersonalInformationFragmentDirections.actionPersonalInformationFragmentToProfilePictureFragment(),
-            extras
         )
     }
 

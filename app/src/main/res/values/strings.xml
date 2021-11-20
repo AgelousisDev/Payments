@@ -229,7 +229,6 @@
     <string name="key_clients_by_group_label">Clients by\nGroup</string>
     <string name="key_clear_all_invoices_question">Do you want to clear all invoices?</string>
     <string name="key_add_clients_from_home_message">Navigate to clients ⇨ tab and add your clients</string>
-    <string name="key_shared_profile_picture_transition_name" translatable="false">profile_picture_transition</string>
     <string name="key_search_in_groups_label">Search in Groups</string>
     <string name="key_apply_label">Apply</string>
     <string name="key_country_code_label">Country Code</string>

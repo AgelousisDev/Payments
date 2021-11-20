@@ -1,32 +1,39 @@
 package com.agelousis.payments.main.ui.personalInformation
 
 import android.os.Bundle
-import android.transition.TransitionInflater
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.agelousis.payments.R
-import com.agelousis.payments.base.BaseBindingFragment
-import com.agelousis.payments.databinding.ProfilePictureFragmentLayoutBinding
+import coil.compose.rememberImagePainter
 import com.agelousis.payments.main.MainActivity
-import com.agelousis.payments.main.ui.personalInformation.presenter.PersonalInformationPresenter
+import com.agelousis.payments.ui.extraHorizontalMargin
+import java.io.File
 
-class ProfilePictureFragment: BaseBindingFragment<ProfilePictureFragmentLayoutBinding>(
-    inflate = ProfilePictureFragmentLayoutBinding::inflate
-), PersonalInformationPresenter {
+class ProfilePictureFragment: Fragment() {
 
-    override fun onProfilePicturePressed() {
-        findNavController().popBackStack()
-    }
-
-    override fun onBindData(binding: ProfilePictureFragmentLayoutBinding?) {
-        super.onBindData(binding)
-        binding?.userModel = (activity as? MainActivity)?.userModel
-        binding?.presenter = this
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.shared_image_transition)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return ComposeView(
+            context = context ?: return null
+        ).apply {
+            setContent {
+                ProfileImageView()
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,6 +43,30 @@ class ProfilePictureFragment: BaseBindingFragment<ProfilePictureFragmentLayoutBi
 
     private fun setupUI() {
         (activity as? MainActivity)?.binding?.appBarMain?.bottomAppBar?.performHide()
+    }
+
+    @Composable
+    fun ProfileImageView() {
+        Box(
+            modifier = Modifier.clickable {
+                findNavController().popBackStack()
+            }.fillMaxSize()
+        ) {
+            Image(
+                rememberImagePainter(
+                    data = File(context?.filesDir, (activity as? MainActivity)?.userModel?.profileImage ?: return)
+                ),
+                contentDescription = null,
+                alignment = Alignment.Center,
+                modifier = extraHorizontalMargin.fillMaxSize()
+            )
+        }
+    }
+
+    @Preview
+    @Composable
+    fun ProfilePictureFragmentComposablePreview() {
+        ProfileImageView()
     }
 
 }

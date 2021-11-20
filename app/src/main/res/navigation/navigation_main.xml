@@ -38,13 +38,6 @@
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out"/>
-        <!--<action
-            android:id="@+id/action_paymentsFragment_to_historyFragment"
-            app:destination="@id/historyFragment"
-            app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/slide_out_top"
-            app:popEnterAnim="@anim/slide_in_top"
-            app:popExitAnim="@anim/slide_out_bottom" />-->
         <action
             android:id="@+id/action_paymentsFragment_to_QRCodeFragment"
             app:destination="@id/QRCodeFragment"
@@ -61,10 +54,10 @@
         <action
             android:id="@+id/action_personalInformationFragment_to_profilePictureFragment"
             app:destination="@id/profilePictureFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/slide_bottom"
+            app:popEnterAnim="@anim/slide_up"
+            app:popExitAnim="@anim/slide_bottom" />
     </fragment>
     <fragment
         android:id="@+id/newPaymentFragment"
@@ -206,7 +199,6 @@
     <fragment
         android:id="@+id/profilePictureFragment"
         android:name="com.agelousis.payments.main.ui.personalInformation.ProfilePictureFragment"
-        android:label="ProfilePictureFragment"
-        tools:layout="@layout/profile_picture_fragment_layout"/>
+        android:label="ProfilePictureFragment"/>
 
 </navigation>
