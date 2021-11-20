@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../../layout/compose-model-1637427811281.xml" value="0.6138211382113821" />
+        <entry key="../../../../../../layout/compose-model-1637432123330.xml" value="0.6138211382113821" />
+        <entry key="../../../../../../layout/compose-model-1637432561388.xml" value="0.2816722972972973" />
         <entry key="app/src/main/res/drawable-night-v31/balance_overview_background.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable-night/balance_overview_backgound.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable-night/balance_overview_background.xml" value="0.33645833333333336" />
@@ -11,6 +13,7 @@
         <entry key="app/src/main/res/drawable/balance_overview_background.xml" value="0.3312820512820513" />
         <entry key="app/src/main/res/drawable/basic_dialog_background.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/basic_dialog_footer_background.xml" value="0.33645833333333336" />
+        <entry key="app/src/main/res/drawable/bottom_sheet_navigation_line.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/ic_add.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/ic_add_group.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/ic_arrow.xml" value="0.33645833333333336" />
@@ -26,6 +29,7 @@
         <entry key="app/src/main/res/drawable/payments_app_icon_foreground.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/pdf_background.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/tab_layout_background.xml" value="0.33645833333333336" />
+        <entry key="app/src/main/res/font/ubuntu_light.xml" value="0.35052083333333334" />
         <entry key="app/src/main/res/layout-land/activity_login.xml" value="0.22552083333333334" />
         <entry key="app/src/main/res/layout-land/chart_fragment_layout.xml" value="0.22530864197530864" />
         <entry key="app/src/main/res/layout-land/fragment_new_payment_amount_layout.xml" value="0.23229166666666667" />
@@ -64,6 +68,8 @@
         <entry key="app/src/main/res/layout/period_filter_fragment_layout.xml" value="0.15577507598784193" />
         <entry key="app/src/main/res/layout/person_details_picker_layout.xml" value="0.3203125" />
         <entry key="app/src/main/res/layout/profile_picture_fragment_layout.xml" value="0.18342391304347827" />
+        <entry key="app/src/main/res/layout/share_message_fragment_layout.xml" value="0.18342391304347827" />
+        <entry key="app/src/main/res/layout/share_message_row_layout.xml" value="0.3203125" />
         <entry key="app/src/main/res/layout/total_payments_amount_fragment_layout.xml" value="0.1983695652173913" />
         <entry key="app/src/main/res/layout/year_month_picker_fragment_layout.xml" value="0.15577507598784193" />
         <entry key="app/src/main/res/menu/bottom_navigation_main_menu.xml" value="0.27870370370370373" />
