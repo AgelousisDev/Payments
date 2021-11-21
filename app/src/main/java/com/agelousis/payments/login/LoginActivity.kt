@@ -20,7 +20,7 @@ import com.agelousis.payments.biometrics.BiometricsHelper
 import com.agelousis.payments.biometrics.BiometricsListener
 import com.agelousis.payments.database.DBManager
 import com.agelousis.payments.databinding.ActivityLoginBinding
-import com.agelousis.payments.forgotPassword.ForgotPasswordBottomSheetFragment
+import com.agelousis.payments.forgotPassword.ForgotPasswordDialogFragment
 import com.agelousis.payments.guide.GuideActivity
 import com.agelousis.payments.login.enumerations.UIMode
 import com.agelousis.payments.login.models.UserModel
@@ -190,7 +190,7 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, UserSe
     }
 
     override fun onForgotPassword(userId: Int) {
-        ForgotPasswordBottomSheetFragment.show(
+        ForgotPasswordDialogFragment.show(
             supportFragmentManager = supportFragmentManager,
             userId = userId
         )

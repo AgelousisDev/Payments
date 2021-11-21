@@ -89,7 +89,12 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$liveDataViewModelVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$liveDataViewModelVersion")
+    // ViewModel utilities for Compose
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$liveDataViewModelVersion")
+    // LiveData
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$liveDataViewModelVersion")
     implementation(platform("com.google.firebase:firebase-bom:$firebaseBomVersion"))
+    implementation("androidx.compose.material:material-icons-extended:$composeVersion")
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("androidx.core:core-ktx:$ktxCoreVersion")

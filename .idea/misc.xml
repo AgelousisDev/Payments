@@ -7,6 +7,7 @@
         <entry key="../../../../../../layout/compose-model-1637432123330.xml" value="0.6138211382113821" />
         <entry key="../../../../../../layout/compose-model-1637432561388.xml" value="0.2816722972972973" />
         <entry key="../../../../../../layout/compose-model-1637507954545.xml" value="0.5989159891598916" />
+        <entry key="../../../../../../layout/compose-model-1637523717375.xml" value="0.592140921409214" />
         <entry key="app/src/main/res/drawable-night-v31/balance_overview_background.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable-night/balance_overview_backgound.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable-night/balance_overview_background.xml" value="0.33645833333333336" />
@@ -50,6 +51,7 @@
         <entry key="app/src/main/res/layout/currency_row_layout.xml" value="0.3203125" />
         <entry key="app/src/main/res/layout/currency_selector_fragment_layout.xml" value="0.1983695652173913" />
         <entry key="app/src/main/res/layout/details_app_switch_layout.xml" value="0.3203125" />
+        <entry key="app/src/main/res/layout/forgot_password_fragment_layout.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_files_layout.xml" value="0.22056159420289856" />
         <entry key="app/src/main/res/layout/fragment_new_payment_amount_layout.xml" value="0.15577507598784193" />
         <entry key="app/src/main/res/layout/fragment_new_payment_layout.xml" value="0.33" />
