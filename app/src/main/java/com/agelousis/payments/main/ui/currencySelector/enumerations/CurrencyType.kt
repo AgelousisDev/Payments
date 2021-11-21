@@ -33,4 +33,6 @@ enum class CurrencyType {
             SEK -> "kr "
         }
 
+    var isSelected = false
+
 }
