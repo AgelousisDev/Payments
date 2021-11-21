@@ -5,14 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
@@ -31,7 +28,9 @@ import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.shareMessageFragment.enumerations.ShareMessageType
 import com.agelousis.payments.main.ui.shareMessageFragment.presenters.ShareMessagePresenter
+import com.agelousis.payments.ui.BottomSheetNavigationLine
 import com.agelousis.payments.ui.Typography
+import com.agelousis.payments.ui.textViewTitleLabelFont
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.views.bottomSheet.BasicBottomSheetDialogFragment
@@ -115,43 +114,38 @@ class ShareMessageBottomSheetFragment: BasicBottomSheetDialogFragment(), ShareMe
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Divider(
-                thickness = 2.5.dp,
-                modifier = Modifier.padding(
-                    top = 8.dp,
-                    bottom = 8.dp
-                ).width(
-                    width = 20.dp
-                ).background(
-                    color = colorResource(id = R.color.grey),
-                    shape = RoundedCornerShape(50)
-                )
-            )
+            BottomSheetNavigationLine()
             Text(
                 text = stringResource(id = R.string.key_contact_share_message_label),
-                style = MaterialTheme.typography.h3,
+                style = textViewTitleLabelFont,
                 color = colorResource(id = R.color.dayNightTextOnBackground),
             )
             LazyRow(
                 horizontalArrangement = Arrangement.SpaceAround,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 16.dp
+                    )
             ) {
                 items(
                     shareMessageTypeList
                 ) { shareMessageType ->
                     Box(
-                        modifier = Modifier.padding(
-                            top = 16.dp,
-                            bottom = 16.dp
-                        ).clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(bounded = false),
-                            enabled = shareMessageType.isEnabled,
-                        ) {
-                            onShareMessageTypeSelected(
-                                shareMessageType = shareMessageType
+                        modifier = Modifier
+                            .padding(
+                                top = 0.dp,
+                                bottom = 16.dp
                             )
-                        }
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = rememberRipple(bounded = false),
+                                enabled = shareMessageType.isEnabled,
+                            ) {
+                                onShareMessageTypeSelected(
+                                    shareMessageType = shareMessageType
+                                )
+                            }
                     ) {
                         Image(
                             painter = painterResource(

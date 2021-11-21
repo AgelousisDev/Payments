@@ -46,6 +46,7 @@
         <entry key="app/src/main/res/layout/country_row_layout.xml" value="0.20018115942028986" />
         <entry key="app/src/main/res/layout/country_selector_fragment_layout.xml" value="0.19972826086956522" />
         <entry key="app/src/main/res/layout/currency_edit_text_layout.xml" value="0.3197463768115942" />
+        <entry key="app/src/main/res/layout/currency_row_layout.xml" value="0.3203125" />
         <entry key="app/src/main/res/layout/currency_selector_fragment_layout.xml" value="0.1983695652173913" />
         <entry key="app/src/main/res/layout/details_app_switch_layout.xml" value="0.3203125" />
         <entry key="app/src/main/res/layout/fragment_files_layout.xml" value="0.22056159420289856" />

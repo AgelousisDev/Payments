@@ -17,6 +17,30 @@ private val fonts = FontFamily(
     Font(R.font.ubuntu, weight = FontWeight.Normal, style = FontStyle.Italic)
 )
 
+val textViewTitleFont = TextStyle(
+    fontFamily = FontFamily(Font(R.font.ubuntu_regular)),
+    fontWeight = FontWeight.Bold,
+    fontSize = 24.sp
+)
+
+val textViewTitleLabelFont = TextStyle(
+    fontFamily = FontFamily(Font(R.font.ubuntu_regular)),
+    fontWeight = FontWeight.Bold,
+    fontSize = 14.sp
+)
+
+val textViewLabel = TextStyle(
+    fontFamily = FontFamily(Font(R.font.ubuntu_light)),
+    fontWeight = FontWeight.Light,
+    fontSize = 12.sp
+)
+
+val textViewValueLabel = TextStyle(
+    fontFamily = FontFamily(Font(R.font.ubuntu_light)),
+    fontWeight = FontWeight.Light,
+    fontSize = 14.sp
+)
+
 val Typography = Typography(
     body1 = TextStyle(
         fontFamily = fonts,

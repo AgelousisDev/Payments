@@ -55,6 +55,7 @@
         app:layout_anchorGravity="center"
         app:layout_anchor="@id/bottomAppBar"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+        app:backgroundTint="@color/colorPrimaryContainer"
         app:srcCompat="@drawable/ic_add"
         app:tint="@color/white"
         app:elevation="8dp"/>

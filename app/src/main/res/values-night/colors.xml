@@ -4,6 +4,7 @@
     <color name="colorPrimaryLighter">#121212</color>
     <color name="colorPrimaryDark">#121212</color>
     <color name="colorAccent">#1E88E5</color>
+    <color name="colorPrimaryContainer">@color/colorAccent</color>
 
     <color name="whiteTwo">#000000</color>
     <color name="dayNightTextOnBackground">#FFFFFF</color>
