@@ -30,6 +30,7 @@ import com.agelousis.payments.main.ui.shareMessageFragment.enumerations.ShareMes
 import com.agelousis.payments.main.ui.shareMessageFragment.presenters.ShareMessagePresenter
 import com.agelousis.payments.ui.BottomSheetNavigationLine
 import com.agelousis.payments.ui.Typography
+import com.agelousis.payments.ui.appColors
 import com.agelousis.payments.ui.textViewTitleLabelFont
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
@@ -102,7 +103,10 @@ class ShareMessageBottomSheetFragment: BasicBottomSheetDialogFragment(), ShareMe
             context = context ?: return null
         ).apply {
             setContent {
-                MaterialTheme(typography = Typography) {
+                MaterialTheme(
+                    typography = Typography,
+                    colors = appColors()
+                ) {
                     ShareMessageOptionsScreen()
                 }
             }

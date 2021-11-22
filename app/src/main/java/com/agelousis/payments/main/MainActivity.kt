@@ -90,7 +90,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 navigationIcon = null
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.CENTER
-                floatingButtonTint = R.color.colorAccent
+                floatingButtonTint = R.color.colorPrimaryContainer
                 floatingButtonState = true
             }
             R.id.paymentsFragment -> {
@@ -98,7 +98,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 appBarTitle = ""
                 floatingButtonImage = R.drawable.ic_add_group
                 floatingButtonPosition = FloatingButtonPosition.CENTER
-                floatingButtonTint = R.color.colorAccent
+                floatingButtonTint = R.color.colorPrimaryContainer
                 floatingButtonState = true
             }
             R.id.newPaymentFragment -> {
@@ -108,7 +108,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 appBarTitle = resources.getString(R.string.key_client_info_label)
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END
-                floatingButtonTint = R.color.colorAccent
+                floatingButtonTint = R.color.colorPrimaryContainer
                 floatingButtonState = true
             }
             R.id.newPaymentAmountFragment -> {
@@ -118,7 +118,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 appBarTitle = resources.getString(R.string.key_add_payment_label)
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END
-                floatingButtonTint = R.color.colorAccent
+                floatingButtonTint = R.color.colorPrimaryContainer
                 floatingButtonState = true
             }
             R.id.filesFragment -> {
@@ -135,14 +135,14 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 appBarTitle = resources.getString(R.string.key_filter_period_label)
                 floatingButtonImage = R.drawable.ic_table
                 floatingButtonPosition = FloatingButtonPosition.END
-                floatingButtonTint = R.color.colorAccent
+                floatingButtonTint = R.color.colorPrimaryContainer
                 floatingButtonState = true
             }
             R.id.historyFragment -> {
                 navigationIcon = null
                 floatingButtonImage = R.drawable.ic_left_and_right
                 floatingButtonPosition = FloatingButtonPosition.CENTER
-                floatingButtonTint = R.color.colorAccent
+                floatingButtonTint = R.color.colorPrimaryContainer
                 floatingButtonState = false
             }
             R.id.pdfViewerFragment -> {
@@ -152,7 +152,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 appBarTitle = resources.getString(R.string.key_invoice_label)
                 floatingButtonImage = R.drawable.ic_share
                 floatingButtonPosition = FloatingButtonPosition.END
-                floatingButtonTint = R.color.colorAccent
+                floatingButtonTint = R.color.colorPrimaryContainer
                 floatingButtonState = true
             }
             R.id.filterPaymentsFragment -> {
@@ -162,7 +162,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 appBarTitle = resources.getString(R.string.key_clients_order_label)
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END
-                floatingButtonTint = R.color.colorAccent
+                floatingButtonTint = R.color.colorPrimaryContainer
                 floatingButtonState = true
             }
             R.id.QRCodeFragment -> {
@@ -513,7 +513,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
     fun returnFloatingButtonBackToNormal() {
         floatingButtonType = FloatingButtonType.NORMAL
         floatingButtonImage = R.drawable.ic_check
-        binding.appBarMain.floatingButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorAccent))
+        binding.appBarMain.floatingButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorPrimaryContainer))
     }
 
     fun startGroupActivity(groupModel: GroupModel? = null) {

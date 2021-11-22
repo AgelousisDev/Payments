@@ -7,12 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.DialogFragment
@@ -22,6 +20,7 @@ import com.agelousis.payments.R
 import com.agelousis.payments.forgotPassword.ui.ForgotPasswordUI
 import com.agelousis.payments.forgotPassword.viewModels.ForgotPasswordViewModel
 import com.agelousis.payments.ui.Typography
+import com.agelousis.payments.ui.appColors
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.applyAnimationOnKeyboard
 import com.agelousis.payments.utils.extensions.toast
@@ -60,6 +59,7 @@ class ForgotPasswordDialogFragment: DialogFragment() {
         }
     }
 
+    @ExperimentalComposeUiApi
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return ComposeView(
             context = context ?: return null
@@ -67,7 +67,7 @@ class ForgotPasswordDialogFragment: DialogFragment() {
             setContent {
                 MaterialTheme(
                     typography = Typography,
-                    colors = if (isSystemInDarkTheme()) darkColors() else lightColors()
+                    colors = appColors()
                 ) {
                     ForgotPasswordUI(
                         updatePasswordBlock = this@ForgotPasswordDialogFragment::onChangePassword
@@ -87,6 +87,7 @@ class ForgotPasswordDialogFragment: DialogFragment() {
         }
     }
 
+    @ExperimentalComposeUiApi
     @ExperimentalMaterialApi
     @ExperimentalFoundationApi
     @Preview

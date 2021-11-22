@@ -22,6 +22,7 @@ import com.agelousis.payments.main.ui.currencySelector.enumerations.CurrencyType
 import com.agelousis.payments.main.ui.currencySelector.interfaces.CurrencySelectorFragmentPresenter
 import com.agelousis.payments.main.ui.currencySelector.ui.CurrencySelectorLayout
 import com.agelousis.payments.ui.Typography
+import com.agelousis.payments.ui.appColors
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.currencySymbol
 
@@ -75,7 +76,10 @@ class CurrencySelectorDialogFragment: DialogFragment(), CurrencySelectorFragment
             context = context ?: return null
         ).apply {
             setContent {
-                MaterialTheme(typography = Typography) {
+                MaterialTheme(
+                    typography = Typography,
+                    colors = appColors()
+                ) {
                     CurrencySelectorLayout(
                         currencyTypes = currencyTypes,
                         currencyPresenter = this@CurrencySelectorDialogFragment

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -12,24 +13,23 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
 import com.agelousis.payments.R
 import com.agelousis.payments.forgotPassword.viewModels.ForgotPasswordViewModel
-import com.agelousis.payments.ui.BottomSheetNavigationLine
 import com.agelousis.payments.ui.textViewTitleLabelFont
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.agelousis.payments.ui.horizontalMargin
-import com.agelousis.payments.ui.textViewValueLabelFont
+import com.agelousis.payments.ui.textViewTitleFont
 
 typealias UpdatePasswordBlock = () -> Unit
 
+@ExperimentalComposeUiApi
 @Composable
 fun ForgotPasswordUI(
     updatePasswordBlock: UpdatePasswordBlock
@@ -42,6 +42,7 @@ fun ForgotPasswordUI(
     var pinVisibility: Boolean by remember { mutableStateOf(false) }
     var newPasswordVisibility: Boolean by remember { mutableStateOf(false) }
     var repeatNewPasswordVisibility: Boolean by remember { mutableStateOf(false) }
+    val keyboardController = LocalSoftwareKeyboardController.current
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.background(
@@ -53,7 +54,16 @@ fun ForgotPasswordUI(
             )
         )
     ) {
-        BottomSheetNavigationLine()
+        Text(
+            text = stringResource(
+                id = R.string.key_forgot_password_label
+            ),
+            style = textViewTitleFont,
+            modifier = horizontalMargin,
+            color = colorResource(
+                id = R.color.dayNightTextOnBackground
+            )
+        )
         OutlinedTextField(
             value = pinValue,
             onValueChange = {
@@ -72,7 +82,13 @@ fun ForgotPasswordUI(
                 )
             },
             keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Number
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    keyboardController?.hide()
+                }
             ),
             visualTransformation = if (pinVisibility) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
@@ -88,7 +104,6 @@ fun ForgotPasswordUI(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    top = 8.dp,
                     start = 16.dp,
                     end = 16.dp
                 )
@@ -106,14 +121,17 @@ fun ForgotPasswordUI(
                     text = stringResource(
                         id = R.string.key_new_password_hint
                     ),
-                    style = textViewTitleLabelFont,
-                    color = colorResource(
-                        id = R.color.dayNightTextOnBackground
-                    )
+                    style = textViewTitleLabelFont
                 )
             },
             keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Password
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    keyboardController?.hide()
+                }
             ),
             visualTransformation = if (newPasswordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
@@ -147,14 +165,17 @@ fun ForgotPasswordUI(
                     text = stringResource(
                         id = R.string.key_repeat_new_password_hint
                     ),
-                    style = textViewTitleLabelFont,
-                    color = colorResource(
-                        id = R.color.dayNightTextOnBackground
-                    )
+                    style = textViewTitleLabelFont
                 )
             },
             keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Password
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    keyboardController?.hide()
+                }
             ),
             visualTransformation = if (repeatNewPasswordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
@@ -185,7 +206,7 @@ fun ForgotPasswordUI(
                 text = stringResource(
                     id = R.string.key_change_password_label
                 ),
-                style = textViewValueLabelFont
+                style = textViewTitleLabelFont
             )
         }
     }
