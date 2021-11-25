@@ -10,10 +10,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.GestureDetector
 import android.view.MotionEvent
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.widget.doAfterTextChanged
-import androidx.lifecycle.ViewModelProvider
 import com.agelousis.payments.R
 import com.agelousis.payments.base.BaseActivity
 import com.agelousis.payments.biometrics.BiometricsHelper
@@ -44,7 +44,7 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, UserSe
     private lateinit var binding: ActivityLoginBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val userModel by lazy { UserModel() }
-    private val viewModel by lazy { ViewModelProvider(this).get(LoginViewModel::class.java) }
+    private val viewModel: LoginViewModel by viewModels()
     private var dbManager: DBManager? = null
     private var signInState = SignInState.SIGN_UP
     private var mDetector: GestureDetectorCompat? = null

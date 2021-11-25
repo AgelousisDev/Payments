@@ -40,6 +40,7 @@
         <entry key="app/src/main/res/layout/activity_group.xml" value="0.3532608695652174" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.21302083333333333" />
+        <entry key="app/src/main/res/layout/activity_notification.xml" value="0.23385416666666667" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.24320652173913043" />
         <entry key="app/src/main/res/layout/balance_overview_row_layout.xml" value="0.5" />
         <entry key="app/src/main/res/layout/chart_fragment_layout.xml" value="0.22056159420289856" />

@@ -4,7 +4,6 @@ import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.os.Build
 import android.provider.Settings
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -17,11 +16,9 @@ object NotificationHelper {
     fun triggerNotification(context: Context, notificationDataModel: NotificationDataModel) {
         val channelId = context.resources.getString(R.string.key_payments_notifications_channel)
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val notificationChannel = NotificationChannel(channelId, channelId, importance)
-            notificationManager?.createNotificationChannel(notificationChannel)
-        }
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val notificationChannel = NotificationChannel(channelId, channelId, importance)
+        notificationManager?.createNotificationChannel(notificationChannel)
         notificationManager?.notify(
             notificationDataModel.notificationId,
             createNotification(
@@ -53,7 +50,7 @@ object NotificationHelper {
             Intent(context, NotificationActivity::class.java).also {
                 it.putExtra(NotificationActivity.BUBBLE_NOTIFICATION_EXTRA, notificationDataModel)
             },
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
         mBuilder.setContentIntent(resultPendingIntent)
         return mBuilder
