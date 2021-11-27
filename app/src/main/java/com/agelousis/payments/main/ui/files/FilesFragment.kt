@@ -1,5 +1,6 @@
 package com.agelousis.payments.main.ui.files
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
@@ -182,6 +183,21 @@ class FilesFragment: BaseBindingFragment<FragmentFilesLayoutBinding>(
                 filteredList.getOrNull(
                     index = position
                 ) is HeaderModel
+            }
+        )
+        binding?.filesListRecyclerView?.addItemDecoration(
+            object: RecyclerView.ItemDecoration() {
+                override fun getItemOffsets(
+                    outRect: Rect,
+                    view: View,
+                    parent: RecyclerView,
+                    state: RecyclerView.State
+                ) {
+                    super.getItemOffsets(outRect, view, parent, state)
+                    val adapterPosition = parent.getChildAdapterPosition(view)
+                    if (filteredList isLastAt adapterPosition)
+                        outRect.bottom = 90.inPixel.toInt()
+                }
             }
         )
     }

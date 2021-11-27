@@ -2,16 +2,14 @@ package com.agelousis.payments.main.ui.qrCode
 
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
+import com.agelousis.payments.base.BaseBindingFragment
 import com.agelousis.payments.databinding.QrCodeFragmentLayoutBinding
 import com.agelousis.payments.firebase.models.FirebaseMessageModel
 import com.agelousis.payments.firebase.models.FirebaseNotificationData
@@ -29,13 +27,19 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import com.itextpdf.xmp.impl.Base64
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 
-class QRCodeFragment: Fragment(), ZXingScannerView.ResultHandler {
+class QRCodeFragment: BaseBindingFragment<QrCodeFragmentLayoutBinding>(
+    inflate = QrCodeFragmentLayoutBinding::inflate
+), ZXingScannerView.ResultHandler {
 
     override fun handleResult(p0: Result?) {
         destinationFirebaseToken = Base64.decode(p0?.text)
     }
 
-    private lateinit var binding: QrCodeFragmentLayoutBinding
+    override fun onBindData(binding: QrCodeFragmentLayoutBinding?) {
+        super.onBindData(binding)
+        binding?.qrCodeSelectionType = args.qrCodeSelectionType
+    }
+
     private val args: QRCodeFragmentArgs by navArgs()
     private val viewModel by viewModels<PaymentsViewModel>()
     private var destinationFirebaseToken: String? = null
@@ -43,17 +47,6 @@ class QRCodeFragment: Fragment(), ZXingScannerView.ResultHandler {
             field = value
             this requestClientData (args.selectedClients?.toList() ?: return)
         }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = QrCodeFragmentLayoutBinding.inflate(
-            inflater,
-            container,
-            false
-        ).also {
-            it.qrCodeSelectionType = args.qrCodeSelectionType
-        }
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -64,8 +57,8 @@ class QRCodeFragment: Fragment(), ZXingScannerView.ResultHandler {
     override fun onResume() {
         super.onResume()
         if (args.qrCodeSelectionType == QRCodeSelectionType.SCAN) {
-            binding.qrCodeScanner.startCamera()
-            binding.qrCodeScanner.setResultHandler(this)
+            binding?.qrCodeScanner?.startCamera()
+            binding?.qrCodeScanner?.setResultHandler(this)
         }
     }
 
@@ -99,21 +92,21 @@ class QRCodeFragment: Fragment(), ZXingScannerView.ResultHandler {
             .setErrorCorrectionLevel(ErrorCorrectionLevel.L)
             .setMargin(2)
             .qrCode?.let { qrCodeBitmap ->
-                binding.qrCodeBitmap = qrCodeBitmap
+                binding?.qrCodeBitmap = qrCodeBitmap
             }
     }
 
     private fun startQRCodeScanning() {
-        binding.qrCodeScanner.setFormats(
+        binding?.qrCodeScanner?.setFormats(
             listOf(
                 BarcodeFormat.QR_CODE
             )
         )
-        binding.qrCodeScanner.setAutoFocus(true)
-        binding.qrCodeScanner.setLaserColor(ContextCompat.getColor(context ?: return, R.color.colorAccent))
+        binding?.qrCodeScanner?.setAutoFocus(true)
+        binding?.qrCodeScanner?.setLaserColor(ContextCompat.getColor(context ?: return, R.color.colorAccent))
         //binding.qrCodeScanner.setMaskColor(ContextCompat.getColor(context ?: return, R.color.colorAccent))
         if (Build.MANUFACTURER.equals("HUAWEI", ignoreCase = true))
-            binding.qrCodeScanner.setAspectTolerance(0.5f)
+            binding?.qrCodeScanner?.setAspectTolerance(0.5f)
     }
 
     private infix fun requestClientData(clientModelList: List<ClientModel>) {
@@ -141,7 +134,7 @@ class QRCodeFragment: Fragment(), ZXingScannerView.ResultHandler {
     override fun onPause() {
         super.onPause()
         if (args.qrCodeSelectionType == QRCodeSelectionType.SCAN)
-            binding.qrCodeScanner.stopCamera()
+            binding?.qrCodeScanner?.stopCamera()
     }
 
 }

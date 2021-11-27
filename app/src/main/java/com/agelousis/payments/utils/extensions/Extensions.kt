@@ -341,7 +341,7 @@ fun View.circularReveal(circularAnimationCompletionBlock: CircularAnimationCompl
             override fun onGlobalLayout() {
                 val finalRadius: Float = max(width.toFloat(), height.toFloat())
                 // create the animator for this view (the start radius is zero)
-                val circularReveal = ViewAnimationUtils.createCircularReveal(this@circularReveal, width - (resources.getDimensionPixelSize(R.dimen.activity_general_horizontal_margin) * 2), height - (height / 6), 0f, finalRadius)
+                val circularReveal = ViewAnimationUtils.createCircularReveal(this@circularReveal, width / 2, height - (height / 6), 0f, finalRadius)
                 circularReveal.duration = 500
                 // make the view visible and start the animation
                 visibility = View.VISIBLE

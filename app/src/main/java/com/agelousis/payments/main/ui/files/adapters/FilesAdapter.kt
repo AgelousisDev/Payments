@@ -87,40 +87,4 @@ class FilesAdapter(private val list: ArrayList<Any>, private val presenter: File
 
     fun reloadData() = notifyDataSetChanged()
 
-    fun restoreItem(position: Int) = notifyItemChanged(position)
-
-    fun removeItemAndUpdate(context: Context, position: Int): Boolean {
-        list.removeAt(position)
-        notifyItemRemoved(position)
-        //notifyItemRangeChanged(position, list.size)
-
-        val uselessHeaderRow = list.filterIsInstance<HeaderModel>().firstOrNull { headerModel ->
-            list.filterIsInstance<FileDataModel>().all { headerModel.dateTime != it.fileDate }
-        }
-        uselessHeaderRow?.let {
-            val headerPosition = list.indexOf(it)
-            list.removeAt(headerPosition)
-            notifyItemRemoved(headerPosition)
-            //notifyItemRangeChanged(headerPosition, list.size)
-        }
-        addEmptyViewIf(
-            emptyRow = EmptyModel(
-                title = context.resources.getString(R.string.key_no_files_title_message),
-                message = context.resources.getString(R.string.key_no_files_message),
-                imageIconResource = R.drawable.ic_colored_pdf
-            )
-        ) {
-            list.isEmpty()
-        }
-        return list.any { it is EmptyModel }
-    }
-
-    private fun addEmptyViewIf(emptyRow: EmptyModel, predicate: () -> Boolean) {
-        if (predicate()) {
-            list.add(emptyRow)
-            notifyItemInserted(0)
-            notifyItemRangeChanged(0, list.size)
-        }
-    }
-
 }

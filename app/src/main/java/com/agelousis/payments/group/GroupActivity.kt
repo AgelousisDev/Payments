@@ -95,7 +95,7 @@ class GroupActivity : BaseActivity(), GroupActivityPresenter, ColorSelectorPrese
     private val selectedGroupModel by lazy { intent?.extras?.getParcelable(GROUP_MODEL_EXTRA) ?: GroupModel() }
 
     override fun onBackPressed() {
-       binding. rootLayout.circularUnReveal(
+       binding.rootLayout.circularUnReveal(
             centerX = onTouchCenterX?.toInt(),
             centerY = onTouchCenterY?.toInt()
         ) {

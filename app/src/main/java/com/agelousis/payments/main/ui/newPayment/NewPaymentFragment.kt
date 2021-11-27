@@ -383,9 +383,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
     }
 
     fun checkInputFields() {
-        fillCurrentPersonModel(
-            saveState = true
-        )
+        fillCurrentPersonModel()
         ifLet(
             currentClientModel?.groupName,
             currentClientModel?.firstName,
@@ -435,7 +433,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
         }
     }
 
-    private fun fillCurrentPersonModel(saveState: Boolean = false) {
+    private fun fillCurrentPersonModel() {
         var phone = binding.phoneLayout.value
         selectedCountryDataModel?.countryZipCode?.let { zipCode ->
             if (binding.phoneLayout.value?.startsWith(zipCode) == false)
@@ -458,7 +456,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             active = binding.activeAppSwitchLayout.isChecked,
             free = binding.freeAppSwitchLayout.isChecked,
             messageTemplate = binding.messageTemplateField.text?.toString(),
-            payments = if (saveState && !binding.activeAppSwitchLayout.isChecked) listOf() else availablePayments,
+            payments = availablePayments,
             paymentType = selectedPaymentType,
             groupColor = args.clientDataModel?.groupColor,
             groupImage = args.clientDataModel?.groupImage
