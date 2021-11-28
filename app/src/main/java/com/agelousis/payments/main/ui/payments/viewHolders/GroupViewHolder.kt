@@ -10,6 +10,7 @@ class GroupViewHolder(private val binding: GroupRowLayoutBinding): RecyclerView.
     fun bind(groupModel: GroupModel, presenter: GroupPresenter) {
         binding.groupModel = groupModel
         binding.presenter = presenter
+        binding.groupNameTextView.isSelected = true
         binding.executePendingBindings()
     }
 

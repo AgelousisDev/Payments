@@ -87,7 +87,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 && destination.id != R.id.historyFragment
                 && destination.id != R.id.personalInformationFragment
         statusBarColor = when(destination.id) {
-            R.id.newPaymentFragment,
             R.id.personalInformationFragment ->
                 ContextCompat.getColor(this, R.color.colorPrimaryLighter)
             else ->

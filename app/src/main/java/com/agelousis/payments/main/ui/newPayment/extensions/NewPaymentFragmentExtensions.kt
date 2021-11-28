@@ -2,6 +2,10 @@ package com.agelousis.payments.main.ui.newPayment.extensions
 
 import android.graphics.Rect
 import android.view.View
+import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updateMargins
 import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.R
 import com.agelousis.payments.main.MainActivity
@@ -11,17 +15,21 @@ import com.agelousis.payments.main.ui.newPayment.NewPaymentFragment
 import com.agelousis.payments.main.ui.newPayment.adapters.PaymentAmountAdapter
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.utils.constants.Constants
+import com.agelousis.payments.utils.custom.FabExtendingOnScrollListener
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.models.NotificationDataModel
 import com.agelousis.payments.utils.models.SimpleDialogDataModel
 
 fun NewPaymentFragment.configureScrollView() {
-    binding.nestedScrollView.setOnScrollChangeListener { _, _, _, _, _ ->
-        binding.headerConstraintLayout.elevation = if (binding.nestedScrollView.canScrollVertically(-1)) 8.inPixel else 0.0f
-    }
+    binding.nestedScrollView.setOnScrollChangeListener(
+        FabExtendingOnScrollListener(
+            floatingActionButton = binding.addPaymentButton
+        )
+    )
 }
 
 fun NewPaymentFragment.configureRecyclerView() {
+    configureRecyclerViewMargins()
     binding.paymentAmountRecyclerView.addItemDecoration(
         object: RecyclerView.ItemDecoration() {
             override fun getItemOffsets(
@@ -42,6 +50,30 @@ fun NewPaymentFragment.configureRecyclerView() {
         vat = (activity as? MainActivity)?.userModel?.vat,
         presenter = this
     )
+}
+
+fun NewPaymentFragment.configureRecyclerViewMargins() {
+    when (context?.isLandscape == true) {
+        true ->
+            binding.paymentAmountRecyclerView.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                updateMargins(
+                    bottom =
+                    if (availablePayments.isEmpty())
+                        90.inPixel.toInt()
+                    else
+                        0
+                )
+            }
+        false ->
+            binding.paymentAmountRecyclerView.updateLayoutParams<LinearLayout.LayoutParams> {
+                updateMargins(
+                    bottom = if (availablePayments.isEmpty())
+                        90.inPixel.toInt()
+                    else
+                        0
+                )
+            }
+    }
 }
 
 fun NewPaymentFragment.showCountryCodesSelector() {

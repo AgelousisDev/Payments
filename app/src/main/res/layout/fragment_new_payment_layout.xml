@@ -7,7 +7,7 @@
         <import type="com.agelousis.payments.main.ui.payments.models.PaymentAmountModel" />
         <import type="com.agelousis.payments.main.ui.payments.enumerations.PaymentType" />
         <variable
-            name="personModel"
+            name="clientModel"
             type="com.agelousis.payments.main.ui.payments.models.ClientModel" />
 
         <variable
@@ -40,18 +40,17 @@
             android:id="@+id/headerConstraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryLighter"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <FrameLayout
                 android:id="@+id/paymentRowHeaderFrameLayout"
-                backgroundDrawableTintColor="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? groupModel.color != null ? groupModel.color : personModel.groupColor : null}"
+                backgroundDrawableTintColor="@{groupModel.groupImage == null &amp;&amp; clientModel.groupImage == null ? groupModel.color != null ? groupModel.color : clientModel.groupColor : null}"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_margin="@dimen/activity_general_horizontal_margin"
-                android:background="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? @drawable/oval_background : null}"
+                android:background="@{groupModel.groupImage == null &amp;&amp; clientModel.groupImage == null ? @drawable/oval_background : null}"
                 android:elevation="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -62,18 +61,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@{groupModel.groupName != null ? String.valueOf(groupModel.groupName.charAt(0)).toUpperCase() : String.valueOf(personModel.groupName.charAt(0)).toUpperCase()}"
+                    android:text="@{groupModel.groupName != null ? String.valueOf(groupModel.groupName.charAt(0)).toUpperCase() : String.valueOf(clientModel.groupName.charAt(0)).toUpperCase()}"
                     android:textColor="@color/white"
                     android:textStyle="normal"
-                    android:visibility="@{groupModel.groupImage == null &amp;&amp; personModel.groupImage == null ? View.VISIBLE : View.GONE}" />
+                    android:visibility="@{groupModel.groupImage == null &amp;&amp; clientModel.groupImage == null ? View.VISIBLE : View.GONE}" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/userRowImageView"
-                    picassoGroupImageFromInternalFiles="@{groupModel.groupImage != null ? groupModel.groupImage : personModel.groupImage}"
+                    picassoGroupImageFromInternalFiles="@{groupModel.groupImage != null ? groupModel.groupImage : clientModel.groupImage}"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    android:visibility="@{groupModel.groupImage != null || personModel.groupImage != null ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{groupModel.groupImage != null || clientModel.groupImage != null ? View.VISIBLE : View.GONE}"
                     tools:srcCompat="@drawable/ic_group" />
 
             </FrameLayout>
@@ -87,12 +86,27 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:onClick="@{() -> presenter.onClientShareMessage()}"
+                android:visibility="@{clientModel.email != null || clientModel.phone != null ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="@+id/paymentRowHeaderFrameLayout"
                 app:layout_constraintStart_toEndOf="@+id/paymentRowHeaderFrameLayout"
                 app:layout_constraintTop_toTopOf="@+id/paymentRowHeaderFrameLayout"
                 app:srcCompat="@drawable/ic_message"
                 app:tint="@color/colorAccent"
                 tools:tint="@color/petrolDarker" />
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/addPaymentButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+                android:fontFamily="@font/ubuntu"
+                android:onClick="@{() -> presenter.onPaymentAmount((PaymentAmountModel) null)}"
+                android:text="@string/key_add_payment_label"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_add"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -122,7 +136,7 @@
 
                 <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
                     android:id="@+id/paymentTypeLayout"
-                    personDetailsPicker="@{personModel.paymentType != null ? personModel.paymentType.getLocalizedTitle(context.resources) : PaymentType.CASH_PAYMENT.getLocalizedTitle(context.resources)}"
+                    personDetailsPicker="@{clientModel.paymentType != null ? clientModel.paymentType.getLocalizedTitle(context.resources) : PaymentType.CASH_PAYMENT.getLocalizedTitle(context.resources)}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:fieldType="TEXT"
@@ -132,7 +146,7 @@
 
                 <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
                     android:id="@+id/firstNameLayout"
-                    personDetails='@{personModel.firstName != null ? personModel.firstName : ""}'
+                    personDetails='@{clientModel.firstName != null ? clientModel.firstName : ""}'
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:fieldType="TEXT"
@@ -142,7 +156,7 @@
 
                 <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
                     android:id="@+id/surnameLayout"
-                    personDetails='@{personModel.surname != null ? personModel.surname : ""}'
+                    personDetails='@{clientModel.surname != null ? clientModel.surname : ""}'
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:fieldType="TEXT"
@@ -162,7 +176,7 @@
 
                 <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
                     android:id="@+id/phoneLayout"
-                    personDetails='@{personModel.phone != null ? personModel.phone : ""}'
+                    personDetails='@{clientModel.phone != null ? clientModel.phone : ""}'
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:fieldType="NUMBER"
@@ -172,7 +186,7 @@
 
                 <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
                     android:id="@+id/parentNameLayout"
-                    personDetails='@{personModel.parentName != null ? personModel.parentName : ""}'
+                    personDetails='@{clientModel.parentName != null ? clientModel.parentName : ""}'
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:fieldType="TEXT"
@@ -182,7 +196,7 @@
 
                 <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
                     android:id="@+id/parentPhoneLayout"
-                    personDetails='@{personModel.parentPhone != null ? personModel.parentPhone : ""}'
+                    personDetails='@{clientModel.parentPhone != null ? clientModel.parentPhone : ""}'
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:fieldType="NUMBER"
@@ -192,7 +206,7 @@
 
                 <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
                     android:id="@+id/emailLayout"
-                    personDetails='@{personModel.email != null ? personModel.email : ""}'
+                    personDetails='@{clientModel.email != null ? clientModel.email : ""}'
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:fieldType="EMAIL"
@@ -202,7 +216,7 @@
 
                 <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
                     android:id="@+id/groupDetailsLayout"
-                    personDetailsPicker="@{groupModel.groupName != null ? groupModel.groupName : personModel.groupName != null ? personModel.groupName : @string/key_empty_field_label}"
+                    personDetailsPicker="@{groupModel.groupName != null ? groupModel.groupName : clientModel.groupName != null ? clientModel.groupName : @string/key_empty_field_label}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:fieldType="TEXT"
@@ -212,7 +226,7 @@
 
                 <com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
                     android:id="@+id/activeAppSwitchLayout"
-                    appSwitchIsChecked="@{personModel.active != null ? personModel.active : true}"
+                    appSwitchIsChecked="@{clientModel.active != null ? clientModel.active : true}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
@@ -223,7 +237,7 @@
 
                 <com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
                     android:id="@+id/freeAppSwitchLayout"
-                    appSwitchIsChecked="@{personModel.free == true}"
+                    appSwitchIsChecked="@{clientModel.free == true}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
@@ -248,24 +262,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textLongMessage"
-                        android:text="@{personModel.messageTemplate != null &amp;&amp; personModel.messageTemplate.empty == false ? personModel.messageTemplate : userModel.defaultMessageTemplate}" />
+                        android:text="@{clientModel.messageTemplate != null &amp;&amp; clientModel.messageTemplate.empty == false ? clientModel.messageTemplate : userModel.defaultMessageTemplate}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/addPaymentButton"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_marginStart="@dimen/activity_general_horizontal_margin"
-                    android:fontFamily="@font/ubuntu"
-                    android:onClick="@{() -> presenter.onPaymentAmount((PaymentAmountModel) null)}"
-                    android:text="@string/key_add_payment_label"
-                    android:textAllCaps="false"
-                    android:textColor="@color/dayNightTextOnBackground"
-                    app:cornerRadius="8dp"
-                    app:icon="@drawable/ic_add" />
 
                 <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                     android:id="@+id/clearPaymentsButton"

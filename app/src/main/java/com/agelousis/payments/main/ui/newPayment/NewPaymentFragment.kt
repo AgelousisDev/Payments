@@ -144,6 +144,8 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             )
             clear()
         }
+        binding.paymentsAreAvailable = false
+        configureRecyclerViewMargins()
     }
 
     override fun onClientShareMessage() {
@@ -190,7 +192,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
     override fun onResume() {
         super.onResume()
         currentClientModel?.let {
-            binding.personModel = it
+            binding.clientModel = it
         }
     }
 
@@ -201,7 +203,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             false
         ).also {
             it.groupModel = args.groupDataModel
-            it.personModel = args.clientDataModel
+            it.clientModel = args.clientDataModel
             it.userModel = (activity as? MainActivity)?.userModel
             it.paymentsAreAvailable = availablePayments.isNotEmpty()
             it.presenter = this
@@ -294,6 +296,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
                     !currentClientModel?.phone.isNullOrEmpty()
                 }
             }
+            configureRecyclerViewMargins()
             (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
             binding.paymentsAreAvailable = availablePayments.isNotEmpty()
         }
