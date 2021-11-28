@@ -12,8 +12,6 @@ import androidx.navigation.fragment.findNavController
 import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.base.BaseBindingFragment
-import com.agelousis.payments.custom.itemDecoration.DividerItemRecyclerViewDecorator
-import com.agelousis.payments.custom.itemDecoration.HeaderItemDecoration
 import com.agelousis.payments.database.DBManager
 import com.agelousis.payments.databinding.FragmentPersonalInformationLayoutBinding
 import com.agelousis.payments.login.LoginActivity
@@ -26,7 +24,7 @@ import com.agelousis.payments.main.ui.currencySelector.CurrencySelectorDialogFra
 import com.agelousis.payments.main.ui.currencySelector.enumerations.CurrencyType
 import com.agelousis.payments.main.ui.currencySelector.interfaces.CurrencySelectorFragmentPresenter
 import com.agelousis.payments.main.ui.files.models.HeaderModel
-import com.agelousis.payments.main.ui.personalInformation.adapters.OptionTypesAdapter
+import com.agelousis.payments.main.ui.personalInformation.extensions.configureRecyclerView
 import com.agelousis.payments.main.ui.personalInformation.models.OptionType
 import com.agelousis.payments.main.ui.personalInformation.presenter.OptionPresenter
 import com.agelousis.payments.main.ui.personalInformation.presenter.PersonalInformationPresenter
@@ -248,7 +246,7 @@ class PersonalInformationFragment: BaseBindingFragment<FragmentPersonalInformati
     private val newUserModel by lazy {
         (activity as? MainActivity)?.userModel?.copy()
     }
-    private val optionList by lazy {
+    val optionList by lazy {
         arrayListOf(
             HeaderModel(
                 dateTime = null,
@@ -320,29 +318,6 @@ class PersonalInformationFragment: BaseBindingFragment<FragmentPersonalInformati
 
     private fun setupUI() {
         binding?.materialTextViewTitle?.isSelected = true
-    }
-
-    private fun configureRecyclerView() {
-        binding?.optionRecyclerView?.adapter = OptionTypesAdapter(
-            list = optionList,
-            optionPresenter = this
-        )
-        binding?.optionRecyclerView?.addItemDecoration(DividerItemRecyclerViewDecorator(
-            context = context ?: return,
-            margin = resources.getDimension(R.dimen.activity_general_horizontal_margin).toInt()
-        ) {
-            optionList.getOrNull(index = it) !is HeaderModel && optionList.getOrNull(index = it) != OptionType.DELETE_USER
-        })
-        binding?.optionRecyclerView?.addItemDecoration(
-            HeaderItemDecoration(
-                parent = binding?.optionRecyclerView ?: return
-            ) {
-                optionList.getOrNull(index = it) is HeaderModel
-            }
-        )
-        binding?.optionRecyclerView?.setOnScrollChangeListener { _, _, _, _, _ ->
-            binding?.headerConstraintLayout?.elevation = if (binding?.optionRecyclerView?.canScrollVertically(-1) == true) 8.inPixel else 0.0f
-        }
     }
 
     fun playProfileSuccessAnimation() {

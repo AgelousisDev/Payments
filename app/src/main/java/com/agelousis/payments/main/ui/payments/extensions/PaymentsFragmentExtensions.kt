@@ -267,7 +267,7 @@ fun PaymentsFragment.addRecyclerViewItemDecoration() {
                     is PaymentAmountSumModel -> {
                         outRect.top = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
                         if (filteredList isLastAt adapterPosition)
-                            outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
+                            outRect.bottom = 90.inPixel.toInt()
                     }
                 }
             }

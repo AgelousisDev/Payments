@@ -72,7 +72,6 @@
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
         app:startIconDrawable="@drawable/ic_group"
-        app:startIconTint="@color/colorAccent"
         app:endIconMode="clear_text"
         app:hintEnabled="true"
         app:boxCornerRadiusTopStart="8dp"

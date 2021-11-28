@@ -1,12 +1,9 @@
 package com.agelousis.payments.main.ui.newPayment.extensions
 
-import android.graphics.Rect
-import android.view.View
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updateMargins
-import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.R
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.countrySelector.CountrySelectorDialogFragment
@@ -30,21 +27,7 @@ fun NewPaymentFragment.configureScrollView() {
 
 fun NewPaymentFragment.configureRecyclerView() {
     configureRecyclerViewMargins()
-    binding.paymentAmountRecyclerView.addItemDecoration(
-        object: RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(
-                outRect: Rect,
-                view: View,
-                parent: RecyclerView,
-                state: RecyclerView.State
-            ) {
-                super.getItemOffsets(outRect, view, parent, state)
-                val adapterPosition = parent.getChildAdapterPosition(view)
-                if (availablePayments isLastAt adapterPosition)
-                    outRect.bottom = 56.inPixel.toInt()
-            }
-        }
-    )
+    binding.paymentAmountRecyclerView applyFloatingButtonBottomMarginWith availablePayments
     binding.paymentAmountRecyclerView.adapter = PaymentAmountAdapter(
         paymentModelList = availablePayments,
         vat = (activity as? MainActivity)?.userModel?.vat,
