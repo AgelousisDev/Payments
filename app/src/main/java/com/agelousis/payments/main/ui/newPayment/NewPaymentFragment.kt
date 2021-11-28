@@ -16,13 +16,12 @@ import com.agelousis.payments.database.DatabaseTriggeringType
 import com.agelousis.payments.databinding.FragmentNewPaymentLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.enumerations.FloatingButtonType
-import com.agelousis.payments.main.ui.countrySelector.CountrySelectorDialogFragment
 import com.agelousis.payments.main.ui.countrySelector.interfaces.CountrySelectorFragmentPresenter
 import com.agelousis.payments.main.ui.countrySelector.models.CountryDataModel
-import com.agelousis.payments.main.ui.groupSelector.GroupSelectorDialogFragment
 import com.agelousis.payments.main.ui.groupSelector.interfaces.GroupSelectorFragmentPresenter
 import com.agelousis.payments.main.ui.newPayment.adapters.PaymentAmountAdapter
 import com.agelousis.payments.main.ui.newPayment.enumerations.PaymentAmountRowState
+import com.agelousis.payments.main.ui.newPayment.extensions.*
 import com.agelousis.payments.main.ui.newPayment.presenters.NewPaymentPresenter
 import com.agelousis.payments.main.ui.newPayment.viewModels.NewPaymentViewModel
 import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
@@ -36,8 +35,6 @@ import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.CountryHelper
 import com.agelousis.payments.utils.models.CalendarDataModel
 import com.agelousis.payments.utils.models.ContactDataModel
-import com.agelousis.payments.utils.models.NotificationDataModel
-import com.agelousis.payments.utils.models.SimpleDialogDataModel
 import com.agelousis.payments.views.detailsSwitch.interfaces.AppSwitchListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -158,15 +155,15 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
 
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by viewModels<NewPaymentViewModel>()
-    private val args: NewPaymentFragmentArgs by navArgs()
+    val args: NewPaymentFragmentArgs by navArgs()
     private val databaseTriggeringType by lazy {
         args.groupDataModel?.let { DatabaseTriggeringType.INSERT } ?: DatabaseTriggeringType.UPDATE
     }
-    private val availableGroups by lazy { arrayListOf<GroupModel>() }
-    private val availablePayments by lazy { ArrayList(args.clientDataModel?.payments ?: listOf()) }
+    val availableGroups by lazy { arrayListOf<GroupModel>() }
+    val availablePayments by lazy { ArrayList(args.clientDataModel?.payments ?: listOf()) }
     lateinit var binding: FragmentNewPaymentLayoutBinding
-    private var currentClientModel: ClientModel? = null
-    private var paymentReadyForDeletionIndexArray = arrayListOf<Int>()
+    var currentClientModel: ClientModel? = null
+    var paymentReadyForDeletionIndexArray = arrayListOf<Int>()
     private var paymentAmountUpdateIndex: Int? = null
     private var addPaymentButtonState = true
         set(value) {
@@ -180,7 +177,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             fillCurrentPersonModel()
             currentClientModel != it
         } ?: true
-    private var selectedCountryDataModel: CountryDataModel? = null
+    var selectedCountryDataModel: CountryDataModel? = null
     private var contactDataModel: ContactDataModel? = null
         set(value) {
             field = value
@@ -216,6 +213,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
         super.onViewCreated(view, savedInstanceState)
         setupUI()
         configureRecyclerView()
+        configureScrollView()
         initializeGroups()
         initializeNewPayments()
         configureObservers()
@@ -223,7 +221,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
     }
 
     private fun setupUI() {
-        binding.nestedScrollView hideHeaderViewOnScroll binding.headerConstraintLayout
         binding.paymentTypeLayout.setOnDetailsPressed {
             context?.showListDialog(
                 title = resources.getString(R.string.key_payment_type_label),
@@ -255,27 +252,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
         }
     }
 
-    private fun showGroupsSelectionFragment() {
-        availableGroups.forEach { groupModel ->
-            groupModel.isSelected = groupModel.groupName?.lowercase() == binding.groupDetailsLayout.value?.lowercase()
-        }
-        GroupSelectorDialogFragment.show(
-            supportFragmentManager = childFragmentManager,
-            groupModelList = availableGroups,
-            groupSelectorFragmentPresenter = this
-        )
-    }
-
-    private fun showCountryCodesSelector() {
-        CountrySelectorDialogFragment.show(
-            supportFragmentManager = childFragmentManager,
-            countrySelectorFragmentPresenter = this,
-            selectedCountryDataModel = selectedCountryDataModel,
-            userModel = (activity as? MainActivity)?.userModel,
-            updateGlobalCountryState = false
-        )
-    }
-
     private fun configureObservers() {
         viewModel.groupsLiveData.observe(viewLifecycleOwner) {
             availableGroups.clear()
@@ -301,48 +277,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
         binding.selectedCountryDataModel = selectedCountryDataModel
     }
 
-    private fun redirectToSMSAppIf(payment: PaymentAmountModel, predicate: () -> Boolean) {
-        if (predicate())
-            context?.showTwoButtonsDialog(
-                SimpleDialogDataModel(
-                    title = resources.getString(R.string.key_sms_label),
-                    message = resources.getString(R.string.key_send_sms_message),
-                    positiveButtonText = resources.getString(R.string.key_send_label),
-                    positiveButtonBlock = {
-                        context?.sendSMSMessage(
-                            mobileNumbers = listOf(
-                                binding.phoneLayout.value ?: ""
-                            ),
-                            message = String.format(
-                                "%s\n%s",
-                                binding.messageTemplateField.text?.toString() ?: "",
-                                payment.paymentMonth ?: payment.paymentDate ?: ""
-                            )
-                        )
-                    },
-                    isCancellable = false
-                )
-            )
-    }
-
-    private fun scheduleNotification() {
-        availablePayments.filter { it.paymentDateNotification == true }.forEachIndexed { index, paymentAmountModel ->
-            (context ?: return@forEachIndexed) scheduleNotification NotificationDataModel(
-                calendar = paymentAmountModel.paymentDate?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.defaultTimeCalendar ?: return@forEachIndexed,
-                notificationId = index,
-                title = currentClientModel?.fullName,
-                body = String.format(
-                    resources.getString(R.string.key_notification_amount_value),
-                    paymentAmountModel.paymentAmount?.euroFormattedString ?: ""
-                ),
-                date = paymentAmountModel.paymentDate.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.formattedDateWith(pattern = Constants.VIEWING_DATE_FORMAT),
-                groupName = currentClientModel?.groupName,
-                groupImage = /*currentPersonModel?.personImage ?: */currentClientModel?.groupImage ?: args.groupDataModel?.groupImage,
-                groupTint = currentClientModel?.groupColor
-            )
-        }
-    }
-
     private fun initializeNewPayments() {
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<PaymentAmountModel>(
             NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA
@@ -363,14 +297,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
             binding.paymentsAreAvailable = availablePayments.isNotEmpty()
         }
-    }
-
-    private fun configureRecyclerView() {
-        binding.paymentAmountRecyclerView.adapter = PaymentAmountAdapter(
-            paymentModelList = availablePayments,
-            vat = (activity as? MainActivity)?.userModel?.vat,
-            presenter = this
-        )
     }
 
     private fun initializeGroups() {
@@ -461,18 +387,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             groupColor = args.clientDataModel?.groupColor,
             groupImage = args.clientDataModel?.groupImage
         )
-    }
-
-    fun dismissPayment() {
-        paymentReadyForDeletionIndexArray.sortDescending()
-        paymentReadyForDeletionIndexArray.forEach { paymentReadyForDeletionIndex ->
-            (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.removeItem(
-                position = paymentReadyForDeletionIndex
-            )
-            (activity as? MainActivity)?.returnFloatingButtonBackToNormal()
-        }
-        paymentReadyForDeletionIndexArray.clear()
-        binding.paymentsAreAvailable = availablePayments.isNotEmpty()
     }
 
 }

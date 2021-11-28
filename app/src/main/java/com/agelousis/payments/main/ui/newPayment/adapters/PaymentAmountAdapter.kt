@@ -55,7 +55,7 @@ class PaymentAmountAdapter(private val paymentModelList: ArrayList<PaymentAmount
         )
     }
 
-    fun removeItem(position: Int) {
+    infix fun removeItem(position: Int) {
         paymentModelList.removeAt(position)
         notifyItemRemoved(position)
     }

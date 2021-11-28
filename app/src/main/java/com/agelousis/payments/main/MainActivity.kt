@@ -35,6 +35,7 @@ import com.agelousis.payments.main.ui.clientsSelector.ClientsSelectorDialogFragm
 import com.agelousis.payments.main.ui.files.FilesFragment
 import com.agelousis.payments.main.ui.history.HistoryFragment
 import com.agelousis.payments.main.ui.newPayment.NewPaymentFragment
+import com.agelousis.payments.main.ui.newPayment.extensions.dismissPayment
 import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
 import com.agelousis.payments.main.ui.payments.PaymentsFragment
 import com.agelousis.payments.main.ui.payments.models.GroupModel
@@ -85,6 +86,13 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 && destination.id != R.id.filesFragment
                 && destination.id != R.id.historyFragment
                 && destination.id != R.id.personalInformationFragment
+        statusBarColor = when(destination.id) {
+            R.id.newPaymentFragment,
+            R.id.personalInformationFragment ->
+                ContextCompat.getColor(this, R.color.colorPrimaryLighter)
+            else ->
+                ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        }
         when(destination.id) {
             R.id.personalInformationFragment -> {
                 navigationIcon = null
@@ -315,6 +323,11 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 binding.appBarMain.bottomAppBar.performShow()
             else
                 binding.appBarMain.bottomAppBar.performHide()
+        }
+    private var statusBarColor: Int? = null
+        set(value) {
+            field = value
+            window?.statusBarColor = value ?: return
         }
 
     override fun onBackPressed() {

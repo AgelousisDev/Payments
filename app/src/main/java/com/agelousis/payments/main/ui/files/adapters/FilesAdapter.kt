@@ -1,10 +1,9 @@
 package com.agelousis.payments.main.ui.files.adapters
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.agelousis.payments.R
 import com.agelousis.payments.databinding.EmptyRowLayoutBinding
 import com.agelousis.payments.databinding.FileRowLayoutBinding
 import com.agelousis.payments.databinding.HeaderRowLayoutBinding
@@ -85,6 +84,7 @@ class FilesAdapter(private val list: ArrayList<Any>, private val presenter: File
         return super.getItemViewType(position)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun reloadData() = notifyDataSetChanged()
 
 }
