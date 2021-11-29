@@ -12,12 +12,6 @@ class PaymentAmountViewHolder(private val binding: PaymentAmountRowLayoutBinding
         binding.vat = vat
         binding.title = title
         binding.presenter = presenter
-        itemView.setOnLongClickListener {
-            presenter.onPaymentAmountLongPressed(
-                adapterPosition = adapterPosition
-            )
-            true
-        }
         binding.executePendingBindings()
     }
 

@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Parcelable
 import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
-import com.agelousis.payments.main.ui.newPayment.enumerations.PaymentAmountRowState
 import com.agelousis.payments.main.ui.payments.enumerations.PaymentType
 import com.agelousis.payments.main.ui.paymentsFiltering.enumerations.PaymentsFilteringOptionType
 import com.agelousis.payments.utils.constants.Constants
@@ -88,8 +87,6 @@ data class PaymentAmountModel(val paymentId: Int? = null,
                               val singlePaymentProducts: List<String>?
 ): Parcelable {
 
-    @IgnoredOnParcel var paymentAmountRowState = PaymentAmountRowState.NORMAL
-
     fun getAmountWithoutVat(context: Context, vat: Int?) =
         paymentAmount.getAmountWithoutVat(
             vat = vat
@@ -112,13 +109,11 @@ data class PaymentAmountModel(val paymentId: Int? = null,
 
     val paymentColor: Int
         get() {
-            val paymentMonthCalendar = paymentMonthDate?.toCalendar(plusMonths = 1) ?: return paymentAmountRowState.backgroundTint
-            return if (paymentAmountRowState == PaymentAmountRowState.NORMAL)
-                if (paymentMonthCalendar.time.isDatePassed)
-                    R.color.orange
-                else paymentAmountRowState.backgroundTint
+            val paymentMonthCalendar = paymentMonthDate?.toCalendar(plusMonths = 1)
+            return if (paymentMonthCalendar?.time?.isDatePassed == true)
+                R.color.orange
             else
-                paymentAmountRowState.backgroundTint
+                R.color.green
         }
 
     val paymentMonthDate

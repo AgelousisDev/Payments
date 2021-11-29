@@ -9,6 +9,7 @@ import com.agelousis.payments.R
 import com.agelousis.payments.custom.enumerations.SwipeAction
 import com.agelousis.payments.main.enumerations.SwipeItemType
 import com.agelousis.payments.main.ui.files.viewHolders.FileViewHolder
+import com.agelousis.payments.main.ui.newPayment.viewHolders.PaymentAmountViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.BalanceOverviewViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.GroupViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.PaymentViewHolder
@@ -38,6 +39,8 @@ class SwipeItemTouchHelper(
                     SwipeItemType.BALANCE_OVERVIEW_ITEM
                 is FileViewHolder ->
                     SwipeItemType.PDF_ITEM
+                is PaymentAmountViewHolder ->
+                    SwipeItemType.PAYMENT_AMOUNT
                 else ->
                     null
             },

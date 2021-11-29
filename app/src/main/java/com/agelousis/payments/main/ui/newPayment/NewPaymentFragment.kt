@@ -15,12 +15,10 @@ import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.database.DatabaseTriggeringType
 import com.agelousis.payments.databinding.FragmentNewPaymentLayoutBinding
 import com.agelousis.payments.main.MainActivity
-import com.agelousis.payments.main.enumerations.FloatingButtonType
 import com.agelousis.payments.main.ui.countrySelector.interfaces.CountrySelectorFragmentPresenter
 import com.agelousis.payments.main.ui.countrySelector.models.CountryDataModel
 import com.agelousis.payments.main.ui.groupSelector.interfaces.GroupSelectorFragmentPresenter
 import com.agelousis.payments.main.ui.newPayment.adapters.PaymentAmountAdapter
-import com.agelousis.payments.main.ui.newPayment.enumerations.PaymentAmountRowState
 import com.agelousis.payments.main.ui.newPayment.extensions.*
 import com.agelousis.payments.main.ui.newPayment.presenters.NewPaymentPresenter
 import com.agelousis.payments.main.ui.newPayment.viewModels.NewPaymentViewModel
@@ -69,7 +67,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
     }
 
     override fun onPaymentAmount(paymentAmountModel: PaymentAmountModel?) {
-        restorePaymentsToNormalState()
         fillCurrentPersonModel()
         paymentAmountUpdateIndex = paymentAmountModel?.let { availablePayments.indexOf(it) }
         findNavController().navigate(
@@ -78,26 +75,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
                 lastPaymentMonthDate = availablePayments.firstOrNull()?.paymentMonthDate
             )
         )
-    }
-
-    override fun onPaymentAmountLongPressed(adapterPosition: Int) {
-        availablePayments.getOrNull(index = adapterPosition)?.paymentAmountRowState = availablePayments.getOrNull(index = adapterPosition)?.paymentAmountRowState?.otherState ?: PaymentAmountRowState.NORMAL
-        (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.notifyItemChanged(
-            adapterPosition
-        )
-        when((activity as? MainActivity)?.floatingButtonType) {
-            FloatingButtonType.NORMAL ->
-                if (availablePayments.any { it.paymentAmountRowState == PaymentAmountRowState.CAN_BE_DISMISSED })
-                    (activity as? MainActivity)?.setFloatingButtonAsPaymentRemovalButton()
-            FloatingButtonType.NEGATIVE ->
-                if (availablePayments.all { it.paymentAmountRowState == PaymentAmountRowState.NORMAL })
-                    (activity as? MainActivity)?.returnFloatingButtonBackToNormal()
-            else -> {}
-        }
-        if (availablePayments.getOrNull(index = adapterPosition)?.paymentAmountRowState == PaymentAmountRowState.CAN_BE_DISMISSED)
-            paymentReadyForDeletionIndexArray.add(adapterPosition)
-        else
-            paymentReadyForDeletionIndexArray.remove(adapterPosition)
     }
 
     override fun onCalendarEvent(paymentAmountModel: PaymentAmountModel?) {
@@ -165,7 +142,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
     val availablePayments by lazy { ArrayList(args.clientDataModel?.payments ?: listOf()) }
     lateinit var binding: FragmentNewPaymentLayoutBinding
     var currentClientModel: ClientModel? = null
-    var paymentReadyForDeletionIndexArray = arrayListOf<Int>()
     private var paymentAmountUpdateIndex: Int? = null
     private var addPaymentButtonState = true
         set(value) {
@@ -347,18 +323,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
                         clientModel = currentClientModel ?: return@launch
                     )
             }
-        }
-    }
-
-    private fun restorePaymentsToNormalState() {
-        if (availablePayments.any { it.paymentAmountRowState == PaymentAmountRowState.CAN_BE_DISMISSED }) {
-            availablePayments.forEach {
-                it.paymentAmountRowState = PaymentAmountRowState.NORMAL
-            }
-            (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
-            paymentReadyForDeletionIndexArray.clear()
-            binding.paymentsAreAvailable = availablePayments.isNotEmpty()
-            (activity as? MainActivity)?.returnFloatingButtonBackToNormal()
         }
     }
 

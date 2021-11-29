@@ -4,12 +4,16 @@ import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updateMargins
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.agelousis.payments.R
+import com.agelousis.payments.custom.itemTouchHelper.SwipeItemTouchHelper
 import com.agelousis.payments.main.MainActivity
+import com.agelousis.payments.main.enumerations.SwipeItemType
 import com.agelousis.payments.main.ui.countrySelector.CountrySelectorDialogFragment
 import com.agelousis.payments.main.ui.groupSelector.GroupSelectorDialogFragment
 import com.agelousis.payments.main.ui.newPayment.NewPaymentFragment
 import com.agelousis.payments.main.ui.newPayment.adapters.PaymentAmountAdapter
+import com.agelousis.payments.main.ui.newPayment.viewHolders.PaymentAmountViewHolder
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.custom.FabExtendingOnScrollListener
@@ -27,6 +31,7 @@ fun NewPaymentFragment.configureScrollView() {
 
 fun NewPaymentFragment.configureRecyclerView() {
     configureRecyclerViewMargins()
+    configurePaymentsSwipeEvent()
     binding.paymentAmountRecyclerView applyFloatingButtonBottomMarginWith availablePayments
     binding.paymentAmountRecyclerView.adapter = PaymentAmountAdapter(
         paymentModelList = availablePayments,
@@ -57,6 +62,32 @@ fun NewPaymentFragment.configureRecyclerViewMargins() {
                 )
             }
     }
+}
+
+private fun NewPaymentFragment.configurePaymentsSwipeEvent() {
+    val swipeItemTouchHelper = ItemTouchHelper(
+        SwipeItemTouchHelper(
+            context = context ?: return,
+            marginStart = resources.getDimension(R.dimen.activity_general_horizontal_margin),
+            swipePredicateBlock = {
+                it is PaymentAmountViewHolder
+            }
+        ) innerBlock@ { _, swipeItemType, position ->
+            when(swipeItemType) {
+                SwipeItemType.PAYMENT_AMOUNT ->
+                    this removePaymentAt position
+                else -> {}
+            }
+        }
+    )
+    swipeItemTouchHelper.attachToRecyclerView(binding.paymentAmountRecyclerView)
+}
+
+private infix fun NewPaymentFragment.removePaymentAt(position: Int) {
+    (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.removeItem(
+        position = position
+    )
+    configureRecyclerViewMargins()
 }
 
 fun NewPaymentFragment.showCountryCodesSelector() {
@@ -120,16 +151,4 @@ fun NewPaymentFragment.scheduleNotification() {
             groupTint = currentClientModel?.groupColor
         )
     }
-}
-
-fun NewPaymentFragment.dismissPayment() {
-    paymentReadyForDeletionIndexArray.sortDescending()
-    paymentReadyForDeletionIndexArray.forEach { paymentReadyForDeletionIndex ->
-        (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.removeItem(
-            position = paymentReadyForDeletionIndex
-        )
-        (activity as? MainActivity)?.returnFloatingButtonBackToNormal()
-    }
-    paymentReadyForDeletionIndexArray.clear()
-    binding.paymentsAreAvailable = availablePayments.isNotEmpty()
 }

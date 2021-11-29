@@ -9,7 +9,8 @@ import com.agelousis.payments.utils.extensions.fromVector
 enum class SwipeItemType {
     BALANCE_OVERVIEW_ITEM,
     CLIENT_ITEM,
-    PDF_ITEM;
+    PDF_ITEM,
+    PAYMENT_AMOUNT;
 
     fun getIcons(context: Context): Array<Bitmap?> {
 

@@ -5,7 +5,6 @@
     <data>
         <import type="com.agelousis.payments.utils.extensions.ExtensionsKt" />
         <import type="android.view.View" />
-        <import type="com.agelousis.payments.main.ui.newPayment.enumerations.PaymentAmountRowState" />
         <variable
             name="paymentAmountModel"
             type="com.agelousis.payments.main.ui.payments.models.PaymentAmountModel" />

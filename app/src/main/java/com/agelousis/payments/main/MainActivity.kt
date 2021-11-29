@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
-import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -28,14 +27,12 @@ import com.agelousis.payments.group.GroupActivity
 import com.agelousis.payments.login.LoginActivity
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.enumerations.FloatingButtonPosition
-import com.agelousis.payments.main.enumerations.FloatingButtonType
 import com.agelousis.payments.main.materialMenu.enumerations.MaterialMenuOption
 import com.agelousis.payments.main.materialMenu.models.MaterialMenuDataModel
 import com.agelousis.payments.main.ui.clientsSelector.ClientsSelectorDialogFragment
 import com.agelousis.payments.main.ui.files.FilesFragment
 import com.agelousis.payments.main.ui.history.HistoryFragment
 import com.agelousis.payments.main.ui.newPayment.NewPaymentFragment
-import com.agelousis.payments.main.ui.newPayment.extensions.dismissPayment
 import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
 import com.agelousis.payments.main.ui.payments.PaymentsFragment
 import com.agelousis.payments.main.ui.payments.models.GroupModel
@@ -97,7 +94,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 navigationIcon = null
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.CENTER
-                //floatingButtonTint = R.color.colorPrimaryContainer
                 floatingButtonState = true
             }
             R.id.paymentsFragment -> {
@@ -105,7 +101,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 appBarTitle = ""
                 floatingButtonImage = R.drawable.ic_add_group
                 floatingButtonPosition = FloatingButtonPosition.CENTER
-                //floatingButtonTint = R.color.colorPrimaryContainer
                 floatingButtonState = true
             }
             R.id.newPaymentFragment -> {
@@ -115,7 +110,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 appBarTitle = resources.getString(R.string.key_client_info_label)
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END
-                //floatingButtonTint = R.color.colorPrimaryContainer
                 floatingButtonState = true
             }
             R.id.newPaymentAmountFragment -> {
@@ -125,7 +119,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 appBarTitle = resources.getString(R.string.key_add_payment_label)
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END
-                //floatingButtonTint = R.color.colorPrimaryContainer
                 floatingButtonState = true
             }
             R.id.filesFragment -> {
@@ -133,7 +126,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 appBarTitle = ""
                 floatingButtonImage = R.drawable.ic_delete
                 floatingButtonPosition = FloatingButtonPosition.CENTER
-                //floatingButtonTint = R.color.red
             }
             R.id.periodFilterFragment -> {
                 navigationIcon = getDrawableFromAttribute(
@@ -142,14 +134,12 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 appBarTitle = resources.getString(R.string.key_filter_period_label)
                 floatingButtonImage = R.drawable.ic_table
                 floatingButtonPosition = FloatingButtonPosition.END
-                //floatingButtonTint = R.color.colorPrimaryContainer
                 floatingButtonState = true
             }
             R.id.historyFragment -> {
                 navigationIcon = null
                 floatingButtonImage = R.drawable.ic_left_and_right
                 floatingButtonPosition = FloatingButtonPosition.CENTER
-                //floatingButtonTint = R.color.colorPrimaryContainer
                 floatingButtonState = false
             }
             R.id.pdfViewerFragment -> {
@@ -159,7 +149,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 appBarTitle = resources.getString(R.string.key_invoice_label)
                 floatingButtonImage = R.drawable.ic_share
                 floatingButtonPosition = FloatingButtonPosition.END
-                //floatingButtonTint = R.color.colorPrimaryContainer
                 floatingButtonState = true
             }
             R.id.filterPaymentsFragment -> {
@@ -169,7 +158,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 appBarTitle = resources.getString(R.string.key_clients_order_label)
                 floatingButtonImage = R.drawable.ic_check
                 floatingButtonPosition = FloatingButtonPosition.END
-                //floatingButtonTint = R.color.colorPrimaryContainer
                 floatingButtonState = true
             }
             R.id.QRCodeFragment -> {
@@ -195,14 +183,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 (supportFragmentManager.currentNavigationFragment as? PersonalInformationFragment)?.playProfileSuccessAnimation()
             R.id.paymentsFragment -> startGroupActivity()
             R.id.newPaymentFragment ->
-                when(floatingButtonType) {
-                    FloatingButtonType.NORMAL ->
-                        (supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.checkInputFields()
-                    FloatingButtonType.NEGATIVE -> {
-                        (supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.dismissPayment()
-                        returnFloatingButtonBackToNormal()
-                    }
-                }
+                (supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.checkInputFields()
             R.id.newPaymentAmountFragment ->
                 (supportFragmentManager.currentNavigationFragment as? NewPaymentAmountFragment)?.checkInputFields()
             R.id.periodFilterFragment ->
@@ -259,7 +240,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
             else
                 binding.appBarMain.floatingButton.hide()
         }
-    var floatingButtonType = FloatingButtonType.NORMAL
     private var floatingButtonPosition = FloatingButtonPosition.END
         set(value) {
             field = value
@@ -270,11 +250,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                     binding.appBarMain.bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_END
             }
         }
-    /*private var floatingButtonTint: Int = 0
-        set(value) {
-            field = value
-            binding.appBarMain.floatingButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, value))
-        }*/
     var historyButtonIsVisible = false
         set(value) {
             field = value
@@ -514,18 +489,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
             )
         else
             super.onBackPressed()
-    }
-
-    fun setFloatingButtonAsPaymentRemovalButton() {
-        floatingButtonType = FloatingButtonType.NEGATIVE
-        floatingButtonImage = R.drawable.ic_delete
-        binding.appBarMain.floatingButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red))
-    }
-
-    fun returnFloatingButtonBackToNormal() {
-        floatingButtonType = FloatingButtonType.NORMAL
-        floatingButtonImage = R.drawable.ic_check
-        binding.appBarMain.floatingButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorPrimaryContainer))
     }
 
     fun startGroupActivity(groupModel: GroupModel? = null) {

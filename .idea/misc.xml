@@ -65,6 +65,7 @@
         <entry key="app/src/main/res/layout/last_payment_month_row_layout.xml" value="0.30117753623188404" />
         <entry key="app/src/main/res/layout/material_search_view_layout.xml" value="0.19972826086956522" />
         <entry key="app/src/main/res/layout/option_type_row_layout.xml" value="0.19882246376811594" />
+        <entry key="app/src/main/res/layout/payment_amount_row_layout.xml" value="0.17798913043478262" />
         <entry key="app/src/main/res/layout/payment_amount_sum_layout.xml" value="0.20199275362318841" />
         <entry key="app/src/main/res/layout/payment_row_layout.xml" value="0.20199275362318841" />
         <entry key="app/src/main/res/layout/payments_menu_option_row_layout.xml" value="0.20199275362318841" />
