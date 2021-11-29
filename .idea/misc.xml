@@ -8,6 +8,7 @@
         <entry key="../../../../../../layout/compose-model-1637432561388.xml" value="0.2816722972972973" />
         <entry key="../../../../../../layout/compose-model-1637507954545.xml" value="0.5989159891598916" />
         <entry key="../../../../../../layout/compose-model-1637523717375.xml" value="0.592140921409214" />
+        <entry key="../../../../../../layout/compose-model-1638218961501.xml" value="0.5975609756097561" />
         <entry key="app/src/main/res/drawable-night-v31/balance_overview_background.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable-night/balance_overview_backgound.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable-night/balance_overview_background.xml" value="0.33645833333333336" />
@@ -41,7 +42,7 @@
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.21302083333333333" />
         <entry key="app/src/main/res/layout/activity_notification.xml" value="0.23385416666666667" />
-        <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.24320652173913043" />
+        <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/balance_overview_row_layout.xml" value="0.5" />
         <entry key="app/src/main/res/layout/chart_fragment_layout.xml" value="0.22056159420289856" />
         <entry key="app/src/main/res/layout/clients_selector_fragment_layout.xml" value="0.1983695652173913" />
@@ -79,6 +80,7 @@
         <entry key="app/src/main/res/layout/share_message_row_layout.xml" value="0.3203125" />
         <entry key="app/src/main/res/layout/total_payments_amount_fragment_layout.xml" value="0.1983695652173913" />
         <entry key="app/src/main/res/layout/year_month_picker_fragment_layout.xml" value="0.15577507598784193" />
+        <entry key="app/src/main/res/menu/activity_main_menu.xml" value="0.3203125" />
         <entry key="app/src/main/res/menu/bottom_navigation_main_menu.xml" value="0.27870370370370373" />
         <entry key="app/src/main/res/menu/main_menu.xml" value="0.3203125" />
         <entry key="app/src/main/res/xml/network_security_config.xml" value="0.15677083333333333" />

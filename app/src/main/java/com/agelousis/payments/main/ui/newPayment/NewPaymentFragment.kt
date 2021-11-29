@@ -170,6 +170,8 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
         currentClientModel?.let {
             binding.clientModel = it
         }
+        (activity as? MainActivity)?.shareMessageMenuItemIsVisible = !args.clientDataModel?.email.isNullOrEmpty()
+                || !args.clientDataModel?.phone.isNullOrEmpty()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

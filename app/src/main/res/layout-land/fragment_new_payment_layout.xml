@@ -74,23 +74,6 @@
 
         </FrameLayout>
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="end"
-            android:layout_margin="@dimen/activity_general_horizontal_margin"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:focusable="true"
-            android:onClick="@{() -> presenter.onClientShareMessage()}"
-            android:visibility="@{clientModel != null ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="@+id/paymentRowHeaderFrameLayout"
-            app:layout_constraintStart_toEndOf="@+id/paymentRowHeaderFrameLayout"
-            app:layout_constraintTop_toTopOf="@+id/paymentRowHeaderFrameLayout"
-            app:srcCompat="@drawable/ic_message"
-            app:tint="@color/colorAccent"
-            tools:tint="@color/petrolDarker" />
-
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/addPaymentButton"
             android:layout_width="wrap_content"

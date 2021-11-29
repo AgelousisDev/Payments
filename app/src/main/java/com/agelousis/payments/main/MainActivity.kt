@@ -29,6 +29,7 @@ import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.enumerations.FloatingButtonPosition
 import com.agelousis.payments.main.materialMenu.enumerations.MaterialMenuOption
 import com.agelousis.payments.main.materialMenu.models.MaterialMenuDataModel
+import com.agelousis.payments.main.presenter.MainActivityPresenter
 import com.agelousis.payments.main.ui.clientsSelector.ClientsSelectorDialogFragment
 import com.agelousis.payments.main.ui.files.FilesFragment
 import com.agelousis.payments.main.ui.history.HistoryFragment
@@ -53,12 +54,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener, View.OnClickListener, NotificationListener {
+class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener, View.OnClickListener, NotificationListener, MainActivityPresenter {
 
     companion object {
         const val USER_MODEL_EXTRA = "MainActivity=userModelExtra"
         const val FIREBASE_NOTIFICATION_DATA_EXTRA = "MainActivity=firebaseNotificatonDataExtra"
         const val QR_CODE_CAMERA_PERMISSION_REQUEST_CODE = 1
+    }
+
+    override fun onShareMessageIcon() {
+        (supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.onClientShareMessage()
     }
 
     override fun onNotificationReceived(firebaseNotificationData: FirebaseNotificationData) {
@@ -72,6 +77,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
 
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
         bottomAppBarState = true
+        shareMessageMenuItemIsVisible = false
         ((binding.appBarMain.floatingButton.layoutParams as? CoordinatorLayout.LayoutParams)?.behavior as? HideBottomViewOnScrollBehavior)?.slideUp(
             binding.appBarMain.floatingButton
         )
@@ -146,7 +152,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 navigationIcon = getDrawableFromAttribute(
                     attributeId = R.attr.homeAsUpIndicator
                 )
-                appBarTitle = resources.getString(R.string.key_invoice_label)
+                appBarTitle = ""
                 floatingButtonImage = R.drawable.ic_share
                 floatingButtonPosition = FloatingButtonPosition.END
                 floatingButtonState = true
@@ -303,6 +309,11 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
             field = value
             window?.statusBarColor = value ?: return
         }
+    var shareMessageMenuItemIsVisible: Boolean = false
+        set(value) {
+            field = value
+            binding.appBarMain.shareMessageIcon.isVisible = value
+        }
 
     override fun onBackPressed() {
         when (binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().currentDestination?.id) {
@@ -335,6 +346,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
         super.onCreate(savedInstanceState)
         window?.isEdgeToEdge = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
         binding = ActivityMainBinding.inflate(layoutInflater)
+        binding.presenter = this
         setContentView(binding.root)
         setupToolbar()
         setupUI()
