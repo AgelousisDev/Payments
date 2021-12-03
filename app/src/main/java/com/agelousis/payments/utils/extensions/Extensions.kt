@@ -567,8 +567,8 @@ val String.toRawMobileNumber
 fun Date.toCalendar(plusMonths: Int? = null): Calendar {
     val calendar = Calendar.getInstance()
     calendar.time = this
-    calendar.set(Calendar.YEAR, if (calendar.get(Calendar.MONTH) == 11) calendar.get(Calendar.YEAR) + 1 else calendar.get(Calendar.YEAR))
-    calendar.set(Calendar.MONTH, if (calendar.get(Calendar.MONTH) == 11) 0 else calendar.get(Calendar.MONTH) + (plusMonths ?: 0))
+    calendar.set(Calendar.YEAR, if (calendar.get(Calendar.MONTH) == 11 && plusMonths != null) calendar.get(Calendar.YEAR) + 1 else calendar.get(Calendar.YEAR))
+    calendar.set(Calendar.MONTH, if (calendar.get(Calendar.MONTH) == 11 && plusMonths != null) 0 else calendar.get(Calendar.MONTH) + (plusMonths ?: 0))
     return calendar
 }
 
