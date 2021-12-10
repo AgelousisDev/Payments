@@ -24,7 +24,7 @@ import com.agelousis.payments.main.ui.paymentsFiltering.FilterPaymentsFragment
 import com.agelousis.payments.main.ui.paymentsFiltering.enumerations.PaymentsFilteringOptionType
 import com.agelousis.payments.main.ui.periodFilter.models.PeriodFilterDataModel
 import com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType
-import com.agelousis.payments.main.ui.totalPaymentsAmount.TotalPaymentsAmountDialogFragment
+import com.agelousis.payments.main.ui.totalPaymentsAmount.TotalPaymentsAmountBottomSheetDialogFragment
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.widgets.extensions.clientModelList
@@ -121,7 +121,7 @@ class PaymentsFragment: Fragment(), GroupPresenter, PaymentPresenter, PaymentAmo
     }
 
     override fun onPaymentAmountSumSelected(paymentAmountSumModel: PaymentAmountSumModel) {
-        TotalPaymentsAmountDialogFragment.show(
+        TotalPaymentsAmountBottomSheetDialogFragment.show(
             supportFragmentManager = childFragmentManager,
             paymentAmountSumModel = paymentAmountSumModel
         )
