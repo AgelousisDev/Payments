@@ -23,6 +23,7 @@
      android:layout_width="match_parent"
      android:layout_height="wrap_content"
      android:onClick="@{() -> presenter.onPaymentAmount(paymentAmountModel)}"
+     alphaOrBlurEffectViewGroup="@{paymentAmountModel.skipPayment}"
      app:elevation="16dp"
      app:cardUseCompatPadding="true"
      app:cardBackgroundColor="@color/whiteTwo"
@@ -31,7 +32,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/constraintLayout">
 
         <View
             android:id="@+id/paymentAmountRowLeftLineSeparator"
@@ -102,7 +104,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             style="@style/TextViewLabel"
-            android:id="@+id/paymentAmountPaymentMonthLabel"
+            android:id="@+id/paymentAmountMonthLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/nav_header_vertical_spacing"
@@ -116,10 +118,28 @@
             app:layout_constraintEnd_toStartOf="@+id/paymentAmountRowRightLineSeparator"
             app:layout_constraintStart_toEndOf="@+id/paymentAmountRowLeftLineSeparator"
             app:layout_constraintTop_toBottomOf="@+id/paymentAmountRowDateLineSeparator"
-            app:layout_constraintBottom_toBottomOf="parent"
             tools:text="Total:\t$1000,00" />
 
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextViewValueLabel"
+            android:id="@+id/paymentAmountNoteLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:layout_marginStart="@dimen/nav_header_vertical_spacing"
+            android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+            android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
+            android:text="@{paymentAmountModel.paymentNote}"
+            android:gravity="center"
+            android:visibility="@{paymentAmountModel.paymentNote.empty == true ? View.GONE : View.VISIBLE}"
+            app:layout_constraintEnd_toStartOf="@+id/paymentAmountRowRightLineSeparator"
+            app:layout_constraintStart_toEndOf="@+id/paymentAmountRowLeftLineSeparator"
+            app:layout_constraintTop_toBottomOf="@+id/paymentAmountMonthLabel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="Sample payment notes" />
+
         <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieAnimationView"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:clickable="true"

@@ -9,7 +9,7 @@ enum class FileRowState {
 
     fun getBackgroundColor(context: Context) =
         when(this) {
-            NORMAL -> ContextCompat.getColor(context, R.color.nativeBackgroundColor)
+            NORMAL -> ContextCompat.getColor(context, R.color.whiteTwo)
             SELECTED -> ContextCompat.getColor(context, R.color.lightRed)
         }
 

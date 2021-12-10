@@ -42,6 +42,9 @@ fun UserSelectionLayout(
                 id = R.string.key_select_user_from_backup_label
             ),
             style = textViewTitleLabelFont,
+            color = colorResource(
+                id = R.color.dayNightTextOnBackground
+            ),
             textAlign = TextAlign.Start,
             modifier = Modifier.fillMaxWidth().padding(
                 start = 16.dp
@@ -107,6 +110,9 @@ fun UserSelectionLayout(
                     MarqueeText(
                         text = userModel.username ?: "",
                         style = textViewTitleLabelFont,
+                        color = colorResource(
+                            id = R.color.dayNightTextOnBackground
+                        ),
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(
                             top = 8.dp,

@@ -18,7 +18,7 @@
     style="@style/FilledMaterialCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="42dp"
+    app:cardCornerRadius="30dp"
     app:cardUseCompatPadding="true"
     android:clipToPadding="false"
     android:id="@+id/materialCardView">

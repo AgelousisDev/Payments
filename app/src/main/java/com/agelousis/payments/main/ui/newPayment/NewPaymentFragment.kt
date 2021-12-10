@@ -295,7 +295,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             currentClientModel?.groupName,
             currentClientModel?.firstName,
             currentClientModel?.surname,
-            currentClientModel?.phone,
         ) {
             checkDatabasePaymentAction()
         } ?: run {
@@ -305,7 +304,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             binding.groupDetailsLayout.errorState = binding.groupDetailsLayout.value == null
             binding.firstNameLayout.errorState = binding.firstNameLayout.value == null
             binding.surnameLayout.errorState = binding.surnameLayout.value == null
-            binding.phoneLayout.errorState = binding.phoneLayout.value == null
         }
     }
 
