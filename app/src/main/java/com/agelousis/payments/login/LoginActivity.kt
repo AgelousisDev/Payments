@@ -27,8 +27,7 @@ import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.login.presenter.LoginPresenter
 import com.agelousis.payments.login.viewModel.LoginViewModel
 import com.agelousis.payments.main.MainActivity
-import com.agelousis.payments.userSelection.UserSelectionFragment
-import com.agelousis.payments.userSelection.presenters.UserSelectionPresenter
+import com.agelousis.payments.userSelection.UserSelectionBottomSheetFragment
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.models.SimpleDialogDataModel
@@ -39,7 +38,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
-class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, UserSelectionPresenter, GestureDetector.OnGestureListener {
+class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, GestureDetector.OnGestureListener {
 
     private lateinit var binding: ActivityLoginBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
@@ -161,18 +160,6 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, UserSe
 
     override fun onBiometricsCancelled() {
         binding.biometricsActive = false
-    }
-
-    override fun onUserSelected(userModel: UserModel) {
-        signInState = SignInState.LOGIN
-        binding.signInState = signInState
-        binding.userModel = userModel
-        binding.biometricsActive = userModel.biometrics == true
-        binding.loginButtonState = userModel.username?.isNotEmpty() == true && userModel.password?.isNotEmpty() == true
-        binding.passwordLength = userModel.password?.length
-        showBiometrics(
-            biometrics = userModel.biometrics == true
-        )
     }
 
     override fun onUsersSelect() {
@@ -299,7 +286,7 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, UserSe
             )
         else
             if (supportFragmentManager.findFragmentByTag(Constants.USER_SELECTION_FRAGMENT_TAG) == null)
-                UserSelectionFragment.show(
+                UserSelectionBottomSheetFragment.show(
                     supportFragmentManager = supportFragmentManager,
                     users = ArrayList(users),
                 )
@@ -424,6 +411,18 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, UserSe
     private fun showGuideIf(predicate: () -> Boolean) {
         if (predicate())
             startActivity(Intent(this, GuideActivity::class.java))
+    }
+
+    fun onUserSelected(userModel: UserModel) {
+        signInState = SignInState.LOGIN
+        binding.signInState = signInState
+        binding.userModel = userModel
+        binding.biometricsActive = userModel.biometrics == true
+        binding.loginButtonState = userModel.username?.isNotEmpty() == true && userModel.password?.isNotEmpty() == true
+        binding.passwordLength = userModel.password?.length
+        showBiometrics(
+            biometrics = userModel.biometrics == true
+        )
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {

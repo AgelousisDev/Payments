@@ -12,6 +12,8 @@
         <entry key="../../../../../../layout/compose-model-1639160253288.xml" value="0.5948509485094851" />
         <entry key="../../../../../../layout/compose-model-1639162321616.xml" value="0.5948509485094851" />
         <entry key="../../../../../../layout/compose-model-1639162482787.xml" value="0.5948509485094851" />
+        <entry key="../../../../../../layout/compose-model-1639163127645.xml" value="0.5948509485094851" />
+        <entry key="../../../../../../layout/compose-model-1639167813363.xml" value="0.5948509485094851" />
         <entry key="app/src/main/res/drawable-night-v31/balance_overview_background.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable-night/balance_overview_backgound.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable-night/balance_overview_background.xml" value="0.33645833333333336" />
@@ -31,6 +33,7 @@
         <entry key="app/src/main/res/drawable/ic_message.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/ic_sms.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/ic_speech_bubble.xml" value="0.33645833333333336" />
+        <entry key="app/src/main/res/drawable/oval_background.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/payment_row_background.xml" value="0.26875" />
         <entry key="app/src/main/res/drawable/payments_app_icon_foreground.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/pdf_background.xml" value="0.33645833333333336" />
@@ -82,6 +85,8 @@
         <entry key="app/src/main/res/layout/share_message_fragment_layout.xml" value="0.18342391304347827" />
         <entry key="app/src/main/res/layout/share_message_row_layout.xml" value="0.3203125" />
         <entry key="app/src/main/res/layout/total_payments_amount_fragment_layout.xml" value="0.1983695652173913" />
+        <entry key="app/src/main/res/layout/user_row_layout.xml" value="0.31929347826086957" />
+        <entry key="app/src/main/res/layout/user_selection_fragment_layout.xml" value="0.17708333333333334" />
         <entry key="app/src/main/res/layout/year_month_picker_fragment_layout.xml" value="0.15577507598784193" />
         <entry key="app/src/main/res/menu/activity_main_menu.xml" value="0.3203125" />
         <entry key="app/src/main/res/menu/bottom_navigation_main_menu.xml" value="0.27870370370370373" />

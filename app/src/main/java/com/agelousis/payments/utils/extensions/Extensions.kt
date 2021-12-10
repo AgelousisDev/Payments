@@ -1018,3 +1018,6 @@ infix fun RecyclerView.applyFloatingButtonBottomMarginWith(items: List<Any>) {
         }
     )
 }
+
+val ByteArray.bitmap
+    get() = BitmapFactory.decodeByteArray(this, 0, this.size)
