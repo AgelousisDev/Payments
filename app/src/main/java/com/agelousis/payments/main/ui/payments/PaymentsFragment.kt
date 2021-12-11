@@ -410,7 +410,6 @@ class PaymentsFragment: Fragment(), GroupPresenter, PaymentPresenter, PaymentAmo
             }
         binding.paymentListRecyclerView.scheduleLayoutAnimation()
         (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
-        (activity as? MainActivity)?.historyButtonIsVisible = filteredList.filterIsInstance<ClientModel>().mapNotNull { it.payments }.flatten().isNotEmpty()
         sharedPreferences?.clientModelList.takeIf { it == null || it.size != list.filterIsInstance<ClientModel>().size }.apply {
             sharedPreferences?.clientModelList = list.filterIsInstance<ClientModel>()
             context?.updatePaymentsAppWidget()

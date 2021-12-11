@@ -17,7 +17,7 @@ import com.agelousis.payments.databinding.FragmentPersonalInformationLayoutBindi
 import com.agelousis.payments.login.LoginActivity
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.MainActivity
-import com.agelousis.payments.main.ui.countrySelector.CountrySelectorDialogFragment
+import com.agelousis.payments.main.ui.countrySelector.CountrySelectorBottomSheetDialogFragment
 import com.agelousis.payments.main.ui.countrySelector.models.CountryDataModel
 import com.agelousis.payments.main.ui.countrySelector.interfaces.CountrySelectorFragmentPresenter
 import com.agelousis.payments.main.ui.currencySelector.CurrencySelectorDialogFragment
@@ -186,7 +186,7 @@ class PersonalInformationFragment: BaseBindingFragment<FragmentPersonalInformati
     }
 
     override fun onChangeCountry() {
-        CountrySelectorDialogFragment.show(
+        CountrySelectorBottomSheetDialogFragment.show(
             supportFragmentManager = childFragmentManager,
             countrySelectorFragmentPresenter = object: CountrySelectorFragmentPresenter {
                 override fun onCountrySelected(countryDataModel: CountryDataModel) {

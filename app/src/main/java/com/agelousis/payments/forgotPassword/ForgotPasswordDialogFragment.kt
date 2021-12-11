@@ -22,7 +22,6 @@ import com.agelousis.payments.forgotPassword.viewModels.ForgotPasswordViewModel
 import com.agelousis.payments.ui.Typography
 import com.agelousis.payments.ui.appColors
 import com.agelousis.payments.utils.constants.Constants
-import com.agelousis.payments.utils.extensions.applyAnimationOnKeyboard
 import com.agelousis.payments.utils.extensions.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -100,7 +99,6 @@ class ForgotPasswordDialogFragment: DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.applyAnimationOnKeyboard()
         addObservers()
     }
 

@@ -9,8 +9,8 @@ import com.agelousis.payments.R
 import com.agelousis.payments.custom.itemTouchHelper.SwipeItemTouchHelper
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.enumerations.SwipeItemType
-import com.agelousis.payments.main.ui.countrySelector.CountrySelectorDialogFragment
-import com.agelousis.payments.main.ui.groupSelector.GroupSelectorDialogFragment
+import com.agelousis.payments.main.ui.countrySelector.CountrySelectorBottomSheetDialogFragment
+import com.agelousis.payments.main.ui.groupSelector.GroupSelectorBottomSheetDialogFragment
 import com.agelousis.payments.main.ui.newPayment.NewPaymentFragment
 import com.agelousis.payments.main.ui.newPayment.adapters.PaymentAmountAdapter
 import com.agelousis.payments.main.ui.newPayment.viewHolders.PaymentAmountViewHolder
@@ -91,7 +91,7 @@ private infix fun NewPaymentFragment.removePaymentAt(position: Int) {
 }
 
 fun NewPaymentFragment.showCountryCodesSelector() {
-    CountrySelectorDialogFragment.show(
+    CountrySelectorBottomSheetDialogFragment.show(
         supportFragmentManager = childFragmentManager,
         countrySelectorFragmentPresenter = this,
         selectedCountryDataModel = selectedCountryDataModel,
@@ -104,7 +104,7 @@ fun NewPaymentFragment.showGroupsSelectionFragment() {
     availableGroups.forEach { groupModel ->
         groupModel.isSelected = groupModel.groupName?.lowercase() == binding.groupDetailsLayout.value?.lowercase()
     }
-    GroupSelectorDialogFragment.show(
+    GroupSelectorBottomSheetDialogFragment.show(
         supportFragmentManager = childFragmentManager,
         groupModelList = availableGroups,
         groupSelectorFragmentPresenter = this

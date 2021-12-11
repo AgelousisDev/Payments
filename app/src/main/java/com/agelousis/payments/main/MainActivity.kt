@@ -27,8 +27,6 @@ import com.agelousis.payments.group.GroupActivity
 import com.agelousis.payments.login.LoginActivity
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.enumerations.FloatingButtonPosition
-import com.agelousis.payments.main.materialMenu.enumerations.MaterialMenuOption
-import com.agelousis.payments.main.materialMenu.models.MaterialMenuDataModel
 import com.agelousis.payments.main.presenter.MainActivityPresenter
 import com.agelousis.payments.main.ui.clientsSelector.ClientsSelectorDialogFragment
 import com.agelousis.payments.main.ui.files.FilesFragment
@@ -211,19 +209,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val dbManager by lazy { DBManager(context = this) }
     val userModel by lazy { intent?.extras?.getParcelable<UserModel>(USER_MODEL_EXTRA) }
-    private val materialMenuDataModel by lazy {
-        MaterialMenuDataModel(
-            profileImagePath = userModel?.profileImage,
-            profileName = userModel?.fullName ?: resources.getString(R.string.key_empty_field_label),
-            materialMenuOptionList = listOf(
-                MaterialMenuOption.HOME,
-                MaterialMenuOption.PROFILE,
-                MaterialMenuOption.INVOICES,
-                MaterialMenuOption.HISTORY,
-                MaterialMenuOption.GUIDE
-            )
-        )
-    }
     var appBarTitle: String? = null
         set(value) {
             field = value
@@ -255,11 +240,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 FloatingButtonPosition.END ->
                     binding.appBarMain.bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_END
             }
-        }
-    var historyButtonIsVisible = false
-        set(value) {
-            field = value
-            materialMenuDataModel.materialMenuOptionList?.firstOrNull { it == MaterialMenuOption.HISTORY }?.isEnabled = value
         }
     private val notificationIntentFilter by lazy { IntentFilter(Constants.SHOW_NOTIFICATION_INTENT_ACTION) }
     private val notificationDataReceiver by lazy {

@@ -3,12 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="kotlin.jvm.functions.Function0" />
         <variable
             name="userModel"
             type="com.agelousis.payments.login.models.UserModel" />
         <variable
             name="headerTitle"
             type="String" />
+        <variable
+            name="dismissBlock"
+            type="Function0" />
     </data>
 <RelativeLayout
     android:layout_width="match_parent"
@@ -20,12 +24,24 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:background="@drawable/basic_dialog_background">
+            android:background="@drawable/basic_dialog_background"
+            tools:backgroundTint="@color/petrolDarker">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="@dimen/activity_general_horizontal_margin"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="@{() -> dismissBlock.invoke()}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_close"
+                app:tint="@color/white"/>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/selectorFragmentHeader"
@@ -35,6 +51,9 @@
                 android:layout_marginTop="@dimen/activity_general_horizontal_margin"
                 android:text="@{headerTitle != null ? headerTitle : @string/key_select_country_label}"
                 android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="@string/key_select_country_label" />
 
             <com.agelousis.payments.views.searchLayout.MaterialSearchView
@@ -44,10 +63,11 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/selectorFragmentHeader"
                 app:searchHint="@string/key_search_in_countries_label" />
 
-        </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

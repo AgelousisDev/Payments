@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.agelousis.payments.R
@@ -17,8 +16,10 @@ import com.agelousis.payments.main.ui.groupSelector.interfaces.GroupSelectorFrag
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.utils.constants.Constants
+import com.agelousis.payments.utils.extensions.applyAnimationOnKeyboard
+import com.agelousis.payments.views.bottomSheet.BasicBottomSheetDialogFragment
 
-class GroupSelectorDialogFragment: DialogFragment(), GroupSelectorFragmentPresenter {
+class GroupSelectorBottomSheetDialogFragment: BasicBottomSheetDialogFragment(), GroupSelectorFragmentPresenter {
 
     companion object {
         fun show(
@@ -26,7 +27,7 @@ class GroupSelectorDialogFragment: DialogFragment(), GroupSelectorFragmentPresen
             groupModelList: List<GroupModel>,
             groupSelectorFragmentPresenter: GroupSelectorFragmentPresenter,
         ) {
-            GroupSelectorDialogFragment().also {
+            GroupSelectorBottomSheetDialogFragment().also {
                 it.groupModelList = groupModelList
                 it.groupSelectorFragmentPresenter = groupSelectorFragmentPresenter
             }.show(
@@ -64,12 +65,14 @@ class GroupSelectorDialogFragment: DialogFragment(), GroupSelectorFragmentPresen
         ).also {
             it.userModel = (activity as? MainActivity)?.userModel
             it.headerTitle = resources.getString(R.string.key_select_group_label)
+            it.dismissBlock = this::dismiss
         }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.applyAnimationOnKeyboard()
         setupUI()
         configureRecyclerView()
     }

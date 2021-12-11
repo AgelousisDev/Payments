@@ -15,16 +15,17 @@ import com.agelousis.payments.main.ui.countrySelector.models.CountryDataModel
 import com.agelousis.payments.main.ui.countrySelector.interfaces.CountrySelectorFragmentPresenter
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.utils.constants.Constants
+import com.agelousis.payments.utils.extensions.applyAnimationOnKeyboard
 import com.agelousis.payments.utils.extensions.countryDataModel
 import com.agelousis.payments.utils.helpers.CountryHelper
-import com.agelousis.payments.views.dialogFragment.FullScreenDialogFragment
+import com.agelousis.payments.views.bottomSheet.BasicBottomSheetDialogFragment
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import java.util.*
 
-class CountrySelectorDialogFragment: FullScreenDialogFragment(), CountrySelectorFragmentPresenter {
+class CountrySelectorBottomSheetDialogFragment: BasicBottomSheetDialogFragment(), CountrySelectorFragmentPresenter {
 
     companion object {
         fun show(
@@ -34,7 +35,7 @@ class CountrySelectorDialogFragment: FullScreenDialogFragment(), CountrySelector
             userModel: UserModel?,
             updateGlobalCountryState: Boolean = true
         ) {
-            CountrySelectorDialogFragment().also {
+            CountrySelectorBottomSheetDialogFragment().also {
                 it.countrySelectorFragmentPresenter = countrySelectorFragmentPresenter
                 it.selectedCountryDataModel = selectedCountryDataModel
                 it.userModel = userModel
@@ -79,12 +80,14 @@ class CountrySelectorDialogFragment: FullScreenDialogFragment(), CountrySelector
             false
         ).also {
             it.userModel = userModel
+            it.dismissBlock = this::dismiss
         }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.applyAnimationOnKeyboard()
         configureRecyclerView()
         setupUI()
     }
