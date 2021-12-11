@@ -76,9 +76,24 @@
             android:focusable="true"
             android:onClick="@{() -> presenter.onGroupSms(groupModel)}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/addClientIcon"
+            app:layout_constraintEnd_toStartOf="@+id/addPaymentIcon"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_speech_bubble" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/addPaymentIcon"
+            android:layout_width="20dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="@{() -> presenter.onPersonAdd(groupModel)}"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/addClientIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_add_payment" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/addClientIcon"
