@@ -61,6 +61,7 @@
         <entry key="app/src/main/res/layout/currency_edit_text_layout.xml" value="0.3197463768115942" />
         <entry key="app/src/main/res/layout/currency_row_layout.xml" value="0.3203125" />
         <entry key="app/src/main/res/layout/currency_selector_fragment_layout.xml" value="0.1983695652173913" />
+        <entry key="app/src/main/res/layout/date_field_layout.xml" value="0.17481884057971014" />
         <entry key="app/src/main/res/layout/details_app_switch_layout.xml" value="0.3203125" />
         <entry key="app/src/main/res/layout/file_row_layout.xml" value="0.17708333333333334" />
         <entry key="app/src/main/res/layout/forgot_password_fragment_layout.xml" value="0.25" />
@@ -84,7 +85,7 @@
         <entry key="app/src/main/res/layout/payments_menu_option_row_layout.xml" value="0.20199275362318841" />
         <entry key="app/src/main/res/layout/payments_menu_options_fragment_layout.xml" value="0.22554347826086957" />
         <entry key="app/src/main/res/layout/pdf_viewer_fragment_layout.xml" value="0.22780797101449277" />
-        <entry key="app/src/main/res/layout/period_filter_fragment_layout.xml" value="0.15577507598784193" />
+        <entry key="app/src/main/res/layout/period_filter_fragment_layout.xml" value="0.25" />
         <entry key="app/src/main/res/layout/person_details_picker_layout.xml" value="0.3203125" />
         <entry key="app/src/main/res/layout/profile_picture_fragment_layout.xml" value="0.18342391304347827" />
         <entry key="app/src/main/res/layout/qr_code_fragment_layout.xml" value="0.15577507598784193" />
