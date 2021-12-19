@@ -35,7 +35,7 @@ class NewPaymentViewModel: ViewModel() {
 
     suspend fun updateClient(context: Context, userId: Int?, clientModel: ClientModel) {
         val dbManager = DBManager(context = context)
-        dbManager.updatePayment(
+        dbManager.updateClient(
             userId = userId,
             clientModel = clientModel
         ) {

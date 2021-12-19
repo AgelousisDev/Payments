@@ -3,26 +3,28 @@ package com.agelousis.payments.main.ui.payments.extensions
 import android.graphics.Rect
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.R
+import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.custom.enumerations.SwipeAction
 import com.agelousis.payments.custom.itemTouchHelper.SwipeItemTouchHelper
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.enumerations.SwipeItemType
+import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
 import com.agelousis.payments.main.ui.payments.PaymentsFragment
 import com.agelousis.payments.main.ui.payments.adapters.PaymentsAdapter
-import com.agelousis.payments.main.ui.payments.models.BalanceOverviewDataModel
-import com.agelousis.payments.main.ui.payments.models.ClientModel
-import com.agelousis.payments.main.ui.payments.models.GroupModel
-import com.agelousis.payments.main.ui.payments.models.PaymentAmountSumModel
+import com.agelousis.payments.main.ui.payments.models.*
 import com.agelousis.payments.main.ui.payments.viewHolders.BalanceOverviewViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.GroupViewHolder
-import com.agelousis.payments.main.ui.payments.viewHolders.PaymentViewHolder
+import com.agelousis.payments.main.ui.payments.viewHolders.ClientViewHolder
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.PDFHelper
 import com.agelousis.payments.utils.models.SimpleDialogDataModel
+import com.agelousis.payments.widgets.extensions.clientModelList
+import com.agelousis.payments.widgets.extensions.updatePaymentsAppWidget
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -32,7 +34,7 @@ fun PaymentsFragment.configureSwipeEvents() {
             context = context ?: return,
             marginStart = resources.getDimension(R.dimen.activity_general_horizontal_margin),
             swipePredicateBlock = {
-                it is GroupViewHolder || it is PaymentViewHolder || it is BalanceOverviewViewHolder
+                it is GroupViewHolder || it is ClientViewHolder || it is BalanceOverviewViewHolder
             }
         ) innerBlock@ { swipeAction, swipeItemType, position ->
             when(swipeItemType) {
@@ -237,6 +239,7 @@ fun PaymentsFragment.configureRecyclerViewAdapterAndLayoutManager() {
     binding.paymentListRecyclerView.adapter = PaymentsAdapter(
         list = filteredList,
         groupPresenter = this,
+        clientPresenter = this,
         paymentPresenter = this,
         paymentAmountSumPresenter = this,
         balanceOverviewPresenter = this
@@ -256,12 +259,15 @@ fun PaymentsFragment.addRecyclerViewItemDecoration() {
                         if (context?.isLandscape == false)
                             outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
                     }
-                    is ClientModel -> {
+                    is ClientModel,
+                    is PaymentAmountModel -> {
                         if (context?.isLandscape == true)
                             outRect.top = resources.getDimensionPixelOffset(R.dimen.nav_header_vertical_spacing)
                         outRect.left = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
                         outRect.right = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
-                        if (filteredList isLastAt adapterPosition)
+                        if (filteredList isLastAt adapterPosition
+                            || filteredList.getOrNull(adapterPosition) is PaymentAmountModel
+                        )
                             outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
                     }
                     is PaymentAmountSumModel -> {
@@ -273,4 +279,143 @@ fun PaymentsFragment.addRecyclerViewItemDecoration() {
             }
         }
     )
+}
+
+fun PaymentsFragment.configurePayments(list: List<Any>, query: String? = null) {
+    filteredList.clear()
+    list.filterIsInstance<ClientModel>().takeIf { it.isNotEmpty() }?.let { payments ->
+        if (sharedPreferences?.balanceOverviewState == true
+            && query == null
+        )
+            filteredList.add(
+                BalanceOverviewDataModel.getBalanceOverviewDataModelWith(
+                    currentBalance = (activity as? MainActivity)?.userModel?.balance,
+                    lastPaymentMonthList = payments getSixLastPaymentMonths (context
+                        ?: return@let)
+                )
+            )
+        payments.groupBy {
+            it.groupName ?: ""
+        }.toSortedMap().forEach { map ->
+            map.value.filter {
+                it.fullName.lowercase().contains(query?.replace(" ", "")?.lowercase() ?: "")
+                        || it.groupName?.lowercase()
+                    ?.contains(query?.replace(" ", "")?.lowercase() ?: "") == true
+            }.takeIf {
+                it.isNotEmpty()
+            }?.let inner@{ filteredByQueryPayments ->
+                filteredList.add(
+                    GroupModel(
+                        groupId = filteredByQueryPayments.firstOrNull()?.groupId,
+                        groupName = map.key,
+                        color = filteredByQueryPayments.firstOrNull()?.groupColor,
+                        groupImage = filteredByQueryPayments.firstOrNull()?.groupImage
+                    )
+                )
+                filteredList.addAll(
+                    filteredByQueryPayments.sortedBy { (it getPaymentsFilteringOptionType MainApplication.paymentsFilteringOptionTypes).position }
+                        .also { clientModelList ->
+                            when (context?.isLandscape) {
+                                true ->
+                                    clientModelList.forEach { clientModel ->
+                                        clientModel.backgroundDrawable =
+                                            R.drawable.payment_row_radius_background
+                                    }
+                                else ->
+                                    if (clientModelList.isSizeOne)
+                                        clientModelList.firstOrNull()?.backgroundDrawable =
+                                            R.drawable.payment_row_radius_background
+                                    else {
+                                        clientModelList.firstOrNull()?.backgroundDrawable =
+                                            R.drawable.payment_row_header_background
+                                        clientModelList.lastOrNull()?.backgroundDrawable =
+                                            R.drawable.payment_row_footer_background
+                                    }
+                            }
+                        }
+                )
+
+                filteredByQueryPayments.mapNotNull {
+                    it.totalPaymentAmount
+                }.sum().takeIf {
+                    !it.isZero
+                }?.let { sum ->
+                    filteredList.add(
+                        PaymentAmountSumModel(
+                            sum = sum,
+                            color = filteredByQueryPayments.firstOrNull()?.groupColor
+                        )
+                    )
+                }
+            }
+        }
+    }
+    filteredList.addAll(
+        list.filterIsInstance<GroupModel>().filter {
+            it.groupName?.lowercase()?.contains(query?.lowercase() ?: "") == true
+        }
+    )
+    val paymentAmountIndexed = mutableMapOf<Int, PaymentAmountModel>()
+    list.filterIsInstance<PaymentAmountModel>().forEach { paymentAmountModel ->
+        filteredList.forEachIndexed { index, item ->
+            if (item is GroupModel
+                && paymentAmountModel.groupId == item.groupId
+                && query?.lowercase() ?: "" in paymentAmountModel.singlePaymentProducts?.joinToString(
+                    separator = ""
+                )?.lowercase() ?: ""
+            )
+                paymentAmountIndexed[index + 1] = paymentAmountModel
+        }
+    }
+    paymentAmountIndexed.forEach { (index, paymentAmountModel) ->
+        filteredList.add(
+            index,
+            paymentAmountModel
+        )
+    }
+
+    if (filteredList.isEmpty())
+        query.whenNull {
+            filteredList.add(
+                EmptyModel(
+                    title = resources.getString(R.string.key_no_clients_title_message),
+                    message = resources.getString(R.string.key_no_clients_message),
+                    animationJsonIcon = "empty_animation.json"
+                )
+            )
+        }?.let {
+            filteredList.add(
+                EmptyModel(
+                    message = String.format(
+                        resources.getString(R.string.key_no_results_found_value),
+                        it
+                    ),
+                    imageIconResource = R.drawable.ic_colored_search
+                )
+            )
+        }
+    binding.paymentListRecyclerView.scheduleLayoutAnimation()
+    (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
+    sharedPreferences?.clientModelList.takeIf { it == null || it.size != list.filterIsInstance<ClientModel>().size }
+        .apply {
+            sharedPreferences?.clientModelList = list.filterIsInstance<ClientModel>()
+            context?.updatePaymentsAppWidget()
+        }
+}
+
+fun PaymentsFragment.initializeNewPayments() {
+    findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<PaymentAmountModel>(
+        NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA
+    )?.observe(viewLifecycleOwner) { paymentAmountModel ->
+        uiScope.launch {
+            viewModel.insertPayment(
+                context = context ?: return@launch,
+                paymentAmountModel = paymentAmountModel,
+                insertionSuccessBlock = this@initializeNewPayments::initializePayments
+            )
+        }
+        findNavController().currentBackStackEntry?.savedStateHandle?.remove<PaymentAmountModel>(
+            NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA
+        )
+    }
 }

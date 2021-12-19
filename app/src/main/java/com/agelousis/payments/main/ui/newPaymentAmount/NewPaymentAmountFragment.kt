@@ -44,7 +44,9 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
     val fieldsHaveChanged
         get() = args.paymentAmountDataModel?.let {
             val currentPaymentAmountModel = PaymentAmountModel(
-                paymentId = binding.paymentAmountModel?.paymentId,
+                paymentId = args.paymentAmountDataModel?.paymentId,
+                userId = args.paymentAmountDataModel?.userId,
+                groupId = args.paymentAmountDataModel?.groupId,
                 paymentAmount = binding.amountLayout.doubleValue,
                 paymentMonth = binding.paymentMonthDetailsLayout.dateValue,
                 paymentDate = binding.dateDetailsLayout.dateValue,
@@ -67,6 +69,7 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
         ).also {
             it.paymentAmountModel = args.paymentAmountDataModel
             it.defaultPaymentAmount = (activity as? MainActivity)?.userModel?.defaultPaymentAmount
+            it.singlePaymentState = args.groupModelData != null
         }
         return binding.root
     }
@@ -173,6 +176,9 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
             findNavController().previousBackStackEntry?.savedStateHandle?.set(
                 PAYMENT_AMOUNT_DATA_EXTRA,
                 PaymentAmountModel(
+                    paymentId = args.paymentAmountDataModel?.paymentId,
+                    userId = if (args.groupModelData != null) (activity as? MainActivity)?.userModel?.id else null,
+                    groupId = args.paymentAmountDataModel?.groupId ?: args.groupModelData?.groupId,
                     paymentAmount = it.first().toString().toDouble(),
                     paymentMonth = binding.paymentMonthDetailsLayout.dateValue,
                     paymentDate = it.second().toString(),

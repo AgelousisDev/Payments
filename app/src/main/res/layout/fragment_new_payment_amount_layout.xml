@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <data>
-
         <import type="android.view.View" />
-
         <import type="com.agelousis.payments.views.extensions.ExtensionsKt" />
-
         <variable
             name="paymentAmountModel"
             type="com.agelousis.payments.main.ui.payments.models.PaymentAmountModel" />
-
         <variable
             name="defaultPaymentAmount"
             type="Double" />
-
         <variable
             name="singlePaymentState"
             type="Boolean" />

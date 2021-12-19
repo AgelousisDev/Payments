@@ -7,4 +7,5 @@ interface GroupPresenter {
     fun onPersonAdd(groupModel: GroupModel)
     fun onGroupSms(groupModel: GroupModel)
     fun onGroupEmail(groupModel: GroupModel)
+    fun onPaymentAdd(groupModel: GroupModel)
 }

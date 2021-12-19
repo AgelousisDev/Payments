@@ -6,11 +6,11 @@
         <import type="android.view.View" />
         <import type="com.agelousis.payments.utils.extensions.ExtensionsKt" />
         <variable
-            name="paymentAmountModel"
-            type="com.agelousis.payments.main.ui.payments.models.PaymentAmountModel" />
+            name="clientModel"
+            type="com.agelousis.payments.main.ui.payments.models.ClientModel" />
         <variable
             name="presenter"
-            type="com.agelousis.payments.main.ui.payments.presenters.PaymentPresenter"/>
+            type="com.agelousis.payments.main.ui.payments.presenters.ClientPresenter" />
         <variable
             name="adapterPosition"
             type="Integer" />
@@ -20,49 +20,71 @@
         android:layout_height="wrap_content"
         android:focusable="true"
         android:clickable="true"
-        android:background="@drawable/payment_row_radius_background"
-        alphaOrBlurEffectViewGroup="@{paymentAmountModel.skipPayment == true}"
-        android:onClick="@{() -> presenter.onPaymentSelected(paymentAmountModel, adapterPosition)}"
+        viewBackground="@{clientModel.backgroundDrawable}"
+        alphaOrBlurEffectViewGroup="@{clientModel.active == false}"
+        android:onClick="@{() -> presenter.onClientSelected(clientModel, adapterPosition)}"
         android:animateLayoutChanges="true">
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.5" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/selectedPaymentIcon"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginStart="@dimen/activity_general_horizontal_margin"
-            android:visibility="@{paymentAmountModel.selected == true ? View.VISIBLE : View.GONE}"
+            android:visibility="@{clientModel.selected == true ? View.VISIBLE : View.GONE}"
             app:srcCompat="@drawable/ic_check"
             app:tint="@color/green"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <FrameLayout
+            android:id="@+id/paymentRowHeaderFrameLayout"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+            android:background="@{clientModel.groupImage == null ? @drawable/oval_background : null}"
+            backgroundDrawableTintColor="@{clientModel.groupImage == null ? clientModel.groupColor : null}"
+            android:elevation="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/selectedPaymentIcon"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/TextViewTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@{String.valueOf(clientModel.groupName.charAt(0)).toUpperCase()}"
+                android:visibility="@{clientModel.groupImage == null ? View.VISIBLE : View.GONE}"
+                android:textColor="@color/white"
+                android:textStyle="normal" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/userRowImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="@{clientModel.groupImage != null ? View.VISIBLE : View.GONE}"
+                picassoGroupImageFromInternalFiles="@{clientModel.groupImage}"
+                android:scaleType="centerCrop"/>
+
+        </FrameLayout>
+
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/singlePaymentProductsTextView"
+            android:id="@+id/entryCustomerNameTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_general_horizontal_margin"
-            android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
             android:layout_marginStart="@dimen/activity_general_horizontal_margin"
-            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
             android:fontFamily="@font/ubuntu"
             android:gravity="start"
-            android:text="@{paymentAmountModel.singlePaymentProductsSeparated}"
+            android:text="@{clientModel.fullName}"
             android:textSize="14sp"
             android:singleLine="true"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/entryTotalAmountTextView"
-            app:layout_constraintStart_toEndOf="@+id/selectedPaymentIcon"
-            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            app:layout_constraintStart_toEndOf="@+id/paymentRowHeaderFrameLayout"
+            app:layout_constraintTop_toTopOf="@+id/paymentRowHeaderFrameLayout"
             tools:text="Vagelis Agelousis" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -72,25 +94,26 @@
             android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
             android:fontFamily="@font/ubuntu"
             android:gravity="end"
-            android:text="@{paymentAmountModel.paymentAmount != null ? ExtensionsKt.getEuroFormattedString(paymentAmountModel.paymentAmount) : @string/key_empty_field_label}"
+            android:text="@{clientModel.free == true ? @string/key_free_label : clientModel.totalPaymentAmount != null ? ExtensionsKt.getEuroFormattedString(clientModel.totalPaymentAmount) : @string/key_empty_field_label}"
             android:textSize="18sp"
-            android:textColor="@{paymentAmountModel.paymentAmount == null || paymentAmountModel.paymentAmount == 0.0 ? @color/fateBlue : @color/colorAccent}"
+            android:textColor="@{clientModel.free == true ? @color/fateBlue :  clientModel.groupColor}"
+            textViewColorByPaymentDate="@{clientModel.free == true ? null : clientModel.payments}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="40$" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/notesTextView"
+            android:id="@+id/entryDateTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
             android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
             android:layout_marginBottom="@dimen/activity_general_horizontal_margin"
             android:fontFamily="@font/ubuntu_monospace"
             android:gravity="start"
-            android:text="@{paymentAmountModel.paymentNote}"
+            android:text="@{clientModel.getCommunicationData(context)}"
             android:textColor="@color/grey"
             android:textSize="12sp"
             android:singleLine="true"
@@ -98,8 +121,8 @@
             android:marqueeRepeatLimit="marquee_forever"
             app:layout_constraintVertical_bias="0.0"
             app:layout_constraintEnd_toStartOf="@+id/entryTotalAmountTextView"
-            app:layout_constraintStart_toEndOf="@+id/selectedPaymentIcon"
-            app:layout_constraintTop_toBottomOf="@+id/guideline"
+            app:layout_constraintStart_toEndOf="@+id/paymentRowHeaderFrameLayout"
+            app:layout_constraintTop_toBottomOf="@+id/entryCustomerNameTextView"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="10-11-2019" />
 

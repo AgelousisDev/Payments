@@ -88,7 +88,7 @@
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:onClick="@{() -> presenter.onPersonAdd(groupModel)}"
+            android:onClick="@{() -> presenter.onPaymentAdd(groupModel)}"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/addClientIcon"

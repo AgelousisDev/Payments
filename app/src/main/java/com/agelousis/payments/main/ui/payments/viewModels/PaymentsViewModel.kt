@@ -4,15 +4,18 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.agelousis.payments.database.DBManager
+import com.agelousis.payments.database.InsertionSuccessBlock
 import com.agelousis.payments.firebase.models.FirebaseMessageModel
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.ui.files.models.FileDataModel
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.ClientModel
+import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.network.repositories.FirebaseMessageRepository
 import com.agelousis.payments.network.responses.ErrorModel
 import com.agelousis.payments.network.responses.FirebaseResponseModel
 import com.agelousis.payments.utils.extensions.pdfFormattedCurrentDate
+import com.agelousis.payments.utils.extensions.whenNull
 import java.io.File
 import java.util.*
 
@@ -96,6 +99,27 @@ class PaymentsViewModel: ViewModel() {
             userId = userModel?.id,
             balance = balance
         )
+    }
+
+    suspend fun insertPayment(
+        context: Context,
+        paymentAmountModel: PaymentAmountModel,
+        insertionSuccessBlock: InsertionSuccessBlock
+    ) {
+        val dbManager = DBManager(
+            context = context
+        )
+        paymentAmountModel.paymentId.whenNull {
+            dbManager.insertPayment(
+                paymentAmountModel = paymentAmountModel,
+                insertionSuccessBlock = insertionSuccessBlock
+            )
+        }?.let {
+            dbManager.updatePayment(
+                paymentAmountModel = paymentAmountModel,
+                insertionSuccessBlock = insertionSuccessBlock
+            )
+        }
     }
 
     fun sendClientDataRequestNotification(firebaseMessageModel: FirebaseMessageModel) {

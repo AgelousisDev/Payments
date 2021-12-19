@@ -27,15 +27,13 @@ import com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType
 import com.agelousis.payments.main.ui.totalPaymentsAmount.TotalPaymentsAmountBottomSheetDialogFragment
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
-import com.agelousis.payments.widgets.extensions.clientModelList
-import com.agelousis.payments.widgets.extensions.updatePaymentsAppWidget
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 
-class PaymentsFragment: Fragment(), GroupPresenter, PaymentPresenter, PaymentAmountSumPresenter,
+class PaymentsFragment: Fragment(), GroupPresenter, ClientPresenter, PaymentPresenter, PaymentAmountSumPresenter,
     PaymentsFragmentPresenter, BalanceOverviewPresenter {
 
     override fun onDeletePayments() {
@@ -69,10 +67,10 @@ class PaymentsFragment: Fragment(), GroupPresenter, PaymentPresenter, PaymentAmo
         )
     }
 
-    override fun onPaymentSelected(clientModel: ClientModel, adapterPosition: Int) {
+    override fun onClientSelected(clientModel: ClientModel, adapterPosition: Int) {
         when {
             filteredList.filterIsInstance<ClientModel>().any { it.isSelected } ->
-                onPaymentLongPressed(
+                onClientLongPressed(
                     paymentIndex = adapterPosition,
                     isSelected = !clientModel.isSelected
                 )
@@ -88,7 +86,7 @@ class PaymentsFragment: Fragment(), GroupPresenter, PaymentPresenter, PaymentAmo
         }
     }
 
-    override fun onPaymentLongPressed(paymentIndex: Int, isSelected: Boolean) {
+    override fun onClientLongPressed(paymentIndex: Int, isSelected: Boolean) {
         (filteredList.getOrNull(
             index = paymentIndex
         ) as? ClientModel)?.isSelected = isSelected
@@ -102,6 +100,18 @@ class PaymentsFragment: Fragment(), GroupPresenter, PaymentPresenter, PaymentAmo
             position = paymentIndex
         )
         (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
+    }
+
+    override fun onPaymentSelected(paymentAmountModel: PaymentAmountModel, adapterPosition: Int) {
+        findNavController().navigate(
+            PaymentsFragmentDirections.actionPaymentsFragmentToNewPaymentAmountFragment(
+                paymentAmountDataModel =  paymentAmountModel
+            )
+        )
+    }
+
+    override fun onPaymentLongPressed(paymentIndex: Int, isSelected: Boolean) {
+
     }
 
     override fun onPersonAdd(groupModel: GroupModel) {
@@ -118,6 +128,14 @@ class PaymentsFragment: Fragment(), GroupPresenter, PaymentPresenter, PaymentAmo
 
     override fun onGroupEmail(groupModel: GroupModel) {
         this sendGroupEmail groupModel
+    }
+
+    override fun onPaymentAdd(groupModel: GroupModel) {
+        findNavController().navigate(
+            PaymentsFragmentDirections.actionPaymentsFragmentToNewPaymentAmountFragment(
+                groupModelData = groupModel
+            )
+        )
     }
 
     override fun onPaymentAmountSumSelected(paymentAmountSumModel: PaymentAmountSumModel) {
@@ -287,6 +305,7 @@ class PaymentsFragment: Fragment(), GroupPresenter, PaymentPresenter, PaymentAmo
             if (it)
                 initializePayments()
         }
+        initializeNewPayments()
     }
 
     fun clearSelectedPayments() {
@@ -328,91 +347,6 @@ class PaymentsFragment: Fragment(), GroupPresenter, PaymentPresenter, PaymentAmo
             }
             sharedPreferences?.paymentsFilteringOptionTypes = paymentsFilteringOptionTypes
             MainApplication.paymentsFilteringOptionTypes = paymentsFilteringOptionTypes
-        }
-    }
-
-    private fun configurePayments(list: List<Any>, query: String? = null) {
-        filteredList.clear()
-        list.filterIsInstance<ClientModel>().takeIf { it.isNotEmpty() }?.let { payments ->
-            if (sharedPreferences?.balanceOverviewState == true
-                && query == null
-            )
-                filteredList.add(
-                    BalanceOverviewDataModel.getBalanceOverviewDataModelWith(
-                        currentBalance = (activity as? MainActivity)?.userModel?.balance,
-                        lastPaymentMonthList = payments getSixLastPaymentMonths (context ?: return@let)
-                    )
-                )
-            payments.groupBy { it.groupName ?: "" }.toSortedMap().forEach { map ->
-                map.value.filter { it.fullName.lowercase().contains(query?.replace(" ", "")?.lowercase() ?: "") || it.groupName?.lowercase()?.contains(query?.replace(" ", "")?.lowercase() ?: "") == true }
-                    .takeIf { it.isNotEmpty() }?.let inner@ { filteredByQueryPayments ->
-                        filteredList.add(
-                            GroupModel(
-                                groupId = filteredByQueryPayments.firstOrNull()?.groupId,
-                                groupName = map.key,
-                                color = filteredByQueryPayments.firstOrNull()?.groupColor,
-                                groupImage = filteredByQueryPayments.firstOrNull()?.groupImage
-                            )
-                        )
-                        filteredList.addAll(
-                            filteredByQueryPayments.sortedBy { (it getPaymentsFilteringOptionType MainApplication.paymentsFilteringOptionTypes).position  }.also { clientModelList ->
-                                when(context?.isLandscape) {
-                                    true ->
-                                        clientModelList.forEach { clientModel ->
-                                            clientModel.backgroundDrawable = R.drawable.payment_row_radius_background
-                                        }
-                                    else ->
-                                        if (clientModelList.isSizeOne)
-                                            clientModelList.firstOrNull()?.backgroundDrawable = R.drawable.payment_row_radius_background
-                                        else {
-                                            clientModelList.firstOrNull()?.backgroundDrawable = R.drawable.payment_row_header_background
-                                            clientModelList.lastOrNull()?.backgroundDrawable = R.drawable.payment_row_footer_background
-                                        }
-                                }
-                            }
-                        )
-                        filteredByQueryPayments.mapNotNull { it.totalPaymentAmount }.sum().takeIf { !it.isZero }?.let { sum ->
-                            filteredList.add(
-                                PaymentAmountSumModel(
-                                    sum = sum,
-                                    color = filteredByQueryPayments.firstOrNull()?.groupColor
-                                )
-                            )
-                        }
-                    }
-            }
-        }
-        filteredList.addAll(
-            list.filterIsInstance<GroupModel>().filter {
-                it.groupName?.lowercase()?.contains(query?.lowercase() ?: "") == true
-            }
-        )
-
-        if (filteredList.isEmpty())
-            query.whenNull {
-                filteredList.add(
-                    EmptyModel(
-                        title = resources.getString(R.string.key_no_clients_title_message),
-                        message = resources.getString(R.string.key_no_clients_message),
-                        animationJsonIcon = "empty_animation.json"
-                    )
-                )
-            }?.let {
-                filteredList.add(
-                    EmptyModel(
-                        message = String.format(
-                            resources.getString(R.string.key_no_results_found_value),
-                            it
-                        ),
-                        imageIconResource = R.drawable.ic_colored_search
-                    )
-                )
-            }
-        binding.paymentListRecyclerView.scheduleLayoutAnimation()
-        (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
-        sharedPreferences?.clientModelList.takeIf { it == null || it.size != list.filterIsInstance<ClientModel>().size }.apply {
-            sharedPreferences?.clientModelList = list.filterIsInstance<ClientModel>()
-            context?.updatePaymentsAppWidget()
         }
     }
 
