@@ -28,10 +28,8 @@ import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.shareMessageFragment.ShareMessageBottomSheetFragment
-import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.CountryHelper
-import com.agelousis.payments.utils.models.CalendarDataModel
 import com.agelousis.payments.utils.models.ContactDataModel
 import com.agelousis.payments.views.detailsSwitch.interfaces.AppSwitchListener
 import kotlinx.coroutines.CoroutineScope
@@ -78,22 +76,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
     }
 
     override fun onCalendarEvent(paymentAmountModel: PaymentAmountModel?) {
-        (context ?: return) createCalendarEventWith CalendarDataModel(
-            calendar = paymentAmountModel?.paymentDate?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.calendar ?: return,
-            title = String.format(
-                "%s %s",
-                binding.firstNameLayout.value ?: return,
-                binding.surnameLayout.value ?: return
-            ),
-            description = String.format(
-                resources.getString(R.string.key_calendar_event_amount_value),
-                paymentAmountModel.getAmountWithoutVat(
-                    context = context ?: return,
-                    vat = (activity as? MainActivity)?.userModel?.vat ?: return
-                )
-            ),
-            email = binding.emailLayout.value ?: return
-        )
+        this createCalendarEventWith paymentAmountModel
     }
 
     override fun onContactSelection() {

@@ -15,6 +15,7 @@ import com.agelousis.payments.databinding.FragmentPaymentsLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.menuOptions.PaymentsMenuOptionsBottomSheetFragment
 import com.agelousis.payments.main.ui.files.models.FileDataModel
+import com.agelousis.payments.main.ui.newPayment.presenters.NewPaymentPresenter
 import com.agelousis.payments.main.ui.payments.adapters.PaymentsAdapter
 import com.agelousis.payments.main.ui.payments.extensions.*
 import com.agelousis.payments.main.ui.payments.models.*
@@ -33,7 +34,7 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 
-class PaymentsFragment: Fragment(), GroupPresenter, ClientPresenter, PaymentPresenter, PaymentAmountSumPresenter,
+class PaymentsFragment: Fragment(), GroupPresenter, ClientPresenter, NewPaymentPresenter, PaymentAmountSumPresenter,
     PaymentsFragmentPresenter, BalanceOverviewPresenter {
 
     override fun onDeletePayments() {
@@ -102,16 +103,17 @@ class PaymentsFragment: Fragment(), GroupPresenter, ClientPresenter, PaymentPres
         (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
     }
 
-    override fun onPaymentSelected(paymentAmountModel: PaymentAmountModel, adapterPosition: Int) {
+    override fun onPaymentAmount(paymentAmountModel: PaymentAmountModel?) {
         findNavController().navigate(
             PaymentsFragmentDirections.actionPaymentsFragmentToNewPaymentAmountFragment(
-                paymentAmountDataModel =  paymentAmountModel
+                paymentAmountDataModel =  paymentAmountModel,
+                independentPaymentState = true
             )
         )
     }
 
-    override fun onPaymentLongPressed(paymentIndex: Int, isSelected: Boolean) {
-
+    override fun onCalendarEvent(paymentAmountModel: PaymentAmountModel?) {
+        this createCalendarEventWith paymentAmountModel
     }
 
     override fun onPersonAdd(groupModel: GroupModel) {
@@ -133,7 +135,8 @@ class PaymentsFragment: Fragment(), GroupPresenter, ClientPresenter, PaymentPres
     override fun onPaymentAdd(groupModel: GroupModel) {
         findNavController().navigate(
             PaymentsFragmentDirections.actionPaymentsFragmentToNewPaymentAmountFragment(
-                groupModelData = groupModel
+                groupModelData = groupModel,
+                independentPaymentState = true
             )
         )
     }
@@ -305,7 +308,6 @@ class PaymentsFragment: Fragment(), GroupPresenter, ClientPresenter, PaymentPres
             if (it)
                 initializePayments()
         }
-        initializeNewPayments()
     }
 
     fun clearSelectedPayments() {

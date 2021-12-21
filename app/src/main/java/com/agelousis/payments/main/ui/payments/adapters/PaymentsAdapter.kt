@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.databinding.*
+import com.agelousis.payments.main.ui.newPayment.presenters.NewPaymentPresenter
+import com.agelousis.payments.main.ui.newPayment.viewHolders.PaymentAmountViewHolder
 import com.agelousis.payments.main.ui.payments.enumerations.PaymentsAdapterViewType
 import com.agelousis.payments.main.ui.payments.models.*
 import com.agelousis.payments.main.ui.payments.presenters.*
@@ -14,9 +16,10 @@ class PaymentsAdapter(
     private val list: ArrayList<Any>,
     private val groupPresenter: GroupPresenter,
     private val clientPresenter: ClientPresenter,
-    private val paymentPresenter: PaymentPresenter,
+    private val paymentPresenter: NewPaymentPresenter,
     private val paymentAmountSumPresenter: PaymentAmountSumPresenter,
-    private val balanceOverviewPresenter: BalanceOverviewPresenter
+    private val balanceOverviewPresenter: BalanceOverviewPresenter,
+    private val vat: Int?
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -56,8 +59,8 @@ class PaymentsAdapter(
                     )
                 )
             PaymentsAdapterViewType.PAYMENT_VIEW.type ->
-                PaymentViewHolder(
-                    binding = PaymentRowLayoutBinding.inflate(
+                PaymentAmountViewHolder(
+                    binding = PaymentAmountRowLayoutBinding.inflate(
                         inflater,
                         parent,
                         false
@@ -107,10 +110,14 @@ class PaymentsAdapter(
             ) as? ClientModel ?: return,
             presenter = clientPresenter
         )
-        (holder as? PaymentViewHolder)?.bind(
+        (holder as? PaymentAmountViewHolder)?.bind(
             paymentAmountModel = list.getOrNull(
                 index = position
             ) as? PaymentAmountModel ?: return,
+            vat = vat,
+            title = (list.getOrNull(
+                index = position
+            ) as? PaymentAmountModel)?.singlePaymentProductsSeparated,
             presenter = paymentPresenter
         )
         (holder as? PaymentAmountSumViewHolder)?.bind(

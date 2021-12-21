@@ -13,6 +13,9 @@
         <variable
             name="singlePaymentState"
             type="Boolean" />
+        <variable
+            name="independentPaymentState"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -93,6 +96,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:visibility="@{independentPaymentState ? View.GONE : View.VISIBLE}"
                     app:appSwitchLabel="@string/key_single_payment_label"
                     app:appSwitchShowLine="true" />
 
@@ -101,7 +105,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="@{singlePaymentState == true ? View.VISIBLE : View.GONE}">
+                    android:visibility="@{singlePaymentState == true || independentPaymentState == true ? View.VISIBLE : View.GONE}">
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"

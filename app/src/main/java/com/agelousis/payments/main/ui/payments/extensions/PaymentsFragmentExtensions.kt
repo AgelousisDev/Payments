@@ -3,7 +3,6 @@ package com.agelousis.payments.main.ui.payments.extensions
 import android.graphics.Rect
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -13,15 +12,17 @@ import com.agelousis.payments.custom.enumerations.SwipeAction
 import com.agelousis.payments.custom.itemTouchHelper.SwipeItemTouchHelper
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.enumerations.SwipeItemType
-import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
+import com.agelousis.payments.main.ui.newPayment.viewHolders.PaymentAmountViewHolder
 import com.agelousis.payments.main.ui.payments.PaymentsFragment
 import com.agelousis.payments.main.ui.payments.adapters.PaymentsAdapter
 import com.agelousis.payments.main.ui.payments.models.*
 import com.agelousis.payments.main.ui.payments.viewHolders.BalanceOverviewViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.GroupViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.ClientViewHolder
+import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.PDFHelper
+import com.agelousis.payments.utils.models.CalendarDataModel
 import com.agelousis.payments.utils.models.SimpleDialogDataModel
 import com.agelousis.payments.widgets.extensions.clientModelList
 import com.agelousis.payments.widgets.extensions.updatePaymentsAppWidget
@@ -34,12 +35,14 @@ fun PaymentsFragment.configureSwipeEvents() {
             context = context ?: return,
             marginStart = resources.getDimension(R.dimen.activity_general_horizontal_margin),
             swipePredicateBlock = {
-                it is GroupViewHolder || it is ClientViewHolder || it is BalanceOverviewViewHolder
+                it is GroupViewHolder || it is ClientViewHolder || it is BalanceOverviewViewHolder || it is PaymentAmountViewHolder
             }
         ) innerBlock@ { swipeAction, swipeItemType, position ->
             when(swipeItemType) {
                 SwipeItemType.BALANCE_OVERVIEW_ITEM ->
                     disableBalanceOverview()
+                SwipeItemType.PAYMENT_AMOUNT ->
+                    this deleteItemWith position
                 else ->
                     when(swipeAction) {
                         SwipeAction.RIGHT -> {
@@ -49,7 +52,7 @@ fun PaymentsFragment.configureSwipeEvents() {
                             )
                         }
                         SwipeAction.LEFT ->
-                            this deletePaymentWith position
+                            this deleteItemWith position
                     }
             }
         }
@@ -98,16 +101,21 @@ infix fun PaymentsFragment.sendGroupEmail(groupModel: GroupModel) {
     )
 }
 
-private infix fun PaymentsFragment.deletePaymentWith(position: Int) {
+private infix fun PaymentsFragment.deleteItemWith(
+    position: Int
+) {
     context?.showTwoButtonsDialog(
         SimpleDialogDataModel(
             isCancellable = false,
             title = resources.getString(R.string.key_warning_label),
             message =
-            if (filteredList.getOrNull(index = position) is GroupModel)
-                String.format(resources.getString(R.string.key_delete_group_message_value), (filteredList.getOrNull(index = position) as? GroupModel)?.groupName)
-            else
-                resources.getString(R.string.key_delete_payment_message),
+            when {
+                filteredList.getOrNull(index = position) is GroupModel ->
+                    String.format(resources.getString(R.string.key_delete_group_message_value), (filteredList.getOrNull(index = position) as? GroupModel)?.groupName)
+                filteredList.getOrNull(index = position) is PaymentAmountModel ->
+                    resources.getString(R.string.key_delete_payment_message)
+                else -> resources.getString(R.string.key_delete_client_message)
+            },
             negativeButtonBlock = {
                 (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.updateIn(
                     position = position
@@ -242,7 +250,8 @@ fun PaymentsFragment.configureRecyclerViewAdapterAndLayoutManager() {
         clientPresenter = this,
         paymentPresenter = this,
         paymentAmountSumPresenter = this,
-        balanceOverviewPresenter = this
+        balanceOverviewPresenter = this,
+        vat = (activity as? MainActivity)?.userModel?.vat
     )
 }
 
@@ -403,19 +412,19 @@ fun PaymentsFragment.configurePayments(list: List<Any>, query: String? = null) {
         }
 }
 
-fun PaymentsFragment.initializeNewPayments() {
-    findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<PaymentAmountModel>(
-        NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA
-    )?.observe(viewLifecycleOwner) { paymentAmountModel ->
-        uiScope.launch {
-            viewModel.insertPayment(
-                context = context ?: return@launch,
-                paymentAmountModel = paymentAmountModel,
-                insertionSuccessBlock = this@initializeNewPayments::initializePayments
+infix fun PaymentsFragment.createCalendarEventWith(paymentAmountModel: PaymentAmountModel?) {
+    (context ?: return) createCalendarEventWith CalendarDataModel(
+        calendar = paymentAmountModel?.paymentDate?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.calendar ?: return,
+        title = String.format(
+            "%s",
+            paymentAmountModel.singlePaymentProductsSeparated ?: ""
+        ),
+        description = String.format(
+            resources.getString(R.string.key_calendar_event_amount_value),
+            paymentAmountModel.getAmountWithoutVat(
+                context = context ?: return,
+                vat = (activity as? MainActivity)?.userModel?.vat ?: return
             )
-        }
-        findNavController().currentBackStackEntry?.savedStateHandle?.remove<PaymentAmountModel>(
-            NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA
         )
-    }
+    )
 }

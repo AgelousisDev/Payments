@@ -12,10 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import coil.compose.rememberImagePainter
+import com.agelousis.payments.R
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.ui.extraHorizontalMargin
 import java.io.File
@@ -48,14 +50,21 @@ class ProfilePictureFragment: Fragment() {
     @Composable
     fun ProfileImageView() {
         Box(
-            modifier = Modifier.clickable {
-                findNavController().popBackStack()
-            }.fillMaxSize()
+            modifier = Modifier
+                .clickable {
+                    findNavController().popBackStack()
+                }
+                .fillMaxSize()
         ) {
             Image(
-                rememberImagePainter(
-                    data = File(context?.filesDir, (activity as? MainActivity)?.userModel?.profileImage ?: return)
-                ),
+                if ((activity as? MainActivity)?.userModel?.profileImage != null)
+                    rememberImagePainter(
+                        data = File(context?.filesDir, (activity as? MainActivity)?.userModel?.profileImage ?: return)
+                    )
+                else
+                    painterResource(
+                        id = R.drawable.ic_person
+                    ),
                 contentDescription = null,
                 alignment = Alignment.Center,
                 modifier = extraHorizontalMargin.fillMaxSize()

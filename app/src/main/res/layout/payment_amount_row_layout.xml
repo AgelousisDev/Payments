@@ -47,12 +47,14 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/paymentAmountRowHeader"
             style="@style/TextViewTitleLabel"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/nav_header_vertical_spacing"
+            android:gravity="center_horizontal"
             android:text="@{title != null ? title : paymentAmountModel.paymentYearMonthWithArrow != null ? paymentAmountModel.paymentYearMonthWithArrow : @string/key_summary_label}"
             android:singleLine="true"
             android:maxLines="1"
+            tools:text="Single Payment"
             app:layout_constraintEnd_toStartOf="@+id/paymentAmountRowRightLineSeparator"
             app:layout_constraintStart_toEndOf="@+id/paymentAmountRowLeftLineSeparator"
             app:layout_constraintTop_toTopOf="parent" />

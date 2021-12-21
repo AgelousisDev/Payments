@@ -1019,11 +1019,26 @@ class DBManager(context: Context) {
         }
     }
 
-    suspend fun deletePayment(personIds: List<Int>, deletionSuccessBlock: DeletionSuccessBlock) {
+    suspend fun deleteClients(personIds: List<Int>, deletionSuccessBlock: DeletionSuccessBlock) {
         withContext(Dispatchers.Default) {
             personIds.forEach { personId ->
                 database?.delete(
                     SQLiteHelper.PERSONS_TABLE_NAME,
+                    "${SQLiteHelper.ID}=?",
+                    arrayOf(personId.toString())
+                )
+            }
+            withContext(Dispatchers.Main) {
+                deletionSuccessBlock()
+            }
+        }
+    }
+
+    suspend fun deletePayments(paymentIds: List<Int>, deletionSuccessBlock: DeletionSuccessBlock) {
+        withContext(Dispatchers.Default) {
+            paymentIds.forEach { personId ->
+                database?.delete(
+                    SQLiteHelper.PAYMENTS_TABLE_NAME,
                     "${SQLiteHelper.ID}=?",
                     arrayOf(personId.toString())
                 )

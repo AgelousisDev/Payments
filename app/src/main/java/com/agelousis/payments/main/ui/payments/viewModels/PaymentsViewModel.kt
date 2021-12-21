@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.agelousis.payments.database.DBManager
-import com.agelousis.payments.database.InsertionSuccessBlock
 import com.agelousis.payments.firebase.models.FirebaseMessageModel
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.ui.files.models.FileDataModel
@@ -15,7 +14,6 @@ import com.agelousis.payments.network.repositories.FirebaseMessageRepository
 import com.agelousis.payments.network.responses.ErrorModel
 import com.agelousis.payments.network.responses.FirebaseResponseModel
 import com.agelousis.payments.utils.extensions.pdfFormattedCurrentDate
-import com.agelousis.payments.utils.extensions.whenNull
 import java.io.File
 import java.util.*
 
@@ -52,27 +50,35 @@ class PaymentsViewModel: ViewModel() {
 
     suspend fun deleteItem(context: Context, item: Any?) {
         val dbManager = DBManager(context = context)
-        (item as? GroupModel)?.let {
-            dbManager.deleteGroup(
-                groupId = it.groupId
-            ) {
-                deletionLiveData.value = true
-            }
-        }
-        (item as? ClientModel)?.let {
-            dbManager.deletePayment(
-                personIds = listOf(
-                    it.personId ?: return@let
-                )
-            ) {
-                deletionLiveData.value = true
-            }
+        when(item) {
+            is GroupModel ->
+                dbManager.deleteGroup(
+                    groupId = item.groupId
+                ) {
+                    deletionLiveData.value = true
+                }
+            is ClientModel ->
+                dbManager.deleteClients(
+                    personIds = listOf(
+                        item.personId ?: return
+                    )
+                ) {
+                    deletionLiveData.value = true
+                }
+            is PaymentAmountModel ->
+                dbManager.deletePayments(
+                    paymentIds = listOf(
+                        item.paymentId ?: return
+                    )
+                ) {
+                    deletionLiveData.value = true
+                }
         }
     }
 
     suspend fun deletePayments(context: Context, personIds: List<Int>) {
         val dbManager = DBManager(context = context)
-        dbManager.deletePayment(
+        dbManager.deleteClients(
             personIds = personIds
         ) {
             deletionLiveData.value = true
@@ -99,27 +105,6 @@ class PaymentsViewModel: ViewModel() {
             userId = userModel?.id,
             balance = balance
         )
-    }
-
-    suspend fun insertPayment(
-        context: Context,
-        paymentAmountModel: PaymentAmountModel,
-        insertionSuccessBlock: InsertionSuccessBlock
-    ) {
-        val dbManager = DBManager(
-            context = context
-        )
-        paymentAmountModel.paymentId.whenNull {
-            dbManager.insertPayment(
-                paymentAmountModel = paymentAmountModel,
-                insertionSuccessBlock = insertionSuccessBlock
-            )
-        }?.let {
-            dbManager.updatePayment(
-                paymentAmountModel = paymentAmountModel,
-                insertionSuccessBlock = insertionSuccessBlock
-            )
-        }
     }
 
     fun sendClientDataRequestNotification(firebaseMessageModel: FirebaseMessageModel) {
