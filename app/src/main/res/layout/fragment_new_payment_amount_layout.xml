@@ -36,6 +36,42 @@
                 android:animateLayoutChanges="true"
                 android:orientation="vertical">
 
+                <LinearLayout
+                    android:id="@+id/singlePaymentProductsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="@{singlePaymentState == true || independentPaymentState == true ? View.VISIBLE : View.GONE}">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_general_horizontal_margin"
+                        android:hint="@string/key_products_label"
+                        app:endIconMode="clear_text"
+                        app:hintEnabled="true">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/singlePaymentProductsField"
+                            style="@style/TextViewTitleLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionDone"
+                            android:inputType="text"
+                            android:singleLine="true" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/singlePaymentProductsChipGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+                        android:layout_marginEnd="@dimen/activity_general_horizontal_margin" />
+
+                </LinearLayout>
+
                 <com.agelousis.payments.views.currencyEditText.CurrencyFieldLayout
                     android:id="@+id/amountLayout"
                     currencyAmount="@{paymentAmountModel.paymentAmount != null ? paymentAmountModel.paymentAmount : defaultPaymentAmount}"
@@ -86,7 +122,7 @@
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackgroundBorderless"
                     app:appSwitchLabel="@string/key_skip_payment_label"
-                    app:appSwitchShowLine="true" />
+                    app:appSwitchShowLine="false" />
 
                 <com.agelousis.payments.views.detailsSwitch.DetailsAppSwitch
                     android:id="@+id/singlePaymentAppSwitchLayout"
@@ -99,43 +135,6 @@
                     android:visibility="@{independentPaymentState ? View.GONE : View.VISIBLE}"
                     app:appSwitchLabel="@string/key_single_payment_label"
                     app:appSwitchShowLine="true" />
-
-                <LinearLayout
-                    android:id="@+id/singlePaymentProductsLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="@{singlePaymentState == true || independentPaymentState == true ? View.VISIBLE : View.GONE}">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/activity_general_horizontal_margin"
-                        android:hint="@string/key_products_label"
-                        app:endIconMode="clear_text"
-                        app:hintEnabled="true">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/singlePaymentProductsField"
-                            style="@style/TextViewTitleLabel"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:imeOptions="actionDone"
-                            android:inputType="text"
-                            android:singleLine="true"
-                            android:text="@{paymentAmountModel.paymentNote}" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/singlePaymentProductsChipGroup"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/activity_general_horizontal_margin"
-                        android:layout_marginEnd="@dimen/activity_general_horizontal_margin" />
-
-                </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/notesTextInputLayout"

@@ -369,9 +369,6 @@ fun PaymentsFragment.configurePayments(list: List<Any>, query: String? = null) {
         filteredList.forEachIndexed { index, item ->
             if (item is GroupModel
                 && paymentAmountModel.groupId == item.groupId
-                && query?.lowercase() ?: "" in paymentAmountModel.singlePaymentProducts?.joinToString(
-                    separator = ""
-                )?.lowercase() ?: ""
             )
                 paymentAmountIndexed[index + 1] = paymentAmountModel
         }
