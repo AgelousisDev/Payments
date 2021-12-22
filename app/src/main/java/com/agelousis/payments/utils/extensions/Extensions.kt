@@ -88,7 +88,7 @@ typealias CompletionSuccessBlock = (Boolean) -> Unit
 typealias CircularAnimationCompletionBlock = () -> Unit
 typealias BitmapBlock = (Bitmap?) -> Unit
 
-fun <T> T?.whenNull(receiver: () -> Unit): T? {
+inline fun <T> T?.whenNull(receiver: () -> Unit): T? {
     return if (this == null) {
         receiver.invoke()
         null

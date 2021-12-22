@@ -10,7 +10,7 @@
             type="com.agelousis.payments.main.ui.payments.models.ClientModel" />
         <variable
             name="presenter"
-            type="com.agelousis.payments.main.ui.payments.presenters.PaymentPresenter" />
+            type="com.agelousis.payments.main.ui.payments.presenters.ClientPresenter" />
         <variable
             name="adapterPosition"
             type="Integer" />
@@ -22,7 +22,7 @@
         android:clickable="true"
         viewBackground="@{clientModel.backgroundDrawable}"
         alphaOrBlurEffectViewGroup="@{clientModel.active == false}"
-        android:onClick="@{() -> presenter.onPaymentSelected(clientModel, adapterPosition)}"
+        android:onClick="@{() -> presenter.onClientSelected(clientModel, adapterPosition)}"
         android:animateLayoutChanges="true">
 
         <androidx.appcompat.widget.AppCompatImageView

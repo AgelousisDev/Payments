@@ -77,6 +77,8 @@ data class ClientModel(val personId: Int? = null,
 
 @Parcelize
 data class PaymentAmountModel(val paymentId: Int? = null,
+                              val userId: Int? = null,
+                              val groupId: Int? = null,
                               val paymentAmount: Double?,
                               val paymentMonth: String?,
                               val paymentDate: String?,
@@ -86,6 +88,9 @@ data class PaymentAmountModel(val paymentId: Int? = null,
                               var singlePayment: Boolean?,
                               val singlePaymentProducts: List<String>?
 ): Parcelable {
+
+    @IgnoredOnParcel
+    var isSelected = false
 
     fun getAmountWithoutVat(context: Context, vat: Int?) =
         paymentAmount.getAmountWithoutVat(
@@ -131,5 +136,8 @@ data class PaymentAmountModel(val paymentId: Int? = null,
                 1
             )
         }
+
+    val singlePaymentProductsSeparated
+        get() = singlePaymentProducts?.joinToString(separator = ",")
 
 }

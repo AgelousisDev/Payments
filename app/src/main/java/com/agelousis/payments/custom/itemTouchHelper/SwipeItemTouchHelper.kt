@@ -12,7 +12,7 @@ import com.agelousis.payments.main.ui.files.viewHolders.FileViewHolder
 import com.agelousis.payments.main.ui.newPayment.viewHolders.PaymentAmountViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.BalanceOverviewViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.GroupViewHolder
-import com.agelousis.payments.main.ui.payments.viewHolders.PaymentViewHolder
+import com.agelousis.payments.main.ui.payments.viewHolders.ClientViewHolder
 import com.agelousis.payments.utils.extensions.secondOrNull
 
 typealias SwipeActionBlock = (swipeAction: SwipeAction, swipeItemType: SwipeItemType?, position: Int) -> Unit
@@ -33,7 +33,7 @@ class SwipeItemTouchHelper(
             if (direction == ItemTouchHelper.END) SwipeAction.LEFT else SwipeAction.RIGHT,
             when(viewHolder) {
                 is GroupViewHolder,
-                is PaymentViewHolder ->
+                is ClientViewHolder ->
                     SwipeItemType.CLIENT_ITEM
                 is BalanceOverviewViewHolder ->
                     SwipeItemType.BALANCE_OVERVIEW_ITEM
@@ -52,7 +52,7 @@ class SwipeItemTouchHelper(
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
         val swipeItemType = when(viewHolder) {
             is GroupViewHolder,
-            is PaymentViewHolder ->
+            is ClientViewHolder ->
                 SwipeItemType.CLIENT_ITEM
             is BalanceOverviewViewHolder ->
                 SwipeItemType.BALANCE_OVERVIEW_ITEM

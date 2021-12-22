@@ -9,6 +9,7 @@ import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.ui.files.models.FileDataModel
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.ClientModel
+import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.network.repositories.FirebaseMessageRepository
 import com.agelousis.payments.network.responses.ErrorModel
 import com.agelousis.payments.network.responses.FirebaseResponseModel
@@ -49,27 +50,35 @@ class PaymentsViewModel: ViewModel() {
 
     suspend fun deleteItem(context: Context, item: Any?) {
         val dbManager = DBManager(context = context)
-        (item as? GroupModel)?.let {
-            dbManager.deleteGroup(
-                groupId = it.groupId
-            ) {
-                deletionLiveData.value = true
-            }
-        }
-        (item as? ClientModel)?.let {
-            dbManager.deletePayment(
-                personIds = listOf(
-                    it.personId ?: return@let
-                )
-            ) {
-                deletionLiveData.value = true
-            }
+        when(item) {
+            is GroupModel ->
+                dbManager.deleteGroup(
+                    groupId = item.groupId
+                ) {
+                    deletionLiveData.value = true
+                }
+            is ClientModel ->
+                dbManager.deleteClients(
+                    personIds = listOf(
+                        item.personId ?: return
+                    )
+                ) {
+                    deletionLiveData.value = true
+                }
+            is PaymentAmountModel ->
+                dbManager.deletePayments(
+                    paymentIds = listOf(
+                        item.paymentId ?: return
+                    )
+                ) {
+                    deletionLiveData.value = true
+                }
         }
     }
 
     suspend fun deletePayments(context: Context, personIds: List<Int>) {
         val dbManager = DBManager(context = context)
-        dbManager.deletePayment(
+        dbManager.deleteClients(
             personIds = personIds
         ) {
             deletionLiveData.value = true

@@ -1,8 +1,8 @@
 package com.agelousis.payments.main.ui.payments.presenters
 
-import com.agelousis.payments.main.ui.payments.models.ClientModel
+import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 
 interface PaymentPresenter {
-    fun onPaymentSelected(clientModel: ClientModel, adapterPosition: Int)
+    fun onPaymentSelected(paymentAmountModel: PaymentAmountModel, adapterPosition: Int)
     fun onPaymentLongPressed(paymentIndex: Int, isSelected: Boolean)
 }

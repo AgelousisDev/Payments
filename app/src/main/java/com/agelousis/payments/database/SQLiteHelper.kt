@@ -75,7 +75,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         const val DB_NAME_EXTENSION = ".db"
 
         // database version
-        private const val DB_VERSION = 4
+        private const val DB_VERSION = 5
 
         // Creating users table query
         private const val USERS_TABLE_CREATION_QUERY = "CREATE TABLE $USERS_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -94,7 +94,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
 
         //Creating payments table query
         private const val PAYMENTS_TABLE_CREATION_QUERY = "CREATE TABLE $PAYMENTS_TABLE_NAME($ID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "$PERSON_ID INTEGER, $PAYMENT_AMOUNT DOUBLE, $PAYMENT_MONTH TEXT, $PAYMENT_DATE TEXT, $SKIP_PAYMENT BOOLEAN," +
+                "$USER_ID INTEGER, $GROUP_ID INTEGER, $PERSON_ID INTEGER, $PAYMENT_AMOUNT DOUBLE, $PAYMENT_MONTH TEXT, $PAYMENT_DATE TEXT, $SKIP_PAYMENT BOOLEAN," +
                 "$PAYMENT_NOTE TEXT, $PAYMENT_DATE_NOTIFICATION BOOLEAN, $SINGLE_PAYMENT BOOLEAN, $SINGLE_PAYMENT_PRODUCTS TEXT);"
 
         //Creating files table query
@@ -119,10 +119,14 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         when {
-            newVersion > oldVersion ->
+            newVersion > oldVersion -> {
                 db?.execSQL(
-                    "ALTER TABLE $USERS_TABLE_NAME ADD COLUMN $BALANCE DOUBLE"
+                    "ALTER TABLE $PAYMENTS_TABLE_NAME ADD COLUMN $USER_ID INTEGER"
                 )
+                db?.execSQL(
+                    "ALTER TABLE $PAYMENTS_TABLE_NAME ADD COLUMN $GROUP_ID INTEGER"
+                )
+            }
         }
     }
 

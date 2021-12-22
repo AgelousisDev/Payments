@@ -1,9 +1,9 @@
-package com.agelousis.payments.main.ui.shareMessageFragment.enumerations
+package com.agelousis.payments.main.ui.newPayment.enumerations
 
 import com.agelousis.payments.R
 import com.agelousis.payments.utils.constants.Constants
 
-enum class ShareMessageType {
+enum class ContactType {
     CALL, SMS, WHATS_APP, VIBER, EMAIL;
 
     val icon

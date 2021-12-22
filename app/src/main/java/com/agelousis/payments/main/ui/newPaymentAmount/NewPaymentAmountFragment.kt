@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.agelousis.payments.R
@@ -14,6 +15,7 @@ import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.databinding.DismissibleChipBinding
 import com.agelousis.payments.databinding.FragmentNewPaymentAmountLayoutBinding
 import com.agelousis.payments.main.MainActivity
+import com.agelousis.payments.main.ui.newPayment.viewModels.NewPaymentViewModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
@@ -21,6 +23,9 @@ import com.agelousis.payments.utils.helpers.CurrencyHelper
 import com.agelousis.payments.views.currencyEditText.interfaces.AmountListener
 import com.agelousis.payments.views.detailsSwitch.interfaces.AppSwitchListener
 import com.google.android.material.chip.Chip
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 class NewPaymentAmountFragment: Fragment(), AmountListener {
@@ -41,10 +46,14 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
 
     private lateinit var binding: FragmentNewPaymentAmountLayoutBinding
     private val args: NewPaymentAmountFragmentArgs by navArgs()
+    private val viewModel by viewModels<NewPaymentViewModel>()
+    private val uiScope = CoroutineScope(Dispatchers.Main)
     val fieldsHaveChanged
         get() = args.paymentAmountDataModel?.let {
             val currentPaymentAmountModel = PaymentAmountModel(
-                paymentId = binding.paymentAmountModel?.paymentId,
+                paymentId = args.paymentAmountDataModel?.paymentId,
+                userId = args.paymentAmountDataModel?.userId,
+                groupId = args.paymentAmountDataModel?.groupId,
                 paymentAmount = binding.amountLayout.doubleValue,
                 paymentMonth = binding.paymentMonthDetailsLayout.dateValue,
                 paymentDate = binding.dateDetailsLayout.dateValue,
@@ -67,6 +76,7 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
         ).also {
             it.paymentAmountModel = args.paymentAmountDataModel
             it.defaultPaymentAmount = (activity as? MainActivity)?.userModel?.defaultPaymentAmount
+            it.independentPaymentState = args.independentPaymentState
         }
         return binding.root
     }
@@ -161,6 +171,10 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
         )
     }
 
+    private fun dismiss() {
+        findNavController().popBackStack()
+    }
+
     fun checkInputFields() {
         if (binding.singlePaymentProductsField.text?.isNotEmpty() == true)
             addSinglePaymentProductChip(
@@ -170,9 +184,11 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
             binding.amountLayout.doubleValue,
             binding.dateDetailsLayout.dateValue
         ) {
-            findNavController().previousBackStackEntry?.savedStateHandle?.set(
-                PAYMENT_AMOUNT_DATA_EXTRA,
+            with(
                 PaymentAmountModel(
+                    paymentId = args.paymentAmountDataModel?.paymentId,
+                    userId = if (args.independentPaymentState) (activity as? MainActivity)?.userModel?.id else null,
+                    groupId = args.paymentAmountDataModel?.groupId ?: args.groupModelData?.groupId,
                     paymentAmount = it.first().toString().toDouble(),
                     paymentMonth = binding.paymentMonthDetailsLayout.dateValue,
                     paymentDate = it.second().toString(),
@@ -182,8 +198,24 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
                     singlePayment = binding.singlePaymentAppSwitchLayout.isChecked,
                     singlePaymentProducts = singlePaymentProductList
                 )
-            )
-            findNavController().popBackStack()
+            ) {
+                if (args.independentPaymentState)
+                    uiScope.launch {
+                        viewModel.insertPayment(
+                            context = context ?: return@launch,
+                            paymentAmountModel = this@with,
+                            insertionSuccessBlock = this@NewPaymentAmountFragment::dismiss
+                        )
+                    }
+                else {
+                    findNavController().previousBackStackEntry?.savedStateHandle?.set(
+                        PAYMENT_AMOUNT_DATA_EXTRA,
+                        this
+                    )
+                    dismiss()
+                }
+
+            }
         } ?: run {
             binding.amountLayout.errorState = binding.amountLayout.doubleValue == null
             binding.dateDetailsLayout.errorState = binding.dateDetailsLayout.dateValue == null
