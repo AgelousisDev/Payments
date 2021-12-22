@@ -52,7 +52,6 @@
                 android:layout_margin="@dimen/activity_general_horizontal_margin"
                 android:background="@{groupModel.groupImage == null &amp;&amp; clientModel.groupImage == null ? @drawable/oval_background : null}"
                 android:elevation="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -81,15 +80,24 @@
                 android:id="@+id/addPaymentButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/activity_general_horizontal_margin"
+                android:layout_margin="@dimen/activity_general_horizontal_margin"
                 android:fontFamily="@font/ubuntu"
                 android:onClick="@{() -> presenter.onPaymentAmount((PaymentAmountModel) null)}"
                 android:text="@string/key_add_payment_label"
                 android:textAllCaps="false"
                 app:icon="@drawable/ic_add"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/contactComposeView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_general_horizontal_margin"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/paymentRowHeaderFrameLayout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

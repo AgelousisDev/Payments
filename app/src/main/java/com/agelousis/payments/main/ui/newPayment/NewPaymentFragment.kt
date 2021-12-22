@@ -27,7 +27,6 @@ import com.agelousis.payments.main.ui.payments.enumerations.PaymentType
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.models.ClientModel
-import com.agelousis.payments.main.ui.shareMessageFragment.ShareMessageBottomSheetFragment
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.CountryHelper
 import com.agelousis.payments.utils.models.ContactDataModel
@@ -108,13 +107,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
         configureRecyclerViewMargins()
     }
 
-    override fun onClientShareMessage() {
-        ShareMessageBottomSheetFragment.show(
-            supportFragmentManager = activity?.supportFragmentManager ?: return,
-            clientModel = args.clientDataModel ?: return
-        )
-    }
-
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by viewModels<NewPaymentViewModel>()
     val args: NewPaymentFragmentArgs by navArgs()
@@ -153,8 +145,6 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
         currentClientModel?.let {
             binding.clientModel = it
         }
-        (activity as? MainActivity)?.shareMessageMenuItemIsVisible = !args.clientDataModel?.email.isNullOrEmpty()
-                || !args.clientDataModel?.phone.isNullOrEmpty()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -181,6 +171,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
         initializeNewPayments()
         configureObservers()
         initializeCountryDataModel()
+        setupContactUI()
     }
 
     private fun setupUI() {

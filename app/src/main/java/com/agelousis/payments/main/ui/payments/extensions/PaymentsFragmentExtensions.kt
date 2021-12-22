@@ -364,20 +364,16 @@ fun PaymentsFragment.configurePayments(list: List<Any>, query: String? = null) {
             it.groupName?.lowercase()?.contains(query?.lowercase() ?: "") == true
         }
     )
-    val paymentAmountIndexed = mutableMapOf<Int, PaymentAmountModel>()
     list.filterIsInstance<PaymentAmountModel>().forEach { paymentAmountModel ->
-        filteredList.forEachIndexed { index, item ->
+        filteredList.toList().forEachIndexed { index, item ->
             if (item is GroupModel
                 && paymentAmountModel.groupId == item.groupId
             )
-                paymentAmountIndexed[index + 1] = paymentAmountModel
+                filteredList.add(
+                    index + 1,
+                    paymentAmountModel
+                )
         }
-    }
-    paymentAmountIndexed.forEach { (index, paymentAmountModel) ->
-        filteredList.add(
-            index,
-            paymentAmountModel
-        )
     }
 
     if (filteredList.isEmpty())

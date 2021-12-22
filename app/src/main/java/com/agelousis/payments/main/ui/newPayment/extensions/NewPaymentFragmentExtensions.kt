@@ -1,6 +1,7 @@
 package com.agelousis.payments.main.ui.newPayment.extensions
 
 import android.widget.LinearLayout
+import androidx.compose.material.MaterialTheme
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updateMargins
@@ -15,6 +16,10 @@ import com.agelousis.payments.main.ui.newPayment.NewPaymentFragment
 import com.agelousis.payments.main.ui.newPayment.adapters.PaymentAmountAdapter
 import com.agelousis.payments.main.ui.newPayment.viewHolders.PaymentAmountViewHolder
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
+import com.agelousis.payments.main.ui.newPayment.enumerations.ContactType
+import com.agelousis.payments.main.ui.newPayment.ui.ContactOptionsLayout
+import com.agelousis.payments.ui.Typography
+import com.agelousis.payments.ui.appColors
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.custom.FabExtendingOnScrollListener
 import com.agelousis.payments.utils.extensions.*
@@ -171,4 +176,87 @@ infix fun NewPaymentFragment.createCalendarEventWith(paymentAmountModel: Payment
         ),
         email = binding.emailLayout.value ?: return
     )
+}
+
+private val NewPaymentFragment.contactTypeList: List<ContactType>
+    get() {
+        val array = arrayListOf<ContactType>()
+        array.add(
+            ContactType.CALL.also {
+                it.isEnabled = args.clientDataModel?.phone.isNullOrEmpty() == false
+            }
+        )
+        array.add(
+            ContactType.SMS.also {
+                it.isEnabled = args.clientDataModel?.phone.isNullOrEmpty() == false
+            }
+        )
+        array.add(
+            ContactType.WHATS_APP.also {
+                it.isEnabled =
+                    args.clientDataModel?.phone.isNullOrEmpty() == false && context?.packageManager?.isPackageInstalled(
+                        packageName = it.packageName ?: return@also
+                    ) == true
+            }
+        )
+        array.add(
+            ContactType.VIBER.also {
+                it.isEnabled =
+                    args.clientDataModel?.phone.isNullOrEmpty() == false && context?.packageManager?.isPackageInstalled(
+                        packageName = it.packageName ?: return@also
+                    ) == true
+            }
+        )
+        array.add(
+            ContactType.EMAIL.also {
+                it.isEnabled = args.clientDataModel?.email.isNullOrEmpty() == false
+            }
+        )
+        return array
+    }
+
+fun NewPaymentFragment.setupContactUI() {
+    if (!args.clientDataModel?.email.isNullOrEmpty()
+            || !args.clientDataModel?.phone.isNullOrEmpty())
+        binding.contactComposeView?.setContent {
+            MaterialTheme(
+                typography = Typography,
+                colors = appColors()
+            ) {
+                ContactOptionsLayout(
+                    contactTypeList = contactTypeList,
+                    contactTypeSelectionBlock = this::configureShareMethod
+                )
+            }
+        }
+}
+
+private fun NewPaymentFragment.configureShareMethod(contactType: ContactType) {
+    when (contactType) {
+        ContactType.CALL ->
+            context?.call(
+                phone = args.clientDataModel?.phone ?: return
+            )
+        ContactType.SMS ->
+            context?.sendSMSMessage(
+                mobileNumbers = listOf(
+                    args.clientDataModel?.phone?.toRawMobileNumber ?: return
+                ),
+                message = args.clientDataModel?.messageTemplate ?: ""
+            )
+        ContactType.WHATS_APP, ContactType.VIBER ->
+            context?.shareMessage(
+                schemeUrl = String.format(
+                    contactType.schemeUrl ?: return,
+                    args.clientDataModel?.phone?.toRawMobileNumber,
+                    args.clientDataModel?.messageTemplate ?: ""
+                )
+            )
+        ContactType.EMAIL ->
+            context?.textEmail(
+                args.clientDataModel?.email ?: return,
+                content = args.clientDataModel?.messageTemplate ?: ""
+            )
+
+    }
 }
