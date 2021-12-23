@@ -2,6 +2,17 @@ package com.agelousis.payments.main.ui.periodFilter
 
 import android.app.Activity
 import android.net.Uri
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -14,6 +25,10 @@ import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
 import com.agelousis.payments.main.ui.periodFilter.presenter.PeriodFilterFragmentPresenter
+import com.agelousis.payments.main.ui.periodFilter.ui.PeriodFilterLayout
+import com.agelousis.payments.ui.Typography
+import com.agelousis.payments.ui.appColors
+import com.agelousis.payments.userSelection.ui.UserSelectionLayout
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.PDFHelper
@@ -25,35 +40,64 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 
-class PeriodFilterFragment: BaseBindingFragment<PeriodFilterFragmentLayoutBinding>(
-    inflate = PeriodFilterFragmentLayoutBinding::inflate
-), PeriodFilterFragmentPresenter {
+class PeriodFilterFragment: Fragment(), PeriodFilterFragmentPresenter {
 
     companion object {
         private const val LOADING_TIME = 5000L
     }
 
     override fun onPdfInvoice() {
-        val minimumMonthDate = binding?.periodFilterMinimumPaymentMonthLayout?.dateValue?.toDateWith(pattern = Constants.MONTH_DATE_FORMAT, locale = Locale.US) ?: return
+        /*val minimumMonthDate = binding?.periodFilterMinimumPaymentMonthLayout?.dateValue?.toDateWith(pattern = Constants.MONTH_DATE_FORMAT, locale = Locale.US) ?: return
         val maximumMonthDate = binding?.periodFilterMaximumPaymentMonthLayout?.dateValue?.toDateWith(pattern = Constants.MONTH_DATE_FORMAT, locale = Locale.US) ?: return
         initializePDFCreation(
             payments = args.paymentListData.filter { it.paymentMonthDate ?: Date() in minimumMonthDate..maximumMonthDate }.sortedBy { it.paymentMonthDate }
-        )
+        )*/
     }
 
-    override fun onBindData(binding: PeriodFilterFragmentLayoutBinding?) {
+    /*override fun onBindData(binding: PeriodFilterFragmentLayoutBinding?) {
         super.onBindData(binding)
         binding?.periodFilterDataModel = args.periodFilterData
         binding?.isLoading = false
         binding?.presenter = this
-    }
+    }*/
 
     private val args: PeriodFilterFragmentArgs by navArgs()
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by viewModels<PaymentsViewModel>()
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return ComposeView(
+            context = context ?: return null
+        ).apply {
+            setContent {
+                MaterialTheme(
+                    typography = Typography,
+                    colors = appColors()
+                ) {
+                    PeriodFilterLayout(
+                        periodFilterDataModel = args.periodFilterData,
+                        periodFilterFragmentPresenter = this@PeriodFilterFragment
+                    )
+                }
+            }
+        }
+    }
+
+    @ExperimentalMaterialApi
+    @ExperimentalFoundationApi
+    @Preview
+    @Composable
+    fun ProfilePictureFragmentComposablePreview() {
+        PeriodFilterLayout(
+            childFragmentManager = childFragmentManager,
+            periodFilterDataModel = args.periodFilterData,
+            periodFilterFragmentPresenter = this@PeriodFilterFragment,
+            yearMonthPickerListener = this
+        )
+    }
+
     fun initializeExportToExcelOperation() {
-        (activity as? MainActivity)?.floatingButtonState = false
+        /*(activity as? MainActivity)?.floatingButtonState = false
         binding?.isLoading = true
         after(
             millis = LOADING_TIME
@@ -72,10 +116,10 @@ class PeriodFilterFragment: BaseBindingFragment<PeriodFilterFragmentLayoutBindin
                 else
                     findNavController().popBackStack()
             }
-        }
+        }*/
     }
 
-    private fun triggerCsvCreation(uri: Uri) {
+    /*private fun triggerCsvCreation(uri: Uri) {
         val minimumMonthDate = binding?.periodFilterMinimumPaymentMonthLayout?.dateValue?.toDateWith(pattern = Constants.MONTH_DATE_FORMAT, locale = Locale.US) ?: return
         val maximumMonthDate = binding?.periodFilterMaximumPaymentMonthLayout?.dateValue?.toDateWith(pattern = Constants.MONTH_DATE_FORMAT, locale = Locale.US) ?: return
         val filteredPayments = args.paymentListData.filter { it.paymentMonthDate ?: Date() in minimumMonthDate..maximumMonthDate }
@@ -146,6 +190,6 @@ class PeriodFilterFragment: BaseBindingFragment<PeriodFilterFragmentLayoutBindin
                 }
             )
         )
-    }
+    }*/
 
 }

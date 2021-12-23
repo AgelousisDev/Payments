@@ -88,21 +88,4 @@ class ColorSelectorBottomSheetFragment: BasicBottomSheetDialogFragment(), ColorS
         )
     }
 
-    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        configureRecyclerView()
-    }
-
-    private fun configureRecyclerView() {
-        (binding.colorPickerRecyclerView.layoutManager as? FlexboxLayoutManager)?.also {
-            it.flexDirection = FlexDirection.ROW
-            it.justifyContent = JustifyContent.CENTER
-            it.alignItems = AlignItems.CENTER
-        }
-        binding.colorPickerRecyclerView.adapter = ColorSelectorAdapter(
-            colorDataModelList = colorDataModelList,
-            colorSelectorPresenter = this
-        )
-    }*/
-
 }

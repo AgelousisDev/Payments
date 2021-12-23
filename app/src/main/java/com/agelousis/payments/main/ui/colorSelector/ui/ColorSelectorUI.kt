@@ -53,9 +53,8 @@ fun ColorSelectorLayout(
                 all = 16.dp
             ),
             cells = GridCells.Adaptive(
-                minSize = 50.dp
-            ),
-            modifier = Modifier.wrapContentSize()
+                minSize = 100.dp
+            )
         ) {
             items(colorDataModelList.size) { index ->
                 ColorData(
@@ -77,17 +76,17 @@ fun ColorData(
         interactionSource = remember { MutableInteractionSource() },
         indication = rememberRipple(bounded = false),
         modifier = Modifier
-            .size(
-                width = 50.dp,
-                height = 50.dp
-            ).padding(
+            .height(
+                height = 70.dp
+            )
+            .padding(
                 all = 10.dp
             ),
-        shape = RoundedCornerShape(25.dp),
+        shape = RoundedCornerShape(16.dp),
         backgroundColor = Color(
             color = colorDataModel.color
         ),
-        elevation = 8.dp,
+        elevation = 10.dp,
         onClick = {
             colorSelectorPresenter.onColorSelected(
                 color = colorDataModel.color

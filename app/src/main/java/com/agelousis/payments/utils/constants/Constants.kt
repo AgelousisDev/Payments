@@ -64,7 +64,8 @@ object Constants {
             Color.parseColor("#87F5B5"),
             Color.parseColor("#BCF593"),
             Color.parseColor("#E2F587"),
-            Color.parseColor("#D9BCAD")
+            Color.parseColor("#D9BCAD"),
+            Color.parseColor("#46526D")
         )
     }
 

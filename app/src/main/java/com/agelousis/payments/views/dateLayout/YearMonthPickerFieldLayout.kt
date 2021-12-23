@@ -16,10 +16,10 @@ import com.agelousis.payments.views.dateLayout.models.YearMonthPickerDataModel
 import com.agelousis.payments.views.personDetailsLayout.models.PersonDetailsViewDataModel
 import java.util.*
 
-class YearMonthPickerFieldLayout(context: Context, attributeSet: AttributeSet?): FrameLayout(context, attributeSet),
+class YearMonthPickerFieldLayout(context: Context, attributeSet: AttributeSet? = null): FrameLayout(context, attributeSet),
     DatePickerPresenter, YearMonthPickerListener {
 
-    private lateinit var binding: DateFieldLayoutBinding
+    val binding = DateFieldLayoutBinding.inflate(LayoutInflater.from(context), this, false)
     var dateValue: String? = null
         set(value) {
             field = value
@@ -67,7 +67,6 @@ class YearMonthPickerFieldLayout(context: Context, attributeSet: AttributeSet?):
     private fun initAttributesAndView(attributeSet: AttributeSet?) {
         attributeSet?.let {
             val attributes = context.obtainStyledAttributes(it, R.styleable.PersonDetailsLayout, 0, 0)
-            binding = DateFieldLayoutBinding.inflate(LayoutInflater.from(context), null, false)
             binding.dataModel = PersonDetailsViewDataModel(
                 label = attributes.getString(R.styleable.PersonDetailsLayout_label),
                 value = attributes.getString(R.styleable.PersonDetailsLayout_value),
@@ -76,8 +75,8 @@ class YearMonthPickerFieldLayout(context: Context, attributeSet: AttributeSet?):
             )
             binding.presenter = this
             attributes.recycle()
-            addView(binding.root)
         }
+        addView(binding.root)
     }
 
 }
