@@ -51,7 +51,7 @@ data class ClientModel(val personId: Int? = null,
 
     @IgnoredOnParcel var backgroundDrawable = R.drawable.payment_row_background
 
-    infix fun getPaymentsFilteringOptionType(paymentsFilteringOptionTypes: List<PaymentsFilteringOptionType>?) =
+    infix fun getClientsFilteringOptionType(paymentsFilteringOptionTypes: List<PaymentsFilteringOptionType>?) =
         when {
             active == false -> PaymentsFilteringOptionType.INACTIVE.also { paymentsFilteringOptionType ->
                 paymentsFilteringOptionType.position = paymentsFilteringOptionTypes?.firstOrNull { it == PaymentsFilteringOptionType.INACTIVE }?.position ?: return@also

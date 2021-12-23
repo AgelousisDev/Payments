@@ -1,14 +1,14 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="140dp"
-    android:height="200dp"
+    android:width="130dp"
+    android:height="187dp"
     android:viewportWidth="210"
     android:viewportHeight="297">
   <path
-      android:pathData="M152.117,113.685 L76.48,102.204C44.271,113.685 38.725,118.794 38.725,125.165L38.662,194.048c0,6.372 5.61,11.481 12.606,11.481L152.117,205.529c6.996,0 12.606,-5.109 12.606,-11.481L164.724,125.165c0,-6.372 -5.61,-11.481 -12.606,-11.481zM152.117,194.048L51.268,194.048L51.268,159.607L152.117,159.607ZM152.117,136.646L51.268,136.646L51.268,125.165L152.117,125.165Z"
-      android:strokeWidth="6.015083"
+      android:pathData="M187.079,105.834 L65.693,85.382C14.003,105.834 5.101,114.935 5.101,126.286l-0.101,122.714c0,11.351 9.003,20.452 20.231,20.452L187.079,269.453c11.228,0 20.231,-9.101 20.231,-20.452L207.31,126.286c0,-11.351 -9.003,-20.452 -20.231,-20.452zM187.079,249L25.231,249L25.231,187.643L187.079,187.643ZM187.079,146.739L25.231,146.739L25.231,126.286L187.079,126.286Z"
+      android:strokeWidth="10.170722"
       android:fillColor="@color/dayNightTextOnBackground"/>
   <path
-      android:pathData="m196.493,88.529l-15.929,0l0,15.774l-5.31,0l0,-15.774l-15.929,0L159.325,83.271l15.929,0l0,-15.774l5.31,0L180.564,83.271l15.929,0z"
-      android:strokeWidth="2.6418703"
-      android:fillColor="@color/dayNightTextOnBackground"/>
+      android:pathData="m209.257,40.172l-29.343,0l0,29.057L170.132,69.229L170.132,40.172l-29.343,0l0,-9.686l29.343,0l0,-29.057l9.781,0l0,29.057l29.343,0z"
+      android:strokeWidth="4.8666396"
+      android:fillColor="@color/colorAccent"/>
 </vector>

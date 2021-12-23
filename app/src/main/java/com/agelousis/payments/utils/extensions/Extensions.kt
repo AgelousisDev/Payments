@@ -342,7 +342,7 @@ fun View.circularReveal(circularAnimationCompletionBlock: CircularAnimationCompl
                 val finalRadius: Float = max(width.toFloat(), height.toFloat())
                 // create the animator for this view (the start radius is zero)
                 val circularReveal = ViewAnimationUtils.createCircularReveal(this@circularReveal, width / 2, height - (height / 6), 0f, finalRadius)
-                circularReveal.duration = 500
+                circularReveal.duration = 250
                 // make the view visible and start the animation
                 visibility = View.VISIBLE
                 circularReveal.addListener(
@@ -359,7 +359,7 @@ fun View.circularReveal(circularAnimationCompletionBlock: CircularAnimationCompl
 fun View.circularUnReveal(centerX: Int? = null, centerY: Int? = null, circularAnimationCompletionBlock: CircularAnimationCompletionBlock) {
     val finalRadius = max(width.toFloat(), height.toFloat()) * 1.1f
     val circularReveal = ViewAnimationUtils.createCircularReveal(this@circularUnReveal, centerX ?: width - 72, centerY ?: 72, finalRadius, 0.0f)
-    circularReveal.duration = 500
+    circularReveal.duration = 250
     circularReveal.addListener(
         onEnd = {
             visibility = View.INVISIBLE

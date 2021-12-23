@@ -88,7 +88,7 @@
         <entry key="app/src/main/res/layout/fragment_new_payment_layout.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_payments_layout.xml" value="0.20833333333333334" />
         <entry key="app/src/main/res/layout/fragment_personal_information_layout.xml" value="0.15577507598784193" />
-        <entry key="app/src/main/res/layout/group_row_layout.xml" value="0.67" />
+        <entry key="app/src/main/res/layout/group_row_layout.xml" value="0.45643153526970953" />
         <entry key="app/src/main/res/layout/group_selection_row_layout.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/guide_basic_fragment_layout.xml" value="0.15577507598784193" />
         <entry key="app/src/main/res/layout/history_fragment_layout.xml" value="0.22780797101449277" />

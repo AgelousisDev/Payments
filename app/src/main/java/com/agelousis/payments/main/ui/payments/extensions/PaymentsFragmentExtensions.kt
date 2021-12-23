@@ -267,6 +267,8 @@ fun PaymentsFragment.addRecyclerViewItemDecoration() {
                             outRect.top = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
                         if (context?.isLandscape == false)
                             outRect.bottom = resources.getDimensionPixelOffset(R.dimen.activity_general_horizontal_margin)
+                        if (filteredList isLastAt adapterPosition)
+                            outRect.bottom = 90.inPixel.toInt()
                     }
                     is ClientModel,
                     is PaymentAmountModel -> {
@@ -312,17 +314,17 @@ fun PaymentsFragment.configurePayments(list: List<Any>, query: String? = null) {
                     ?.contains(query?.replace(" ", "")?.lowercase() ?: "") == true
             }.takeIf {
                 it.isNotEmpty()
-            }?.let inner@{ filteredByQueryPayments ->
+            }?.let inner@ { filteredByQueryClients ->
                 filteredList.add(
                     GroupModel(
-                        groupId = filteredByQueryPayments.firstOrNull()?.groupId,
+                        groupId = filteredByQueryClients.firstOrNull()?.groupId,
                         groupName = map.key,
-                        color = filteredByQueryPayments.firstOrNull()?.groupColor,
-                        groupImage = filteredByQueryPayments.firstOrNull()?.groupImage
+                        color = filteredByQueryClients.firstOrNull()?.groupColor,
+                        groupImage = filteredByQueryClients.firstOrNull()?.groupImage
                     )
                 )
                 filteredList.addAll(
-                    filteredByQueryPayments.sortedBy { (it getPaymentsFilteringOptionType MainApplication.paymentsFilteringOptionTypes).position }
+                    filteredByQueryClients.sortedBy { (it getClientsFilteringOptionType MainApplication.paymentsFilteringOptionTypes).position }
                         .also { clientModelList ->
                             when (context?.isLandscape) {
                                 true ->
@@ -344,15 +346,18 @@ fun PaymentsFragment.configurePayments(list: List<Any>, query: String? = null) {
                         }
                 )
 
-                filteredByQueryPayments.mapNotNull {
+                filteredByQueryClients.mapNotNull {
                     it.totalPaymentAmount
                 }.sum().takeIf {
                     !it.isZero
                 }?.let { sum ->
                     filteredList.add(
                         PaymentAmountSumModel(
-                            sum = sum,
-                            color = filteredByQueryPayments.firstOrNull()?.groupColor
+                            sum = sum + (list.filterIsInstance<PaymentAmountModel>()
+                                .filter { paymentAmountModel -> paymentAmountModel.groupId == filteredByQueryClients.firstOrNull()?.groupId }
+                                .mapNotNull { it.paymentAmount }.takeIf { it.isNotEmpty() }?.sum()
+                                ?: 0.0),
+                            color = filteredByQueryClients.firstOrNull()?.groupColor
                         )
                     )
                 }

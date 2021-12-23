@@ -24,6 +24,10 @@
         <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
     </style>
 
+    <style name="GroupAppTheme" parent="MainAppTheme">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
     <!-- Alert Dialog -->
     <style name="MaterialAlertDialog" parent="@style/ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="android:clipToPadding">false</item>
