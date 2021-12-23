@@ -4,17 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentManager
-import com.agelousis.payments.databinding.ColorSelectorFragmentLayoutBinding
-import com.agelousis.payments.main.ui.colorSelector.adapters.ColorSelectorAdapter
 import com.agelousis.payments.main.ui.colorSelector.models.ColorDataModel
 import com.agelousis.payments.main.ui.colorSelector.presenters.ColorSelectorPresenter
+import com.agelousis.payments.main.ui.colorSelector.ui.ColorSelectorLayout
+import com.agelousis.payments.ui.Typography
+import com.agelousis.payments.ui.appColors
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.views.bottomSheet.BasicBottomSheetDialogFragment
-import com.google.android.flexbox.AlignItems
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexboxLayoutManager
-import com.google.android.flexbox.JustifyContent
 
 class ColorSelectorBottomSheetFragment: BasicBottomSheetDialogFragment(), ColorSelectorPresenter {
 
@@ -43,7 +46,6 @@ class ColorSelectorBottomSheetFragment: BasicBottomSheetDialogFragment(), ColorS
         dismiss()
     }
 
-    private lateinit var binding: ColorSelectorFragmentLayoutBinding
     private val colorDataModelList by lazy {
         Constants.Colors.colorPickerColors.map {
             ColorDataModel(
@@ -55,16 +57,38 @@ class ColorSelectorBottomSheetFragment: BasicBottomSheetDialogFragment(), ColorS
     private var colorSelectorPresenter: ColorSelectorPresenter? = null
     private var selectedColor: Int? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = ColorSelectorFragmentLayoutBinding.inflate(
-            inflater,
-            container,
-            false
-        )
-        return binding.root
+    @ExperimentalMaterialApi
+    @ExperimentalFoundationApi
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return ComposeView(
+            context = context ?: return null
+        ).apply {
+            setContent {
+                MaterialTheme(
+                    typography = Typography,
+                    colors = appColors()
+                ) {
+                    ColorSelectorLayout(
+                        colorDataModelList = colorDataModelList,
+                        colorSelectorPresenter = this@ColorSelectorBottomSheetFragment
+                    )
+                }
+            }
+        }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    @ExperimentalMaterialApi
+    @ExperimentalFoundationApi
+    @Preview
+    @Composable
+    fun ProfilePictureFragmentComposablePreview() {
+        ColorSelectorLayout(
+            colorDataModelList = colorDataModelList,
+            colorSelectorPresenter = this@ColorSelectorBottomSheetFragment
+        )
+    }
+
+    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configureRecyclerView()
     }
@@ -79,6 +103,6 @@ class ColorSelectorBottomSheetFragment: BasicBottomSheetDialogFragment(), ColorS
             colorDataModelList = colorDataModelList,
             colorSelectorPresenter = this
         )
-    }
+    }*/
 
 }

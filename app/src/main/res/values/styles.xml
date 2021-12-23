@@ -24,13 +24,6 @@
         <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
     </style>
 
-    <style name="GroupAppTheme" parent="AppTheme">
-        <item name="colorPrimaryDark">@color/black</item>
-        <item name="android:navigationBarColor">@color/black</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:windowBackground">@color/black</item>
-    </style>
-
     <!-- Alert Dialog -->
     <style name="MaterialAlertDialog" parent="@style/ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="android:clipToPadding">false</item>

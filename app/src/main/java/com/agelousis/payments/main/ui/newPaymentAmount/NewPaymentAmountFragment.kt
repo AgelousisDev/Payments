@@ -182,7 +182,8 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
             )
         ifLet(
             binding.amountLayout.doubleValue,
-            binding.dateDetailsLayout.dateValue
+            binding.dateDetailsLayout.dateValue,
+            if (args.independentPaymentState) singlePaymentProductList else listOf()
         ) {
             with(
                 PaymentAmountModel(
@@ -219,6 +220,10 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
         } ?: run {
             binding.amountLayout.errorState = binding.amountLayout.doubleValue == null
             binding.dateDetailsLayout.errorState = binding.dateDetailsLayout.dateValue == null
+            if (args.independentPaymentState
+                && singlePaymentProductList == null
+            )
+                binding.singlePaymentProductsField.error = resources.getString(R.string.key_products_required_error)
         }
     }
 

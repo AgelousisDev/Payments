@@ -40,7 +40,7 @@
             android:theme="@style/MainAppTheme" />
         <activity
             android:name=".group.GroupActivity"
-            android:theme="@style/GroupAppTheme" />
+            android:theme="@style/MainAppTheme" />
         <activity
             android:name=".notificationActivity.NotificationActivity"
             android:allowEmbedded="true"

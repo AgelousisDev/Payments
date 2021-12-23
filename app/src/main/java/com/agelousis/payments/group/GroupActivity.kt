@@ -107,6 +107,7 @@ class GroupActivity : BaseActivity(), GroupActivityPresenter, ColorSelectorPrese
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         overridePendingTransition(0, 0)
+        window?.isEdgeToEdge = true
         binding = ActivityGroupBinding.inflate(
             layoutInflater
         ).also {
@@ -117,6 +118,18 @@ class GroupActivity : BaseActivity(), GroupActivityPresenter, ColorSelectorPrese
             binding.root
         )
         setupUI()
+    }
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        binding.root.applyWindowInsets(
+            withTop = true,
+            withBottom = !isEdgeToEdgeEnabled
+        )
+        if (!isEdgeToEdgeEnabled)
+            binding.rootLayout.applyWindowInsets(
+                withBottom = true
+            )
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

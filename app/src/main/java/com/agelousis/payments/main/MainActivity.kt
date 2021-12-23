@@ -313,7 +313,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window?.isEdgeToEdge = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+        window?.isEdgeToEdge = true
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar()
