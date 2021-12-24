@@ -210,7 +210,7 @@ class ChartFragment: Fragment() {
         binding.pieChart.setUsePercentValues(true)
         binding.pieChart.setEntryLabelTextSize(12f)
         binding.pieChart.setEntryLabelColor(ContextCompat.getColor(context ?: return, R.color.dayNightTextOnBackground))
-        binding.pieChart.centerText = resources.getString(R.string.key_clients_by_group_label)
+        binding.pieChart.centerText = resources.getString(R.string.key_incoming_payments_label)
         binding.pieChart.setCenterTextSize(24f)
         binding.pieChart.description.isEnabled = false
         binding.pieChart.setBackgroundColor(Color.TRANSPARENT)
