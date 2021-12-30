@@ -44,7 +44,7 @@ class SwipeItemTouchHelper(
                 else ->
                     null
             },
-            viewHolder.adapterPosition
+            viewHolder.bindingAdapterPosition
         )
     }
 

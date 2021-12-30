@@ -9,11 +9,11 @@ class ClientViewHolder(private val binding: ClientRowLayoutBinding): RecyclerVie
 
     fun bind(clientModel: ClientModel, presenter: ClientPresenter) {
         binding.clientModel = clientModel
-        binding.adapterPosition = adapterPosition
+        binding.adapterPosition = bindingAdapterPosition
         binding.presenter = presenter
         itemView.setOnLongClickListener {
             presenter.onClientLongPressed(
-                paymentIndex = adapterPosition,
+                paymentIndex = bindingAdapterPosition,
                 isSelected = !clientModel.isSelected
             )
             true

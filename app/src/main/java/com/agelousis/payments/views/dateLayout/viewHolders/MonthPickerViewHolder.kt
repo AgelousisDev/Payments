@@ -9,7 +9,7 @@ class MonthPickerViewHolder(private val binding: MonthPickerRowLayoutBinding): R
 
     fun bind(monthDataModel: MonthDataModel, yearMonthPickerFragmentPresenter: YearMonthPickerFragmentPresenter) {
         binding.monthDataModel = monthDataModel
-        binding.adapterPosition = adapterPosition
+        binding.adapterPosition = bindingAdapterPosition
         binding.presenter = yearMonthPickerFragmentPresenter
         binding.executePendingBindings()
     }

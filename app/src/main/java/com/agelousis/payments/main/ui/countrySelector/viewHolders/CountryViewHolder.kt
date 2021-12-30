@@ -9,7 +9,7 @@ class CountryViewHolder(private val binding: CountryRowLayoutBinding): RecyclerV
 
     fun bind(countryDataModel: CountryDataModel, selectedCountryDataIndex: Int?, countrySelectorFragmentPresenter: CountrySelectorFragmentPresenter) {
         binding.countryDataModel = countryDataModel
-        binding.isSelected = selectedCountryDataIndex == adapterPosition
+        binding.isSelected = selectedCountryDataIndex == bindingAdapterPosition
         binding.presenter = countrySelectorFragmentPresenter
         binding.executePendingBindings()
     }

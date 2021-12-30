@@ -9,13 +9,13 @@ class FileViewHolder(private val binding: FileRowLayoutBinding): RecyclerView.Vi
 
     fun bind(fileDataModel: FileDataModel, presenter: FilePresenter) {
         binding.fileDataModel = fileDataModel
-        binding.adapterPosition = adapterPosition
+        binding.adapterPosition = bindingAdapterPosition
         binding.presenter = presenter
         binding.fileRowDescription.isSelected = true
         binding.fileRowDate.isSelected = true
         binding.fileRowCardView.setOnLongClickListener {
             presenter.onFileLongPressed(
-                adapterPosition = adapterPosition
+                adapterPosition = bindingAdapterPosition
             )
             true
         }

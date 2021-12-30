@@ -218,7 +218,7 @@ private val NewPaymentFragment.contactTypeList: List<ContactType>
 fun NewPaymentFragment.setupContactUI() {
     if (!args.clientDataModel?.email.isNullOrEmpty()
             || !args.clientDataModel?.phone.isNullOrEmpty())
-        binding.contactComposeView?.setContent {
+        binding.contactComposeView.setContent {
             MaterialTheme(
                 typography = Typography,
                 colors = appColors()

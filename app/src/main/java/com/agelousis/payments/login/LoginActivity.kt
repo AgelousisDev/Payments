@@ -425,7 +425,7 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, Gestur
         )
     }
 
-    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         super.dispatchTouchEvent(ev)
         return mDetector?.onTouchEvent(ev) == true
     }

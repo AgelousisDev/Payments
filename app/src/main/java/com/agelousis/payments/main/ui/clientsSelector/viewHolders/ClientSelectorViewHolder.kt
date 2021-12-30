@@ -11,7 +11,7 @@ class ClientSelectorViewHolder(private val binding: ClientSelectorRowLayoutBindi
         binding.clientModel = clientModel
         binding.materialCheckBox.setOnCheckedChangeListener { _, isChecked ->
             clientSelectorPresenter.onClientSelected(
-                adapterPosition = adapterPosition,
+                adapterPosition = bindingAdapterPosition,
                 isSelected = isChecked
             )
         }

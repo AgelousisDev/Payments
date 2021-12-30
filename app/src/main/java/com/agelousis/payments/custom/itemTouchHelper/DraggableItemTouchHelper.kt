@@ -16,8 +16,8 @@ class DraggableItemTouchHelper(private val list: List<Any>): ItemTouchHelper.Cal
     override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
         if(viewHolder.itemViewType != target.itemViewType)
             return false
-        val fromPosition = viewHolder.adapterPosition
-        val toPosition = target.adapterPosition
+        val fromPosition = viewHolder.bindingAdapterPosition
+        val toPosition = target.bindingAdapterPosition
         if(dragFrom == -1)
             dragFrom =  fromPosition
         dragTo = toPosition
@@ -30,7 +30,7 @@ class DraggableItemTouchHelper(private val list: List<Any>): ItemTouchHelper.Cal
             dragTo = -1
             dragFrom = dragTo
         }
-        recyclerView.adapter?.notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
+        recyclerView.adapter?.notifyItemMoved(viewHolder.bindingAdapterPosition, target.bindingAdapterPosition)
         return true
     }
 

@@ -7,7 +7,7 @@ class FabExtendingOnScrollListener(
     private val floatingActionButton: ExtendedFloatingActionButton
 ) : NestedScrollView.OnScrollChangeListener {
     override fun onScrollChange(
-        v: NestedScrollView?,
+        v: NestedScrollView,
         scrollX: Int,
         scrollY: Int,
         oldScrollX: Int,

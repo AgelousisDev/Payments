@@ -1,4 +1,5 @@
 plugins {
+    id("com.github.ben-manes.versions") version "0.28.0"
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-parcelize")
@@ -9,13 +10,14 @@ plugins {
 
 val kotlinVersion = "1.6.0"
 val navVersion = "2.3.5"
-val materialVersion = "1.5.0-beta01"
-val ktxCoreVersion = "1.7.0"
+val materialVersion = "1.6.0-alpha01"
+val ktxCoreVersion = "1.8.0-alpha02"
 val activityVersion = "1.4.0"
 val fragmentVersion = "1.4.0"
 val firebaseBomVersion = "28.0.1"
 val liveDataViewModelVersion = "2.4.0"
 val composeVersion = "1.0.5"
+val kotlinCoroutinesVersion = "1.6.0"
 
 android {
     compileSdk = 31
@@ -76,14 +78,13 @@ dependencies {
     implementation("androidx.compose.material:material:$composeVersion")
     implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     implementation("io.coil-kt:coil-compose:1.4.0")
-    implementation("androidx.viewpager2:viewpager2:1.0.0")
-    implementation("androidx.core:core-ktx:1.7.0")
+    implementation("androidx.viewpager2:viewpager2:1.1.0-beta01")
     implementation("androidx.appcompat:appcompat:1.4.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.2")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.biometric:biometric:1.2.0-alpha04")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion")
     implementation("com.squareup.picasso:picasso:2.71828")
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
@@ -99,10 +100,10 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("androidx.core:core-ktx:$ktxCoreVersion")
     implementation("com.google.android.flexbox:flexbox:3.0.0")
-    implementation("com.airbnb.android:lottie:4.2.1")
-    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("com.airbnb.android:lottie:4.2.2")
+    implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.3")
     implementation("me.dm7.barcodescanner:zxing:1.9.8")
     implementation(files("libs/itextpdf-5.5.13.jar"))
     testImplementation("junit:junit:4.13.2")
