@@ -13,7 +13,6 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
@@ -29,7 +28,6 @@ import com.agelousis.payments.ui.textViewTitleFont
 
 typealias UpdatePasswordBlock = () -> Unit
 
-@ExperimentalComposeUiApi
 @Composable
 fun ForgotPasswordUI(
     updatePasswordBlock: UpdatePasswordBlock

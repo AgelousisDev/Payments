@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
@@ -45,8 +43,6 @@ class TotalPaymentsAmountBottomSheetDialogFragment: BasicBottomSheetDialogFragme
         arguments?.getParcelable<PaymentAmountSumModel>(PAYMENT_AMOUNT_SUM_MODEL_EXTRA)
     }
 
-    @ExperimentalMaterialApi
-    @ExperimentalFoundationApi
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return ComposeView(
             context = context ?: return null
@@ -65,8 +61,6 @@ class TotalPaymentsAmountBottomSheetDialogFragment: BasicBottomSheetDialogFragme
         }
     }
 
-    @ExperimentalMaterialApi
-    @ExperimentalFoundationApi
     @Preview
     @Composable
     fun ProfilePictureFragmentComposablePreview() {

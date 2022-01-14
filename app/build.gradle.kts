@@ -16,8 +16,10 @@ val activityVersion = "1.4.0"
 val fragmentVersion = "1.4.0"
 val firebaseBomVersion = "28.0.1"
 val liveDataViewModelVersion = "2.4.0"
-val composeVersion = "1.0.5"
+val composeVersion = "1.2.0-alpha01"
 val kotlinCoroutinesVersion = "1.6.0"
+val appCompatVersion = "1.4.1"
+val constraintLayoutVersion = "2.1.3"
 
 android {
     compileSdk = 31
@@ -79,8 +81,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     implementation("io.coil-kt:coil-compose:1.4.0")
     implementation("androidx.viewpager2:viewpager2:1.1.0-beta01")
-    implementation("androidx.appcompat:appcompat:1.4.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.2")
+    implementation("androidx.appcompat:appcompat:$appCompatVersion")
+    implementation("androidx.constraintlayout:constraintlayout:$constraintLayoutVersion")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.biometric:biometric:1.2.0-alpha04")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion")

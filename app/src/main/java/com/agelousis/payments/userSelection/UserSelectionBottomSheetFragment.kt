@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
@@ -42,8 +40,6 @@ class UserSelectionBottomSheetFragment: BasicBottomSheetDialogFragment() {
         arguments?.getParcelableArrayList<UserModel>(USERS_EXTRA)
     }
 
-    @ExperimentalMaterialApi
-    @ExperimentalFoundationApi
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return ComposeView(
             context = context ?: return null
@@ -84,8 +80,6 @@ class UserSelectionBottomSheetFragment: BasicBottomSheetDialogFragment() {
         }
     }
 
-    @ExperimentalMaterialApi
-    @ExperimentalFoundationApi
     @Preview
     @Composable
     fun ProfilePictureFragmentComposablePreview() {

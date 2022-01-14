@@ -1,6 +1,5 @@
 package com.agelousis.payments.main.ui.colorSelector.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -8,7 +7,6 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
@@ -27,9 +25,6 @@ import com.agelousis.payments.main.ui.colorSelector.presenters.ColorSelectorPres
 import com.agelousis.payments.ui.BottomSheetNavigationLine
 import com.agelousis.payments.ui.textViewTitleLabelFont
 
-
-@ExperimentalFoundationApi
-@ExperimentalMaterialApi
 @Composable
 fun ColorSelectorLayout(
     colorDataModelList: List<ColorDataModel>,
@@ -66,7 +61,6 @@ fun ColorSelectorLayout(
     }
 }
 
-@ExperimentalMaterialApi
 @Composable
 fun ColorData(
     colorDataModel: ColorDataModel,

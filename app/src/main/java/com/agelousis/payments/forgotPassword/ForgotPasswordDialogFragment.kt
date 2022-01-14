@@ -6,11 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.DialogFragment
@@ -58,7 +55,6 @@ class ForgotPasswordDialogFragment: DialogFragment() {
         }
     }
 
-    @ExperimentalComposeUiApi
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return ComposeView(
             context = context ?: return null
@@ -86,9 +82,6 @@ class ForgotPasswordDialogFragment: DialogFragment() {
         }
     }
 
-    @ExperimentalComposeUiApi
-    @ExperimentalMaterialApi
-    @ExperimentalFoundationApi
     @Preview
     @Composable
     fun ProfilePictureFragmentComposablePreview() {

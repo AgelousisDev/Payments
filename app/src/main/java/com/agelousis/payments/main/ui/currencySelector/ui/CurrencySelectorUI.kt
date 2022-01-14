@@ -1,6 +1,5 @@
 package com.agelousis.payments.main.ui.currencySelector.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -9,7 +8,6 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
@@ -27,8 +25,6 @@ import com.agelousis.payments.main.ui.currencySelector.enumerations.CurrencyType
 import com.agelousis.payments.main.ui.currencySelector.interfaces.CurrencySelectorFragmentPresenter
 import com.agelousis.payments.ui.textViewTitleFont
 
-@ExperimentalMaterialApi
-@ExperimentalFoundationApi
 @Composable
 fun CurrencySelectorLayout(
     currencyTypes: List<CurrencyType>,
@@ -86,7 +82,6 @@ fun CurrencySelectorLayout(
     }
 }
 
-@ExperimentalMaterialApi
 @Composable
 fun CurrencyType(
     currencyType: CurrencyType,
