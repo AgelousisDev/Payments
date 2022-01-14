@@ -29,7 +29,12 @@ class PDFHelper {
     private val blueColor by lazy { BaseColor(40, 53, 146) }
     private val lightGreyColor by lazy { BaseColor(243, 243, 243) }
 
-    fun initializePDF(context: Context, userModel: UserModel?, clients: List<ClientModel>, pdfInitializationSuccessBlock: PDFInitializationSuccessBlock) {
+    fun initializePDF(
+        context: Context,
+        userModel: UserModel?,
+        clients: List<ClientModel>,
+        pdfInitializationSuccessBlock: PDFInitializationSuccessBlock
+    ) {
         val document = Document()
         val pdfFile = File(context.filesDir, String.format(Constants.PDF_FILE_NAME_FORMAT_VALUE, Date().pdfFormattedCurrentDate))
         PdfWriter.getInstance(document, FileOutputStream(pdfFile))

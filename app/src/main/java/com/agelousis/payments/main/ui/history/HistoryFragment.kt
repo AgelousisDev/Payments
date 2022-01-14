@@ -10,6 +10,7 @@ import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.history.adapters.ChartPagerAdapter
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
+import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
 import com.github.mikephil.charting.data.*
 import com.google.android.material.tabs.TabLayoutMediator
@@ -24,7 +25,12 @@ class HistoryFragment: BaseViewBindingFragment<HistoryFragmentLayoutBinding>(
 
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by viewModels<PaymentsViewModel>()
-    val clientModelList = arrayListOf<ClientModel>()
+    val clientModelList by lazy {
+        arrayListOf<ClientModel>()
+    }
+    val paymentAmountModelList by lazy {
+        arrayListOf<PaymentAmountModel>()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,6 +51,7 @@ class HistoryFragment: BaseViewBindingFragment<HistoryFragmentLayoutBinding>(
             }
             clientModelList.clear()
             clientModelList.addAll(payments.filterIsInstance<ClientModel>())
+            paymentAmountModelList.addAll(payments.filterIsInstance<PaymentAmountModel>())
             configureViewPager()
         }
     }
@@ -55,7 +62,7 @@ class HistoryFragment: BaseViewBindingFragment<HistoryFragmentLayoutBinding>(
                 fragment = this@HistoryFragment
             )
             adapter = chartPagerAdapter
-            offscreenPageLimit = 2
+            offscreenPageLimit = 3
             TabLayoutMediator(
                 binding?.materialTabLayout ?: return@apply,
                 this

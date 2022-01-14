@@ -52,6 +52,9 @@ class ChartFragment: Fragment() {
     private val clientModelList by lazy {
         (parentFragment as? HistoryFragment)?.clientModelList
     }
+    private val paymentAmountModelList by lazy {
+        (parentFragment as? HistoryFragment)?.paymentAmountModelList
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = ChartFragmentLayoutBinding.inflate(
@@ -71,21 +74,26 @@ class ChartFragment: Fragment() {
 
     private fun setupUI() {
         when(chartType) {
-            ChartType.LINE_CHART ->
-                configureLineChart(
-                    entries = clientModelList?.asSequence()?.mapNotNull {
+            ChartType.LINE_CHART -> {
+                val payments = arrayListOf(
+                    *clientModelList?.asSequence()?.mapNotNull {
                         it.payments
-                    }?.flatten()?.sortedBy {
+                    }?.flatten()?.toList()?.toTypedArray() ?: arrayOf(),
+                    *paymentAmountModelList?.toTypedArray() ?: arrayOf()
+                )
+                configureLineChart(
+                    entries = payments.sortedBy {
                         it.paymentMonthDate
-                    }?.groupBy {
+                    }.groupBy {
                         it.paymentMonthDate
-                    }?.map { map ->
+                    }.map { map ->
                         Entry(
                             map.key?.time?.toFloat() ?: 0f,
                             map.value.mapNotNull { it.paymentAmount }.sum().toFloat()
                         )
-                    }?.toList() ?: return
+                    }.toList()
                 )
+            }
             ChartType.PIE_CHART -> {
                 configureGroupDataRecyclerView()
                 configurePieChart(

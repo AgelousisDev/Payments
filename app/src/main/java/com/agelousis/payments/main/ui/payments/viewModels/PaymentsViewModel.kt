@@ -1,6 +1,7 @@
 package com.agelousis.payments.main.ui.payments.viewModels
 
 import android.content.Context
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.agelousis.payments.database.DBManager
@@ -23,6 +24,7 @@ class PaymentsViewModel: ViewModel() {
     val deletionLiveData by lazy { MutableLiveData<Boolean>() }
     val firebaseResponseLiveData by lazy { MutableLiveData<FirebaseResponseModel>() }
     val firebaseErrorLiveData by lazy { MutableLiveData<ErrorModel>() }
+    val paymentsMutableStateList by lazy { mutableStateOf<List<Any>>(listOf()) }
 
     suspend fun initializePayments(context: Context, userModel: UserModel?) {
         val dbManager = DBManager(

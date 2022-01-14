@@ -29,7 +29,7 @@ val textViewTitleLabelFont = TextStyle(
     fontSize = 14.sp
 )
 
-val textViewLabel = TextStyle(
+val textViewLabelFont = TextStyle(
     fontFamily = FontFamily(Font(R.font.ubuntu_light)),
     fontWeight = FontWeight.Light,
     fontSize = 12.sp

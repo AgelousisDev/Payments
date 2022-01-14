@@ -168,9 +168,11 @@ private infix fun PaymentsFragment.configurePDFActionWith(position: Int) {
                 )
             }
         }
-        filteredList.getOrNull(index = position)?.asIs<ClientModel> { personModel ->
+        filteredList.getOrNull(index = position)?.asIs<ClientModel> { clientModel ->
             initializePDFCreation(
-                clients = listOf(personModel)
+                clients = listOf(
+                    clientModel
+                )
             )
         }
     }

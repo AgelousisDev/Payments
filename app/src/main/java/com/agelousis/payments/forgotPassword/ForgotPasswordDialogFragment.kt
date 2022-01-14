@@ -84,7 +84,7 @@ class ForgotPasswordDialogFragment: DialogFragment() {
 
     @Preview
     @Composable
-    fun ProfilePictureFragmentComposablePreview() {
+    fun ForgotPasswordDialogFragmentComposablePreview() {
         ForgotPasswordUI(
             updatePasswordBlock = this@ForgotPasswordDialogFragment::onChangePassword
         )

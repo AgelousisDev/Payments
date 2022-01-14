@@ -63,7 +63,7 @@ class TotalPaymentsAmountBottomSheetDialogFragment: BasicBottomSheetDialogFragme
 
     @Preview
     @Composable
-    fun ProfilePictureFragmentComposablePreview() {
+    fun TotalPaymentsAmountBottomSheetDialogFragmentComposablePreview() {
         TotalPaymentAmountLayoutWith(
             paymentAmountSumModel = paymentAmountModel,
             vat = (activity as? MainActivity)?.userModel?.vat

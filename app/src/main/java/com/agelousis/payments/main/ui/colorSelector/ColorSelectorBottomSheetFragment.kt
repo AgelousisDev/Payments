@@ -75,7 +75,7 @@ class ColorSelectorBottomSheetFragment: BasicBottomSheetDialogFragment(), ColorS
 
     @Preview
     @Composable
-    fun ProfilePictureFragmentComposablePreview() {
+    fun ColorSelectorBottomSheetFragmentComposablePreview() {
         ColorSelectorLayout(
             colorDataModelList = colorDataModelList,
             colorSelectorPresenter = this@ColorSelectorBottomSheetFragment

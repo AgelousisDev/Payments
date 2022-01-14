@@ -87,7 +87,7 @@ class CurrencySelectorDialogFragment: DialogFragment(), CurrencySelectorFragment
 
     @Preview
     @Composable
-    fun ProfilePictureFragmentComposablePreview() {
+    fun CurrencySelectorDialogFragmentComposablePreview() {
         CurrencySelectorLayout(
             currencyTypes = currencyTypes,
             currencyPresenter = this@CurrencySelectorDialogFragment

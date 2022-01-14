@@ -82,7 +82,7 @@ class UserSelectionBottomSheetFragment: BasicBottomSheetDialogFragment() {
 
     @Preview
     @Composable
-    fun ProfilePictureFragmentComposablePreview() {
+    fun UserSelectionBottomSheetFragmentComposablePreview() {
         UserSelectionLayout(
             userModelList = users,
             userSelectionBlock = this@UserSelectionBottomSheetFragment::onUserSelected
