@@ -1,5 +1,6 @@
 package com.agelousis.payments.main.ui.dashboard.ui
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -109,9 +110,10 @@ fun StatisticCardLayout(
                             id = R.color.white
                         )
                     ),
-                    modifier = Modifier.size(
-                        size = 25.dp
-                    )
+                    modifier = Modifier
+                        .size(
+                            size = 25.dp
+                        )
                 )
             }
             Column(
