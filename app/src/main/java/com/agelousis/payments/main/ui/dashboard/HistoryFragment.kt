@@ -1,4 +1,4 @@
-package com.agelousis.payments.main.ui.history
+package com.agelousis.payments.main.ui.dashboard
 
 import android.os.Bundle
 import android.view.*
@@ -7,7 +7,7 @@ import com.agelousis.payments.R
 import com.agelousis.payments.base.BaseViewBindingFragment
 import com.agelousis.payments.databinding.HistoryFragmentLayoutBinding
 import com.agelousis.payments.main.MainActivity
-import com.agelousis.payments.main.ui.history.adapters.ChartPagerAdapter
+import com.agelousis.payments.main.ui.dashboard.adapters.ChartPagerAdapter
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
@@ -39,9 +39,9 @@ class HistoryFragment: BaseViewBindingFragment<HistoryFragmentLayoutBinding>(
     }
 
     private fun addObservers() {
-        viewModel.paymentsLiveData.observe(viewLifecycleOwner) { payments ->
-            (activity as? MainActivity)?.floatingButtonState = payments.filterIsInstance<ClientModel>().isNotEmpty()
-            if (payments.filterIsInstance<ClientModel>().isEmpty()) {
+        viewModel.paymentsLiveData.observe(viewLifecycleOwner) { data ->
+            (activity as? MainActivity)?.floatingButtonState = data.filterIsInstance<ClientModel>().isNotEmpty()
+            if (data.filterIsInstance<ClientModel>().isEmpty()) {
                 binding?.emptyModel = EmptyModel(
                     title = resources.getString(R.string.key_no_clients_title_message),
                     message = resources.getString(R.string.key_add_clients_from_home_message),
@@ -50,8 +50,9 @@ class HistoryFragment: BaseViewBindingFragment<HistoryFragmentLayoutBinding>(
                 return@observe
             }
             clientModelList.clear()
-            clientModelList.addAll(payments.filterIsInstance<ClientModel>())
-            paymentAmountModelList.addAll(payments.filterIsInstance<PaymentAmountModel>())
+            paymentAmountModelList.clear()
+            clientModelList.addAll(data.filterIsInstance<ClientModel>())
+            paymentAmountModelList.addAll(data.filterIsInstance<PaymentAmountModel>())
             configureViewPager()
         }
     }
@@ -86,7 +87,13 @@ class HistoryFragment: BaseViewBindingFragment<HistoryFragmentLayoutBinding>(
     }
 
     fun switchChart() {
-        binding?.chartViewPager?.currentItem = if (binding?.chartViewPager?.currentItem == 0) 1 else 0
+        binding?.chartViewPager?.currentItem = when (binding?.chartViewPager?.currentItem) {
+            2 -> (binding?.chartViewPager?.currentItem ?: 0) - 1
+            1 -> sequence<Int> { (0 until 3).random() }.firstOrNull {
+                it != 1
+            } ?: 0
+            else -> (binding?.chartViewPager?.currentItem ?: 0) + 1
+        }
     }
 
 }

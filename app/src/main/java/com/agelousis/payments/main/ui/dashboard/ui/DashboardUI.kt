@@ -1,4 +1,4 @@
-package com.agelousis.payments.main.ui.history.ui
+package com.agelousis.payments.main.ui.dashboard.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -11,9 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -22,18 +20,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.agelousis.payments.R
-import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
+import com.agelousis.payments.main.ui.dashboard.model.DashboardStatisticsDataModel
+import com.agelousis.payments.main.ui.dashboard.viewModel.DashboardViewModel
 import com.agelousis.payments.ui.horizontalMargin
+import com.agelousis.payments.ui.textViewLabelFont
 import com.agelousis.payments.ui.textViewTitleFont
 import com.agelousis.payments.ui.textViewTitleLabelFont
 
 @Composable
 fun DashboardLayout(
-    viewModel: PaymentsViewModel
+    viewModel: DashboardViewModel
 ) {
-    val paymentItems by remember {
-        viewModel.paymentsMutableStateList
-    }
     Column {
         Text(
             text = stringResource(
@@ -48,13 +45,15 @@ fun DashboardLayout(
             ),
             contentPadding = PaddingValues(
                 all = 16.dp
-            )
+            ),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(
-                items = paymentItems
-            ) {
+                items = viewModel.dashboardStatisticsDataMutableState
+            ) { dashboardStatisticsDataModel ->
                 StatisticCardLayout(
-                    paymentItems = paymentItems
+                    dashboardStatisticsDataModel = dashboardStatisticsDataModel
                 )
             }
         }
@@ -63,20 +62,21 @@ fun DashboardLayout(
 
 @Composable
 fun StatisticCardLayout(
-    paymentItems: List<Any>
+    dashboardStatisticsDataModel: DashboardStatisticsDataModel
 ) {
     Card(
         interactionSource = remember { MutableInteractionSource() },
         indication = rememberRipple(bounded = false),
-        modifier = Modifier
-            .height(
-                height = 100.dp
-            ),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(12.dp),
         elevation = 10.dp,
         onClick = {
 
         },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(
+                height = 65.dp
+            )
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -84,45 +84,57 @@ fun StatisticCardLayout(
             Box(
                 modifier = Modifier
                     .size(
-                        size = 70.dp
+                        size = 60.dp
+                    )
+                    .padding(
+                        all = 8.dp
                     )
                     .background(
                         color = colorResource(
-                            id = R.color.orange
+                            id = dashboardStatisticsDataModel.backgroundColor
+                        ),
+                        shape = RoundedCornerShape(
+                            size = 30.dp
                         )
-                    )
+                    ),
+                contentAlignment = Alignment.Center
             ) {
                 Image(
                     painter = painterResource(
-                        id = R.drawable.ic_person
+                        id = dashboardStatisticsDataModel.icon
                     ),
                     contentDescription = null,
                     colorFilter = ColorFilter.tint(
                         colorResource(
                             id = R.color.white
                         )
+                    ),
+                    modifier = Modifier.size(
+                        size = 25.dp
                     )
                 )
-                Column(
-                    modifier = horizontalMargin
-                ) {
-                    Text(
-                        text = "",
-                        style = textViewTitleLabelFont,
-                        modifier = Modifier.padding(
-                            all = 8.dp
-                        )
+            }
+            Column(
+                modifier = Modifier
+                    .padding(
+                        all = 8.dp
                     )
-                    Text(
-                        text = stringResource(
-                            id = R.string.key_dashboard_label
-                        ),
-                        style = textViewTitleLabelFont,
-                        modifier = Modifier.padding(
-                            all = 8.dp
-                        )
+                    .wrapContentWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = dashboardStatisticsDataModel.size.toString(),
+                    style = textViewTitleLabelFont
+                )
+                Text(
+                    text = stringResource(
+                        id = dashboardStatisticsDataModel.labelResource
+                    ),
+                    style = textViewLabelFont,
+                    color = colorResource(
+                        id = R.color.grey
                     )
-                }
+                )
             }
         }
     }

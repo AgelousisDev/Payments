@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="android.view.View" />
-        <import type="com.agelousis.payments.main.ui.history.enumerations.ChartType" />
+        <import type="com.agelousis.payments.main.ui.dashboard.enumerations.ChartType" />
         <variable
             name="chartType"
             type="ChartType" />

@@ -1,4 +1,4 @@
-package com.agelousis.payments.main.ui.history
+package com.agelousis.payments.main.ui.dashboard
 
 import android.graphics.Color
 import android.os.Bundle
@@ -9,9 +9,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.agelousis.payments.R
 import com.agelousis.payments.databinding.ChartFragmentLayoutBinding
-import com.agelousis.payments.main.ui.history.adapters.GroupDataAdapter
-import com.agelousis.payments.main.ui.history.enumerations.ChartType
-import com.agelousis.payments.main.ui.history.listeners.PaymentLineChartGestureListener
+import com.agelousis.payments.main.ui.dashboard.adapters.GroupDataAdapter
+import com.agelousis.payments.main.ui.dashboard.enumerations.ChartType
+import com.agelousis.payments.main.ui.dashboard.listeners.PaymentLineChartGestureListener
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.euroFormattedString

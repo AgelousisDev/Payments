@@ -1,4 +1,4 @@
-package com.agelousis.payments.main.ui.history.viewHolders
+package com.agelousis.payments.main.ui.dashboard.viewHolders
 
 import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.databinding.GroupDataRowLayoutBinding

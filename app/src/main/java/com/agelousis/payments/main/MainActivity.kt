@@ -29,7 +29,7 @@ import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.enumerations.FloatingButtonPosition
 import com.agelousis.payments.main.ui.clientsSelector.ClientsSelectorDialogFragment
 import com.agelousis.payments.main.ui.files.FilesFragment
-import com.agelousis.payments.main.ui.history.HistoryFragment
+import com.agelousis.payments.main.ui.dashboard.HistoryFragment
 import com.agelousis.payments.main.ui.newPayment.NewPaymentFragment
 import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
 import com.agelousis.payments.main.ui.payments.PaymentsFragment

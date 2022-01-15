@@ -173,7 +173,7 @@
     </fragment>
     <fragment
         android:id="@+id/historyFragment"
-        android:name="com.agelousis.payments.main.ui.history.HistoryFragment"
+        android:name="com.agelousis.payments.main.ui.dashboard.HistoryFragment"
         android:label="HistoryFragment"
         tools:layout="@layout/history_fragment_layout"/>
     <action

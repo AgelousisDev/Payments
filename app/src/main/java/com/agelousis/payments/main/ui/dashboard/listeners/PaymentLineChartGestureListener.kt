@@ -1,4 +1,4 @@
-package com.agelousis.payments.main.ui.history.listeners
+package com.agelousis.payments.main.ui.dashboard.listeners
 
 import android.view.MotionEvent
 import com.agelousis.payments.utils.extensions.euroFormattedString

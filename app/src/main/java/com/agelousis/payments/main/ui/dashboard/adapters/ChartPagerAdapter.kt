@@ -1,11 +1,11 @@
-package com.agelousis.payments.main.ui.history.adapters
+package com.agelousis.payments.main.ui.dashboard.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.agelousis.payments.R
-import com.agelousis.payments.main.ui.history.ChartFragment
-import com.agelousis.payments.main.ui.history.DashboardFragment
-import com.agelousis.payments.main.ui.history.enumerations.ChartType
+import com.agelousis.payments.main.ui.dashboard.ChartFragment
+import com.agelousis.payments.main.ui.dashboard.DashboardFragment
+import com.agelousis.payments.main.ui.dashboard.enumerations.ChartType
 
 class ChartPagerAdapter(fragment: Fragment): FragmentStateAdapter(fragment) {
 
