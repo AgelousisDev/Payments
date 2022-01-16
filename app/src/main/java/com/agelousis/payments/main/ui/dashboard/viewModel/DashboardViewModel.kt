@@ -42,9 +42,9 @@ class DashboardViewModel: ViewModel() {
             clientModel.payments?.any { paymentAmountModel ->
                 paymentAmountModel.dateOrPayment?.dateWithoutTime == Date().dateWithoutTime
             } == true
-        }?.map { clientModel ->
+        }?.joinToString { clientModel ->
             clientModel.fullName
-        }?.joinToString()
+        }
 
     fun initializeDashboardDataWith(
         groupModelList: List<GroupModel>,
