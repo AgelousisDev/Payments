@@ -140,4 +140,7 @@ data class PaymentAmountModel(val paymentId: Int? = null,
     val singlePaymentProductsSeparated
         get() = singlePaymentProducts?.joinToString(separator = ",")
 
+    val dateOrPayment
+        get() = paymentDate?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)
+
 }

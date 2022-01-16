@@ -1,6 +1,5 @@
 package com.agelousis.payments.main.ui.dashboard.ui
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -19,20 +18,22 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.dashboard.model.DashboardStatisticsDataModel
 import com.agelousis.payments.main.ui.dashboard.viewModel.DashboardViewModel
-import com.agelousis.payments.ui.horizontalMargin
-import com.agelousis.payments.ui.textViewLabelFont
-import com.agelousis.payments.ui.textViewTitleFont
-import com.agelousis.payments.ui.textViewTitleLabelFont
+import com.agelousis.payments.ui.*
+import com.agelousis.payments.utils.extensions.euroFormattedString
 
 @Composable
 fun DashboardLayout(
     viewModel: DashboardViewModel
 ) {
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
         Text(
             text = stringResource(
                 id = R.string.key_dashboard_label
@@ -54,15 +55,20 @@ fun DashboardLayout(
                 items = viewModel.dashboardStatisticsDataMutableState
             ) { dashboardStatisticsDataModel ->
                 StatisticCardLayout(
+                    viewModel = viewModel,
                     dashboardStatisticsDataModel = dashboardStatisticsDataModel
                 )
             }
         }
+        DashboardInsightLayout(
+            viewModel = viewModel
+        )
     }
 }
 
 @Composable
 fun StatisticCardLayout(
+    viewModel: DashboardViewModel,
     dashboardStatisticsDataModel: DashboardStatisticsDataModel
 ) {
     Card(
@@ -71,7 +77,9 @@ fun StatisticCardLayout(
         shape = RoundedCornerShape(12.dp),
         elevation = 10.dp,
         onClick = {
-
+            viewModel.onDashboardPage(
+                bottomNavigationMenuItemId = dashboardStatisticsDataModel.dashboardStatisticsType.bottomNavigationMenuItemId
+            )
         },
         modifier = Modifier
             .fillMaxWidth()
@@ -136,6 +144,177 @@ fun StatisticCardLayout(
                     color = colorResource(
                         id = R.color.grey
                     )
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun DashboardInsightLayout(
+    viewModel: DashboardViewModel
+) {
+    Card(
+        interactionSource = remember { MutableInteractionSource() },
+        indication = rememberRipple(bounded = false),
+        shape = RoundedCornerShape(12.dp),
+        elevation = 10.dp,
+        onClick = {},
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                all = 16.dp
+            )
+    ) {
+        Column {
+            Text(
+                text = stringResource(
+                    id = R.string.key_recent_insights_label
+                ),
+                style = textViewTitleLabelFont,
+                modifier = Modifier
+                    .padding(
+                        top = 16.dp,
+                        start = 16.dp
+                    )
+            )
+            SeparatorGreyLine()
+            // Total Incoming Payments
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 16.dp,
+                        start = 16.dp,
+                        end = 16.dp
+                    )
+            ) {
+                Text(
+                    text = stringResource(
+                        id = R.string.key_total_incoming_payments_label
+                    ),
+                    style = textViewLabelFont,
+                    modifier = Modifier
+                        .weight(
+                            weight = 1f
+                        )
+                )
+                Text(
+                    text = viewModel.paymentAmountModelList?.mapNotNull { it.paymentAmount }?.sum()?.euroFormattedString ?: stringResource(
+                        id = R.string.key_empty_field_label
+                    ),
+                    style = textViewValueLabelFont,
+                    textAlign = TextAlign.End,
+                    color = colorResource(
+                        id = R.color.grey
+                    ),
+                    modifier = Modifier
+                        .weight(
+                            weight = 1f
+                        )
+                )
+            }
+            // Maximum incoming group\'s payment
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 16.dp,
+                        start = 16.dp,
+                        end = 16.dp
+                    )
+            ) {
+                Text(
+                    text = stringResource(
+                        id = R.string.key_maximum_incoming_group_payment_label
+                    ),
+                    style = textViewLabelFont,
+                    modifier = Modifier
+                        .weight(
+                            weight = 1.5f
+                        )
+                )
+                Text(
+                    text = (viewModel getMaxIncomingGroupAmount true)?.euroFormattedString ?: stringResource(
+                        id = R.string.key_empty_field_label
+                    ),
+                    style = textViewValueLabelFont,
+                    textAlign = TextAlign.End,
+                    color = colorResource(
+                        id = R.color.grey
+                    ),
+                    modifier = Modifier
+                        .weight(
+                            weight = 0.5f
+                        )
+                )
+            }
+            // Minimum incoming group\'s payment
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 16.dp,
+                        start = 16.dp,
+                        end = 16.dp
+                    )
+            ) {
+                Text(
+                    text = stringResource(
+                        id = R.string.key_minimum_incoming_group_payment_label
+                    ),
+                    style = textViewLabelFont,
+                    modifier = Modifier
+                        .weight(
+                            weight = 1.5f
+                        )
+                )
+                Text(
+                    text = (viewModel getMaxIncomingGroupAmount false)?.euroFormattedString ?: stringResource(
+                        id = R.string.key_empty_field_label
+                    ),
+                    style = textViewValueLabelFont,
+                    textAlign = TextAlign.End,
+                    color = colorResource(
+                        id = R.color.grey
+                    ),
+                    modifier = Modifier
+                        .weight(
+                            weight = 0.5f
+                        )
+                )
+            }
+            // Today payments
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        all = 16.dp
+                    )
+            ) {
+                Text(
+                    text = stringResource(
+                        id = R.string.key_today_payments_label
+                    ),
+                    style = textViewLabelFont,
+                    modifier = Modifier
+                        .weight(
+                            weight = 1f
+                        )
+                )
+                Text(
+                    text = viewModel.todayPaymentClientName ?: stringResource(
+                        id = R.string.key_empty_field_label
+                    ),
+                    style = textViewValueLabelFont,
+                    textAlign = TextAlign.End,
+                    color = colorResource(
+                        id = R.color.grey
+                    ),
+                    modifier = Modifier
+                        .weight(
+                            weight = 1f
+                        )
                 )
             }
         }

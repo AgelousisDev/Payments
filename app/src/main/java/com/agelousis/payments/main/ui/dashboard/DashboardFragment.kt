@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.agelousis.payments.main.MainActivity
+import com.agelousis.payments.main.ui.dashboard.presenter.DashboardPresenter
 import com.agelousis.payments.main.ui.dashboard.ui.DashboardLayout
 import com.agelousis.payments.main.ui.dashboard.viewModel.DashboardViewModel
 import com.agelousis.payments.ui.Typography
@@ -19,11 +20,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DashboardFragment: Fragment() {
+class DashboardFragment: Fragment(), DashboardPresenter {
 
     companion object {
         val shared
             get() = DashboardFragment()
+    }
+
+    override fun onDashboardPage(bottomNavigationMenuItemId: Int) {
+        (activity as? MainActivity)?.binding?.appBarMain?.bottomNavigationView?.selectedItemId = bottomNavigationMenuItemId
     }
 
     private val uiScope = CoroutineScope(Dispatchers.Main)
@@ -45,39 +50,54 @@ class DashboardFragment: Fragment() {
                     DashboardLayout(
                         viewModel = viewModel
                     )
-                    requestData()
                 }
             }
         }
     }
 
-    private fun requestData() {
-        uiScope.launch {
-            uiScope.launch outer@ {
-                viewModel.fetchGroups(
-                    context = context ?: return@outer,
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        addObservers()
+        requestData()
+    }
+
+    private fun addObservers() {
+        viewModel.groupModelListLiveData.observe(
+            viewLifecycleOwner
+        ) {
+            uiScope.launch {
+                viewModel.fetchInvoices(
+                    context = context ?: return@launch,
                     userId = (activity as? MainActivity)?.userModel?.id
-                ) { groupModelList ->
-                    uiScope.launch inner@ {
-                        viewModel.fetchInvoices(
-                            context = context ?: return@inner,
-                            userId = (activity as? MainActivity)?.userModel?.id
-                        ) { fileDataModelList ->
-                            viewModel.initializeDashboardDataWith(
-                                groupModelList = groupModelList,
-                                clientModelList = (parentFragment as? HistoryFragment)?.clientModelList ?: listOf(),
-                                paymentAmountModeList = listOf(
-                                    *(parentFragment as? HistoryFragment)?.clientModelList?.asSequence()?.mapNotNull {
-                                        it.payments
-                                    }?.flatten()?.toList()?.toTypedArray() ?: arrayOf(),
-                                    *(parentFragment as? HistoryFragment)?.paymentAmountModelList?.toTypedArray() ?: arrayOf()
-                                ),
-                                fileDataModelList = fileDataModelList
-                            )
-                        }
-                    }
-                }
+                )
             }
+        }
+        viewModel.fileDataModelListLiveData.observe(
+            viewLifecycleOwner
+        ) { fileDataModelList ->
+            viewModel.initializeDashboardDataWith(
+                groupModelList = viewModel.groupModelListLiveData.value ?: listOf(),
+                clientModelList = viewModel.clientModelList ?: listOf(),
+                paymentAmountModeList = viewModel.paymentAmountModelList ?: listOf(),
+                fileDataModelList = fileDataModelList
+            )
+        }
+    }
+
+    private fun requestData() {
+        viewModel.dashboardPresenter = this
+        viewModel.clientModelList = (parentFragment as? HistoryFragment)?.clientModelList
+        viewModel.paymentAmountModelList = listOf(
+            *(parentFragment as? HistoryFragment)?.clientModelList?.asSequence()?.mapNotNull {
+                it.payments
+            }?.flatten()?.toList()?.toTypedArray() ?: arrayOf(),
+            *(parentFragment as? HistoryFragment)?.paymentAmountModelList?.toTypedArray() ?: arrayOf()
+        )
+        uiScope.launch {
+            viewModel.fetchGroups(
+                context = context ?: return@launch,
+                userId = (activity as? MainActivity)?.userModel?.id
+            )
         }
     }
 

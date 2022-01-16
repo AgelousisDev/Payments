@@ -44,6 +44,21 @@ fun BottomSheetNavigationLine() =
     )
 
 @Composable
+fun SeparatorGreyLine() =
+    Divider(
+        thickness = 0.5.dp,
+        modifier = Modifier
+            .padding(
+                top = 12.dp,
+                bottom = 8.dp
+            )
+            .fillMaxWidth()
+            .background(
+                color = colorResource(id = R.color.grey)
+            )
+    )
+
+@Composable
 fun MarqueeText(
     text: String,
     modifier: Modifier = Modifier,
