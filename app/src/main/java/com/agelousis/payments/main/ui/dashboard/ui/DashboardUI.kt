@@ -39,7 +39,14 @@ fun DashboardLayout(
                 id = R.string.key_dashboard_label
             ),
             style = textViewTitleFont,
-            modifier = horizontalMargin
+            color = colorResource(
+                id = R.color.dayNightTextOnBackground
+            ),
+            modifier = Modifier
+                .padding(
+                    top = 16.dp,
+                    start = 16.dp
+                )
         )
         LazyVerticalGrid(
             cells = GridCells.Fixed(
@@ -163,7 +170,8 @@ fun DashboardInsightLayout(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                all = 16.dp
+                start = 16.dp,
+                end = 16.dp
             )
     ) {
         Column {
