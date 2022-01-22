@@ -53,6 +53,7 @@ import androidx.core.view.*
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.BuildConfig
 import com.agelousis.payments.R
@@ -1030,3 +1031,19 @@ infix fun RecyclerView.applyFloatingButtonBottomMarginWith(items: List<Any>) {
 
 val ByteArray.bitmap
     get() = BitmapFactory.decodeByteArray(this, 0, this.size)
+
+fun <T> Fragment.setBackStackData(key: String, data: T, doBack: Boolean = false) {
+    findNavController().previousBackStackEntry?.savedStateHandle?.set(key, data)
+    if (doBack)
+        findNavController().popBackStack()
+}
+
+fun <T> Fragment.getBackStackData(key: String, singleCall : Boolean = true , result: (T) -> (Unit)) {
+    findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<T>(key)
+        ?.observe(viewLifecycleOwner) {
+            result(it)
+            //if not removed then when click back without set data it will return previous data
+            if (singleCall)
+                findNavController().currentBackStackEntry?.savedStateHandle?.remove<T>(key)
+        }
+}

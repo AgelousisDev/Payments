@@ -52,6 +52,13 @@
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out"/>
+        <action
+            android:id="@+id/action_paymentsFragment_to_groupModificationFragment"
+            app:destination="@id/groupModificationFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/slide_bottom"
+            app:popEnterAnim="@anim/slide_up"
+            app:popExitAnim="@anim/slide_bottom"/>
     </fragment>
     <fragment
         android:id="@+id/personalInformationFragment"
@@ -216,5 +223,16 @@
         android:id="@+id/profilePictureFragment"
         android:name="com.agelousis.payments.main.ui.personalInformation.ProfilePictureFragment"
         android:label="ProfilePictureFragment"/>
+    <fragment
+        android:id="@+id/groupModificationFragment"
+        android:name="com.agelousis.payments.main.ui.groupModification.GroupModificationFragment"
+        android:label="GroupModificationFragment"
+        tools:layout="@layout/group_modification_fragment_layout">
+        <argument
+            android:name="groupModel"
+            app:argType="com.agelousis.payments.main.ui.payments.models.GroupModel"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 
 </navigation>

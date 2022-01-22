@@ -39,9 +39,6 @@
             android:label="@string/app_name"
             android:theme="@style/MainAppTheme" />
         <activity
-            android:name=".group.GroupActivity"
-            android:theme="@style/GroupAppTheme" />
-        <activity
             android:name=".notificationActivity.NotificationActivity"
             android:allowEmbedded="true"
             android:documentLaunchMode="always"

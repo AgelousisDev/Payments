@@ -131,6 +131,13 @@ fun setBackgroundViewTintColor(view: View, color: Int?) {
     }
 }
 
+@BindingAdapter("backgroundViewContextTintColor")
+fun setBackgroundViewContextTintColor(view: View, color: Int?) {
+    color?.let {
+        view.background?.colorFilter = PorterDuffColorFilter(it, PorterDuff.Mode.SRC_IN)
+    }
+}
+
 @BindingAdapter("imageFromByteArray")
 fun setImageFromByteArray(appCompatImageView: AppCompatImageView, byteArray: ByteArray?) {
     byteArray?.let {

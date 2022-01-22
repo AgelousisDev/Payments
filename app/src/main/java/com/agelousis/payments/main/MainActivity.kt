@@ -1,6 +1,5 @@
 package com.agelousis.payments.main
 
-import android.app.Activity
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -23,7 +22,6 @@ import com.agelousis.payments.database.DBManager
 import com.agelousis.payments.database.SQLiteHelper
 import com.agelousis.payments.databinding.ActivityMainBinding
 import com.agelousis.payments.firebase.models.FirebaseNotificationData
-import com.agelousis.payments.group.GroupActivity
 import com.agelousis.payments.login.LoginActivity
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.enumerations.FloatingButtonPosition
@@ -33,7 +31,7 @@ import com.agelousis.payments.main.ui.dashboard.HistoryFragment
 import com.agelousis.payments.main.ui.newPayment.NewPaymentFragment
 import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
 import com.agelousis.payments.main.ui.payments.PaymentsFragment
-import com.agelousis.payments.main.ui.payments.models.GroupModel
+import com.agelousis.payments.main.ui.payments.extensions.redirectToGroupModificationFragment
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.paymentsFiltering.FilterPaymentsFragment
 import com.agelousis.payments.main.ui.pdfViewer.PdfViewerFragment
@@ -100,6 +98,12 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 floatingButtonImage = R.drawable.ic_add_group
                 floatingButtonPosition = FloatingButtonPosition.CENTER
                 floatingButtonState = true
+            }
+            R.id.groupModificationFragment -> {
+                navigationIcon = getDrawableFromAttribute(
+                    attributeId = R.attr.homeAsUpIndicator
+                )
+                floatingButtonState = false
             }
             R.id.newPaymentFragment -> {
                 navigationIcon = getDrawableFromAttribute(
@@ -179,7 +183,8 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
         when(binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().currentDestination?.id) {
             R.id.personalInformationFragment ->
                 (supportFragmentManager.currentNavigationFragment as? PersonalInformationFragment)?.playProfileSuccessAnimation()
-            R.id.paymentsFragment -> startGroupActivity()
+            R.id.paymentsFragment ->
+                (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.redirectToGroupModificationFragment()
             R.id.newPaymentFragment ->
                 (supportFragmentManager.currentNavigationFragment as? NewPaymentFragment)?.checkInputFields()
             R.id.newPaymentAmountFragment ->
@@ -367,24 +372,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
         binding.appBarMain.floatingButton.setOnClickListener(this)
     }
 
-    private fun configureGroup(groupModel: GroupModel, successBlock: () -> Unit) {
-        uiScope.launch {
-            groupModel.groupImageData = this@MainActivity byteArrayFromInternalImage groupModel.groupImage
-            groupModel.groupId?.let {
-                DBManager.updateGroup(
-                    groupModel = groupModel,
-                    updateSuccessBlock = successBlock
-                )
-            } ?: DBManager.insertGroups(
-                userId = userModel?.id,
-                groupModelList = listOf(
-                    groupModel
-                ),
-                insertionSuccessBlock = successBlock
-            )
-        }
-    }
-
     fun initializeDatabaseExport() {
         showTwoButtonsDialog(
             SimpleDialogDataModel(
@@ -468,21 +455,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
             )
         else
             super.onBackPressed()
-    }
-
-    fun startGroupActivity(groupModel: GroupModel? = null) {
-        activityLauncher?.launch(
-            input = Intent(this, GroupActivity::class.java).also {
-                it.putExtra(GroupActivity.GROUP_MODEL_EXTRA, groupModel)
-            }
-        ) { result ->
-            if (result.resultCode == Activity.RESULT_OK)
-                configureGroup(
-                    groupModel = result.data?.extras?.getParcelable(GroupActivity.GROUP_MODEL_EXTRA) ?: return@launch
-                ) {
-                    (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.initializePayments()
-                }
-        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

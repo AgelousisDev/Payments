@@ -3,6 +3,7 @@ package com.agelousis.payments.main.ui.payments.extensions
 import android.graphics.Rect
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -10,10 +11,12 @@ import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.custom.enumerations.SwipeAction
 import com.agelousis.payments.custom.itemTouchHelper.SwipeItemTouchHelper
+import com.agelousis.payments.database.UpdateSuccessBlock
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.enumerations.SwipeItemType
 import com.agelousis.payments.main.ui.newPayment.viewHolders.PaymentAmountViewHolder
 import com.agelousis.payments.main.ui.payments.PaymentsFragment
+import com.agelousis.payments.main.ui.payments.PaymentsFragmentDirections
 import com.agelousis.payments.main.ui.payments.adapters.PaymentsAdapter
 import com.agelousis.payments.main.ui.payments.models.*
 import com.agelousis.payments.main.ui.payments.viewHolders.BalanceOverviewViewHolder
@@ -423,4 +426,37 @@ infix fun PaymentsFragment.createCalendarEventWith(paymentAmountModel: PaymentAm
             )
         )
     )
+}
+
+fun PaymentsFragment.redirectToGroupModificationFragment(
+    groupModel: GroupModel? = null
+) {
+    findNavController().navigate(
+        PaymentsFragmentDirections.actionPaymentsFragmentToGroupModificationFragment(
+            groupModel = groupModel
+        )
+    )
+}
+
+fun PaymentsFragment.configureGroup(
+    groupModel: GroupModel,
+    updateSuccessBlock: UpdateSuccessBlock
+) {
+    uiScope.launch {
+        groupModel.groupImageData = context?.byteArrayFromInternalImage(
+            imageName = groupModel.groupImage
+        )
+        groupModel.groupId?.let {
+            viewModel.updateGroup(
+                groupModel = groupModel,
+                updateSuccessBlock = updateSuccessBlock
+            )
+        } ?: viewModel.insertGroups(
+            userId = (activity as? MainActivity)?.userModel?.id,
+            groupModelList = listOf(
+                groupModel
+            ),
+            insertionSuccessBlock = updateSuccessBlock
+        )
+    }
 }

@@ -3,6 +3,8 @@ package com.agelousis.payments.main.ui.payments.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.agelousis.payments.database.DBManager
+import com.agelousis.payments.database.InsertionSuccessBlock
+import com.agelousis.payments.database.UpdateSuccessBlock
 import com.agelousis.payments.firebase.models.FirebaseMessageModel
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.ui.files.models.FileDataModel
@@ -91,6 +93,28 @@ class PaymentsViewModel: ViewModel() {
         DBManager.updateUserBalance(
             userId = userModel?.id,
             balance = balance
+        )
+    }
+
+    suspend fun updateGroup(
+        groupModel: GroupModel,
+        updateSuccessBlock: UpdateSuccessBlock
+    ) {
+        DBManager.updateGroup(
+            groupModel = groupModel,
+            updateSuccessBlock = updateSuccessBlock
+        )
+    }
+
+    suspend fun insertGroups(
+        userId: Int?,
+        groupModelList: List<GroupModel>,
+        insertionSuccessBlock: InsertionSuccessBlock
+    ) {
+        DBManager.insertGroups(
+            userId = userId,
+            groupModelList = groupModelList,
+            insertionSuccessBlock = insertionSuccessBlock
         )
     }
 

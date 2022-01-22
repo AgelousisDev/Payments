@@ -6,7 +6,7 @@
             type="com.agelousis.payments.main.ui.payments.models.GroupModel" />
         <variable
             name="presenter"
-            type="com.agelousis.payments.group.presenter.GroupActivityPresenter" />
+            type="com.agelousis.payments.main.ui.groupModification.presenter.GroupModificationFragmentPresenter"/>
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,9 +14,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
-    backgroundViewContextColor="@{groupModel.color}"
-    tools:context=".group.GroupActivity"
+    android:layout_marginBottom="90dp"
+    tools:context=".group.GroupModificationFragment"
     android:animateLayoutChanges="true"
     android:id="@+id/rootLayout">
 
@@ -28,6 +27,7 @@
         android:focusable="true"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:onClick="@{() -> presenter.onColorPalette()}"
+        imageTintColor="@{groupModel.color}"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_color_lens" />
@@ -42,6 +42,7 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:onClick="@{() -> presenter.onGroupAdd()}"
         android:visibility="gone"
+        imageTintColor="@{groupModel.color}"
         app:srcCompat="@drawable/ic_check"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

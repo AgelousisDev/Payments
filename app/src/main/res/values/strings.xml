@@ -27,6 +27,7 @@
     <string name="key_no_changes_message">You have not made any changes…</string>
     <string name="key_add_label">Add</string>
     <string name="key_add_group_label">Add Group</string>
+    <string name="key_modify_group">Modify Group</string>
     <string name="key_group_name_label">Group name</string>
     <string name="key_no_clients_title_message">No clients added</string>
     <string name="key_no_clients_message">Click \'+\' to add a Group and then click on each one to add Clients</string>

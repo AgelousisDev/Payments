@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.agelousis.payments.R
@@ -15,6 +16,7 @@ import com.agelousis.payments.databinding.FragmentPaymentsLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.menuOptions.PaymentsMenuOptionsBottomSheetFragment
 import com.agelousis.payments.main.ui.files.models.FileDataModel
+import com.agelousis.payments.main.ui.groupModification.GroupModificationFragment
 import com.agelousis.payments.main.ui.newPayment.presenters.NewPaymentPresenter
 import com.agelousis.payments.main.ui.payments.adapters.PaymentsAdapter
 import com.agelousis.payments.main.ui.payments.extensions.*
@@ -63,7 +65,7 @@ class PaymentsFragment: Fragment(), GroupPresenter, ClientPresenter, NewPaymentP
     }
 
     override fun onGroupSelected(groupModel: GroupModel) {
-        (activity as? MainActivity)?.startGroupActivity(
+        redirectToGroupModificationFragment(
             groupModel = groupModel
         )
     }
@@ -214,6 +216,7 @@ class PaymentsFragment: Fragment(), GroupPresenter, ClientPresenter, NewPaymentP
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeNewFilters()
+        initializeGroupModification()
         configureToolbar()
         configureSearchView()
         configureRecyclerView()
@@ -347,6 +350,20 @@ class PaymentsFragment: Fragment(), GroupPresenter, ClientPresenter, NewPaymentP
             }
             sharedPreferences?.paymentsFilteringOptionTypes = paymentsFilteringOptionTypes
             MainApplication.paymentsFilteringOptionTypes = paymentsFilteringOptionTypes
+        }
+    }
+
+    private fun initializeGroupModification() {
+        setFragmentResultListener(
+            GroupModificationFragment.GROUP_MODEL_EXTRA
+        ) { key, bundle ->
+            if (key == GroupModificationFragment.GROUP_MODEL_EXTRA)
+                configureGroup(
+                    groupModel = bundle.getParcelable(
+                        GroupModificationFragment.GROUP_MODEL_EXTRA
+                    ) ?: return@setFragmentResultListener,
+                    updateSuccessBlock = this::initializePayments
+                )
         }
     }
 

@@ -46,6 +46,7 @@
         <entry key="app/src/main/res/drawable-night/balance_overview_backgound.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable-night/balance_overview_background.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable-v31/balance_overview_background.xml" value="0.33645833333333336" />
+        <entry key="app/src/main/res/drawable/alpha_stroke_background.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/balance_overview_background.xml" value="0.3312820512820513" />
         <entry key="app/src/main/res/drawable/basic_dialog_background.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/basic_dialog_footer_background.xml" value="0.33645833333333336" />
@@ -60,7 +61,11 @@
         <entry key="app/src/main/res/drawable/ic_baseline_arrow_forward.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/ic_baseline_keyboard_arrow_down_24.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/ic_baseline_keyboard_arrow_up_24.xml" value="0.33645833333333336" />
+        <entry key="app/src/main/res/drawable/ic_check.xml" value="0.33645833333333336" />
+        <entry key="app/src/main/res/drawable/ic_color_lens.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/ic_email.xml" value="0.3312820512820513" />
+        <entry key="app/src/main/res/drawable/ic_group.xml" value="0.33645833333333336" />
+        <entry key="app/src/main/res/drawable/ic_group_white.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/ic_message.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/ic_payment.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/ic_person.xml" value="0.33645833333333336" />
