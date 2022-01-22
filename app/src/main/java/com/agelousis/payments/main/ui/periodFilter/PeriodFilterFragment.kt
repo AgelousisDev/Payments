@@ -105,7 +105,6 @@ class PeriodFilterFragment: BaseBindingFragment<PeriodFilterFragmentLayoutBindin
         ) { pdfFile ->
             uiScope.launch {
                 viewModel.insertFile(
-                    context = context ?: return@launch,
                     userModel = (activity as? MainActivity)?.userModel,
                     file = pdfFile,
                     description = String.format(

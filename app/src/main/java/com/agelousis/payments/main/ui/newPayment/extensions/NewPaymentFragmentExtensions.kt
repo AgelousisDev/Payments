@@ -28,9 +28,9 @@ import com.agelousis.payments.utils.models.NotificationDataModel
 import com.agelousis.payments.utils.models.SimpleDialogDataModel
 
 fun NewPaymentFragment.configureScrollView() {
-    binding.nestedScrollView.setOnScrollChangeListener(
+    layoutBinding.nestedScrollView.setOnScrollChangeListener(
         FabExtendingOnScrollListener(
-            floatingActionButton = binding.addPaymentButton
+            floatingActionButton = layoutBinding.addPaymentButton
         )
     )
 }
@@ -38,8 +38,8 @@ fun NewPaymentFragment.configureScrollView() {
 fun NewPaymentFragment.configureRecyclerView() {
     configureRecyclerViewMargins()
     configurePaymentsSwipeEvent()
-    binding.paymentAmountRecyclerView applyFloatingButtonBottomMarginWith availablePayments
-    binding.paymentAmountRecyclerView.adapter = PaymentAmountAdapter(
+    layoutBinding.paymentAmountRecyclerView applyFloatingButtonBottomMarginWith availablePayments
+    layoutBinding.paymentAmountRecyclerView.adapter = PaymentAmountAdapter(
         paymentModelList = availablePayments,
         vat = (activity as? MainActivity)?.userModel?.vat,
         presenter = this
@@ -49,7 +49,7 @@ fun NewPaymentFragment.configureRecyclerView() {
 fun NewPaymentFragment.configureRecyclerViewMargins() {
     when (context?.isLandscape == true) {
         true ->
-            binding.paymentAmountRecyclerView.updateLayoutParams<ConstraintLayout.LayoutParams> {
+            layoutBinding.paymentAmountRecyclerView.updateLayoutParams<ConstraintLayout.LayoutParams> {
                 updateMargins(
                     bottom =
                     if (availablePayments.isEmpty())
@@ -59,7 +59,7 @@ fun NewPaymentFragment.configureRecyclerViewMargins() {
                 )
             }
         false ->
-            binding.paymentAmountRecyclerView.updateLayoutParams<LinearLayout.LayoutParams> {
+            layoutBinding.paymentAmountRecyclerView.updateLayoutParams<LinearLayout.LayoutParams> {
                 updateMargins(
                     bottom = if (availablePayments.isEmpty())
                         90.inPixel.toInt()
@@ -86,11 +86,11 @@ private fun NewPaymentFragment.configurePaymentsSwipeEvent() {
             }
         }
     )
-    swipeItemTouchHelper.attachToRecyclerView(binding.paymentAmountRecyclerView)
+    swipeItemTouchHelper.attachToRecyclerView(layoutBinding.paymentAmountRecyclerView)
 }
 
 private infix fun NewPaymentFragment.removePaymentAt(position: Int) {
-    (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.removeItem(
+    (layoutBinding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.removeItem(
         position = position
     )
     configureRecyclerViewMargins()
@@ -108,7 +108,7 @@ fun NewPaymentFragment.showCountryCodesSelector() {
 
 fun NewPaymentFragment.showGroupsSelectionFragment() {
     availableGroups.forEach { groupModel ->
-        groupModel.isSelected = groupModel.groupName?.lowercase() == binding.groupDetailsLayout.value?.lowercase()
+        groupModel.isSelected = groupModel.groupName?.lowercase() == layoutBinding.groupDetailsLayout.value?.lowercase()
     }
     GroupSelectorBottomSheetDialogFragment.show(
         supportFragmentManager = childFragmentManager,
@@ -127,11 +127,11 @@ fun NewPaymentFragment.redirectToSMSAppIf(payment: PaymentAmountModel, predicate
                 positiveButtonBlock = {
                     context?.sendSMSMessage(
                         mobileNumbers = listOf(
-                            binding.phoneLayout.value ?: ""
+                            layoutBinding.phoneLayout.value ?: ""
                         ),
                         message = String.format(
                             "%s\n%s",
-                            binding.messageTemplateField.text?.toString() ?: "",
+                            layoutBinding.messageTemplateField.text?.toString() ?: "",
                             payment.paymentMonth ?: payment.paymentDate ?: ""
                         )
                     )
@@ -164,8 +164,8 @@ infix fun NewPaymentFragment.createCalendarEventWith(paymentAmountModel: Payment
         calendar = paymentAmountModel?.paymentDate?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)?.calendar ?: return,
         title = String.format(
             "%s %s",
-            binding.firstNameLayout.value ?: return,
-            binding.surnameLayout.value ?: return
+            layoutBinding.firstNameLayout.value ?: return,
+            layoutBinding.surnameLayout.value ?: return
         ),
         description = String.format(
             resources.getString(R.string.key_calendar_event_amount_value),
@@ -174,7 +174,7 @@ infix fun NewPaymentFragment.createCalendarEventWith(paymentAmountModel: Payment
                 vat = (activity as? MainActivity)?.userModel?.vat ?: return
             )
         ),
-        email = binding.emailLayout.value ?: return
+        email = layoutBinding.emailLayout.value ?: return
     )
 }
 
@@ -218,7 +218,7 @@ private val NewPaymentFragment.contactTypeList: List<ContactType>
 fun NewPaymentFragment.setupContactUI() {
     if (!args.clientDataModel?.email.isNullOrEmpty()
             || !args.clientDataModel?.phone.isNullOrEmpty())
-        binding.contactComposeView.setContent {
+        layoutBinding.contactComposeView.setContent {
             MaterialTheme(
                 typography = Typography,
                 colors = appColors()

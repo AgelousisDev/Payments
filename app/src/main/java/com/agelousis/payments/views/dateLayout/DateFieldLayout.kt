@@ -60,7 +60,7 @@ class DateFieldLayout(context: Context, attributeSet: AttributeSet?): FrameLayou
                 label = attributes.getString(R.styleable.PersonDetailsLayout_label),
                 value = attributes.getString(R.styleable.PersonDetailsLayout_value),
                 showLine = attributes.getBoolean(R.styleable.PersonDetailsLayout_showLine, true),
-                icon = attributes.getResourceId(R.styleable.PersonDetailsLayout_iconResource, 0)
+                endIcon = attributes.getResourceId(R.styleable.PersonDetailsLayout_endIconResource, 0)
             )
             binding.presenter = this
             attributes.recycle()

@@ -1,6 +1,5 @@
 package com.agelousis.payments.main.ui.dashboard.viewModel
 
-import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -85,13 +84,9 @@ class DashboardViewModel: ViewModel() {
     }
 
     suspend fun fetchGroups(
-        context: Context,
         userId: Int?
     ) {
-        val dbManager = DBManager(
-            context = context
-        )
-        dbManager.initializeGroups(
+        DBManager.initializeGroups(
             userId = userId
         ) {
             groupModelListMutableLiveData.value = it
@@ -99,13 +94,9 @@ class DashboardViewModel: ViewModel() {
     }
 
     suspend fun fetchInvoices(
-        context: Context,
         userId: Int?
     ) {
-        val dbManager = DBManager(
-            context = context
-        )
-        dbManager.initializeFiles(
+        DBManager.initializeFiles(
             userId = userId
         ) {
             fileDataModelListMutableLiveData.value  = it

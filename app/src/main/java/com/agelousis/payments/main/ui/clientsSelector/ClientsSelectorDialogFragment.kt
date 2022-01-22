@@ -136,7 +136,6 @@ class ClientsSelectorDialogFragment: DialogFragment(), ClientsSelectorFragmentPr
             withContext(Dispatchers.Default) {
                 for (map in filteredClientModelList.filter { it.isSelected }.groupBy { it.groupName })
                     viewModel.insertGroup(
-                        context = context ?: return@withContext,
                         userId = (activity as? MainActivity)?.userModel?.id,
                         groupModel = GroupModel(
                             groupName = map.key ?: return@withContext,
@@ -148,7 +147,6 @@ class ClientsSelectorDialogFragment: DialogFragment(), ClientsSelectorFragmentPr
                         }
                         uiScope.launch innerLaunch@ {
                             viewModel.insertClients(
-                                context = context ?: return@innerLaunch,
                                 userId = (activity as? MainActivity)?.userModel?.id,
                                 clientModelList = map.value
                             ) {

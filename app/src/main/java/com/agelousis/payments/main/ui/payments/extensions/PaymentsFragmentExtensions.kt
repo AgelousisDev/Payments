@@ -126,7 +126,6 @@ private infix fun PaymentsFragment.deleteItemWith(
             positiveButtonBlock = {
                 uiScope.launch {
                     viewModel.deleteItem(
-                        context = context ?: return@launch,
                         item = filteredList.getOrNull(index = position)
                     )
                 }
@@ -146,7 +145,6 @@ infix fun PaymentsFragment.configureMultipleDeleteActionWith(positions: List<Int
             positiveButtonBlock = {
                 uiScope.launch {
                     viewModel.deletePayments(
-                        context = context ?: return@launch,
                         personIds = positions
                     )
                 }
@@ -159,7 +157,6 @@ private infix fun PaymentsFragment.configurePDFActionWith(position: Int) {
     uiScope.launch {
         filteredList.getOrNull(index = position)?.asIs<GroupModel> { groupModel ->
             viewModel.initializePayments(
-                context = context ?: return@asIs,
                 userModel = (activity as? MainActivity)?.userModel,
                 groupModel = groupModel
             ) {
@@ -189,7 +186,6 @@ fun PaymentsFragment.initializePDFCreation(
     ) { pdfFile ->
         uiScope.launch {
             viewModel.insertFile(
-                context = context ?: return@launch,
                 userModel = (activity as? MainActivity)?.userModel,
                 file = pdfFile,
                 description = if (clients.isSizeOne)

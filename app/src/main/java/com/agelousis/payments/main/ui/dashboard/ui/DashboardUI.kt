@@ -4,9 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
@@ -30,46 +28,48 @@ import com.agelousis.payments.utils.extensions.euroFormattedString
 fun DashboardLayout(
     viewModel: DashboardViewModel
 ) {
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Text(
-            text = stringResource(
-                id = R.string.key_dashboard_label
-            ),
-            style = textViewTitleFont,
-            color = colorResource(
-                id = R.color.dayNightTextOnBackground
-            ),
-            modifier = Modifier
-                .padding(
-                    top = 16.dp,
-                    start = 16.dp
-                )
-        )
-        LazyVerticalGrid(
-            cells = GridCells.Fixed(
-                count = 2
-            ),
-            contentPadding = PaddingValues(
-                all = 16.dp
-            ),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(
-                items = viewModel.dashboardStatisticsDataMutableState
-            ) { dashboardStatisticsDataModel ->
-                StatisticCardLayout(
-                    viewModel = viewModel,
-                    dashboardStatisticsDataModel = dashboardStatisticsDataModel
-                )
+        item {
+            Text(
+                text = stringResource(
+                    id = R.string.key_dashboard_label
+                ),
+                style = textViewTitleFont,
+                color = colorResource(
+                    id = R.color.dayNightTextOnBackground
+                ),
+                modifier = Modifier
+                    .padding(
+                        top = 16.dp,
+                        start = 16.dp
+                    )
+            )
+        }
+        item {
+            LazyRow(
+                contentPadding = PaddingValues(
+                    all = 16.dp
+                ),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(
+                    items = viewModel.dashboardStatisticsDataMutableState
+                ) { dashboardStatisticsDataModel ->
+                    StatisticCardLayout(
+                        viewModel = viewModel,
+                        dashboardStatisticsDataModel = dashboardStatisticsDataModel
+                    )
+                }
             }
         }
-        DashboardInsightLayout(
-            viewModel = viewModel
-        )
+        item {
+            DashboardInsightLayout(
+                viewModel = viewModel
+            )
+        }
     }
 }
 
@@ -134,7 +134,8 @@ fun StatisticCardLayout(
             Column(
                 modifier = Modifier
                     .padding(
-                        all = 8.dp
+                        start = 8.dp,
+                        end = 16.dp
                     )
                     .wrapContentWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -171,7 +172,8 @@ fun DashboardInsightLayout(
             .fillMaxWidth()
             .padding(
                 start = 16.dp,
-                end = 16.dp
+                end = 16.dp,
+                bottom = 16.dp
             )
     ) {
         Column {

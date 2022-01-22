@@ -13,9 +13,8 @@ class FilesViewModel: ViewModel() {
     val filesLiveData by lazy { MutableLiveData<List<FileDataModel>>() }
     val fileDeletionLiveData by lazy { MutableLiveData<Boolean>() }
 
-    suspend fun initializeFiles(context: Context, userId: Int?) {
-        val dbManager = DBManager(context = context)
-        dbManager.initializeFiles(
+    suspend fun initializeFiles(userId: Int?) {
+        DBManager.initializeFiles(
             userId = userId
         ) {
             filesLiveData.value = it
@@ -29,8 +28,7 @@ class FilesViewModel: ViewModel() {
                 fileName = fileDataModel?.fileName
             )
         }
-        val dbManager = DBManager(context = context)
-        dbManager.deleteFiles(
+        DBManager.deleteFiles(
             fileIds = fileDataModelList.mapNotNull { it?.fileId }
         ) {
             fileDeletionLiveData.value = true

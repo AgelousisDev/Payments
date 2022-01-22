@@ -1,6 +1,5 @@
 package com.agelousis.payments.main.ui.newPayment.viewModels
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.agelousis.payments.database.DBManager
@@ -15,18 +14,16 @@ class NewPaymentViewModel: ViewModel() {
     val groupsLiveData by lazy { MutableLiveData<List<GroupModel>>() }
     val clientInsertionStateLiveData by lazy { MutableLiveData<Boolean>() }
 
-    suspend fun initializeGroups(context: Context, userId: Int?) {
-        val dbManager = DBManager(context = context)
-        dbManager.initializeGroups(
+    suspend fun initializeGroups(userId: Int?) {
+        DBManager.initializeGroups(
             userId = userId
         ) {
             groupsLiveData.value = it
         }
     }
 
-    suspend fun addClient(context: Context, userId: Int?, clientModel: ClientModel) {
-        val dbManager = DBManager(context = context)
-        dbManager.insertClients(
+    suspend fun addClient(userId: Int?, clientModel: ClientModel) {
+        DBManager.insertClients(
             userId = userId,
             clientModelList = listOf(
                 clientModel
@@ -36,9 +33,8 @@ class NewPaymentViewModel: ViewModel() {
         }
     }
 
-    suspend fun updateClient(context: Context, userId: Int?, clientModel: ClientModel) {
-        val dbManager = DBManager(context = context)
-        dbManager.updateClient(
+    suspend fun updateClient(userId: Int?, clientModel: ClientModel) {
+        DBManager.updateClient(
             userId = userId,
             clientModel = clientModel
         ) {
@@ -47,20 +43,16 @@ class NewPaymentViewModel: ViewModel() {
     }
 
     suspend fun insertPayment(
-        context: Context,
         paymentAmountModel: PaymentAmountModel,
         insertionSuccessBlock: InsertionSuccessBlock
     ) {
-        val dbManager = DBManager(
-            context = context
-        )
         paymentAmountModel.paymentId.whenNull {
-            dbManager.insertPayment(
+            DBManager.insertPayment(
                 paymentAmountModel = paymentAmountModel,
                 insertionSuccessBlock = insertionSuccessBlock
             )
         }?.let {
-            dbManager.updatePayment(
+            DBManager.updatePayment(
                 paymentAmountModel = paymentAmountModel,
                 insertionSuccessBlock = insertionSuccessBlock
             )

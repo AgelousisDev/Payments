@@ -201,7 +201,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
 
     lateinit var binding: ActivityMainBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
-    private val dbManager by lazy { DBManager(context = this) }
     val userModel by lazy { intent?.extras?.getParcelable<UserModel>(USER_MODEL_EXTRA) }
     var appBarTitle: String? = null
         set(value) {
@@ -372,11 +371,11 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
         uiScope.launch {
             groupModel.groupImageData = this@MainActivity byteArrayFromInternalImage groupModel.groupImage
             groupModel.groupId?.let {
-                dbManager.updateGroup(
+                DBManager.updateGroup(
                     groupModel = groupModel,
                     updateSuccessBlock = successBlock
                 )
-            } ?: dbManager.insertGroups(
+            } ?: DBManager.insertGroups(
                 userId = userModel?.id,
                 groupModelList = listOf(
                     groupModel
@@ -420,7 +419,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 positiveButtonBackgroundColor = ContextCompat.getColor(this, R.color.red),
                 positiveButtonBlock = {
                     uiScope.launch {
-                        dbManager.clearPayments(
+                        DBManager.clearPayments(
                             userId = userModel?.id
                         ) {
                             (supportFragmentManager.currentNavigationFragment as? PaymentsFragment)?.initializePayments()

@@ -1,6 +1,5 @@
 package com.agelousis.payments.login.viewModel
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.agelousis.payments.database.DBManager
@@ -13,16 +12,14 @@ class LoginViewModel: ViewModel() {
     val groupsLiveData by lazy { MutableLiveData<List<GroupModel>>() }
     val personsImagesLiveData by lazy { MutableLiveData<List<Pair<String?, ByteArray?>>>() }
 
-    suspend fun initializeUsers(context: Context) {
-        val dbManager = DBManager(context = context)
-        dbManager.checkUsers {
+    suspend fun initializeUsers() {
+        DBManager.checkUsers {
             usersLiveData.value = it.takeIf { it.isNotEmpty() } ?: return@checkUsers
         }
     }
 
-    suspend fun initializeGroups(context: Context) {
-        val dbManager = DBManager(context = context)
-        dbManager.initializeGroups inner@ {
+    suspend fun initializeGroups() {
+        DBManager.initializeGroups inner@ {
             groupsLiveData.value = it.takeIf { it.isNotEmpty() } ?: return@inner
         }
     }

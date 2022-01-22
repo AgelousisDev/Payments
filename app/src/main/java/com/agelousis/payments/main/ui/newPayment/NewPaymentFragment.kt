@@ -40,27 +40,27 @@ import kotlin.collections.ArrayList
 class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragmentPresenter, CountrySelectorFragmentPresenter {
 
     override fun onCountrySelected(countryDataModel: CountryDataModel) {
-        if (binding.phoneLayout.value?.contains(" ") == true)
-            binding.phoneLayout.value = String.format(
+        if (layoutBinding.phoneLayout.value?.contains(" ") == true)
+            layoutBinding.phoneLayout.value = String.format(
                 "%s %s",
                 countryDataModel.countryZipCode ?: "",
-                binding.phoneLayout.value?.split(
+                layoutBinding.phoneLayout.value?.split(
                     " "
                 )?.second()
             )
         else
-            binding.phoneLayout.value = String.format(
+            layoutBinding.phoneLayout.value = String.format(
                 "%s %s",
                 countryDataModel.countryZipCode ?: "",
-                binding.phoneLayout.value ?: ""
+                layoutBinding.phoneLayout.value ?: ""
             )
         selectedCountryDataModel = countryDataModel
-        binding.selectedCountryDataModel = countryDataModel
+        layoutBinding.selectedCountryDataModel = countryDataModel
     }
 
     override fun onGroupSelected(groupModel: GroupModel) {
-        binding.groupDetailsLayout.errorState = false
-        binding.groupDetailsLayout.value = groupModel.groupName
+        layoutBinding.groupDetailsLayout.errorState = false
+        layoutBinding.groupDetailsLayout.value = groupModel.groupName
     }
 
     override fun onPaymentAmount(paymentAmountModel: PaymentAmountModel?) {
@@ -97,16 +97,17 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
 
     override fun onClearPayments() {
         availablePayments.apply {
-            (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.notifyItemRangeRemoved(
+            (layoutBinding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.notifyItemRangeRemoved(
                 0,
                 size
             )
             clear()
         }
-        binding.paymentsAreAvailable = false
+        layoutBinding.paymentsAreAvailable = false
         configureRecyclerViewMargins()
     }
 
+    lateinit var layoutBinding: FragmentNewPaymentLayoutBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel by viewModels<NewPaymentViewModel>()
     val args: NewPaymentFragmentArgs by navArgs()
@@ -115,14 +116,13 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
     }
     val availableGroups by lazy { arrayListOf<GroupModel>() }
     val availablePayments by lazy { ArrayList(args.clientDataModel?.payments ?: listOf()) }
-    lateinit var binding: FragmentNewPaymentLayoutBinding
     var currentClientModel: ClientModel? = null
     private var paymentAmountUpdateIndex: Int? = null
     private var addPaymentButtonState = true
         set(value) {
             field = value
-            binding.addPaymentButton.animateAlpha(toAlpha = if (value) 1.0f else 0.2f)
-            binding.addPaymentButton.isEnabled = value
+            layoutBinding.addPaymentButton.animateAlpha(toAlpha = if (value) 1.0f else 0.2f)
+            layoutBinding.addPaymentButton.isEnabled = value
         }
     private var selectedPaymentType = PaymentType.CASH_PAYMENT
     val fieldsHaveChanged
@@ -134,21 +134,21 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
     private var contactDataModel: ContactDataModel? = null
         set(value) {
             field = value
-            binding.firstNameLayout.value = value?.firstName
-            binding.surnameLayout.value = value?.lastName
-            binding.emailLayout.value = value?.email
-            binding.phoneLayout.value = value?.phoneNumber
+            layoutBinding.firstNameLayout.value = value?.firstName
+            layoutBinding.surnameLayout.value = value?.lastName
+            layoutBinding.emailLayout.value = value?.email
+            layoutBinding.phoneLayout.value = value?.phoneNumber
         }
 
     override fun onResume() {
         super.onResume()
         currentClientModel?.let {
-            binding.clientModel = it
+            layoutBinding.clientModel = it
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentNewPaymentLayoutBinding.inflate(
+        layoutBinding = FragmentNewPaymentLayoutBinding.inflate(
             inflater,
             container,
             false
@@ -159,7 +159,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             it.paymentsAreAvailable = availablePayments.isNotEmpty()
             it.presenter = this
         }
-        return binding.root
+        return layoutBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -175,31 +175,31 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
     }
 
     private fun setupUI() {
-        binding.paymentTypeLayout.setOnDetailsPressed {
+        layoutBinding.paymentTypeLayout.setOnDetailsPressed {
             context?.showListDialog(
                 title = resources.getString(R.string.key_payment_type_label),
                 items = resources.getStringArray(R.array.key_payment_type_array).toList()
             ) {
                 val paymentType = PaymentType.values().getOrNull(index = it) ?: return@showListDialog
                 selectedPaymentType = paymentType
-                binding.paymentTypeLayout.value = paymentType.getLocalizedTitle(
+                layoutBinding.paymentTypeLayout.value = paymentType.getLocalizedTitle(
                     resources = resources
                 )
             }
         }
-        binding.countryCodeLayout.setOnDetailsPressed {
+        layoutBinding.countryCodeLayout.setOnDetailsPressed {
             showCountryCodesSelector()
         }
-        binding.groupDetailsLayout.setOnDetailsPressed {
+        layoutBinding.groupDetailsLayout.setOnDetailsPressed {
             showGroupsSelectionFragment()
         }
-        binding.activeAppSwitchLayout.setOnClickListener {
-            binding.activeAppSwitchLayout.isChecked = binding.activeAppSwitchLayout.isChecked == false
+        layoutBinding.activeAppSwitchLayout.setOnClickListener {
+            layoutBinding.activeAppSwitchLayout.isChecked = layoutBinding.activeAppSwitchLayout.isChecked == false
         }
-        binding.freeAppSwitchLayout.setOnClickListener {
-            binding.freeAppSwitchLayout.isChecked = binding.freeAppSwitchLayout.isChecked == false
+        layoutBinding.freeAppSwitchLayout.setOnClickListener {
+            layoutBinding.freeAppSwitchLayout.isChecked = layoutBinding.freeAppSwitchLayout.isChecked == false
         }
-        binding.freeAppSwitchLayout.appSwitchListener = object: AppSwitchListener {
+        layoutBinding.freeAppSwitchLayout.appSwitchListener = object: AppSwitchListener {
             override fun onAppSwitchValueChanged(isChecked: Boolean) {
                 addPaymentButtonState = !isChecked
             }
@@ -228,7 +228,7 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
                 zipCode = currentPhoneValue.split(" ").firstOrNull()
             )
         } ?: MainApplication.countryDataModel
-        binding.selectedCountryDataModel = selectedCountryDataModel
+        layoutBinding.selectedCountryDataModel = selectedCountryDataModel
     }
 
     private fun initializeNewPayments() {
@@ -249,15 +249,14 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
                 }
             }
             configureRecyclerViewMargins()
-            (binding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
-            binding.paymentsAreAvailable = availablePayments.isNotEmpty()
+            (layoutBinding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
+            layoutBinding.paymentsAreAvailable = availablePayments.isNotEmpty()
         }
     }
 
     private fun initializeGroups() {
         uiScope.launch {
             viewModel.initializeGroups(
-                context = context ?: return@launch,
                 userId = (activity as? MainActivity)?.userModel?.id
             )
         }
@@ -272,12 +271,12 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
         ) {
             checkDatabasePaymentAction()
         } ?: run {
-            binding.nestedScrollView.post {
-                binding.nestedScrollView.smoothScrollTo(0, 0)
+            layoutBinding.nestedScrollView.post {
+                layoutBinding.nestedScrollView.smoothScrollTo(0, 0)
             }
-            binding.groupDetailsLayout.errorState = binding.groupDetailsLayout.value == null
-            binding.firstNameLayout.errorState = binding.firstNameLayout.value == null
-            binding.surnameLayout.errorState = binding.surnameLayout.value == null
+            layoutBinding.groupDetailsLayout.errorState = layoutBinding.groupDetailsLayout.value == null
+            layoutBinding.firstNameLayout.errorState = layoutBinding.firstNameLayout.value == null
+            layoutBinding.surnameLayout.errorState = layoutBinding.surnameLayout.value == null
         }
     }
 
@@ -286,13 +285,11 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             when(databaseTriggeringType) {
                 DatabaseTriggeringType.INSERT ->
                     viewModel.addClient(
-                        context = this@NewPaymentFragment.context ?: return@launch,
                         userId = (activity as? MainActivity)?.userModel?.id,
                         clientModel = currentClientModel ?: return@launch
                     )
                 DatabaseTriggeringType.UPDATE ->
                     viewModel.updateClient(
-                        context = this@NewPaymentFragment.context ?: return@launch,
                         userId = (activity as? MainActivity)?.userModel?.id,
                         clientModel = currentClientModel ?: return@launch
                     )
@@ -301,28 +298,28 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
     }
 
     private fun fillCurrentPersonModel() {
-        var phone = binding.phoneLayout.value
+        var phone = layoutBinding.phoneLayout.value
         selectedCountryDataModel?.countryZipCode?.let { zipCode ->
-            if (binding.phoneLayout.value?.startsWith(zipCode) == false)
+            if (layoutBinding.phoneLayout.value?.startsWith(zipCode) == false)
                 phone = String.format(
                     "%s%s",
                     "$zipCode ",
-                    binding.phoneLayout.value
+                    layoutBinding.phoneLayout.value
                 )
         }
         currentClientModel = ClientModel(
             personId = args.clientDataModel?.personId,
-            groupId = availableGroups.firstOrNull { it.groupName.equals(binding.groupDetailsLayout.value, ignoreCase = true) }?.groupId,
-            groupName = binding.groupDetailsLayout.value,
-            firstName = binding.firstNameLayout.value,
-            surname = binding.surnameLayout.value,
+            groupId = availableGroups.firstOrNull { it.groupName.equals(layoutBinding.groupDetailsLayout.value, ignoreCase = true) }?.groupId,
+            groupName = layoutBinding.groupDetailsLayout.value,
+            firstName = layoutBinding.firstNameLayout.value,
+            surname = layoutBinding.surnameLayout.value,
             phone = phone,
-            parentName = binding.parentNameLayout.value,
-            parentPhone = binding.parentPhoneLayout.value,
-            email = binding.emailLayout.value,
-            active = binding.activeAppSwitchLayout.isChecked,
-            free = binding.freeAppSwitchLayout.isChecked,
-            messageTemplate = binding.messageTemplateField.text?.toString(),
+            parentName = layoutBinding.parentNameLayout.value,
+            parentPhone = layoutBinding.parentPhoneLayout.value,
+            email = layoutBinding.emailLayout.value,
+            active = layoutBinding.activeAppSwitchLayout.isChecked,
+            free = layoutBinding.freeAppSwitchLayout.isChecked,
+            messageTemplate = layoutBinding.messageTemplateField.text?.toString(),
             payments = availablePayments,
             paymentType = selectedPaymentType,
             groupColor = args.clientDataModel?.groupColor,

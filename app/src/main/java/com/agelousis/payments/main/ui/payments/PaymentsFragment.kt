@@ -168,7 +168,6 @@ class PaymentsFragment: Fragment(), GroupPresenter, ClientPresenter, NewPaymentP
         }?.currentBalance = balance
         uiScope.launch {
             viewModel.updateUserBalance(
-                context = context ?: return@launch,
                 userModel = (activity as? MainActivity)?.userModel,
                 balance = balance
             )
@@ -332,7 +331,6 @@ class PaymentsFragment: Fragment(), GroupPresenter, ClientPresenter, NewPaymentP
     fun initializePayments() {
         uiScope.launch {
             viewModel.initializePayments(
-                context = context ?: return@launch,
                 userModel = (activity as? MainActivity)?.userModel
             )
         }

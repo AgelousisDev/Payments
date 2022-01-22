@@ -40,6 +40,8 @@
         <entry key="../../../../../../layout/compose-model-1642193728670.xml" value="1.0" />
         <entry key="../../../../../../layout/compose-model-1642245894962.xml" value="0.6409214092140921" />
         <entry key="../../../../../../layout/compose-model-1642326410906.xml" value="0.6355013550135501" />
+        <entry key="../../../../../../layout/compose-model-1642880749164.xml" value="0.7628726287262872" />
+        <entry key="../../../../../../layout/compose-model-1642880902449.xml" value="0.7628726287262872" />
         <entry key="app/src/main/res/drawable-night-v31/balance_overview_background.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable-night/balance_overview_backgound.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable-night/balance_overview_background.xml" value="0.33645833333333336" />
@@ -61,6 +63,7 @@
         <entry key="app/src/main/res/drawable/ic_email.xml" value="0.3312820512820513" />
         <entry key="app/src/main/res/drawable/ic_message.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/ic_payment.xml" value="0.33645833333333336" />
+        <entry key="app/src/main/res/drawable/ic_person.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/ic_sms.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/ic_speech_bubble.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable/ic_telephone.xml" value="0.3312820512820513" />
@@ -122,6 +125,7 @@
         <entry key="app/src/main/res/layout/payments_menu_options_fragment_layout.xml" value="0.22554347826086957" />
         <entry key="app/src/main/res/layout/pdf_viewer_fragment_layout.xml" value="0.22780797101449277" />
         <entry key="app/src/main/res/layout/period_filter_fragment_layout.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/person_details_field_layout.xml" value="0.3203125" />
         <entry key="app/src/main/res/layout/person_details_picker_layout.xml" value="0.3203125" />
         <entry key="app/src/main/res/layout/profile_picture_fragment_layout.xml" value="0.18342391304347827" />
         <entry key="app/src/main/res/layout/qr_code_fragment_layout.xml" value="0.15577507598784193" />

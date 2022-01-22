@@ -80,7 +80,6 @@ class HistoryFragment: BaseViewBindingFragment<HistoryFragmentLayoutBinding>(
     private fun initializePayments() {
         uiScope.launch {
             viewModel.initializePayments(
-                context = context ?: return@launch,
                 userModel = (activity as? MainActivity)?.userModel
             )
         }

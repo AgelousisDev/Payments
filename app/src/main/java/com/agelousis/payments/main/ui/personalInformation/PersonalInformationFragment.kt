@@ -242,7 +242,6 @@ class PersonalInformationFragment: BaseBindingFragment<FragmentPersonalInformati
         context?.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
     }
     private val uiScope = CoroutineScope(Dispatchers.Main)
-    private val dbManager by lazy { context?.let { DBManager(context = it) } }
     private val newUserModel by lazy {
         (activity as? MainActivity)?.userModel?.copy()
     }
@@ -329,7 +328,7 @@ class PersonalInformationFragment: BaseBindingFragment<FragmentPersonalInformati
     private fun updateUser() {
         if ((activity as? MainActivity)?.userModel != newUserModel)
             uiScope.launch {
-                dbManager?.updateUser(
+                DBManager.updateUser(
                     userModel = newUserModel ?: return@launch
                 ) { newUserModel ->
                     this@PersonalInformationFragment restartMainActivityOrPopBackStack newUserModel
@@ -367,7 +366,7 @@ class PersonalInformationFragment: BaseBindingFragment<FragmentPersonalInformati
 
     private fun deleteUser() {
         uiScope.launch {
-            dbManager?.deleteUser(
+            DBManager.deleteUser(
                 userId = (activity as? MainActivity)?.userModel?.id ?: return@launch
             ) {
                 startActivity(Intent(context, LoginActivity::class.java))

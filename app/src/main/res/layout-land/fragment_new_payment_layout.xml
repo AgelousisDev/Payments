@@ -153,7 +153,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/importFromContactLayout"
-                app:showLine="true" />
+                app:showLine="true"
+                app:startIconResource="@drawable/ic_person"/>
 
             <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
                 android:id="@+id/surnameLayout"
@@ -166,7 +167,8 @@
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/paymentTypeLayout"
-                app:showLine="true" />
+                app:showLine="true"
+                app:startIconResource="@drawable/ic_person"/>
 
             <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
                 android:id="@+id/parentNameLayout"
@@ -205,7 +207,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/parentNameLayout"
-                app:showLine="true" />
+                app:showLine="true"
+                app:startIconResource="@drawable/ic_telephone"/>
 
             <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
                 android:id="@+id/parentPhoneLayout"
@@ -231,7 +234,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/phoneLayout"
-                app:showLine="true" />
+                app:showLine="true"
+                app:startIconResource="@drawable/ic_email"/>
 
             <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
                 android:id="@+id/groupDetailsLayout"

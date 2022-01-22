@@ -291,7 +291,6 @@ class FilesFragment: BaseBindingFragment<FragmentFilesLayoutBinding>(
     private fun initializeFiles() {
         uiScope.launch {
             viewModel.initializeFiles(
-                context = context ?: return@launch,
                 userId = (activity as? MainActivity)?.userModel?.id
             )
         }

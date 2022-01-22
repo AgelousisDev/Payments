@@ -1,6 +1,5 @@
 package com.agelousis.payments.main.ui.payments.viewModels
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.agelousis.payments.database.DBManager
@@ -24,41 +23,32 @@ class PaymentsViewModel: ViewModel() {
     val firebaseResponseLiveData by lazy { MutableLiveData<FirebaseResponseModel>() }
     val firebaseErrorLiveData by lazy { MutableLiveData<ErrorModel>() }
 
-    suspend fun initializePayments(context: Context, userModel: UserModel?) {
-        val dbManager = DBManager(
-            context = context
-        )
-        dbManager.initializePayments(
+    suspend fun initializePayments(userModel: UserModel?) {
+        DBManager.initializePayments(
             userId = userModel?.id
         ) {
             paymentsLiveData.value = it
         }
-        dbManager.close()
     }
 
-    suspend fun initializePayments(context: Context, userModel: UserModel?, groupModel: GroupModel, completionBlock: (List<ClientModel>) -> Unit) {
-        val dbManager = DBManager(
-            context = context
-        )
-        dbManager.initializePayments(
+    suspend fun initializePayments(userModel: UserModel?, groupModel: GroupModel, completionBlock: (List<ClientModel>) -> Unit) {
+        DBManager.initializePayments(
             userId = userModel?.id,
             groupId = groupModel.groupId,
             personsClosure = completionBlock
         )
-        dbManager.close()
     }
 
-    suspend fun deleteItem(context: Context, item: Any?) {
-        val dbManager = DBManager(context = context)
+    suspend fun deleteItem(item: Any?) {
         when(item) {
             is GroupModel ->
-                dbManager.deleteGroup(
+                DBManager.deleteGroup(
                     groupId = item.groupId
                 ) {
                     deletionLiveData.value = true
                 }
             is ClientModel ->
-                dbManager.deleteClients(
+                DBManager.deleteClients(
                     personIds = listOf(
                         item.personId ?: return
                     )
@@ -66,7 +56,7 @@ class PaymentsViewModel: ViewModel() {
                     deletionLiveData.value = true
                 }
             is PaymentAmountModel ->
-                dbManager.deletePayments(
+                DBManager.deletePayments(
                     paymentIds = listOf(
                         item.paymentId ?: return
                     )
@@ -76,18 +66,16 @@ class PaymentsViewModel: ViewModel() {
         }
     }
 
-    suspend fun deletePayments(context: Context, personIds: List<Int>) {
-        val dbManager = DBManager(context = context)
-        dbManager.deleteClients(
+    suspend fun deletePayments(personIds: List<Int>) {
+        DBManager.deleteClients(
             personIds = personIds
         ) {
             deletionLiveData.value = true
         }
     }
 
-    suspend fun insertFile(context: Context, userModel: UserModel?, file: File, description: String) {
-        val dbManager = DBManager(context = context)
-        dbManager.insertFile(
+    suspend fun insertFile(userModel: UserModel?, file: File, description: String) {
+        DBManager.insertFile(
             userId = userModel?.id,
             fileDataModel = FileDataModel(
                 description = description,
@@ -99,9 +87,8 @@ class PaymentsViewModel: ViewModel() {
         )
     }
 
-    suspend fun updateUserBalance(context: Context, userModel: UserModel?, balance: Double) {
-        val dbManager = DBManager(context = context)
-        dbManager.updateUserBalance(
+    suspend fun updateUserBalance(userModel: UserModel?, balance: Double) {
+        DBManager.updateUserBalance(
             userId = userModel?.id,
             balance = balance
         )

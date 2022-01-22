@@ -2,6 +2,11 @@ package com.agelousis.payments.application
 
 import android.app.Application
 import android.content.Context
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ProcessLifecycleOwner
+import com.agelousis.payments.database.DBManager
+import com.agelousis.payments.database.SQLiteHelper
 import com.agelousis.payments.firebase.FirebaseInstanceHelper
 import com.agelousis.payments.main.ui.countrySelector.models.CountryDataModel
 import com.agelousis.payments.main.ui.paymentsFiltering.enumerations.PaymentsFilteringOptionType
@@ -27,6 +32,7 @@ class MainApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
+        configureLifecycleEvents()
         DynamicColors.applyToActivitiesIfAvailable(this)
         setLocaleCurrency()
         setPaymentsFilteringOptionTypes()
@@ -78,6 +84,29 @@ class MainApplication: Application() {
         FirebaseInstanceHelper.shared.initializeFirebaseToken {
             firebaseToken = it
         }
+    }
+
+    private fun initializeDBManager() {
+        DBManager.sqLiteHelper = SQLiteHelper(
+            context = applicationContext
+        )
+        DBManager.database = DBManager.sqLiteHelper?.writableDatabase
+    }
+
+    private fun configureLifecycleEvents() {
+        ProcessLifecycleOwner.get().lifecycle.addObserver(
+            object: DefaultLifecycleObserver {
+                override fun onStop(owner: LifecycleOwner) {
+                    super.onStop(owner)
+                    DBManager.close()
+                }
+
+                override fun onStart(owner: LifecycleOwner) {
+                    super.onStart(owner)
+                    initializeDBManager()
+                }
+            }
+        )
     }
 
 }

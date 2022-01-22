@@ -75,7 +75,6 @@ class ForgotPasswordDialogFragment: DialogFragment() {
     private fun onChangePassword() {
         uiScope.launch {
             viewModel.updatePassword(
-                context = context ?: return@launch,
                 userId = userId ?: return@launch,
                 pin = viewModel.pinLiveData.value ?: return@launch
             )

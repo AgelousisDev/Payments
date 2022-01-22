@@ -4,7 +4,8 @@
         <attr name="label" format="string|reference" />
         <attr name="value" format="string|reference" />
         <attr name="showLine" format="boolean" />
-        <attr name="iconResource" format="reference" />
+        <attr name="startIconResource" format="reference" />
+        <attr name="endIconResource" format="reference" />
         <attr name="imeOptionType" format="enum">
             <enum name="actionNext" value="0" />
             <enum name="actionDone" value="1" />

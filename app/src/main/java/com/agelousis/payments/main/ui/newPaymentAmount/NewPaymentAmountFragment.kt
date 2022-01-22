@@ -203,7 +203,6 @@ class NewPaymentAmountFragment: Fragment(), AmountListener {
                 if (args.independentPaymentState)
                     uiScope.launch {
                         viewModel.insertPayment(
-                            context = context ?: return@launch,
                             paymentAmountModel = this@with,
                             insertionSuccessBlock = this@NewPaymentAmountFragment::dismiss
                         )

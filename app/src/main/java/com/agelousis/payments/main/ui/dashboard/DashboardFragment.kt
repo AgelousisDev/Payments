@@ -67,7 +67,6 @@ class DashboardFragment: Fragment(), DashboardPresenter {
         ) {
             uiScope.launch {
                 viewModel.fetchInvoices(
-                    context = context ?: return@launch,
                     userId = (activity as? MainActivity)?.userModel?.id
                 )
             }
@@ -95,7 +94,6 @@ class DashboardFragment: Fragment(), DashboardPresenter {
         )
         uiScope.launch {
             viewModel.fetchGroups(
-                context = context ?: return@launch,
                 userId = (activity as? MainActivity)?.userModel?.id
             )
         }

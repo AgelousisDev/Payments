@@ -143,7 +143,8 @@
                     app:fieldType="TEXT"
                     app:imeOptionType="actionNext"
                     app:label="@string/key_first_name_label"
-                    app:showLine="true" />
+                    app:showLine="true"
+                    app:startIconResource="@drawable/ic_person"/>
 
                 <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
                     android:id="@+id/surnameLayout"
@@ -153,7 +154,8 @@
                     app:fieldType="TEXT"
                     app:imeOptionType="actionNext"
                     app:label="@string/key_surname_label"
-                    app:showLine="true" />
+                    app:showLine="true"
+                    app:startIconResource="@drawable/ic_person"/>
 
                 <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
                     android:id="@+id/countryCodeLayout"
@@ -173,7 +175,8 @@
                     app:fieldType="NUMBER"
                     app:imeOptionType="actionNext"
                     app:label="@string/key_phone_label"
-                    app:showLine="true" />
+                    app:showLine="true"
+                    app:startIconResource="@drawable/ic_telephone"/>
 
                 <com.agelousis.payments.views.personDetailsLayout.PersonDetailsLayout
                     android:id="@+id/parentNameLayout"
@@ -203,7 +206,8 @@
                     app:fieldType="EMAIL"
                     app:imeOptionType="actionDone"
                     app:label="@string/key_email_label"
-                    app:showLine="true" />
+                    app:showLine="true"
+                    app:startIconResource="@drawable/ic_email"/>
 
                 <com.agelousis.payments.views.personDetailsLayout.PersonDetailsPickerLayout
                     android:id="@+id/groupDetailsLayout"

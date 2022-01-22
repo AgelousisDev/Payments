@@ -44,7 +44,6 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, Gestur
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val userModel by lazy { UserModel() }
     private val viewModel: LoginViewModel by viewModels()
-    private var dbManager: DBManager? = null
     private var signInState = SignInState.SIGN_UP
     private var mDetector: GestureDetectorCompat? = null
 
@@ -90,9 +89,9 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, Gestur
                     userModel.vat = 0
                     userModel.defaultPaymentAmount = 0.0
                     userModel.defaultMessageTemplate = resources.getString(R.string.key_default_message_template_value)
-                    dbManager?.userModel = userModel
+                    DBManager.userModel = userModel
                     uiScope.launch {
-                        dbManager?.searchUser(
+                        DBManager.searchUser(
                             userModel = userModel
                         ) { userModel ->
                             this@LoginActivity.userModel.id = userModel?.id
@@ -104,7 +103,7 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, Gestur
                 }
             SignInState.LOGIN ->
                 uiScope.launch {
-                    dbManager?.searchUser(
+                    DBManager.searchUser(
                         userModel = UserModel(
                             username = binding.usernameField.text?.toString(),
                             password = binding.passwordField.text?.toString()
@@ -142,7 +141,7 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, Gestur
 
     override fun onBiometricsSucceed() {
         uiScope.launch {
-            dbManager?.searchUser(
+            DBManager.searchUser(
                 userModel = UserModel(
                     username = binding.usernameField.text?.toString(),
                     password = binding.passwordField.text?.toString()
@@ -206,9 +205,6 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, Gestur
             binding.root
         )
         FirebaseApp.initializeApp(this)
-        dbManager = DBManager(
-            context = this
-        )
         addObservers()
         configureLoginState()
         setupUI()
@@ -294,7 +290,7 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, Gestur
 
     private fun configureLoginState() {
         uiScope.launch {
-            dbManager?.checkUsers {
+            DBManager.checkUsers {
                 signInState = if (it.isNotEmpty()) SignInState.LOGIN else SignInState.SIGN_UP
                 binding.signInState = signInState
                 binding.profileImageView.isEnabled = signInState == SignInState.SIGN_UP
@@ -329,16 +325,12 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, Gestur
 
     private fun initializeUsers() =
         uiScope.launch {
-            viewModel.initializeUsers(
-                context = this@LoginActivity
-            )
+            viewModel.initializeUsers()
         }
 
     private fun initializeGroups() =
         uiScope.launch {
-            viewModel.initializeGroups(
-                context = this@LoginActivity
-            )
+            viewModel.initializeGroups()
         }
 
     private fun initializeDatabaseImport() {

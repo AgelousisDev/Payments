@@ -41,7 +41,8 @@ class PersonDetailsPickerLayout(context: Context, attributeSet: AttributeSet?): 
                 label = attributes.getString(R.styleable.PersonDetailsLayout_label),
                 showLine = attributes.getBoolean(R.styleable.PersonDetailsLayout_showLine, true),
                 imeOptionsType = ImeOptionsType.values()[attributes.getInt(R.styleable.PersonDetailsLayout_imeOptionType, 0)],
-                type = PersonDetailFieldType.values()[attributes.getInt(R.styleable.PersonDetailsLayout_fieldType, 0)]
+                type = PersonDetailFieldType.values()[attributes.getInt(R.styleable.PersonDetailsLayout_fieldType, 0)],
+                endIcon = attributes.getResourceId(R.styleable.PersonDetailsLayout_startIconResource, 0)
             )
             attributes.recycle()
             addView(binding.root)

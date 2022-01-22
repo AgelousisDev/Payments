@@ -1,7 +1,6 @@
 package com.agelousis.payments.database
 
 import android.content.ContentValues
-import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import androidx.core.database.getBlobOrNull
 import androidx.core.database.getDoubleOrNull
@@ -27,10 +26,10 @@ typealias DeletionSuccessBlock = () -> Unit
 typealias GroupsSuccessBlock = (List<GroupModel>) -> Unit
 typealias FilesSuccessBlock = (List<FileDataModel>) -> Unit
 
-class DBManager(context: Context) {
+object DBManager {
 
-    private var sqLiteHelper: SQLiteHelper? = null
-    private var database: SQLiteDatabase? = null
+    var sqLiteHelper: SQLiteHelper? = null
+    var database: SQLiteDatabase? = null
 
     var userModel: UserModel? = null
         set(value) {
@@ -68,11 +67,6 @@ class DBManager(context: Context) {
                 cursor?.close()
             }
         }
-
-    init {
-        sqLiteHelper = SQLiteHelper(context = context)
-        database = sqLiteHelper?.writableDatabase
-    }
 
     suspend fun searchUser(userModel: UserModel, userBlock: UserBlock) {
         withContext(Dispatchers.Default) {

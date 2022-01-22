@@ -18,6 +18,18 @@
     android:clickable="true"
     android:foreground="?attr/selectableItemBackgroundBorderless">
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/personDetailsFieldStartIcon"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="@dimen/activity_general_horizontal_margin"
+        android:visibility="@{dataModel.startIcon != null &amp;&amp; dataModel.startIcon != 0 ? View.VISIBLE : View.GONE}"
+        app:srcCompat="@{dataModel.startIcon}"
+        tools:srcCompat="@drawable/ic_person"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/label"
         style="@style/TextViewTitleLabel"
@@ -25,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_general_horizontal_margin"
         android:text="@{dataModel.label}"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/personDetailsFieldStartIcon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:text="Full Name" />
