@@ -325,6 +325,11 @@ fun PaymentsFragment.configurePayments(list: List<Any>, query: String? = null) {
                     )
                 )
                 filteredList.addAll(
+                    list.filterIsInstance<PaymentAmountModel>().filter { paymentAmountModel ->
+                        paymentAmountModel.groupId == filteredByQueryClients.firstOrNull()?.groupId
+                    }
+                )
+                filteredList.addAll(
                     filteredByQueryClients.sortedBy { (it getClientsFilteringOptionType MainApplication.paymentsFilteringOptionTypes).position }
                         .also { clientModelList ->
                             when (context?.isLandscape) {
@@ -370,17 +375,23 @@ fun PaymentsFragment.configurePayments(list: List<Any>, query: String? = null) {
             it.groupName?.lowercase()?.contains(query?.lowercase() ?: "") == true
         }
     )
-    list.filterIsInstance<PaymentAmountModel>().forEach { paymentAmountModel ->
-        filteredList.toList().forEachIndexed { index, item ->
-            if (item is GroupModel
-                && paymentAmountModel.groupId == item.groupId
-            )
-                filteredList.add(
-                    index + 1,
-                    paymentAmountModel
-                )
+    if (filteredList.none { filteredPaymentItem ->
+            filteredPaymentItem is PaymentAmountModel
+                && list.any { genericPaymentItem ->
+            genericPaymentItem is PaymentAmountModel
         }
-    }
+    })
+        list.filterIsInstance<PaymentAmountModel>().forEach { paymentAmountModel ->
+            filteredList.toList().forEachIndexed { index, item ->
+                if (item is GroupModel
+                    && paymentAmountModel.groupId == item.groupId
+                )
+                    filteredList.add(
+                        index + 1,
+                        paymentAmountModel
+                    )
+            }
+        }
 
     if (filteredList.isEmpty())
         query.whenNull {

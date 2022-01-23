@@ -43,6 +43,8 @@ class DashboardViewModel: ViewModel() {
             } == true
         }?.joinToString { clientModel ->
             clientModel.fullName
+        }?.takeIf {
+            it.isNotEmpty()
         }
 
     fun initializeDashboardDataWith(

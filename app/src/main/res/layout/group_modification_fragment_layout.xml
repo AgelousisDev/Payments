@@ -60,7 +60,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_group_white"/>
+        app:srcCompat="@drawable/ic_group_white"
+        imageTintColor="@{groupModel.groupImage != null ? null : groupModel.color}"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/groupTextInputLayout"
@@ -69,10 +70,13 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_general_horizontal_margin"
         android:hint="@string/key_group_name_label"
-        app:hintTextColor="@{groupModel.color != null ? groupModel.color : @color/colorAccent}"
+        app:boxBackgroundColor="@{groupModel.color != null ? groupModel.color : @color/colorAccent}"
+        app:hintTextColor="@color/white"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
         app:startIconDrawable="@drawable/ic_group"
+        app:startIconTint="@color/white"
+        app:endIconTint="@color/white"
         app:endIconMode="clear_text"
         app:hintEnabled="true"
         app:boxCornerRadiusTopStart="8dp"
@@ -93,7 +97,8 @@
             android:inputType="text"
             android:singleLine="true"
             android:maxLines="1"
-            android:text="@{groupModel.groupName}"/>
+            android:text="@{groupModel.groupName}"
+            android:textColor="@color/white"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -249,7 +249,11 @@ fun setHtmlTextWithBullets(materialTextView: MaterialTextView, htmlTextResourceI
 
 @BindingAdapter("imageTintColor")
 fun setImageViewTint(appCompatImageView: AppCompatImageView, tintColor: Int?) {
-    appCompatImageView.imageTintList = tintColor?.let { ColorStateList.valueOf(it) }
+    tintColor?.let {
+        appCompatImageView.imageTintList = ColorStateList.valueOf(it)
+    } ?: run {
+        appCompatImageView.imageTintList = null
+    }
 }
 
 @BindingAdapter("imageViewBitmap")

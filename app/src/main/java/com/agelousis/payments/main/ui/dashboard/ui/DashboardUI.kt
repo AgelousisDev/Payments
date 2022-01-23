@@ -1,5 +1,9 @@
 package com.agelousis.payments.main.ui.dashboard.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -28,47 +32,61 @@ import com.agelousis.payments.utils.extensions.euroFormattedString
 fun DashboardLayout(
     viewModel: DashboardViewModel
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        item {
-            Text(
-                text = stringResource(
-                    id = R.string.key_dashboard_label
-                ),
-                style = textViewTitleFont,
-                color = colorResource(
-                    id = R.color.dayNightTextOnBackground
-                ),
-                modifier = Modifier
-                    .padding(
-                        top = 16.dp,
-                        start = 16.dp
-                    )
-            )
+    val animationState = remember {
+        MutableTransitionState(
+            initialState = false
+        ).apply {
+            // Start the animation immediately.
+            targetState = true
         }
-        item {
-            LazyRow(
-                contentPadding = PaddingValues(
-                    all = 16.dp
-                ),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(
-                    items = viewModel.dashboardStatisticsDataMutableState
-                ) { dashboardStatisticsDataModel ->
-                    StatisticCardLayout(
-                        viewModel = viewModel,
-                        dashboardStatisticsDataModel = dashboardStatisticsDataModel
-                    )
+    }
+    AnimatedVisibility(
+        visibleState = animationState,
+        enter = slideInVertically(),
+        exit = slideOutVertically()
+    ) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            item {
+                Text(
+                    text = stringResource(
+                        id = R.string.key_dashboard_label
+                    ),
+                    style = textViewTitleFont,
+                    color = colorResource(
+                        id = R.color.dayNightTextOnBackground
+                    ),
+                    modifier = Modifier
+                        .padding(
+                            top = 16.dp,
+                            start = 16.dp
+                        )
+                )
+            }
+            item {
+                LazyRow(
+                    contentPadding = PaddingValues(
+                        all = 16.dp
+                    ),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(
+                        items = viewModel.dashboardStatisticsDataMutableState
+                    ) { dashboardStatisticsDataModel ->
+                        StatisticCardLayout(
+                            viewModel = viewModel,
+                            dashboardStatisticsDataModel = dashboardStatisticsDataModel
+                        )
+                    }
                 }
             }
-        }
-        item {
-            DashboardInsightLayout(
-                viewModel = viewModel
-            )
+            item {
+                DashboardInsightLayout(
+                    viewModel = viewModel
+                )
+            }
         }
     }
 }

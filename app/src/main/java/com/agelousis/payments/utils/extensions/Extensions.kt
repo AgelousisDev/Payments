@@ -1047,3 +1047,8 @@ fun <T> Fragment.getBackStackData(key: String, singleCall : Boolean = true , res
                 findNavController().currentBackStackEntry?.savedStateHandle?.remove<T>(key)
         }
 }
+
+val Long.calendar: Calendar
+    get() = Calendar.getInstance().also {
+        it.timeInMillis = this
+    }
