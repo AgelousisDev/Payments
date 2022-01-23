@@ -49,7 +49,7 @@ data class ClientModel(val personId: Int? = null,
         }
     }
 
-    @IgnoredOnParcel var backgroundDrawable = R.drawable.payment_row_background
+    @IgnoredOnParcel var backgroundDrawable = if (hasPaymentToday) R.drawable.payment_row_marked_background else R.drawable.payment_row_background
 
     infix fun getClientsFilteringOptionType(paymentsFilteringOptionTypes: List<PaymentsFilteringOptionType>?) =
         when {
@@ -72,6 +72,11 @@ data class ClientModel(val personId: Int? = null,
 
     private val singlePaymentProducts
         get() = if (payments?.any { it.singlePayment == true } == true) payments.mapNotNull { it.singlePaymentProducts }.flatten().joinToString(separator = ",") else null
+
+    val hasPaymentToday
+        get() = payments?.any { paymentAmountModel ->
+            paymentAmountModel.dateOfPayment?.dateWithoutTime == Date().dateWithoutTime
+        } == true
 
 }
 
@@ -140,7 +145,7 @@ data class PaymentAmountModel(val paymentId: Int? = null,
     val singlePaymentProductsSeparated
         get() = singlePaymentProducts?.joinToString(separator = ",")
 
-    val dateOrPayment
+    val dateOfPayment
         get() = paymentDate?.toDateWith(pattern = Constants.GENERAL_DATE_FORMAT)
 
 }

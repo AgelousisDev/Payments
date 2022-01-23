@@ -302,8 +302,10 @@ fun PaymentsFragment.configurePayments(list: List<Any>, query: String? = null) {
             filteredList.add(
                 BalanceOverviewDataModel.getBalanceOverviewDataModelWith(
                     currentBalance = (activity as? MainActivity)?.userModel?.balance,
-                    lastPaymentMonthList = payments getSixLastPaymentMonths (context
-                        ?: return@let)
+                    lastPaymentMonthList = payments.getSixLastPaymentMonths(
+                        context = context ?: return@let,
+                        independentPaymentAmountModelList = list.filterIsInstance<PaymentAmountModel>()
+                    )
                 )
             )
         payments.groupBy {
@@ -330,26 +332,11 @@ fun PaymentsFragment.configurePayments(list: List<Any>, query: String? = null) {
                     }
                 )
                 filteredList.addAll(
-                    filteredByQueryClients.sortedBy { (it getClientsFilteringOptionType MainApplication.paymentsFilteringOptionTypes).position }
-                        .also { clientModelList ->
-                            when (context?.isLandscape) {
-                                true ->
-                                    clientModelList.forEach { clientModel ->
-                                        clientModel.backgroundDrawable =
-                                            R.drawable.payment_row_radius_background
-                                    }
-                                else ->
-                                    if (clientModelList.isSizeOne)
-                                        clientModelList.firstOrNull()?.backgroundDrawable =
-                                            R.drawable.payment_row_radius_background
-                                    else {
-                                        clientModelList.firstOrNull()?.backgroundDrawable =
-                                            R.drawable.payment_row_header_background
-                                        clientModelList.lastOrNull()?.backgroundDrawable =
-                                            R.drawable.payment_row_footer_background
-                                    }
-                            }
-                        }
+                    filteredByQueryClients.sortedBy {
+                        (it getClientsFilteringOptionType MainApplication.paymentsFilteringOptionTypes).position
+                    }.also { clientModelList ->
+                            clientModelList applyPaymentRowBackground (context ?: return@also)
+                    }
                 )
 
                 filteredByQueryClients.mapNotNull {

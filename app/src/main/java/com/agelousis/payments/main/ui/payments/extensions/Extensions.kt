@@ -7,11 +7,51 @@ import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.payments.adapters.LastPaymentMonthsAdapter
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.models.LastPaymentMonthDataModel
+import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
+import com.agelousis.payments.utils.extensions.isLandscape
+import com.agelousis.payments.utils.extensions.isSizeOne
 import com.agelousis.payments.utils.extensions.toCalendar
 import java.time.LocalDate
 import java.util.*
 
-infix fun List<ClientModel>.getSixLastPaymentMonths(context: Context): List<LastPaymentMonthDataModel> {
+infix fun List<ClientModel>.applyPaymentRowBackground(
+    context: Context
+) {
+    when (context.isLandscape) {
+        true ->
+            forEach { clientModel ->
+                clientModel.backgroundDrawable =
+                    if (clientModel.hasPaymentToday)
+                        R.drawable.payment_row_marked_radius_background
+                    else
+                        R.drawable.payment_row_radius_background
+            }
+        else ->
+            if (isSizeOne)
+                firstOrNull()?.backgroundDrawable =
+                    if (firstOrNull()?.hasPaymentToday == true)
+                        R.drawable.payment_row_marked_radius_background
+                    else
+                        R.drawable.payment_row_radius_background
+            else {
+                firstOrNull()?.backgroundDrawable =
+                    if (firstOrNull()?.hasPaymentToday == true)
+                        R.drawable.payment_row_marked_header_background
+                    else
+                        R.drawable.payment_row_header_background
+                lastOrNull()?.backgroundDrawable =
+                    if (lastOrNull()?.hasPaymentToday == true)
+                        R.drawable.payment_row_marked_footer_background
+                    else
+                        R.drawable.payment_row_footer_background
+            }
+    }
+}
+
+fun List<ClientModel>.getSixLastPaymentMonths(
+    context: Context,
+    independentPaymentAmountModelList: List<PaymentAmountModel>? = null
+): List<LastPaymentMonthDataModel> {
     val lastPaymentMonthList = arrayListOf<LastPaymentMonthDataModel>()
     val calendar = Date().toCalendar()
     val currentMonth = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, 1)
@@ -20,9 +60,12 @@ infix fun List<ClientModel>.getSixLastPaymentMonths(context: Context): List<Last
     val threeMonthsAgo = currentMonth.minusMonths(3)
     val fourMonthsAgo = currentMonth.minusMonths(4)
     val fiveMonthsAgo = currentMonth.minusMonths(5)
-    val paymentAmountModelList = mapNotNull { clientModel ->
-        clientModel.payments
-    }.flatten()
+    val paymentAmountModelList = listOf(
+        *mapNotNull { clientModel ->
+            clientModel.payments
+        }.flatten().toTypedArray(),
+        *independentPaymentAmountModelList?.toTypedArray() ?: arrayOf()
+    )
 
     /** Current Month **/
     paymentAmountModelList.filter { paymentAmountModel ->

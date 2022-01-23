@@ -38,9 +38,7 @@ class DashboardViewModel: ViewModel() {
     var paymentAmountModelList: List<PaymentAmountModel>? = null
     val todayPaymentClientName
         get() = clientModelList?.filter { clientModel ->
-            clientModel.payments?.any { paymentAmountModel ->
-                paymentAmountModel.dateOrPayment?.dateWithoutTime == Date().dateWithoutTime
-            } == true
+            clientModel.hasPaymentToday
         }?.joinToString { clientModel ->
             clientModel.fullName
         }?.takeIf {
