@@ -244,7 +244,8 @@ private fun NewPaymentFragment.configureShareMethod(contactType: ContactType) {
                 ),
                 message = args.clientDataModel?.messageTemplate ?: ""
             )
-        ContactType.WHATS_APP, ContactType.VIBER ->
+        ContactType.WHATS_APP,
+        ContactType.VIBER ->
             context?.shareMessage(
                 schemeUrl = String.format(
                     contactType.schemeUrl ?: return,
