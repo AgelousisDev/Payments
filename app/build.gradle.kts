@@ -20,6 +20,7 @@ val composeVersion = "1.2.0-alpha01"
 val kotlinCoroutinesVersion = "1.6.0"
 val appCompatVersion = "1.4.1"
 val constraintLayoutVersion = "2.1.3"
+val constraintLayoutComposeVersion = "1.0.0"
 
 android {
     compileSdk = 31
@@ -79,6 +80,7 @@ dependencies {
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.material:material:$composeVersion")
     implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
+    implementation("androidx.constraintlayout:constraintlayout-compose:$constraintLayoutComposeVersion")
     implementation("io.coil-kt:coil-compose:1.4.0")
     implementation("androidx.viewpager2:viewpager2:1.1.0-beta01")
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
