@@ -16,11 +16,12 @@ val activityVersion = "1.4.0"
 val fragmentVersion = "1.4.0"
 val firebaseBomVersion = "28.0.1"
 val liveDataViewModelVersion = "2.4.0"
-val composeVersion = "1.2.0-alpha01"
+val composeVersion = "1.2.0-alpha02"
 val kotlinCoroutinesVersion = "1.6.0"
 val appCompatVersion = "1.4.1"
 val constraintLayoutVersion = "2.1.3"
 val constraintLayoutComposeVersion = "1.0.0"
+val composeActivityVersion = "1.4.0"
 
 android {
     compileSdk = 31
@@ -36,7 +37,7 @@ android {
     }
 
     buildTypes {
-        create("develop") {
+        getByName("debug") {
             signingConfig = signingConfigs.getByName(name = "debug")
             isDebuggable = true
             buildConfigField(type = "String", name = "VALID_PRODUCT_DATE", value = "\"\"")
@@ -69,6 +70,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    configurations {
+        create("developImplementation")
+    }
 }
 // 2020_11_24_10_00_00
 
@@ -79,6 +83,7 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.material:material:$composeVersion")
+    implementation("androidx.activity:activity-compose:$composeActivityVersion")
     implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     implementation("androidx.constraintlayout:constraintlayout-compose:$constraintLayoutComposeVersion")
     implementation("io.coil-kt:coil-compose:1.4.0")

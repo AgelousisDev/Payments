@@ -58,10 +58,9 @@ fun CurrencySelectorLayout(
             )
         }
         LazyVerticalGrid(
-            contentPadding = PaddingValues(
-                all = 16.dp
+            cells = GridCells.Fixed(
+                count = 4
             ),
-            cells = GridCells.Adaptive(70.dp),
             modifier = Modifier.background(
                 color = colorResource(
                     id = R.color.nativeBackgroundColor
@@ -70,7 +69,12 @@ fun CurrencySelectorLayout(
                     bottomStart = 16.dp,
                     bottomEnd = 16.dp
                 )
-            ).fillMaxWidth().wrapContentHeight()
+            ),
+            contentPadding = PaddingValues(
+                all = 16.dp
+            ),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(currencyTypes.size) { index ->
                 CurrencyType(
@@ -91,11 +95,8 @@ fun CurrencyType(
         interactionSource = remember { MutableInteractionSource() },
         indication = rememberRipple(bounded = false),
         modifier = Modifier
-            .size(
-                width = 70.dp,
-                height = 50.dp
-            ).padding(
-                all = 4.dp
+            .height(
+                height = 40.dp
             ),
         shape = RoundedCornerShape(12.dp),
         elevation = if (currencyType.isSelected) 16.dp else 1.dp,
@@ -106,8 +107,7 @@ fun CurrencyType(
         },
     ) {
         Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
+            contentAlignment = Alignment.Center
         ) {
             Image(
                 painter = painterResource(id = currencyType.icon),

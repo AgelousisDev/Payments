@@ -255,7 +255,7 @@ fun after(millis: Long, runnable: Runnable) {
     )
 }
 
-fun Drawable.fromVector(padding: Int): Bitmap {
+fun Drawable.fromVector(padding: Int = 0): Bitmap {
     val bitmap = Bitmap.createBitmap(this.intrinsicWidth, this.intrinsicHeight, Bitmap.Config.ARGB_8888)
     val canvas = Canvas(bitmap)
     this.setBounds(padding, padding, canvas.width - padding, canvas.height - padding)
@@ -1052,3 +1052,6 @@ val Long.calendar: Calendar
     get() = Calendar.getInstance().also {
         it.timeInMillis = this
     }
+
+val File.bitmap
+    get() = BitmapFactory.decodeFile(this.absolutePath)

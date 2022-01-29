@@ -253,6 +253,7 @@
     <string name="key_maximum_incoming_group_payment_label">Max incoming group\'s payment</string>
     <string name="key_minimum_incoming_group_payment_label">Min incoming group\'s payment</string>
     <string name="key_today_payments_label">Today payments</string>
+    <string name="key_group_color_label">Group Color</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>

@@ -96,7 +96,7 @@
             android:gravity="end"
             android:text="@{clientModel.free == true ? @string/key_free_label : clientModel.totalPaymentAmount != null ? ExtensionsKt.getEuroFormattedString(clientModel.totalPaymentAmount) : @string/key_empty_field_label}"
             android:textSize="18sp"
-            android:textColor="@{clientModel.free == true ? @color/fateBlue :  clientModel.groupColor}"
+            android:textColor="@{clientModel.free == true ? @color/blue : clientModel.groupColor}"
             textViewColorByPaymentDate="@{clientModel.free == true ? null : clientModel.payments}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
