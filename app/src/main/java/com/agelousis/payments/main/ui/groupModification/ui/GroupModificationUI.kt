@@ -30,15 +30,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.core.content.ContextCompat
 import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.groupModification.GroupModificationState
 import com.agelousis.payments.main.ui.groupModification.viewModel.GroupModificationViewModel
-import com.agelousis.payments.ui.ColorAccent
 import com.agelousis.payments.ui.textViewLabelFont
 import com.agelousis.payments.ui.textViewTitleLabelFont
 import com.agelousis.payments.utils.constants.Constants
-import com.agelousis.payments.utils.extensions.fromVector
 import com.agelousis.payments.utils.extensions.saveImage
 
 @Composable
@@ -66,9 +63,9 @@ fun GroupModificationLayout(
             groupImageConstrainedReference,
             groupCardInfoConstrainedReference
         ) = createRefs()
-        viewModel.groupBitmap?.let { groupBitmap ->
+        if (viewModel.groupBitmap != null)
             Image(
-                bitmap = groupBitmap.asImageBitmap(),
+                bitmap = viewModel.groupBitmap?.asImageBitmap() ?: return@ConstraintLayout,
                 contentDescription = viewModel.groupName,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -91,7 +88,7 @@ fun GroupModificationLayout(
                     },
                 contentScale = if (viewModel.groupBitmap?.asImageBitmap() != null) ContentScale.Crop else ContentScale.Fit
             )
-        } ?: run {
+        else
             Image(
                 painter = painterResource(
                     id = R.drawable.ic_group
@@ -109,9 +106,7 @@ fun GroupModificationLayout(
                     .clickable {
                         launcher.launch("image/*")
                     }
-                    .background(ColorAccent)
             )
-        }
         Card(
             interactionSource = remember { MutableInteractionSource() },
             indication = rememberRipple(bounded = false),
