@@ -48,6 +48,8 @@
         <entry key="../../../../../../layout/compose-model-1643475619921.xml" value="1.0" />
         <entry key="../../../../../../layout/compose-model-1643475668620.xml" value="0.5" />
         <entry key="../../../../../../layout/compose-model-1643496712851.xml" value="0.5" />
+        <entry key="../../../../../../layout/compose-model-1643658011336.xml" value="0.25" />
+        <entry key="../../../../../../layout/compose-model-1643659119155.xml" value="0.33" />
         <entry key="app/src/main/res/drawable-night-v31/balance_overview_background.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable-night/balance_overview_backgound.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable-night/balance_overview_background.xml" value="0.33645833333333336" />
@@ -104,6 +106,7 @@
         <entry key="app/src/main/res/layout-land/fragment_new_payment_layout.xml" value="0.22" />
         <entry key="app/src/main/res/layout-land/history_fragment_layout.xml" value="0.23020833333333332" />
         <entry key="app/src/main/res/layout/activity_group.xml" value="0.3532608695652174" />
+        <entry key="app/src/main/res/layout/activity_guide.xml" value="0.14842958459979735" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.21302083333333333" />
         <entry key="app/src/main/res/layout/activity_notification.xml" value="0.23385416666666667" />
@@ -128,7 +131,7 @@
         <entry key="app/src/main/res/layout/fragment_files_layout.xml" value="0.22056159420289856" />
         <entry key="app/src/main/res/layout/fragment_new_payment_amount_layout.xml" value="0.15577507598784193" />
         <entry key="app/src/main/res/layout/fragment_new_payment_layout.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/fragment_payments_layout.xml" value="0.20833333333333334" />
+        <entry key="app/src/main/res/layout/fragment_payments_layout.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_personal_information_layout.xml" value="0.15577507598784193" />
         <entry key="app/src/main/res/layout/group_modification_fragment_layout.xml" value="0.225" />
         <entry key="app/src/main/res/layout/group_row_layout.xml" value="0.45643153526970953" />
@@ -161,6 +164,7 @@
         <entry key="app/src/main/res/menu/bottom_navigation_main_menu.xml" value="0.27870370370370373" />
         <entry key="app/src/main/res/menu/main_menu.xml" value="0.3203125" />
         <entry key="app/src/main/res/xml/network_security_config.xml" value="0.15677083333333333" />
+        <entry key="app/src/main/res/xml/payments_scene.xml" value="0.15602836879432624" />
       </map>
     </option>
   </component>

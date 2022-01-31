@@ -43,6 +43,11 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.biometric.BiometricManager
 import androidx.cardview.widget.CardView
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.core.animation.addListener
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -1053,5 +1058,22 @@ val Long.calendar: Calendar
         it.timeInMillis = this
     }
 
-val File.bitmap
+val File.bitmap: Bitmap
     get() = BitmapFactory.decodeFile(this.absolutePath)
+
+fun String.parseBold(): AnnotatedString {
+    val parts = this.split("<b>", "</b>")
+    return buildAnnotatedString {
+        var bold = false
+        for (part in parts) {
+            if (bold) {
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                    append(part)
+                }
+            } else {
+                append(part)
+            }
+            bold = !bold
+        }
+    }
+}

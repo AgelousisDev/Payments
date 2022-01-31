@@ -34,7 +34,8 @@ allprojects {
                     "-Xuse-experimental=androidx.compose.ExperimentalComposeApi",
                     "-Xuse-experimental=androidx.compose.material.ExperimentalMaterialApi",
                     "-Xuse-experimental=androidx.compose.runtime.ExperimentalComposeApi",
-                    "-Xuse-experimental=androidx.compose.ui.ExperimentalComposeUiApi"
+                    "-Xuse-experimental=androidx.compose.ui.ExperimentalComposeUiApi",
+                    "-Xuse-experimental=com.google.accompanist.pager.ExperimentalPagerApi"
                 )
         }
     }

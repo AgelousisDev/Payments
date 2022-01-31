@@ -3,12 +3,15 @@ package com.agelousis.payments.ui
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -197,3 +200,44 @@ private fun GradientEdge(
 
 private enum class MarqueeLayers { MainText, SecondaryText, EdgesGradient }
 private data class TextLayoutInfo(val textWidth: Int, val containerWidth: Int)
+
+@Composable
+fun DotsIndicator(
+    totalDots : Int,
+    selectedIndex : Int,
+    selectedColor: Color,
+    unSelectedColor: Color,
+    modifier: Modifier.() -> Modifier
+){
+
+    LazyRow(
+        modifier = Modifier
+            .wrapContentWidth()
+            .wrapContentHeight()
+            .modifier()
+
+    ) {
+
+        items(totalDots) { index ->
+            if (index == selectedIndex) {
+                Box(
+                    modifier = Modifier
+                        .size(5.dp)
+                        .clip(CircleShape)
+                        .background(selectedColor)
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .size(5.dp)
+                        .clip(CircleShape)
+                        .background(unSelectedColor)
+                )
+            }
+
+            if (index != totalDots - 1) {
+                Spacer(modifier = Modifier.padding(horizontal = 2.dp))
+            }
+        }
+    }
+}

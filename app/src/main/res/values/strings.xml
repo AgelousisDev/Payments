@@ -146,52 +146,32 @@
     <string name="key_select_currency_label">Select Currency</string>
     <string name="key_payment_date_notification_warning_message">Notifications must me set on a future Payment Date!</string>
     <string name="key_offline_login_label">Offline Login</string>
-    <string name="key_create_user_guide_message">
-        <![CDATA[
-            <ul>
-                <li>Create multiple users offline</li>
-                <li>Add your authentication method(<b>biometrics</b> or <b>password</b>)</li>
-                <li>Add Profile Image</li>
-                <li>Manage your payments</li>
-            </ul>
-        ]]>
-    </string>
-    <string name="key_payments_grouped_guide_message">
-        <![CDATA[
-            <ul>
-                <li>Add colorful or groups with image</li>
-                <li>Watch your payments by group name alphabetically</li>
-                <li>Swipe left to create a client\'s invoice - Swipe right to delete</li>
-                <li>Make a long click and delete, contact and export invoice of the selected clients</li>
-            </ul>
-        ]]>
-    </string>
+    <string-array name="key_create_user_guide_message_array">
+        <item>Create multiple users offline</item>
+        <item>Add your authentication method(&lt;b>biometrics&lt;/b> or &lt;b>password&lt;/b>)</item>
+        <item>Add Profile Image</item>
+        <item>Manage your payments</item>
+    </string-array>
+    <string-array name="key_payments_grouped_guide_message_array">
+        <item>Add colorful or groups with image</item>
+        <item>Watch your payments by group name alphabetically</item>
+        <item>Swipe left to create a client\'s invoice - Swipe right to delete</item>
+        <item>Make a long click and delete, contact and export invoice of the selected clients</item>
+    </string-array>
     <string name="key_your_client_label">Your Client</string>
-    <string name="key_add_payment_guide_message">
-        <![CDATA[
-            <ul>
-                <li>Fill client info and add multiple payments</li>
-                <li>See the all the payments of the current client in the bottom of this screen</li>
-                <li>Add the payment on the Google Calendar</li>
-            </ul>
-        ]]>
-    </string>
-    <string name="key_edit_personal_information_guide_message">
-        <![CDATA[
-            <ul>
-                <li>Edit your user\'s details, change currency, edit VAT(%) and a lot more…</li>
-            </ul>
-        ]]>
-    </string>
-    <string name="key_edit_payments_order_guide_message">
-        <![CDATA[
-            <ul>
-                <li>Edit the order of payments with the order that you prefer</li>
-                <li>Keeping it as in the screenshot above, \'<b>Free</b>\' payments show, then \'<b>Charged</b>\' payments, then \'<b>Expired</b>\' and last all the \'<b>Single Payments</b>\'</li>
-                <li>This order will apply for all payments under each group</li>
-            </ul>
-        ]]>
-    </string>
+    <string-array name="key_add_payment_guide_message_array">
+        <item>Fill client info and add multiple payments</item>
+        <item>See the all the payments of the current client in the bottom of this screen</item>
+        <item>Add the payment on the Google Calendar</item>
+    </string-array>
+    <string-array name="key_edit_personal_information_guide_message_array">
+        <item>Edit your user\'s details, change currency, edit VAT(%) and a lot more…</item>
+    </string-array>
+    <string-array name="key_edit_payments_order_guide_message_array">
+        <item>Edit the order of payments with the order that you prefer</item>
+        <item>Keeping it as in the screenshot above, &lt;b>Free&lt;/b> payments show, then &lt;b>Charged&lt;/b> payments, then &lt;b>Expired&lt;/b> and last all the &lt;b>Single Payments&lt;/b></item>
+        <item>This order will apply for all payments under each group</item>
+    </string-array>
     <string name="dot_value" translatable="false">&#8226;</string>
     <string name="key_skip_label">SKIP</string>
     <string name="key_guide_label">Guide</string>

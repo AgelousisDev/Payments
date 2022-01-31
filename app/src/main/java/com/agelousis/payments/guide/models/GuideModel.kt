@@ -7,5 +7,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class GuideModel(@DrawableRes val icon: Int,
                       val title: Int,
-                      val subtitle: Int
+                      val subtitleArray: List<String>
 ): Parcelable
