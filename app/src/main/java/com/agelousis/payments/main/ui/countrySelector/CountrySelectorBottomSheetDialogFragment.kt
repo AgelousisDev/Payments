@@ -6,14 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
-import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.databinding.CountrySelectorFragmentLayoutBinding
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.ui.countrySelector.adapters.CountriesAdapter
 import com.agelousis.payments.main.ui.countrySelector.models.CountryDataModel
 import com.agelousis.payments.main.ui.countrySelector.interfaces.CountrySelectorFragmentPresenter
-import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.applyAnimationOnKeyboard
 import com.agelousis.payments.utils.extensions.countryDataModel
@@ -23,7 +21,6 @@ import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
-import java.util.*
 
 class CountrySelectorBottomSheetDialogFragment: BasicBottomSheetDialogFragment(), CountrySelectorFragmentPresenter {
 
@@ -65,9 +62,8 @@ class CountrySelectorBottomSheetDialogFragment: BasicBottomSheetDialogFragment()
             CountryHelper.getCountryDataModelList(
                 context = it
             )
-        }
+        } ?: listOf()
     }
-    private val filteredItemList = arrayListOf<Any>()
     private var countrySelectorFragmentPresenter: CountrySelectorFragmentPresenter? = null
     private var selectedCountryDataModel: CountryDataModel? = null
     private var userModel: UserModel? = null
@@ -93,26 +89,25 @@ class CountrySelectorBottomSheetDialogFragment: BasicBottomSheetDialogFragment()
     }
 
     private fun configureRecyclerView() {
-        filteredItemList.addAll(
-            countryDataModelList ?: return
-        )
         binding.countryRecyclerView.layoutManager = FlexboxLayoutManager(context, FlexDirection.ROW).also {
             it.flexDirection = FlexDirection.ROW
             it.justifyContent = JustifyContent.CENTER
             it.alignItems = AlignItems.CENTER
         }
         binding.countryRecyclerView.adapter = CountriesAdapter(
-            itemList = filteredItemList,
+            itemList = countryDataModelList,
             selectedCountryDataIndex = selectedCountryDataModel?.let { countryDataModel ->
-                filteredItemList.indexOf(
+                countryDataModelList.indexOf(
                     countryDataModel
-                ).takeIf { it != -1 }
+                ).takeIf {
+                    it != -1
+                }
             },
             countrySelectorFragmentPresenter = this
         )
         binding.countryRecyclerView.post {
             binding.countryRecyclerView.scrollToPosition(
-                filteredItemList.indexOf(
+                countryDataModelList.indexOf(
                     selectedCountryDataModel ?: return@post
                 )
             )
@@ -121,30 +116,20 @@ class CountrySelectorBottomSheetDialogFragment: BasicBottomSheetDialogFragment()
 
     private fun setupUI() {
         binding.searchLayout.onQueryListener { query ->
-            filterCountries(
-                query = query
-            )
+            this scrollToSelectedCountryWith query
         }
     }
 
-    private fun filterCountries(query: String?) {
-        filteredItemList.clear()
-        filteredItemList.addAll(
-            countryDataModelList?.filter { countryDataModel ->
-                countryDataModel.countryName.lowercase().contains(query?.lowercase() ?: "")
-            } ?: listOf()
+    private infix fun scrollToSelectedCountryWith(
+        query: String?
+    ) {
+        binding.countryRecyclerView.smoothScrollToPosition(
+            countryDataModelList.indexOfFirst { countryDataModel ->
+                (query?.lowercase() ?: "") in countryDataModel.countryName.lowercase()
+            }.takeIf {
+                it > -1
+            } ?: return
         )
-        if (filteredItemList.isEmpty())
-            filteredItemList.add(
-                EmptyModel(
-                    message = String.format(
-                        resources.getString(R.string.key_no_results_found_value),
-                        query ?: ""
-                    ),
-                    imageIconResource = R.drawable.ic_colored_search
-                )
-            )
-        (binding.countryRecyclerView.adapter as? CountriesAdapter)?.reloadData()
     }
 
 }

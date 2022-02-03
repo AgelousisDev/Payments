@@ -65,5 +65,4 @@ class CountriesAdapter(
         return super.getItemViewType(position)
     }
 
-    fun reloadData() = notifyDataSetChanged()
 }
