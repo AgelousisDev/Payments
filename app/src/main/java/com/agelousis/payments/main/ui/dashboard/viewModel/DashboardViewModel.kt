@@ -15,9 +15,7 @@ import com.agelousis.payments.main.ui.files.models.FileDataModel
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
-import com.agelousis.payments.utils.extensions.dateWithoutTime
 import com.agelousis.payments.utils.extensions.isZero
-import java.util.*
 
 class DashboardViewModel: ViewModel() {
 
@@ -112,11 +110,11 @@ class DashboardViewModel: ViewModel() {
     infix fun getMaxIncomingGroupAmount(
         maxAmount: Boolean,
     ): Double? {
-        val totalPaymentGroupAmountPair = arrayListOf<Double>()
+        val totalPaymentGroupAmountList = arrayListOf<Double>()
         clientModelList?.groupBy { clientModel ->
             clientModel.groupId
         }?.forEach { map ->
-            totalPaymentGroupAmountPair.add(
+            totalPaymentGroupAmountList.add(
                 map.value.mapNotNull { clientModel ->
                     clientModel.totalPaymentAmount
                 }.sum() + (paymentAmountModelList?.filter { paymentAmountModel ->
@@ -126,10 +124,41 @@ class DashboardViewModel: ViewModel() {
                 }?.sum() ?: 0.0)
             )
         }
-        totalPaymentGroupAmountPair.removeAll {
+        totalPaymentGroupAmountList.removeAll {
             it.isZero
         }
-        return if (maxAmount) totalPaymentGroupAmountPair.maxOrNull() else totalPaymentGroupAmountPair.minOrNull()
+        return if (maxAmount) totalPaymentGroupAmountList.maxOrNull() else totalPaymentGroupAmountList.minOrNull()
+    }
+
+    infix fun getMaxIncomingGroupName(
+        maxAmount: Boolean,
+    ): String? {
+        val totalPaymentGroupNamePair = arrayListOf<Pair<String?, Double>>()
+        clientModelList?.groupBy { clientModel ->
+            clientModel.groupId
+        }?.forEach { map ->
+            totalPaymentGroupNamePair.add(
+                map.value.firstOrNull()?.groupName to
+                        map.value.mapNotNull { clientModel ->
+                            clientModel.totalPaymentAmount
+                        }.sum() + (paymentAmountModelList?.filter { paymentAmountModel ->
+                    paymentAmountModel.groupId == map.value.firstOrNull()?.groupId
+                }?.mapNotNull { paymentAmountModel ->
+                    paymentAmountModel.paymentAmount
+                }?.sum() ?: 0.0)
+            )
+        }
+        totalPaymentGroupNamePair.removeAll {
+            it.second.isZero
+        }
+        return if (maxAmount)
+            totalPaymentGroupNamePair.maxByOrNull {
+                it.second
+            }?.first
+        else
+            totalPaymentGroupNamePair.minByOrNull {
+                it.second
+            }?.first
     }
 
 }

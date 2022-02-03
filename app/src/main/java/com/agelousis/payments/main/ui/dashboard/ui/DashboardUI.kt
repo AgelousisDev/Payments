@@ -277,6 +277,41 @@ fun DashboardInsightLayout(
                         )
                 )
             }
+            // Maximum incoming group\'s name
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 16.dp,
+                        start = 16.dp,
+                        end = 16.dp
+                    )
+            ) {
+                Text(
+                    text = stringResource(
+                        id = R.string.key_maximum_incoming_group_name_label
+                    ),
+                    style = textViewLabelFont,
+                    modifier = Modifier
+                        .weight(
+                            weight = 1.5f
+                        )
+                )
+                Text(
+                    text = (viewModel getMaxIncomingGroupName true) ?: stringResource(
+                        id = R.string.key_empty_field_label
+                    ),
+                    style = textViewValueLabelFont,
+                    textAlign = TextAlign.End,
+                    color = colorResource(
+                        id = R.color.grey
+                    ),
+                    modifier = Modifier
+                        .weight(
+                            weight = 0.5f
+                        )
+                )
+            }
             // Minimum incoming group\'s payment
             Row(
                 modifier = Modifier
@@ -299,6 +334,41 @@ fun DashboardInsightLayout(
                 )
                 Text(
                     text = (viewModel getMaxIncomingGroupAmount false)?.euroFormattedString ?: stringResource(
+                        id = R.string.key_empty_field_label
+                    ),
+                    style = textViewValueLabelFont,
+                    textAlign = TextAlign.End,
+                    color = colorResource(
+                        id = R.color.grey
+                    ),
+                    modifier = Modifier
+                        .weight(
+                            weight = 0.5f
+                        )
+                )
+            }
+            // Minimum incoming group\'s name
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 16.dp,
+                        start = 16.dp,
+                        end = 16.dp
+                    )
+            ) {
+                Text(
+                    text = stringResource(
+                        id = R.string.key_minimum_incoming_group_name_label
+                    ),
+                    style = textViewLabelFont,
+                    modifier = Modifier
+                        .weight(
+                            weight = 1.5f
+                        )
+                )
+                Text(
+                    text = (viewModel getMaxIncomingGroupName  false) ?: stringResource(
                         id = R.string.key_empty_field_label
                     ),
                     style = textViewValueLabelFont,

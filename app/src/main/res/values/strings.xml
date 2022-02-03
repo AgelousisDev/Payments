@@ -231,7 +231,9 @@
     <string name="key_recent_insights_label">Recent Insights</string>
     <string name="key_total_incoming_payments_label">Total incoming payments</string>
     <string name="key_maximum_incoming_group_payment_label">Max incoming group\'s payment</string>
+    <string name="key_maximum_incoming_group_name_label">Max incoming group\'s name</string>
     <string name="key_minimum_incoming_group_payment_label">Min incoming group\'s payment</string>
+    <string name="key_minimum_incoming_group_name_label">Min incoming group\'s name</string>
     <string name="key_today_payments_label">Today payments</string>
     <string name="key_group_color_label">Group Color</string>
 
