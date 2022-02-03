@@ -9,7 +9,7 @@ plugins {
 }
 
 val kotlinVersion = "1.6.0"
-val navVersion = "2.3.5"
+val navVersion = "2.5.0-alpha01"
 val materialVersion = "1.6.0-alpha01"
 val ktxCoreVersion = "1.8.0-alpha02"
 val activityVersion = "1.4.0"
@@ -30,8 +30,8 @@ android {
         applicationId = "com.agelousis.payments"
         minSdk = 26
         targetSdk = 31
-        versionCode = 56
-        versionName = "5.2"
+        versionCode = 57
+        versionName = "5.3"
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

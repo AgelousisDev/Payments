@@ -1,6 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript { 
-    val navVersion = "2.3.5"
+    val navVersion = "2.5.0-alpha01"
     val kotlinVersion = "1.6.10"
     repositories {
         google()
