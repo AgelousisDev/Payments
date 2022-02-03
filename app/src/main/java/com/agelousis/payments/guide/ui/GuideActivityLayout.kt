@@ -1,6 +1,8 @@
 package com.agelousis.payments.guide.ui
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,10 +15,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.agelousis.payments.R
@@ -34,7 +38,15 @@ fun GuideActivityLayout(
     guideModelList: List<GuideModel>,
     guideActivityPresenter: GuideActivityPresenter
 ) {
-    ConstraintLayout {
+    ConstraintLayout(
+        modifier = Modifier
+            .background(
+                color = colorResource(
+                    id = R.color.whiteTwo
+                )
+            )
+            .fillMaxSize()
+    ) {
         val pagerState = rememberPagerState()
         val (
             pagerConstrainedReference,
@@ -50,7 +62,7 @@ fun GuideActivityLayout(
                     end.linkTo(parent.end)
                 }
                 .fillMaxHeight(
-                    fraction = 0.9f
+                    fraction = 0.85f
                 ),
             state = pagerState
         ) { page ->
@@ -102,17 +114,32 @@ fun GuideActivityLayout(
 fun GuidePageLayout(
     guideModel: GuideModel
 ) {
+    when(LocalConfiguration.current.orientation) {
+        Configuration.ORIENTATION_LANDSCAPE ->
+            LandscapeGuidePage(
+                guideModel = guideModel
+            )
+        else ->
+            PortraitGuidePage(
+                guideModel = guideModel
+            )
+    }
+}
+
+@Composable
+fun PortraitGuidePage(
+    guideModel: GuideModel
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Card(
             interactionSource = remember { MutableInteractionSource() },
             indication = rememberRipple(bounded = false),
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(16.dp),
             elevation = 10.dp,
             onClick = {},
             modifier = Modifier
-                .wrapContentWidth()
                 .fillMaxSize(
                     fraction = 0.7f
                 )
@@ -133,6 +160,9 @@ fun GuidePageLayout(
                 id = guideModel.title
             ),
             style = textViewTitleLabelFont,
+            color = colorResource(
+                id = R.color.dayNightTextOnBackground
+            ),
             modifier = Modifier
                 .padding(
                     top = 16.dp
@@ -148,7 +178,75 @@ fun GuidePageLayout(
                 }
             },
             style = textViewValueLabelFont,
+            color = colorResource(
+                id = R.color.dayNightTextOnBackground
+            ),
             modifier = horizontalMargin
         )
+    }
+}
+
+@Composable
+fun LandscapeGuidePage(
+    guideModel: GuideModel
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Card(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = rememberRipple(bounded = false),
+            shape = RoundedCornerShape(16.dp),
+            elevation = 10.dp,
+            onClick = {},
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth(
+                    fraction = 0.4f
+                )
+                .padding(
+                    all = 16.dp
+                )
+        ) {
+            Image(
+                painter = painterResource(
+                    id = guideModel.icon
+                ),
+                contentDescription = null,
+                contentScale = ContentScale.Crop
+            )
+        }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = stringResource(
+                    id = guideModel.title
+                ),
+                style = textViewTitleLabelFont,
+                color = colorResource(
+                    id = R.color.dayNightTextOnBackground
+                ),
+                modifier = Modifier
+                    .padding(
+                        top = 16.dp
+                    )
+            )
+            Text(
+                text = buildAnnotatedString {
+                    guideModel.subtitleArray.forEach { subtitle ->
+                        append("\u2022")
+                        append("\t\t")
+                        append(subtitle.parseBold())
+                        append("\n")
+                    }
+                },
+                style = textViewValueLabelFont,
+                color = colorResource(
+                    id = R.color.dayNightTextOnBackground
+                ),
+                modifier = horizontalMargin
+            )
+        }
     }
 }
