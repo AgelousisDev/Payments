@@ -157,7 +157,7 @@ fun GroupInfoLayout(
             },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Number
+                keyboardType = KeyboardType.Text
             ),
             keyboardActions = KeyboardActions(
                 onDone = {

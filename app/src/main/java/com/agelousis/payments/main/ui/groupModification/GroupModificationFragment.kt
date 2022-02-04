@@ -85,6 +85,11 @@ class GroupModificationFragment: BasicBottomSheetDialogFragment(), GroupModifica
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.applyAnimationOnKeyboard()
+    }
+
     private fun initializeViewModelData() {
         viewModel.groupModificationState = if (args.groupModel != null) GroupModificationState.UPDATE else GroupModificationState.ADD
         viewModel.groupImageName = args.groupModel?.groupImage
