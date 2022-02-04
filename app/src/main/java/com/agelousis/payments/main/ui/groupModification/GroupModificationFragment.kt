@@ -73,6 +73,7 @@ class GroupModificationFragment: BasicBottomSheetDialogFragment(), GroupModifica
         return ComposeView(
             context = context ?: return null
         ).apply {
+            applyAnimationOnKeyboard()
             setContent {
                 MaterialTheme(
                     typography = Typography,
@@ -83,11 +84,6 @@ class GroupModificationFragment: BasicBottomSheetDialogFragment(), GroupModifica
                 }
             }
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        view.applyAnimationOnKeyboard()
     }
 
     private fun initializeViewModelData() {
