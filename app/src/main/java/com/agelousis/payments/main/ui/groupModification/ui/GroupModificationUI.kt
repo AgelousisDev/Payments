@@ -1,8 +1,5 @@
 package com.agelousis.payments.main.ui.groupModification.ui
 
-import android.graphics.ImageDecoder
-import android.os.Build
-import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -18,9 +15,8 @@ import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
@@ -36,77 +32,40 @@ import com.agelousis.payments.main.ui.groupModification.viewModel.GroupModificat
 import com.agelousis.payments.ui.textViewLabelFont
 import com.agelousis.payments.ui.textViewTitleLabelFont
 import com.agelousis.payments.utils.constants.Constants
+import com.agelousis.payments.utils.extensions.loadImageBitmap
 import com.agelousis.payments.utils.extensions.saveImage
 
 @Composable
 fun GroupModificationLayout(
     viewModel: GroupModificationViewModel
 ) {
-    val context = LocalContext.current
-    val launcher = rememberLauncherForActivityResult(contract =
-    ActivityResultContracts.GetContent()) { uri ->
-        if (Build.VERSION.SDK_INT < 28)
-            viewModel.groupBitmap = MediaStore.Images
-                .Media.getBitmap(context.contentResolver, uri)
-        else {
-            val source = ImageDecoder
-                .createSource(context.contentResolver, uri ?: return@rememberLauncherForActivityResult)
-            viewModel.groupBitmap = ImageDecoder.decodeBitmap(source)
-        }
-        viewModel.groupImageName = context.saveImage(
-            bitmap = viewModel.groupBitmap,
-            fileName = "${Constants.GROUP_IMAGE_NAME}_${System.currentTimeMillis()}"
-        )
-    }
     ConstraintLayout {
         val (
-            groupImageConstrainedReference,
+            groupColorConstrainedReference,
             groupCardInfoConstrainedReference
         ) = createRefs()
-        if (viewModel.groupBitmap != null)
-            Image(
-                bitmap = viewModel.groupBitmap?.asImageBitmap() ?: return@ConstraintLayout,
-                contentDescription = viewModel.groupName,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(
-                        height = 150.dp
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(
+                    height = 75.dp
+                )
+                .background(
+                    color = viewModel.groupColor,
+                    shape = RoundedCornerShape(
+                        topStart = 16.dp,
+                        topEnd = 16.dp
                     )
-                    .clip(
-                        shape = RoundedCornerShape(
-                            topStart = 16.dp,
-                            topEnd = 16.dp
-                        )
-                    )
-                    .constrainAs(groupImageConstrainedReference) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    }
-                    .clickable {
-                        launcher.launch("image/*")
-                    },
-                contentScale = if (viewModel.groupBitmap?.asImageBitmap() != null) ContentScale.Crop else ContentScale.Fit
-            )
-        else
-            Image(
-                painter = painterResource(
-                    id = R.drawable.ic_group
-                ),
-                contentDescription = viewModel.groupName,
-                modifier = Modifier
-                    .size(
-                        size = 50.dp
-                    )
-                    .constrainAs(groupImageConstrainedReference) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    }
-                    .clickable {
-                        launcher.launch("image/*")
-                    }
-            )
+                )
+                .constrainAs(groupColorConstrainedReference) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .clickable {
+                    viewModel.groupModificationFragmentPresenter?.onColorPalette()
+                }
+        )
         Card(
             interactionSource = remember { MutableInteractionSource() },
             indication = rememberRipple(bounded = false),
@@ -118,7 +77,10 @@ fun GroupModificationLayout(
             modifier = Modifier
                 .fillMaxWidth()
                 .constrainAs(groupCardInfoConstrainedReference) {
-                    top.linkTo(groupImageConstrainedReference.bottom, if (viewModel.groupBitmap != null) (-32).dp else 0  .dp)
+                    top.linkTo(
+                        groupColorConstrainedReference.bottom,
+                        (-32).dp
+                    )
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }
@@ -134,11 +96,24 @@ fun GroupModificationLayout(
 fun GroupInfoLayout(
     viewModel: GroupModificationViewModel
 ) {
+    val context = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(contract =
+    ActivityResultContracts.GetContent()) { uri ->
+        loadImageBitmap(
+            imageUri = uri
+        ) { groupBitmap ->
+            viewModel.groupBitmap = groupBitmap
+            viewModel.groupImageName = context.saveImage(
+                bitmap = groupBitmap,
+                fileName = "${Constants.GROUP_IMAGE_NAME}_${System.currentTimeMillis()}"
+            )
+        }
+    }
     val keyboardController = LocalSoftwareKeyboardController.current
     ConstraintLayout {
         val (
             groupNameTextFieldConstrainedReference,
-            groupBoxColorConstrainedReference,
+            groupImageConstrainedReference,
             groupBoxColorLabelConstrainedReference,
             addGroupButtonConstrainedReference
         ) = createRefs()
@@ -170,39 +145,70 @@ fun GroupInfoLayout(
             modifier = Modifier
                 .constrainAs(groupNameTextFieldConstrainedReference) {
                     top.linkTo(parent.top, 16.dp)
-                    start.linkTo(parent.start, 8.dp)
-                    end.linkTo(parent.end, 8.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
                 }
-        )
-        Box(
-            modifier = Modifier
-                .size(
-                    size = 40.dp
+                .fillMaxWidth()
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp
                 )
-                .background(
-                    color = viewModel.groupColor,
-                    shape = RoundedCornerShape(
-                        size = 20.dp
+        )
+        if (viewModel.groupBitmap != null)
+            Image(
+                bitmap = viewModel.groupBitmap?.asImageBitmap() ?: return@ConstraintLayout,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(
+                        size = 40.dp
+                    )
+                    .background(
+                        color = viewModel.groupColor,
+                        shape = RoundedCornerShape(
+                            size = 20.dp
+                        )
+                    )
+                    .constrainAs(groupImageConstrainedReference) {
+                        top.linkTo(groupNameTextFieldConstrainedReference.bottom, 16.dp)
+                        start.linkTo(parent.start, 16.dp)
+                    }
+                    .clickable {
+                        launcher.launch("image/*")
+                    }
+            )
+        else
+            Image(
+                painter = painterResource(
+                    id = R.drawable.ic_group
+                ),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(
+                        size = 40.dp
+                    )
+                    .constrainAs(groupImageConstrainedReference) {
+                        top.linkTo(groupNameTextFieldConstrainedReference.bottom, 16.dp)
+                        start.linkTo(parent.start, 16.dp)
+                    }
+                    .clickable {
+                        launcher.launch("image/*")
+                    },
+                colorFilter = ColorFilter.tint(
+                    color = colorResource(
+                        id = R.color.dayNightTextOnBackground
                     )
                 )
-                .constrainAs(groupBoxColorConstrainedReference) {
-                    top.linkTo(groupNameTextFieldConstrainedReference.bottom, 16.dp)
-                    start.linkTo(parent.start, 16.dp)
-                }
-                .clickable {
-                    viewModel.groupModificationFragmentPresenter?.onColorPalette()
-                }
-        )
+            )
         Text(
             text = stringResource(
-                id = R.string.key_group_color_label
+                id = R.string.key_group_icon_label
             ),
             style = textViewLabelFont,
             modifier = Modifier
                 .constrainAs(groupBoxColorLabelConstrainedReference) {
-                    start.linkTo(groupBoxColorConstrainedReference.end, 16.dp)
-                    top.linkTo(groupBoxColorConstrainedReference.top)
-                    bottom.linkTo(groupBoxColorConstrainedReference.bottom)
+                    start.linkTo(groupImageConstrainedReference.end, 16.dp)
+                    top.linkTo(groupImageConstrainedReference.top)
+                    bottom.linkTo(groupImageConstrainedReference.bottom)
                 }
         )
         Button(
@@ -210,7 +216,12 @@ fun GroupInfoLayout(
                 viewModel.groupModificationFragmentPresenter?.onGroupAdd()
             },
             enabled = viewModel.groupName.isNotEmpty(),
-            shape = RoundedCornerShape(50),
+            shape = RoundedCornerShape(
+                percent = 50
+            ),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = viewModel.groupColor
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
@@ -218,7 +229,7 @@ fun GroupInfoLayout(
                 )
                 .constrainAs(addGroupButtonConstrainedReference) {
                     start.linkTo(parent.start)
-                    top.linkTo(groupBoxColorConstrainedReference.bottom)
+                    top.linkTo(groupImageConstrainedReference.bottom)
                     bottom.linkTo(parent.bottom)
                     end.linkTo(parent.end)
                 }
@@ -229,6 +240,9 @@ fun GroupInfoLayout(
                         GroupModificationState.UPDATE -> R.string.key_modify_group
                         else -> R.string.key_add_group_label
                     }
+                ),
+                color = colorResource(
+                    id = R.color.white
                 ),
                 style = textViewTitleLabelFont
             )

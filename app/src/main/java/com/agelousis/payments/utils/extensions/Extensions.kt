@@ -79,10 +79,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.*
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
@@ -1077,3 +1074,29 @@ fun String.parseBold(): AnnotatedString {
         }
     }
 }
+
+val FileDescriptor.calculateInSampleSizeBitmap: Bitmap
+    get() {
+        val options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        BitmapFactory.decodeFileDescriptor(this, null, options)
+        // Raw height and width of image
+        val (height: Int, width: Int) = options.run { outHeight to outWidth }
+        var inSampleSize = 1
+
+        if (height > height * 2 || width > width * 2) {
+
+            val halfHeight: Int = height / 2
+            val halfWidth: Int = width / 2
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while (halfHeight / inSampleSize >= height * 2 && halfWidth / inSampleSize >= width * 2) {
+                inSampleSize *= 2
+            }
+        }
+
+        return BitmapFactory.decodeFileDescriptor(this, null, BitmapFactory.Options().also {
+            it.inSampleSize = inSampleSize
+        })
+    }

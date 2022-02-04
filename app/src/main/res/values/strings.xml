@@ -236,6 +236,7 @@
     <string name="key_minimum_incoming_group_name_label">Min incoming group\'s name</string>
     <string name="key_today_payments_label">Today payments</string>
     <string name="key_group_color_label">Group Color</string>
+    <string name="key_group_icon_label">Group Icon</string>
 
     <string-array name="key_payment_type_array">
         <item>Cash Payment</item>
