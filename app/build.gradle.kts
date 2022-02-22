@@ -1,5 +1,5 @@
 plugins {
-    id("com.github.ben-manes.versions") version "0.28.0"
+    id("com.github.ben-manes.versions") version "0.42.0"
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-parcelize")
@@ -9,19 +9,19 @@ plugins {
 }
 
 val kotlinVersion = "1.6.0"
-val navVersion = "2.5.0-alpha01"
-val materialVersion = "1.6.0-alpha01"
-val ktxCoreVersion = "1.8.0-alpha02"
-val activityVersion = "1.4.0"
-val fragmentVersion = "1.4.0"
-val firebaseBomVersion = "28.0.1"
-val liveDataViewModelVersion = "2.4.0"
-val composeVersion = "1.2.0-alpha02"
+val navVersion = "2.5.0-alpha02"
+val materialVersion = "1.6.0-alpha02"
+val ktxCoreVersion = "1.8.0-alpha04"
+val activityVersion = "1.5.0-alpha02"
+val fragmentVersion = "1.5.0-alpha02"
+val firebaseBomVersion = "29.1.0"
+val liveDataViewModelVersion = "2.5.0-alpha02"
+val composeVersion = "1.2.0-alpha03"
 val kotlinCoroutinesVersion = "1.6.0"
 val appCompatVersion = "1.4.1"
 val constraintLayoutVersion = "2.1.3"
 val constraintLayoutComposeVersion = "1.0.0"
-val composeActivityVersion = "1.4.0"
+val composeActivityVersion = "1.5.0-alpha02"
 
 android {
     compileSdk = 31
@@ -86,8 +86,8 @@ dependencies {
     implementation("androidx.activity:activity-compose:$composeActivityVersion")
     implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     implementation("androidx.constraintlayout:constraintlayout-compose:$constraintLayoutComposeVersion")
-    implementation("com.google.accompanist:accompanist-pager:0.24.1-alpha")
-    implementation("io.coil-kt:coil-compose:1.4.0")
+    implementation("com.google.accompanist:accompanist-pager:0.24.2-alpha")
+    implementation("io.coil-kt:coil-compose:2.0.0-alpha09")
     implementation("androidx.viewpager2:viewpager2:1.1.0-beta01")
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
     implementation("androidx.constraintlayout:constraintlayout:$constraintLayoutVersion")
@@ -110,15 +110,15 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("androidx.core:core-ktx:$ktxCoreVersion")
     implementation("com.google.android.flexbox:flexbox:3.0.0")
-    implementation("com.airbnb.android:lottie:4.2.2")
+    implementation("com.airbnb.android:lottie:5.0.1")
     implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.3")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.5")
     implementation("me.dm7.barcodescanner:zxing:1.9.8")
     implementation(files("libs/itextpdf-5.5.13.jar"))
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.4-alpha04")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0-alpha04")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
 }

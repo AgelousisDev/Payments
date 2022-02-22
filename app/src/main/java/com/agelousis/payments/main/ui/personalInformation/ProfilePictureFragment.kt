@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.agelousis.payments.R
 import com.agelousis.payments.main.MainActivity
@@ -58,8 +59,8 @@ class ProfilePictureFragment: Fragment() {
         ) {
             Image(
                 if ((activity as? MainActivity)?.userModel?.profileImage != null)
-                    rememberImagePainter(
-                        data = File(context?.filesDir, (activity as? MainActivity)?.userModel?.profileImage ?: return)
+                    rememberAsyncImagePainter(
+                        model = File(context?.filesDir, (activity as? MainActivity)?.userModel?.profileImage ?: return)
                     )
                 else
                     painterResource(
