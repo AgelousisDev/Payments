@@ -78,7 +78,9 @@ class GroupSelectorBottomSheetDialogFragment: BasicBottomSheetDialogFragment(), 
     }
 
     private fun setupUI() {
-        binding.searchLayout.searchHint = resources.getString(R.string.key_search_in_groups_label)
+        binding.searchLayout.binding.materialSearchViewDataModel = binding.searchLayout.binding.materialSearchViewDataModel?.also { materialSearchViewDataModel ->
+            materialSearchViewDataModel.hint = resources.getString(R.string.key_search_in_groups_label)
+        }
         binding.searchLayout.onQueryListener { query ->
             filterGroups(
                 query = query

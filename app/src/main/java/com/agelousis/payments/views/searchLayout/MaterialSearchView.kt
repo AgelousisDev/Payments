@@ -10,31 +10,33 @@ import com.agelousis.payments.R
 import com.agelousis.payments.databinding.MaterialSearchViewLayoutBinding
 import com.agelousis.payments.utils.extensions.infiniteAlphaAnimation
 import com.agelousis.payments.utils.extensions.initializeField
-import com.agelousis.payments.utils.extensions.setAnimatedImageResourceId
 import com.agelousis.payments.views.searchLayout.enumerations.MaterialSearchViewIconState
+import com.agelousis.payments.views.searchLayout.models.MaterialSearchViewDataModel
+import com.agelousis.payments.views.searchLayout.presenter.MaterialSearchViewPresenter
 
 typealias SearchQueryChangesBlock = (String?) -> Unit
-class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLayout(context, attributeSet) {
+class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLayout(context, attributeSet), MaterialSearchViewPresenter {
+
+    override fun onDeleteQuery() {
+        binding.searchField.text?.clear()
+    }
+
+    override fun onSearchIcon() {
+        context?.initializeField(
+            appCompatEditText = binding.searchField
+        )
+    }
+
+    override fun onProfileImageClicked() {
+        presenter?.onProfileImageClicked()
+    }
+
+    override fun onSecondaryIconClicked() {
+        presenter?.onSecondaryIconClicked()
+    }
 
     lateinit var binding: MaterialSearchViewLayoutBinding
-    private var searchViewIconState = MaterialSearchViewIconState.SEARCH
-        set(value) {
-            field = value
-            binding.searchIcon.setAnimatedImageResourceId(
-                resourceId = value.icon
-            )
-            binding.searchIcon.setOnClickListener {
-                when(value) {
-                    MaterialSearchViewIconState.SEARCH -> onSearchIcon()
-                    MaterialSearchViewIconState.CLOSE -> onDeleteQuery()
-                }
-            }
-        }
-    var searchHint: String? = null
-        set(value) {
-            field = value
-            binding.hint = value ?: return
-        }
+    var presenter: MaterialSearchViewPresenter? = null
 
     init {
         initAttributesAndView(attributeSet = attributeSet)
@@ -48,8 +50,11 @@ class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLa
                 null,
                 false
             )
-            searchHint = attributes.getString(R.styleable.MaterialSearchView_searchHint)
-            binding.secondaryImageResourceId = attributes.getResourceId(R.styleable.MaterialSearchView_secondaryIconResource, 0)
+            binding.materialSearchViewDataModel = MaterialSearchViewDataModel(
+                hint = attributes.getString(R.styleable.MaterialSearchView_searchHint),
+                secondaryImageResourceId = attributes.getResourceId(R.styleable.MaterialSearchView_secondaryIconResource, 0),
+                presenter = this
+            )
             attributes.recycle()
             addView(binding.root)
         }
@@ -64,40 +69,23 @@ class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLa
         binding.searchField.infiniteAlphaAnimation(
             state = true
         )
-        binding.searchIcon.setOnClickListener {
-            onSearchIcon()
-        }
     }
 
-    private fun onDeleteQuery() {
-        binding.searchField.text?.clear()
-    }
-
-    private fun onSearchIcon() {
-        context?.initializeField(
-            appCompatEditText = binding.searchField
-        )
-    }
-
-    fun onQueryListener(searchQueryChangesBlock: SearchQueryChangesBlock) {
+    fun onQueryListener(searchQueryChangeBlock: SearchQueryChangesBlock) {
         binding.searchField.doOnTextChanged { text, _, _, _ ->
             binding.searchField.infiniteAlphaAnimation(
                 state = text?.length == 0
             )
-            if (searchViewIconState != MaterialSearchViewIconState.CLOSE && !text.isNullOrEmpty())
-                searchViewIconState = MaterialSearchViewIconState.CLOSE
-            if (searchViewIconState != MaterialSearchViewIconState.SEARCH && text.isNullOrEmpty())
-                searchViewIconState = MaterialSearchViewIconState.SEARCH
-            searchQueryChangesBlock(if (text?.length ?: 0 > 1) text?.toString() else null)
+            if (binding.materialSearchViewDataModel?.materialSearchViewIconState != MaterialSearchViewIconState.CLOSE && !text.isNullOrEmpty())
+                binding.materialSearchViewDataModel = binding.materialSearchViewDataModel?.also { materialSearchViewDataModel ->
+                    materialSearchViewDataModel.materialSearchViewIconState = MaterialSearchViewIconState.CLOSE
+                }
+            if (binding.materialSearchViewDataModel?.materialSearchViewIconState != MaterialSearchViewIconState.SEARCH && text.isNullOrEmpty())
+                binding.materialSearchViewDataModel = binding.materialSearchViewDataModel?.also { materialSearchViewDataModel ->
+                    materialSearchViewDataModel.materialSearchViewIconState = MaterialSearchViewIconState.SEARCH
+                }
+            searchQueryChangeBlock(if (text?.length ?: 0 > 1) text?.toString() else null)
         }
-    }
-
-    fun onProfileImageClicked(onClickListener: OnClickListener) {
-        binding.profileImageView.setOnClickListener(onClickListener)
-    }
-
-    fun onSecondaryIconClicked(onClickListener: OnClickListener) {
-        binding.secondaryActionIcon.setOnClickListener(onClickListener)
     }
 
 }

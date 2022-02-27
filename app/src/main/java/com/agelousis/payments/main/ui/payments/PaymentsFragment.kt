@@ -30,6 +30,7 @@ import com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType
 import com.agelousis.payments.main.ui.totalPaymentsAmount.TotalPaymentsAmountBottomSheetDialogFragment
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
+import com.agelousis.payments.views.searchLayout.presenter.MaterialSearchViewPresenter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,7 +38,15 @@ import java.io.File
 import java.util.*
 
 class PaymentsFragment: Fragment(), GroupPresenter, ClientPresenter, NewPaymentPresenter, PaymentAmountSumPresenter,
-    PaymentsFragmentPresenter, BalanceOverviewPresenter {
+    PaymentsFragmentPresenter, BalanceOverviewPresenter, MaterialSearchViewPresenter {
+
+    override fun onProfileImageClicked() {
+        redirectToPersonalInformationFragment()
+    }
+
+    override fun onSecondaryIconClicked() {
+        showPaymentsMenuOptionsFragment()
+    }
 
     override fun onDeletePayments() {
         this configureMultipleDeleteActionWith filteredList.filterIsInstance<ClientModel>().filter { it.isSelected }.mapNotNull { it.personId }
@@ -99,10 +108,10 @@ class PaymentsFragment: Fragment(), GroupPresenter, ClientPresenter, NewPaymentP
         selectedPayments = filteredList.filterIsInstance<ClientModel>().count {
             it.isSelected
         }
-        (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.updateIn(
+        (layoutBinding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.updateIn(
             position = paymentIndex
         )
-        (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
+        (layoutBinding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
     }
 
     override fun onPaymentAmount(paymentAmountModel: PaymentAmountModel?) {
@@ -156,7 +165,7 @@ class PaymentsFragment: Fragment(), GroupPresenter, ClientPresenter, NewPaymentP
         }?.currentBalanceOverviewState = filteredList.firstNotNullOfOrNull {
             it as? BalanceOverviewDataModel
         }?.currentBalanceOverviewState?.other
-        binding.paymentListRecyclerView.adapter?.notifyItemChanged(
+        layoutBinding.paymentListRecyclerView.adapter?.notifyItemChanged(
             filteredList.indexOfFirst {
                 it is BalanceOverviewDataModel
             }
@@ -176,7 +185,7 @@ class PaymentsFragment: Fragment(), GroupPresenter, ClientPresenter, NewPaymentP
         }
     }
 
-    lateinit var binding: FragmentPaymentsLayoutBinding
+    lateinit var layoutBinding: FragmentPaymentsLayoutBinding
     val uiScope = CoroutineScope(Dispatchers.Main)
     val sharedPreferences by lazy { context?.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE) }
     val viewModel: PaymentsViewModel by viewModels()
@@ -185,24 +194,24 @@ class PaymentsFragment: Fragment(), GroupPresenter, ClientPresenter, NewPaymentP
     private var searchViewState: Boolean = false
         set(value) {
             field  = value
-            binding.searchLayout.isVisible = value
+            layoutBinding.searchLayout.isVisible = value
         }
     private var appBarIsVisible: Boolean = false
         set(value) {
             field = value
-            binding.paymentsAppBarLayout.visibility = if (value) View.VISIBLE else View.GONE
+            layoutBinding.paymentsAppBarLayout.visibility = if (value) View.VISIBLE else View.GONE
         }
     private var selectedPayments: Int = 0
         set(value) {
             field = value
-            binding.selectedPaymentsView.text = String.format(
+            layoutBinding.selectedPaymentsView.text = String.format(
                 resources.getString(R.string.key_payments_selected_value_label),
                 value
             )
         }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentPaymentsLayoutBinding.inflate(
+        layoutBinding = FragmentPaymentsLayoutBinding.inflate(
             inflater,
             container,
             false
@@ -210,7 +219,7 @@ class PaymentsFragment: Fragment(), GroupPresenter, ClientPresenter, NewPaymentP
             it.userModel = (activity as? MainActivity)?.userModel
             it.presenter = this
         }
-        return binding.root
+        return layoutBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -225,19 +234,14 @@ class PaymentsFragment: Fragment(), GroupPresenter, ClientPresenter, NewPaymentP
     }
 
     private fun configureToolbar() {
-        binding.paymentsToolbar.setNavigationOnClickListener {
+        layoutBinding.paymentsToolbar.setNavigationOnClickListener {
             clearSelectedPayments()
         }
     }
 
     private fun configureSearchView() {
-        binding.searchLayout.onProfileImageClicked {
-            redirectToPersonalInformationFragment()
-        }
-        binding.searchLayout.onSecondaryIconClicked {
-            showPaymentsMenuOptionsFragment()
-        }
-        binding.searchLayout.onQueryListener {
+        layoutBinding.searchLayout.presenter = this
+        layoutBinding.searchLayout.onQueryListener {
             configurePayments(
                 list = itemsList,
                 query = it
@@ -322,7 +326,7 @@ class PaymentsFragment: Fragment(), GroupPresenter, ClientPresenter, NewPaymentP
                 (it as? ClientModel)?.isSelected = false
             }
         )
-        (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
+        (layoutBinding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
     }
 
     private infix fun setSelectedPaymentsAppBarState(state: Boolean) {
@@ -368,9 +372,8 @@ class PaymentsFragment: Fragment(), GroupPresenter, ClientPresenter, NewPaymentP
     }
 
     private fun redirectToPersonalInformationFragment() {
-        findNavController().navigate(
-            PaymentsFragmentDirections.actionGlobalPersonalInformation()
-        )
+        (activity as? MainActivity)?.binding?.appBarMain?.bottomNavigationView?.selectedItemId =
+            R.id.personalInformationFragment
     }
 
     fun navigateToPeriodFilterFragment() {

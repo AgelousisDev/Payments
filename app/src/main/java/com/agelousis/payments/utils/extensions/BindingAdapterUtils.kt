@@ -1,5 +1,6 @@
 package com.agelousis.payments.utils.extensions
 
+import android.animation.Animator
 import android.animation.ValueAnimator
 import android.content.res.ColorStateList
 import android.graphics.*
@@ -12,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import android.view.animation.LinearInterpolator
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
@@ -284,4 +286,23 @@ fun setAlphaOrBlurEffectViewGroup(viewGroup: ViewGroup, state: Boolean) {
     else
         viewGroup.alpha = if (state) 0.5f else 1.0f
 
+}
+
+@BindingAdapter("animatedImageResourceId")
+fun AppCompatImageView.setAnimatedImageResourceId(resourceId: Int?) {
+    resourceId?.let {
+        post {
+            animate().alpha(0.0f).setInterpolator(LinearInterpolator()).setListener(
+                object: Animator.AnimatorListener {
+                    override fun onAnimationCancel(p0: Animator?) {}
+                    override fun onAnimationRepeat(p0: Animator?) {}
+                    override fun onAnimationStart(p0: Animator?) {}
+                    override fun onAnimationEnd(p0: Animator?) {
+                        setImageResource(it)
+                        animate().alpha(1.0f).interpolator = LinearInterpolator()
+                    }
+                }
+            )
+        }
+    }
 }

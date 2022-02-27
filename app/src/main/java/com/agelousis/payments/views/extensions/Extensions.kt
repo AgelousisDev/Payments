@@ -62,7 +62,9 @@ fun YearMonthPickerFieldLayout.setMonthYearValue(date: String?) {
 @BindingAdapter("materialSearchProfile")
 fun setMaterialSearchProfile(materialSearchView: MaterialSearchView, profileImagePath: String?) {
     profileImagePath?.let {
-        materialSearchView.binding.profileImagePath = it
+        materialSearchView.binding.materialSearchViewDataModel = materialSearchView.binding.materialSearchViewDataModel.also { materialSearchViewDataModel ->
+            materialSearchViewDataModel?.profileImagePath = it
+        }
     }
 }
 

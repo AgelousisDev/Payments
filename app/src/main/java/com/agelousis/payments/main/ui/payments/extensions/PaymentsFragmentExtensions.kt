@@ -50,7 +50,7 @@ fun PaymentsFragment.configureSwipeEvents() {
                     when(swipeAction) {
                         SwipeAction.RIGHT -> {
                             this configurePDFActionWith position
-                            (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.updateIn(
+                            (layoutBinding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.updateIn(
                                 position = position
                             )
                         }
@@ -60,7 +60,7 @@ fun PaymentsFragment.configureSwipeEvents() {
             }
         }
     )
-    swipeItemTouchHelper.attachToRecyclerView(binding.paymentListRecyclerView)
+    swipeItemTouchHelper.attachToRecyclerView(layoutBinding.paymentListRecyclerView)
 }
 
 infix fun PaymentsFragment.sendGroupSms(groupModel: GroupModel) {
@@ -120,7 +120,7 @@ private infix fun PaymentsFragment.deleteItemWith(
                 else -> resources.getString(R.string.key_delete_client_message)
             },
             negativeButtonBlock = {
-                (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.updateIn(
+                (layoutBinding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.updateIn(
                     position = position
                 )
             },
@@ -227,13 +227,13 @@ fun PaymentsFragment.disableBalanceOverview() {
         it is BalanceOverviewDataModel
     }.takeIf { it > -1 }?.let { balanceOverviewDataModelIndex ->
         filteredList.removeAt(balanceOverviewDataModelIndex)
-        binding.paymentListRecyclerView.adapter?.notifyItemRemoved(balanceOverviewDataModelIndex)
+        layoutBinding.paymentListRecyclerView.adapter?.notifyItemRemoved(balanceOverviewDataModelIndex)
     }
 }
 
 fun PaymentsFragment.configureRecyclerViewAdapterAndLayoutManager() {
     if (context?.isLandscape == true)
-        binding.paymentListRecyclerView.layoutManager = GridLayoutManager(
+        layoutBinding.paymentListRecyclerView.layoutManager = GridLayoutManager(
             context,
             2
         ).also { gridLayoutManager ->
@@ -245,7 +245,7 @@ fun PaymentsFragment.configureRecyclerViewAdapterAndLayoutManager() {
                 }
             }
         }
-    binding.paymentListRecyclerView.adapter = PaymentsAdapter(
+    layoutBinding.paymentListRecyclerView.adapter = PaymentsAdapter(
         list = filteredList,
         groupPresenter = this,
         clientPresenter = this,
@@ -257,7 +257,7 @@ fun PaymentsFragment.configureRecyclerViewAdapterAndLayoutManager() {
 }
 
 fun PaymentsFragment.addRecyclerViewItemDecoration() {
-    binding.paymentListRecyclerView.addItemDecoration(
+    layoutBinding.paymentListRecyclerView.addItemDecoration(
         object: RecyclerView.ItemDecoration() {
             override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
                 super.getItemOffsets(outRect, view, parent, state)
@@ -400,8 +400,8 @@ fun PaymentsFragment.configurePayments(list: List<Any>, query: String? = null) {
                 )
             )
         }
-    binding.paymentListRecyclerView.scheduleLayoutAnimation()
-    (binding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
+    layoutBinding.paymentListRecyclerView.scheduleLayoutAnimation()
+    (layoutBinding.paymentListRecyclerView.adapter as? PaymentsAdapter)?.reloadData()
     sharedPreferences?.clientModelList.takeIf { it == null || it.size != list.filterIsInstance<ClientModel>().size }
         .apply {
             sharedPreferences?.clientModelList = list.filterIsInstance<ClientModel>()

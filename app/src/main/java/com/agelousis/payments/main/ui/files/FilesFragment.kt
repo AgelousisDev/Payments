@@ -24,15 +24,19 @@ import com.agelousis.payments.main.ui.files.viewModel.FilesViewModel
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.models.SimpleDialogDataModel
+import com.agelousis.payments.views.searchLayout.presenter.MaterialSearchViewPresenter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
-import java.util.*
 
 class FilesFragment: BaseBindingFragment<FragmentFilesLayoutBinding>(
     inflate = FragmentFilesLayoutBinding::inflate
-), FilePresenter, FilesFragmentPresenter {
+), FilePresenter, FilesFragmentPresenter, MaterialSearchViewPresenter {
+
+    override fun onProfileImageClicked() {
+        redirectToPersonalInformationFragment()
+    }
 
     override fun onDeleteInvoices(clearAllState: Boolean) {
         if (clearAllState) {
@@ -131,9 +135,7 @@ class FilesFragment: BaseBindingFragment<FragmentFilesLayoutBinding>(
     }
 
     private fun configureSearchView() {
-        binding?.searchLayout?.onProfileImageClicked {
-            redirectToPersonalInformationFragment()
-        }
+        binding?.searchLayout?.presenter = this
         binding?.searchLayout?.onQueryListener {
             configureFileList(
                 files = fileList,
@@ -326,9 +328,8 @@ class FilesFragment: BaseBindingFragment<FragmentFilesLayoutBinding>(
     }
 
     private fun redirectToPersonalInformationFragment() {
-        findNavController().navigate(
-            FilesFragmentDirections.actionGlobalPersonalInformation()
-        )
+        (activity as? MainActivity)?.binding?.appBarMain?.bottomNavigationView?.selectedItemId =
+            R.id.personalInformationFragment
     }
 
     private fun clearSelectedFiles() {

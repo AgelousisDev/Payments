@@ -29,17 +29,19 @@ allprojects {
             freeCompilerArgs =
                 listOf(
                     *kotlinOptions.freeCompilerArgs.toTypedArray(),
-                    "-Xuse-experimental=androidx.compose.foundation.ExperimentalAnimationApi",
-                    "-Xuse-experimental=androidx.compose.foundation.ExperimentalFoundationApi",
-                    "-Xuse-experimental=androidx.compose.ExperimentalComposeApi",
-                    "-Xuse-experimental=androidx.compose.material.ExperimentalMaterialApi",
-                    "-Xuse-experimental=androidx.compose.runtime.ExperimentalComposeApi",
-                    "-Xuse-experimental=androidx.compose.ui.ExperimentalComposeUiApi",
-                    "-Xuse-experimental=com.google.accompanist.pager.ExperimentalPagerApi"
+                    "-Xopt-in=androidx.compose.foundation.ExperimentalFoundationApi",
+                    "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi",
+                    "-Xopt-in=androidx.compose.runtime.ExperimentalComposeApi",
+                    "-Xopt-in=androidx.compose.ui.ExperimentalComposeUiApi",
+                    "-Xopt-in=com.google.accompanist.pager.ExperimentalPagerApi"
                 )
         }
     }
 }
+/**
+ * -Xopt-in=androidx.compose.foundation.ExperimentalAnimationApi
+ * -Xopt-in=androidx.compose.ExperimentalComposeApi
+ */
 
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
