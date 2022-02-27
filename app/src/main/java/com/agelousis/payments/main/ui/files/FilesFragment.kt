@@ -222,6 +222,7 @@ class FilesFragment: BaseBindingFragment<FragmentFilesLayoutBinding>(
 
     private fun configureObservers() {
         viewModel.filesLiveData.observe(viewLifecycleOwner) { files ->
+            (activity as? MainActivity)?.invoicesSize = files.size
             (activity as? MainActivity)?.floatingButtonState = files.isNotEmpty()
             initializeActualFiles(
                 files = files

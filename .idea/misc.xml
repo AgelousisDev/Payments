@@ -52,6 +52,8 @@
         <entry key="../../../../../../layout/compose-model-1643659119155.xml" value="0.33" />
         <entry key="../../../../../../layout/compose-model-1643922077712.xml" value="0.1" />
         <entry key="../../../../../../layout/compose-model-1645559021084.xml" value="0.10135135135135136" />
+        <entry key="../../../../../../layout/compose-model-1645986769895.xml" value="0.49444444444444446" />
+        <entry key="../../../../../../layout/compose-model-1645987229392.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-night-v31/balance_overview_background.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable-night/balance_overview_backgound.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable-night/balance_overview_background.xml" value="0.33645833333333336" />
@@ -139,6 +141,7 @@
         <entry key="app/src/main/res/layout/group_row_layout.xml" value="0.45643153526970953" />
         <entry key="app/src/main/res/layout/group_selection_row_layout.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/guide_basic_fragment_layout.xml" value="0.15577507598784193" />
+        <entry key="app/src/main/res/layout/header_row_layout.xml" value="0.22010869565217392" />
         <entry key="app/src/main/res/layout/history_fragment_layout.xml" value="0.22780797101449277" />
         <entry key="app/src/main/res/layout/last_payment_month_row_layout.xml" value="0.30117753623188404" />
         <entry key="app/src/main/res/layout/material_menu_fragment_layout.xml" value="0.17481884057971014" />

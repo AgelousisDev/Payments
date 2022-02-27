@@ -274,6 +274,14 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 number = value ?: return@apply
             }
         }
+    var invoicesSize: Int? = null
+        set(value) {
+            field = value
+            binding.appBarMain.bottomNavigationView.getOrCreateBadge(R.id.filesFragment).apply {
+                isVisible = value != null
+                number = value ?: return@apply
+            }
+        }
     private var bottomAppBarState: Boolean = true
         set(value) {
             field = value
