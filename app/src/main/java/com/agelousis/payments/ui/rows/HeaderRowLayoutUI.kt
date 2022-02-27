@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -22,11 +23,15 @@ fun HeaderRowLayout(
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .height(
+                height = 20.dp
+            )
             .background(
                 color = headerModel.headerBackgroundColor?.let { Color(it) } ?: colorResource(
                     id = R.color.whiteTwo
                 )
-            )
+            ),
+        contentAlignment = Alignment.CenterStart
     ) {
         Text(
             text = headerModel.header,

@@ -13,7 +13,7 @@ enum class DashboardStatisticsType {
             GROUPS,
             CLIENTS,
             PAYMENTS -> R.id.paymentsFragment
-            INVOICES -> R.id.filesFragment
+            INVOICES -> R.id.invoicesFragment
         }
 
 }

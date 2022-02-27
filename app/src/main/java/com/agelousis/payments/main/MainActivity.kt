@@ -26,7 +26,7 @@ import com.agelousis.payments.login.LoginActivity
 import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.enumerations.FloatingButtonPosition
 import com.agelousis.payments.main.ui.clientsSelector.ClientsSelectorDialogFragment
-import com.agelousis.payments.main.ui.files.FilesFragment
+import com.agelousis.payments.main.ui.files.InvoicesFragment
 import com.agelousis.payments.main.ui.dashboard.HistoryFragment
 import com.agelousis.payments.main.ui.newPayment.NewPaymentFragment
 import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
@@ -72,11 +72,11 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
             binding.appBarMain.floatingButton
         )
         bottomNavigationViewIsVisible = destination.id == R.id.paymentsFragment
-                || destination.id == R.id.filesFragment
+                || destination.id == R.id.invoicesFragment
                 || destination.id == R.id.historyFragment
                 || destination.id == R.id.personalInformationFragment
         bottomAppBarContentInsetState = destination.id != R.id.paymentsFragment
-                && destination.id != R.id.filesFragment
+                && destination.id != R.id.invoicesFragment
                 && destination.id != R.id.historyFragment
                 && destination.id != R.id.personalInformationFragment
         statusBarColor = when(destination.id) {
@@ -123,7 +123,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 floatingButtonPosition = FloatingButtonPosition.END
                 floatingButtonState = true
             }
-            R.id.filesFragment -> {
+            R.id.invoicesFragment -> {
                 navigationIcon = null
                 appBarTitle = ""
                 floatingButtonImage = R.drawable.ic_delete
@@ -197,8 +197,8 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 (supportFragmentManager.currentNavigationFragment as? FilterPaymentsFragment)?.saveFiltersAndDismiss()
             R.id.historyFragment ->
                 (supportFragmentManager.currentNavigationFragment as? HistoryFragment)?.switchChart()
-            R.id.filesFragment ->
-                (supportFragmentManager.currentNavigationFragment as? FilesFragment)?.onDeleteInvoices(
+            R.id.invoicesFragment ->
+                (supportFragmentManager.currentNavigationFragment as? InvoicesFragment)?.onDeleteInvoices(
                     clearAllState = true
                 )
         }
@@ -277,7 +277,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
     var invoicesSize: Int? = null
         set(value) {
             field = value
-            binding.appBarMain.bottomNavigationView.getOrCreateBadge(R.id.filesFragment).apply {
+            binding.appBarMain.bottomNavigationView.getOrCreateBadge(R.id.invoicesFragment).apply {
                 isVisible = value != null
                 number = value ?: return@apply
             }

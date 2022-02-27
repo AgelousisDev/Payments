@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.R
 import com.agelousis.payments.base.BaseBindingFragment
 import com.agelousis.payments.custom.itemDecoration.HeaderItemDecoration
-import com.agelousis.payments.databinding.FragmentFilesLayoutBinding
+import com.agelousis.payments.databinding.FragmentInvoicesLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.files.adapters.FilesAdapter
 import com.agelousis.payments.main.ui.files.enumerations.FileRowState
@@ -30,8 +30,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 
-class FilesFragment: BaseBindingFragment<FragmentFilesLayoutBinding>(
-    inflate = FragmentFilesLayoutBinding::inflate
+class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
+    inflate = FragmentInvoicesLayoutBinding::inflate
 ), FilePresenter, FilesFragmentPresenter, MaterialSearchViewPresenter {
 
     override fun onProfileImageClicked() {
@@ -60,7 +60,7 @@ class FilesFragment: BaseBindingFragment<FragmentFilesLayoutBinding>(
                 it.exists()
             }?.let {
                 findNavController().navigate(
-                    FilesFragmentDirections.actionFilesFragmentToPdfViewerFragment(
+                    InvoicesFragmentDirections.actionInvoicesFragmentToPdfViewerFragment(
                         fileDataModel = fileDataModel
                     )
                 )
@@ -101,7 +101,7 @@ class FilesFragment: BaseBindingFragment<FragmentFilesLayoutBinding>(
         (binding?.filesListRecyclerView?.adapter as? FilesAdapter)?.reloadData()
     }
 
-    override fun onBindData(binding: FragmentFilesLayoutBinding?) {
+    override fun onBindData(binding: FragmentInvoicesLayoutBinding?) {
         super.onBindData(binding)
         binding?.presenter = this
         binding?.userModel = (activity as? MainActivity)?.userModel

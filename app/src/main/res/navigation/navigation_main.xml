@@ -123,12 +123,12 @@
     </fragment>
 
     <fragment
-        android:id="@+id/filesFragment"
-        android:name="com.agelousis.payments.main.ui.files.FilesFragment"
-        android:label="FilesFragment"
-        tools:layout="@layout/fragment_files_layout">
+        android:id="@+id/invoicesFragment"
+        android:name="com.agelousis.payments.main.ui.files.InvoicesFragment"
+        android:label="InvoicesFragment"
+        tools:layout="@layout/fragment_invoices_layout">
         <action
-            android:id="@+id/action_filesFragment_to_pdfViewerFragment"
+            android:id="@+id/action_invoicesFragment_to_pdfViewerFragment"
             app:destination="@id/pdfViewerFragment"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out"
@@ -138,13 +138,6 @@
     <action
         android:id="@+id/action_global_paymentsFragment"
         app:destination="@id/paymentsFragment"
-        app:enterAnim="@android:anim/fade_in"
-        app:exitAnim="@android:anim/fade_out"
-        app:popEnterAnim="@android:anim/fade_in"
-        app:popExitAnim="@android:anim/fade_out" />
-    <action
-        android:id="@+id/action_global_filesFragment"
-        app:destination="@id/filesFragment"
         app:enterAnim="@android:anim/fade_in"
         app:exitAnim="@android:anim/fade_out"
         app:popEnterAnim="@android:anim/fade_in"

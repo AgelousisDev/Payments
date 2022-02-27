@@ -17,7 +17,7 @@
         android:enabled="false"/>
 
     <item
-        android:id="@+id/filesFragment"
+        android:id="@+id/invoicesFragment"
         android:title="@string/key_invoices_label"
         android:icon="@drawable/ic_invoice" />
 
