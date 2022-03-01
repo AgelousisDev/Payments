@@ -89,7 +89,9 @@ class GroupModificationFragment: BasicBottomSheetDialogFragment(), GroupModifica
     private fun initializeViewModelData() {
         viewModel.groupModificationState = if (args.groupModel != null) GroupModificationState.UPDATE else GroupModificationState.ADD
         viewModel.groupImageName = args.groupModel?.groupImage
-        viewModel.groupBitmap = args.groupModel?.groupImage?.let { groupImage ->
+        viewModel.groupBitmap = args.groupModel?.groupImage?.takeIf { groupImage ->
+            File(context?.filesDir, groupImage).exists()
+        }?.let { groupImage ->
             File(context?.filesDir, groupImage).bitmap
         }
         viewModel.groupColor = args.groupModel?.color?.let { groupColor ->
