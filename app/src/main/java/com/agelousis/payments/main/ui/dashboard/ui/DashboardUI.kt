@@ -17,12 +17,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.agelousis.payments.R
+import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.dashboard.model.DashboardStatisticsDataModel
 import com.agelousis.payments.main.ui.dashboard.viewModel.DashboardViewModel
 import com.agelousis.payments.ui.*
@@ -32,6 +34,7 @@ import com.agelousis.payments.utils.extensions.euroFormattedString
 fun DashboardLayout(
     viewModel: DashboardViewModel
 ) {
+    val context = LocalContext.current
     val animationState = remember {
         MutableTransitionState(
             initialState = false
@@ -40,12 +43,17 @@ fun DashboardLayout(
             targetState = true
         }
     }
+    val dashboardLazyColumnState = rememberLazyListState()
+    (context as? MainActivity)?.bottomAppBarState = dashboardLazyColumnState.firstVisibleItemIndex == 0
     AnimatedVisibility(
         visibleState = animationState,
         enter = slideInVertically(),
-        exit = slideOutVertically()
+        exit = slideOutVertically(),
+        modifier = Modifier
+            .fillMaxSize()
     ) {
         LazyColumn(
+            state = dashboardLazyColumnState,
             modifier = Modifier
                 .fillMaxSize()
         ) {

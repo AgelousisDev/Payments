@@ -282,7 +282,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 number = value ?: return@apply
             }
         }
-    private var bottomAppBarState: Boolean = true
+    var bottomAppBarState: Boolean = true
         set(value) {
             field = value
             if (value)
