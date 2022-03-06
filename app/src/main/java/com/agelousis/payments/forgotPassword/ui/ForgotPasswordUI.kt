@@ -23,6 +23,7 @@ import com.agelousis.payments.R
 import com.agelousis.payments.forgotPassword.viewModels.ForgotPasswordViewModel
 import com.agelousis.payments.ui.textViewTitleLabelFont
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.agelousis.payments.ui.BasicButton
 import com.agelousis.payments.ui.horizontalMargin
 import com.agelousis.payments.ui.textViewTitleFont
 
@@ -194,18 +195,16 @@ fun ForgotPasswordUI(
                     end = 16.dp
                 )
         )
-        Button(
-            onClick = updatePasswordBlock,
-            modifier = horizontalMargin.fillMaxWidth(),
-            enabled = updatePasswordState,
-            shape = RoundedCornerShape(50)
-        ) {
-            Text(
-                text = stringResource(
-                    id = R.string.key_change_password_label
-                ),
-                style = textViewTitleLabelFont
-            )
-        }
+        BasicButton(
+            text = stringResource(
+                id = R.string.key_change_password_label
+            ),
+            isEnabled = updatePasswordState,
+            roundedCornerShapePercent = 50,
+            modifier = {
+                fillMaxWidth()
+            },
+            basicButtonBlock = updatePasswordBlock
+        )
     }
 }

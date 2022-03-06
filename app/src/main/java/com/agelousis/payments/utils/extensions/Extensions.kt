@@ -1013,7 +1013,7 @@ infix fun RecyclerView.applyFloatingButtonBottomMarginWith(items: List<Any>) {
     )
 }
 
-val ByteArray.bitmap
+val ByteArray.bitmap: Bitmap?
     get() = BitmapFactory.decodeByteArray(this, 0, this.size)
 
 fun <T> Fragment.setBackStackData(key: String, data: T, doBack: Boolean = false) {
@@ -1082,3 +1082,8 @@ val FileDescriptor.calculateInSampleSizeBitmap: Bitmap
             it.inSampleSize = inSampleSize
         })
     }
+
+inline fun Int.run(block: (index: Int) -> Unit) {
+    for (index in 0 until this)
+        block(index)
+}

@@ -1,5 +1,6 @@
 package com.agelousis.payments.main.ui.dashboard.ui
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.slideInVertically
@@ -17,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -48,9 +50,7 @@ fun DashboardLayout(
     AnimatedVisibility(
         visibleState = animationState,
         enter = slideInVertically(),
-        exit = slideOutVertically(),
-        modifier = Modifier
-            .fillMaxSize()
+        exit = slideOutVertically()
     ) {
         LazyColumn(
             state = dashboardLazyColumnState,
@@ -74,21 +74,9 @@ fun DashboardLayout(
                 )
             }
             item {
-                LazyRow(
-                    contentPadding = PaddingValues(
-                        all = 16.dp
-                    ),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    items(
-                        items = viewModel.dashboardStatisticsDataMutableState
-                    ) { dashboardStatisticsDataModel ->
-                        StatisticCardLayout(
-                            viewModel = viewModel,
-                            dashboardStatisticsDataModel = dashboardStatisticsDataModel
-                        )
-                    }
-                }
+                StatisticsCardUI(
+                    viewModel = viewModel
+                )
             }
             item {
                 DashboardInsightLayout(
@@ -100,7 +88,48 @@ fun DashboardLayout(
 }
 
 @Composable
-fun StatisticCardLayout(
+fun StatisticsCardUI(
+    viewModel: DashboardViewModel
+) {
+    when(LocalConfiguration.current.orientation) {
+        Configuration.ORIENTATION_LANDSCAPE ->
+            LazyRow(
+                contentPadding = PaddingValues(
+                    all = 16.dp
+                ),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(
+                    items = viewModel.dashboardStatisticsDataMutableState
+                ) { dashboardStatisticsDataModel ->
+                    StatisticsCardLayout(
+                        viewModel = viewModel,
+                        dashboardStatisticsDataModel = dashboardStatisticsDataModel
+                    )
+                }
+            }
+        else ->
+            GridLazyColumnRow(
+                items = viewModel.dashboardStatisticsDataMutableState,
+                columnCount = 2,
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier
+                    .padding(
+                        start = 16.dp,
+                        top = 16.dp,
+                        end = 16.dp
+                    )
+            ) { dashboardStatisticsDataModel ->
+                StatisticsCardLayout(
+                    viewModel = viewModel,
+                    dashboardStatisticsDataModel = dashboardStatisticsDataModel
+                )
+            }
+    }
+}
+
+@Composable
+fun StatisticsCardLayout(
     viewModel: DashboardViewModel,
     dashboardStatisticsDataModel: DashboardStatisticsDataModel
 ) {
@@ -188,6 +217,7 @@ fun StatisticCardLayout(
 fun DashboardInsightLayout(
     viewModel: DashboardViewModel
 ) {
+    val orientation = LocalConfiguration.current.orientation
     Card(
         interactionSource = remember { MutableInteractionSource() },
         indication = rememberRipple(bounded = false),
@@ -199,7 +229,10 @@ fun DashboardInsightLayout(
             .padding(
                 start = 16.dp,
                 end = 16.dp,
-                bottom = 16.dp
+                bottom = when(orientation) {
+                    Configuration.ORIENTATION_LANDSCAPE -> 16.dp
+                    else -> 110.dp
+                }
             )
     ) {
         Column {

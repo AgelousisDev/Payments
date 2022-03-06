@@ -3,6 +3,7 @@ package com.agelousis.payments.main.ui.dashboard
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.viewModels
+import androidx.viewpager2.widget.ViewPager2
 import com.agelousis.payments.R
 import com.agelousis.payments.base.BaseViewBindingFragment
 import com.agelousis.payments.databinding.HistoryFragmentLayoutBinding
@@ -12,12 +13,10 @@ import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
-import com.github.mikephil.charting.data.*
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
 
 class HistoryFragment: BaseViewBindingFragment<HistoryFragmentLayoutBinding>(
     inflate = HistoryFragmentLayoutBinding::inflate
@@ -64,6 +63,14 @@ class HistoryFragment: BaseViewBindingFragment<HistoryFragmentLayoutBinding>(
             )
             adapter = chartPagerAdapter
             offscreenPageLimit = 3
+            registerOnPageChangeCallback(
+                object: ViewPager2.OnPageChangeCallback() {
+                    override fun onPageSelected(position: Int) {
+                        super.onPageSelected(position)
+                        (activity as? MainActivity)?.bottomAppBarState = true
+                    }
+                }
+            )
             TabLayoutMediator(
                 binding?.materialTabLayout ?: return@apply,
                 this

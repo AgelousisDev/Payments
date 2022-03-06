@@ -29,6 +29,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.groupModification.GroupModificationState
 import com.agelousis.payments.main.ui.groupModification.viewModel.GroupModificationViewModel
+import com.agelousis.payments.ui.BasicButton
 import com.agelousis.payments.ui.textViewLabelFont
 import com.agelousis.payments.ui.textViewTitleLabelFont
 import com.agelousis.payments.utils.constants.Constants
@@ -211,41 +212,27 @@ fun GroupInfoLayout(
                     bottom.linkTo(groupImageConstrainedReference.bottom)
                 }
         )
-        Button(
-            onClick = {
-                viewModel.groupModificationFragmentPresenter?.onGroupAdd()
-            },
-            enabled = viewModel.groupName.isNotEmpty(),
-            shape = RoundedCornerShape(
-                percent = 50
+        BasicButton(
+            text = stringResource(
+                id = when(viewModel.groupModificationState) {
+                    GroupModificationState.UPDATE -> R.string.key_modify_group
+                    else -> R.string.key_add_group_label
+                }
             ),
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = viewModel.groupColor
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    all = 16.dp
-                )
+            isEnabled = viewModel.groupName.isNotEmpty(),
+            roundedCornerShapePercent = 50,
+            buttonColor = viewModel.groupColor,
+            modifier = {
+                fillMaxWidth()
                 .constrainAs(addGroupButtonConstrainedReference) {
                     start.linkTo(parent.start)
                     top.linkTo(groupImageConstrainedReference.bottom)
                     bottom.linkTo(parent.bottom)
                     end.linkTo(parent.end)
                 }
+            }
         ) {
-            Text(
-                text = stringResource(
-                    id = when(viewModel.groupModificationState) {
-                        GroupModificationState.UPDATE -> R.string.key_modify_group
-                        else -> R.string.key_add_group_label
-                    }
-                ),
-                color = colorResource(
-                    id = R.color.white
-                ),
-                style = textViewTitleLabelFont
-            )
+            viewModel.groupModificationFragmentPresenter?.onGroupAdd()
         }
     }
 }

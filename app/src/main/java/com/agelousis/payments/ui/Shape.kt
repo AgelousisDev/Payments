@@ -3,12 +3,11 @@ package com.agelousis.payments.ui
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -29,21 +29,28 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.agelousis.payments.R
+import com.agelousis.payments.main.ui.groupModification.GroupModificationState
+import com.agelousis.payments.utils.extensions.run
 import kotlinx.coroutines.delay
+
+typealias BasicButtonBlock = () -> Unit
 
 @Composable
 fun BottomSheetNavigationLine() =
     Divider(
         thickness = 2.5.dp,
-        modifier = Modifier.padding(
-            top = 12.dp,
-            bottom = 8.dp
-        ).width(
-            width = 20.dp
-        ).background(
-            color = colorResource(id = R.color.grey),
-            shape = RoundedCornerShape(50)
-        )
+        modifier = Modifier
+            .padding(
+                top = 12.dp,
+                bottom = 8.dp
+            )
+            .width(
+                width = 20.dp
+            )
+            .background(
+                color = colorResource(id = R.color.grey),
+                shape = RoundedCornerShape(50)
+            )
     )
 
 @Composable
@@ -239,5 +246,118 @@ fun DotsIndicator(
                 Spacer(modifier = Modifier.padding(horizontal = 2.dp))
             }
         }
+    }
+}
+
+fun <T> LazyListScope.gridItems(
+    items: List<T>,
+    columnCount: Int,
+    modifier: () -> Modifier = { Modifier },
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
+    itemContent: @Composable BoxScope.(T) -> Unit,
+) {
+    val size = items.count()
+    val rows = if (size == 0) 0 else 1 + (size - 1) / columnCount
+    items(rows, key = { it.hashCode() }) { rowIndex ->
+        Row(
+            horizontalArrangement = horizontalArrangement,
+            modifier = modifier()
+        ) {
+            for (columnIndex in 0 until columnCount) {
+                val itemIndex = rowIndex * columnCount + columnIndex
+                if (itemIndex < size) {
+                    Box(
+                        modifier = Modifier.weight(1F, fill = true),
+                        propagateMinConstraints = true
+                    ) {
+                        itemContent(items[itemIndex])
+                    }
+                } else {
+                    Spacer(Modifier.weight(1F, fill = true))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun <T> GridLazyColumnRow(
+    items: List<T>,
+    columnCount: Int,
+    modifier: Modifier = Modifier,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
+    itemContent: @Composable BoxScope.(T) -> Unit,
+) {
+    val size = items.count()
+    val rows = if (size == 0) 0 else 1 + (size - 1) / columnCount
+    rows.run { rowIndex ->
+        Row(
+            horizontalArrangement = horizontalArrangement,
+            modifier = if (rowIndex + 1 < rows)
+                modifier
+            else
+                modifier
+                    .padding(
+                        bottom = 16.dp
+                    )
+        ) {
+            for (columnIndex in 0 until columnCount) {
+                val itemIndex = rowIndex * columnCount + columnIndex
+                if (itemIndex < size)
+                    Box(
+                        modifier = Modifier.weight(
+                            weight = 1f,
+                            fill = true
+                        ),
+                        propagateMinConstraints = true
+                    ) {
+                        itemContent(items[itemIndex])
+                    }
+                else
+                    Spacer(
+                        modifier = Modifier.weight(
+                            weight = 1f,
+                            fill = true
+                        )
+                    )
+            }
+        }
+    }
+}
+
+@Composable
+fun BasicButton(
+    text: String,
+    isEnabled: Boolean = true,
+    roundedCornerShapePercent: Int = 0,
+    buttonColor: Color? = null,
+    modifier: Modifier.() -> Modifier,
+    basicButtonBlock: BasicButtonBlock
+) {
+    Button(
+        onClick = basicButtonBlock,
+        enabled = isEnabled,
+        shape = RoundedCornerShape(
+            percent = roundedCornerShapePercent
+        ),
+        colors = buttonColor?.let {
+            ButtonDefaults.buttonColors(
+                backgroundColor = buttonColor
+            )
+        } ?: ButtonDefaults.buttonColors(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                all = 16.dp
+            )
+            .modifier()
+    ) {
+        Text(
+            text = text,
+            color = colorResource(
+                id = R.color.white
+            ),
+            style = textViewTitleLabelFont
+        )
     }
 }

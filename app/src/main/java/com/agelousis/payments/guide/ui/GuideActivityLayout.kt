@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
@@ -20,7 +19,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.agelousis.payments.R
@@ -85,27 +83,20 @@ fun GuideActivityLayout(
                 }
             }
         )
-        Button(
-            onClick = {
-                guideActivityPresenter.onSkip()
-            },
-            shape = RoundedCornerShape(50),
-            modifier = Modifier
-                .padding(
-                    all = 16.dp
-                )
-                .constrainAs(skipButtonConstrainedReference) {
+        BasicButton(
+            text = stringResource(
+                id = R.string.key_skip_label
+            ),
+            modifier = {
+                constrainAs(skipButtonConstrainedReference) {
                     top.linkTo(dotsIndicatorConstrainedReference.bottom)
                     bottom.linkTo(parent.bottom)
                     end.linkTo(parent.end)
                 }
+            },
+            roundedCornerShapePercent = 50
         ) {
-            Text(
-                text = stringResource(
-                    id = R.string.key_skip_label
-                ),
-                style = textViewTitleLabelFont
-            )
+            guideActivityPresenter.onSkip()
         }
     }
 }
