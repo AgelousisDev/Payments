@@ -14,8 +14,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:focusable="true"
-    android:clickable="true"
+    android:focusable="@{presenter != null}"
+    android:clickable="@{presenter != null}"
     android:foreground="?attr/selectableItemBackgroundBorderless"
     android:onClick="@{() -> presenter.onDatePickerShow()}">
 

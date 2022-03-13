@@ -40,7 +40,7 @@ fun ContactOptionsLayout(
                     )
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
-                        indication = rememberRipple(bounded = false),
+                        indication = rememberRipple(bounded = true),
                         enabled = contactType.isEnabled,
                     ) {
                         contactTypeSelectionBlock(contactType)

@@ -67,7 +67,7 @@ fun UserSelectionLayout(
                         )
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(bounded = false)
+                            indication = rememberRipple(bounded = true)
                         ) {
                             userSelectionBlock(userModel)
                         },

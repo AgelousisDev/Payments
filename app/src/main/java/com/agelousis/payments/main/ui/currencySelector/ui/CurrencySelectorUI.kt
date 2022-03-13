@@ -93,7 +93,7 @@ fun CurrencyType(
 ) {
     Card(
         interactionSource = remember { MutableInteractionSource() },
-        indication = rememberRipple(bounded = false),
+        indication = rememberRipple(bounded = true),
         modifier = Modifier
             .height(
                 height = 40.dp

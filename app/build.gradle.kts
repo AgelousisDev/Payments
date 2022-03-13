@@ -22,6 +22,7 @@ val appCompatVersion = "1.6.0-alpha01"
 val constraintLayoutVersion = "2.1.3"
 val constraintLayoutComposeVersion = "1.0.0"
 val composeActivityVersion = "1.5.0-alpha03"
+val lottieComposeVersion = "5.0.3"
 
 android {
     compileSdk = 31
@@ -111,6 +112,7 @@ dependencies {
     implementation("androidx.core:core-ktx:$ktxCoreVersion")
     implementation("com.google.android.flexbox:flexbox:3.0.0")
     implementation("com.airbnb.android:lottie:5.0.2")
+    implementation("com.airbnb.android:lottie-compose:$lottieComposeVersion")
     implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.5")

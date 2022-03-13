@@ -126,7 +126,7 @@ fun PortraitGuidePage(
     ) {
         Card(
             interactionSource = remember { MutableInteractionSource() },
-            indication = rememberRipple(bounded = false),
+            indication = rememberRipple(bounded = true),
             shape = RoundedCornerShape(16.dp),
             elevation = 10.dp,
             onClick = {},
@@ -186,7 +186,7 @@ fun LandscapeGuidePage(
     ) {
         Card(
             interactionSource = remember { MutableInteractionSource() },
-            indication = rememberRipple(bounded = false),
+            indication = rememberRipple(bounded = true),
             shape = RoundedCornerShape(16.dp),
             elevation = 10.dp,
             onClick = {},

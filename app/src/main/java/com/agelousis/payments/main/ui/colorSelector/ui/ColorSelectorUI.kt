@@ -69,7 +69,7 @@ fun ColorData(
 ) {
     Card(
         interactionSource = remember { MutableInteractionSource() },
-        indication = rememberRipple(bounded = false),
+        indication = rememberRipple(bounded = true),
         modifier = Modifier
             .height(
                 height = 70.dp

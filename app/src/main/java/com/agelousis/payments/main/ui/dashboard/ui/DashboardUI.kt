@@ -135,7 +135,7 @@ fun StatisticsCardLayout(
 ) {
     Card(
         interactionSource = remember { MutableInteractionSource() },
-        indication = rememberRipple(bounded = false),
+        indication = rememberRipple(bounded = true),
         shape = RoundedCornerShape(12.dp),
         elevation = 10.dp,
         onClick = {
@@ -220,7 +220,7 @@ fun DashboardInsightLayout(
     val orientation = LocalConfiguration.current.orientation
     Card(
         interactionSource = remember { MutableInteractionSource() },
-        indication = rememberRipple(bounded = false),
+        indication = rememberRipple(bounded = true),
         shape = RoundedCornerShape(12.dp),
         elevation = 10.dp,
         onClick = {},

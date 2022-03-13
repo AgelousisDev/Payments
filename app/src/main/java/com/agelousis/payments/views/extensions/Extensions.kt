@@ -53,7 +53,7 @@ fun setDateValue(dateFieldLayout: DateFieldLayout, date: String?) {
 }
 
 @BindingAdapter("monthYearValue")
-fun YearMonthPickerFieldLayout.setMonthYearValue(date: String?) {
+infix fun YearMonthPickerFieldLayout.setMonthYearValue(date: String?) {
     date?.let {
         dateValue = it
     }

@@ -69,7 +69,7 @@ fun GroupModificationLayout(
         )
         Card(
             interactionSource = remember { MutableInteractionSource() },
-            indication = rememberRipple(bounded = false),
+            indication = rememberRipple(bounded = true),
             shape = RoundedCornerShape(12.dp),
             elevation = 10.dp,
             onClick = {
