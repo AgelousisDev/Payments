@@ -111,7 +111,7 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("androidx.core:core-ktx:$ktxCoreVersion")
     implementation("com.google.android.flexbox:flexbox:3.0.0")
-    implementation("com.airbnb.android:lottie:5.0.2")
+    implementation("com.airbnb.android:lottie:5.0.3")
     implementation("com.airbnb.android:lottie-compose:$lottieComposeVersion")
     implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
