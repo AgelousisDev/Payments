@@ -57,6 +57,7 @@
         <entry key="../../../../../../layout/compose-model-1646587114949.xml" value="0.25" />
         <entry key="../../../../../../layout/compose-model-1646592037053.xml" value="0.49444444444444446" />
         <entry key="../../../../../../layout/compose-model-1647586910496.xml" value="0.25" />
+        <entry key="../../../../../../layout/compose-model-1647669712800.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-night-v31/balance_overview_background.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable-night/balance_overview_backgound.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/drawable-night/balance_overview_background.xml" value="0.33645833333333336" />
@@ -133,6 +134,7 @@
         <entry key="app/src/main/res/layout/currency_selector_fragment_layout.xml" value="0.1983695652173913" />
         <entry key="app/src/main/res/layout/date_field_layout.xml" value="0.17481884057971014" />
         <entry key="app/src/main/res/layout/details_app_switch_layout.xml" value="0.3203125" />
+        <entry key="app/src/main/res/layout/empty_row_layout.xml" value="0.22010869565217392" />
         <entry key="app/src/main/res/layout/file_row_layout.xml" value="0.17708333333333334" />
         <entry key="app/src/main/res/layout/forgot_password_fragment_layout.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_files_layout.xml" value="0.22056159420289856" />
@@ -146,7 +148,7 @@
         <entry key="app/src/main/res/layout/group_selection_row_layout.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/guide_basic_fragment_layout.xml" value="0.15577507598784193" />
         <entry key="app/src/main/res/layout/header_row_layout.xml" value="0.22010869565217392" />
-        <entry key="app/src/main/res/layout/history_fragment_layout.xml" value="0.22780797101449277" />
+        <entry key="app/src/main/res/layout/history_fragment_layout.xml" value="0.1" />
         <entry key="app/src/main/res/layout/last_payment_month_row_layout.xml" value="0.30117753623188404" />
         <entry key="app/src/main/res/layout/material_menu_fragment_layout.xml" value="0.17481884057971014" />
         <entry key="app/src/main/res/layout/material_menu_option_row_layout.xml" value="0.17481884057971014" />

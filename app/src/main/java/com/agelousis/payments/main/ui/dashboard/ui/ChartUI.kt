@@ -14,8 +14,7 @@ import androidx.core.content.ContextCompat
 import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.dashboard.enumerations.ChartType
 import com.agelousis.payments.main.ui.dashboard.listeners.PaymentLineChartGestureListener
-import com.agelousis.payments.main.ui.payments.models.ClientModel
-import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
+import com.agelousis.payments.main.ui.dashboard.viewModel.DashboardViewModel
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.euroFormattedString
 import com.agelousis.payments.utils.extensions.toast
@@ -33,8 +32,7 @@ import java.util.*
 @Composable
 fun ChartLayout(
     chartType: ChartType,
-    clientModelList: List<ClientModel>,
-    paymentAmountModelList: List<PaymentAmountModel>
+    viewModel: DashboardViewModel
 ) {
     val orientation = LocalConfiguration.current.orientation
     ConstraintLayout(
@@ -48,25 +46,25 @@ fun ChartLayout(
                     factory = { context ->
                         PieChart(context).apply {
                             configurePieChart(
-                                colors = clientModelList.sortedBy {
+                                colors = (viewModel.clientModelListMutableState ?: return@apply).sortedBy {
                                     it.groupName
                                 }.groupBy {
                                     it.groupName
                                 }.map {
                                     it.value.firstOrNull()?.groupColor ?: 0
                                 },
-                                entries = clientModelList.sortedBy {
+                                entries = (viewModel.clientModelListMutableState ?: return@apply).sortedBy {
                                     it.groupName
                                 }.groupBy {
                                     it.groupName
                                 }.map { map ->
-                                    val groupPaymentAmountPercentage = clientModelList.asSequence().filter {
+                                    val groupPaymentAmountPercentage = (viewModel.clientModelListMutableState ?: return@apply).asSequence().filter {
                                         it.groupName == map.key
                                     }.mapNotNull { clientModel ->
                                         clientModel.payments
                                     }.flatten().mapNotNull { paymentAmountModel ->
                                         paymentAmountModel.paymentAmount
-                                    }.sum().toFloat() / clientModelList.mapNotNull { paymentAmountModel ->
+                                    }.sum().toFloat() / (viewModel.clientModelListMutableState ?: return@apply).mapNotNull { paymentAmountModel ->
                                         paymentAmountModel.payments
                                     }.flatten().mapNotNull { paymentAmountModel ->
                                         paymentAmountModel.paymentAmount
@@ -103,10 +101,10 @@ fun ChartLayout(
                     factory = { context ->
                         LineChart(context).apply {
                             val payments = arrayListOf(
-                                *clientModelList.asSequence().mapNotNull {
+                                *(viewModel.clientModelListMutableState ?: return@apply).asSequence().mapNotNull {
                                     it.payments
                                 }.flatten().toList().toTypedArray(),
-                                *paymentAmountModelList.toTypedArray()
+                                *(viewModel.paymentAmountModelListMutableState ?: return@apply).toTypedArray()
                             )
                             this configureLineChart payments.sortedBy {
                                     it.paymentMonthDate

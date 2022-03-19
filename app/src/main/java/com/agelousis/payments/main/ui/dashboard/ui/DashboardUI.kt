@@ -269,7 +269,7 @@ fun DashboardInsightLayout(
                         )
                 )
                 Text(
-                    text = viewModel.paymentAmountModelList?.mapNotNull { it.paymentAmount }?.sum()?.euroFormattedString ?: stringResource(
+                    text = viewModel.paymentAmountModelListMutableState?.mapNotNull { it.paymentAmount }?.sum()?.euroFormattedString ?: stringResource(
                         id = R.string.key_empty_field_label
                     ),
                     style = textViewValueLabelFont,

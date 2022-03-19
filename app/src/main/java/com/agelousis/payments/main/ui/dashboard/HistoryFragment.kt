@@ -2,104 +2,97 @@ package com.agelousis.payments.main.ui.dashboard
 
 import android.os.Bundle
 import android.view.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.viewpager2.widget.ViewPager2
-import com.agelousis.payments.R
-import com.agelousis.payments.base.BaseViewBindingFragment
-import com.agelousis.payments.databinding.HistoryFragmentLayoutBinding
 import com.agelousis.payments.main.MainActivity
-import com.agelousis.payments.main.ui.dashboard.adapters.ChartPagerAdapter
-import com.agelousis.payments.main.ui.payments.models.ClientModel
-import com.agelousis.payments.main.ui.payments.models.EmptyModel
-import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
-import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
-import com.google.android.material.tabs.TabLayoutMediator
+import com.agelousis.payments.main.ui.dashboard.presenter.DashboardPresenter
+import com.agelousis.payments.main.ui.dashboard.ui.HistoryLayout
+import com.agelousis.payments.main.ui.dashboard.viewModel.DashboardViewModel
+import com.agelousis.payments.ui.Typography
+import com.agelousis.payments.ui.appColors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class HistoryFragment: BaseViewBindingFragment<HistoryFragmentLayoutBinding>(
-    inflate = HistoryFragmentLayoutBinding::inflate
-) {
+class HistoryFragment: Fragment(), DashboardPresenter {
+
+    override fun onDashboardPage(bottomNavigationMenuItemId: Int) {
+        (activity as? MainActivity)?.binding?.appBarMain?.bottomNavigationView?.selectedItemId = bottomNavigationMenuItemId
+    }
 
     private val uiScope = CoroutineScope(Dispatchers.Main)
-    private val viewModel by viewModels<PaymentsViewModel>()
-    val clientModelList by lazy {
-        arrayListOf<ClientModel>()
-    }
-    val paymentAmountModelList by lazy {
-        arrayListOf<PaymentAmountModel>()
+    private val viewModel by viewModels<DashboardViewModel>()
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return ComposeView(
+            context = context ?: return null
+        ).apply {
+            setContent {
+                MaterialTheme(
+                    typography = Typography,
+                    colors = appColors()
+                ) {
+                    HistoryLayout(
+                        viewModel = viewModel
+                    )
+                }
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initializePayments()
+        requestData()
         addObservers()
     }
 
     private fun addObservers() {
-        viewModel.paymentsLiveData.observe(viewLifecycleOwner) { data ->
-            (activity as? MainActivity)?.floatingButtonState = data.filterIsInstance<ClientModel>().isNotEmpty()
-            if (data.filterIsInstance<ClientModel>().isEmpty()) {
-                binding?.emptyModel = EmptyModel(
-                    title = resources.getString(R.string.key_no_clients_title_message),
-                    message = resources.getString(R.string.key_add_clients_from_home_message),
-                    animationJsonIcon = "empty_animation.json"
+        viewModel.groupModelListLiveData.observe(
+            viewLifecycleOwner
+        ) {
+            uiScope.launch {
+                viewModel.fetchInvoices(
+                    userId = (activity as? MainActivity)?.userModel?.id
                 )
-                return@observe
             }
-            clientModelList.clear()
-            paymentAmountModelList.clear()
-            clientModelList.addAll(data.filterIsInstance<ClientModel>())
-            paymentAmountModelList.addAll(data.filterIsInstance<PaymentAmountModel>())
-            configureViewPager()
+        }
+        viewModel.fileDataModelListLiveData.observe(
+            viewLifecycleOwner
+        ) {
+            viewModel.initializeDashboardDataWith()
         }
     }
 
-    private fun configureViewPager() {
-        binding?.chartViewPager?.apply {
-            val chartPagerAdapter = ChartPagerAdapter(
-                fragment = this@HistoryFragment
-            )
-            adapter = chartPagerAdapter
-            offscreenPageLimit = 3
-            registerOnPageChangeCallback(
-                object: ViewPager2.OnPageChangeCallback() {
-                    override fun onPageSelected(position: Int) {
-                        super.onPageSelected(position)
-                        (activity as? MainActivity)?.bottomAppBarState = true
-                    }
-                }
-            )
-            TabLayoutMediator(
-                binding?.materialTabLayout ?: return@apply,
-                this
-            ) { tab, index ->
-                tab.setIcon(
-                    chartPagerAdapter.getPageIcon(
-                        position = index
-                    )
-                )
-            }.attach()
-        }
-    }
-
-    private fun initializePayments() {
+    private fun requestData() {
+        viewModel.dashboardPresenter = this
         uiScope.launch {
             viewModel.initializePayments(
                 userModel = (activity as? MainActivity)?.userModel
             )
+            viewModel fetchGroups (activity as? MainActivity)?.userModel?.id
         }
     }
 
+    @Preview(showBackground = true, showSystemUi = true)
+    @Composable
+    fun HistoryFragmentPreview() {
+        HistoryLayout(
+            viewModel = viewModel
+        )
+    }
+
     fun switchChart() {
-        binding?.chartViewPager?.currentItem = when (binding?.chartViewPager?.currentItem) {
+        /*binding?.chartViewPager?.currentItem = when (binding?.chartViewPager?.currentItem) {
             2 -> (binding?.chartViewPager?.currentItem ?: 0) - 1
             1 -> sequence<Int> { (0 until 3).random() }.firstOrNull {
                 it != 1
             } ?: 0
             else -> (binding?.chartViewPager?.currentItem ?: 0) + 1
-        }
+        }*/
     }
 
 }

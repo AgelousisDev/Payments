@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.agelousis.payments.R
 import com.agelousis.payments.database.DBManager
+import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.ui.dashboard.enumerations.DashboardStatisticsType
 import com.agelousis.payments.main.ui.dashboard.model.DashboardStatisticsDataModel
 import com.agelousis.payments.main.ui.dashboard.presenter.DashboardPresenter
@@ -25,6 +26,10 @@ class DashboardViewModel: ViewModel() {
     private val groupModelListMutableLiveData by lazy {
         MutableLiveData<List<GroupModel>>()
     }
+
+    var clientModelListMutableState by mutableStateOf<List<ClientModel>?>(value = null)
+    var paymentAmountModelListMutableState by mutableStateOf<List<PaymentAmountModel>?>(value = null)
+
     val groupModelListLiveData: LiveData<List<GroupModel>>
         get() = groupModelListMutableLiveData
     private val fileDataModelListMutableLiveData by lazy {
@@ -32,10 +37,9 @@ class DashboardViewModel: ViewModel() {
     }
     val fileDataModelListLiveData: LiveData<List<FileDataModel>>
         get() = fileDataModelListMutableLiveData
-    var clientModelList: List<ClientModel>? = null
-    var paymentAmountModelList: List<PaymentAmountModel>? = null
+
     val todayPaymentClientName
-        get() = clientModelList?.filter { clientModel ->
+        get() = clientModelListMutableState?.filter { clientModel ->
             clientModel.hasPaymentToday
         }?.joinToString { clientModel ->
             clientModel.fullName
@@ -43,37 +47,32 @@ class DashboardViewModel: ViewModel() {
             it.isNotEmpty()
         }
 
-    fun initializeDashboardDataWith(
-        groupModelList: List<GroupModel>,
-        clientModelList: List<ClientModel>,
-        paymentAmountModeList: List<PaymentAmountModel>,
-        fileDataModelList: List<FileDataModel>
-    ) {
+    fun initializeDashboardDataWith() {
         dashboardStatisticsDataMutableState = listOf(
             DashboardStatisticsDataModel(
                 dashboardStatisticsType = DashboardStatisticsType.GROUPS,
-                size = groupModelList.size,
+                size = groupModelListLiveData.value?.size ?: 0,
                 labelResource = R.string.key_groups_label,
                 backgroundColor = R.color.orange,
                 icon = R.drawable.ic_group
             ),
             DashboardStatisticsDataModel(
                 dashboardStatisticsType = DashboardStatisticsType.CLIENTS,
-                size = clientModelList.size,
+                size = clientModelListMutableState?.size ?: 0,
                 labelResource = R.string.key_clients_label,
                 backgroundColor = R.color.lightBlue,
                 icon = R.drawable.ic_client
             ),
             DashboardStatisticsDataModel(
                 dashboardStatisticsType = DashboardStatisticsType.PAYMENTS,
-                size = paymentAmountModeList.size,
+                size = paymentAmountModelListMutableState?.size ?: 0,
                 labelResource = R.string.key_payments_label,
                 backgroundColor = R.color.red,
                 icon = R.drawable.ic_payment
             ),
             DashboardStatisticsDataModel(
                 dashboardStatisticsType = DashboardStatisticsType.INVOICES,
-                size = fileDataModelList.size,
+                size = fileDataModelListLiveData.value?.size ?: 0,
                 labelResource = R.string.key_invoices_label,
                 backgroundColor = R.color.green,
                 icon = R.drawable.ic_invoice
@@ -81,7 +80,21 @@ class DashboardViewModel: ViewModel() {
         )
     }
 
-    suspend fun fetchGroups(
+    suspend fun initializePayments(userModel: UserModel?) {
+        DBManager.initializePayments(
+            userId = userModel?.id
+        ) { data ->
+            clientModelListMutableState = data.filterIsInstance<ClientModel>()
+            paymentAmountModelListMutableState = listOf(
+                *clientModelListMutableState?.asSequence()?.mapNotNull {
+                    it.payments
+                }?.flatten()?.toList()?.toTypedArray() ?: arrayOf(),
+                *data.filterIsInstance<PaymentAmountModel>().toTypedArray()
+            )
+        }
+    }
+
+    suspend infix fun fetchGroups(
         userId: Int?
     ) {
         DBManager.initializeGroups(
@@ -111,13 +124,13 @@ class DashboardViewModel: ViewModel() {
         maxAmount: Boolean,
     ): Double? {
         val totalPaymentGroupAmountList = arrayListOf<Double>()
-        clientModelList?.groupBy { clientModel ->
+        clientModelListMutableState?.groupBy { clientModel ->
             clientModel.groupId
         }?.forEach { map ->
             totalPaymentGroupAmountList.add(
                 map.value.mapNotNull { clientModel ->
                     clientModel.totalPaymentAmount
-                }.sum() + (paymentAmountModelList?.filter { paymentAmountModel ->
+                }.sum() + (paymentAmountModelListMutableState?.filter { paymentAmountModel ->
                     paymentAmountModel.groupId == map.value.firstOrNull()?.groupId
                 }?.mapNotNull { paymentAmountModel ->
                     paymentAmountModel.paymentAmount
@@ -134,14 +147,14 @@ class DashboardViewModel: ViewModel() {
         maxAmount: Boolean,
     ): String? {
         val totalPaymentGroupNamePair = arrayListOf<Pair<String?, Double>>()
-        clientModelList?.groupBy { clientModel ->
+        clientModelListMutableState?.groupBy { clientModel ->
             clientModel.groupId
         }?.forEach { map ->
             totalPaymentGroupNamePair.add(
                 map.value.firstOrNull()?.groupName to
                         map.value.mapNotNull { clientModel ->
                             clientModel.totalPaymentAmount
-                        }.sum() + (paymentAmountModelList?.filter { paymentAmountModel ->
+                        }.sum() + (paymentAmountModelListMutableState?.filter { paymentAmountModel ->
                     paymentAmountModel.groupId == map.value.firstOrNull()?.groupId
                 }?.mapNotNull { paymentAmountModel ->
                     paymentAmountModel.paymentAmount
