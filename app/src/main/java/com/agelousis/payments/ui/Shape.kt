@@ -7,7 +7,8 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
+import androidx.compose.material.Divider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -29,7 +29,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.agelousis.payments.R
-import com.agelousis.payments.main.ui.groupModification.GroupModificationState
 import com.agelousis.payments.utils.extensions.run
 import kotlinx.coroutines.delay
 
@@ -64,7 +63,7 @@ fun SeparatorGreyLine() =
             )
             .fillMaxWidth()
             .background(
-                color = colorResource(id = R.color.grey)
+                color = appColorScheme().primary
             )
     )
 
@@ -342,9 +341,12 @@ fun BasicButton(
         ),
         colors = buttonColor?.let {
             ButtonDefaults.buttonColors(
-                backgroundColor = buttonColor
+                containerColor = buttonColor
             )
         } ?: ButtonDefaults.buttonColors(),
+        elevation = ButtonDefaults.buttonElevation(
+            defaultElevation = 8.dp
+        ),
         modifier = Modifier
             .fillMaxWidth()
             .padding(

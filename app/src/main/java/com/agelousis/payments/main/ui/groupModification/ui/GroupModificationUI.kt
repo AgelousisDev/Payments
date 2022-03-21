@@ -10,8 +10,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -69,9 +70,10 @@ fun GroupModificationLayout(
         )
         Card(
             interactionSource = remember { MutableInteractionSource() },
-            indication = rememberRipple(bounded = true),
             shape = RoundedCornerShape(12.dp),
-            elevation = 10.dp,
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 10.dp
+            ),
             onClick = {
 
             },

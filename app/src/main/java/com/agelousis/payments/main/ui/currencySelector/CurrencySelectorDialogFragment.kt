@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,7 +19,7 @@ import com.agelousis.payments.main.ui.currencySelector.enumerations.CurrencyType
 import com.agelousis.payments.main.ui.currencySelector.interfaces.CurrencySelectorFragmentPresenter
 import com.agelousis.payments.main.ui.currencySelector.ui.CurrencySelectorLayout
 import com.agelousis.payments.ui.Typography
-import com.agelousis.payments.ui.appColors
+import com.agelousis.payments.ui.appColorScheme
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.currencySymbol
 
@@ -72,8 +72,8 @@ class CurrencySelectorDialogFragment: DialogFragment(), CurrencySelectorFragment
         ).apply {
             setContent {
                 MaterialTheme(
-                    typography = Typography,
-                    colors = appColors()
+                    colorScheme = appColorScheme(),
+                    typography = Typography
                 ) {
                     CurrencySelectorLayout(
                         currencyTypes = currencyTypes,

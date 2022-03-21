@@ -11,9 +11,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Text
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -135,9 +133,10 @@ fun StatisticsCardLayout(
 ) {
     Card(
         interactionSource = remember { MutableInteractionSource() },
-        indication = rememberRipple(bounded = true),
         shape = RoundedCornerShape(12.dp),
-        elevation = 10.dp,
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 10.dp
+        ),
         onClick = {
             viewModel.onDashboardPage(
                 bottomNavigationMenuItemId = dashboardStatisticsDataModel.dashboardStatisticsType.bottomNavigationMenuItemId
@@ -197,7 +196,10 @@ fun StatisticsCardLayout(
             ) {
                 Text(
                     text = dashboardStatisticsDataModel.size.toString(),
-                    style = textViewTitleLabelFont
+                    style = textViewTitleLabelFont,
+                    color = colorResource(
+                        id = R.color.dayNightTextOnBackground
+                    )
                 )
                 Text(
                     text = stringResource(
@@ -205,7 +207,7 @@ fun StatisticsCardLayout(
                     ),
                     style = textViewLabelFont,
                     color = colorResource(
-                        id = R.color.grey
+                        id = R.color.dayNightTextOnBackground
                     )
                 )
             }
@@ -220,16 +222,17 @@ fun DashboardInsightLayout(
     val orientation = LocalConfiguration.current.orientation
     Card(
         interactionSource = remember { MutableInteractionSource() },
-        indication = rememberRipple(bounded = true),
         shape = RoundedCornerShape(12.dp),
-        elevation = 10.dp,
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 10.dp
+        ),
         onClick = {},
         modifier = Modifier
             .fillMaxWidth()
             .padding(
                 start = 16.dp,
                 end = 16.dp,
-                bottom = when(orientation) {
+                bottom = when (orientation) {
                     Configuration.ORIENTATION_LANDSCAPE -> 16.dp
                     else -> 110.dp
                 }
@@ -245,7 +248,10 @@ fun DashboardInsightLayout(
                     .padding(
                         top = 16.dp,
                         start = 16.dp
-                    )
+                    ),
+                color = colorResource(
+                    id = R.color.dayNightTextOnBackground
+                )
             )
             SeparatorGreyLine()
             // Total Incoming Payments
@@ -266,7 +272,10 @@ fun DashboardInsightLayout(
                     modifier = Modifier
                         .weight(
                             weight = 1f
-                        )
+                        ),
+                    color = colorResource(
+                        id = R.color.dayNightTextOnBackground
+                    )
                 )
                 Text(
                     text = viewModel.paymentAmountModelListMutableState?.mapNotNull { it.paymentAmount }?.sum()?.euroFormattedString ?: stringResource(
@@ -275,7 +284,7 @@ fun DashboardInsightLayout(
                     style = textViewValueLabelFont,
                     textAlign = TextAlign.End,
                     color = colorResource(
-                        id = R.color.grey
+                        id = R.color.dayNightTextOnBackground
                     ),
                     modifier = Modifier
                         .weight(
@@ -301,7 +310,10 @@ fun DashboardInsightLayout(
                     modifier = Modifier
                         .weight(
                             weight = 1.5f
-                        )
+                        ),
+                    color = colorResource(
+                        id = R.color.dayNightTextOnBackground
+                    )
                 )
                 Text(
                     text = (viewModel getMaxIncomingGroupAmount true)?.euroFormattedString ?: stringResource(
@@ -310,7 +322,7 @@ fun DashboardInsightLayout(
                     style = textViewValueLabelFont,
                     textAlign = TextAlign.End,
                     color = colorResource(
-                        id = R.color.grey
+                        id = R.color.dayNightTextOnBackground
                     ),
                     modifier = Modifier
                         .weight(
@@ -336,7 +348,10 @@ fun DashboardInsightLayout(
                     modifier = Modifier
                         .weight(
                             weight = 1.5f
-                        )
+                        ),
+                    color = colorResource(
+                        id = R.color.dayNightTextOnBackground
+                    )
                 )
                 Text(
                     text = (viewModel getMaxIncomingGroupName true) ?: stringResource(
@@ -345,7 +360,7 @@ fun DashboardInsightLayout(
                     style = textViewValueLabelFont,
                     textAlign = TextAlign.End,
                     color = colorResource(
-                        id = R.color.grey
+                        id = R.color.dayNightTextOnBackground
                     ),
                     modifier = Modifier
                         .weight(
@@ -371,7 +386,10 @@ fun DashboardInsightLayout(
                     modifier = Modifier
                         .weight(
                             weight = 1.5f
-                        )
+                        ),
+                    color = colorResource(
+                        id = R.color.dayNightTextOnBackground
+                    )
                 )
                 Text(
                     text = (viewModel getMaxIncomingGroupAmount false)?.euroFormattedString ?: stringResource(
@@ -380,7 +398,7 @@ fun DashboardInsightLayout(
                     style = textViewValueLabelFont,
                     textAlign = TextAlign.End,
                     color = colorResource(
-                        id = R.color.grey
+                        id = R.color.dayNightTextOnBackground
                     ),
                     modifier = Modifier
                         .weight(
@@ -406,7 +424,10 @@ fun DashboardInsightLayout(
                     modifier = Modifier
                         .weight(
                             weight = 1.5f
-                        )
+                        ),
+                    color = colorResource(
+                        id = R.color.dayNightTextOnBackground
+                    )
                 )
                 Text(
                     text = (viewModel getMaxIncomingGroupName  false) ?: stringResource(
@@ -415,7 +436,7 @@ fun DashboardInsightLayout(
                     style = textViewValueLabelFont,
                     textAlign = TextAlign.End,
                     color = colorResource(
-                        id = R.color.grey
+                        id = R.color.dayNightTextOnBackground
                     ),
                     modifier = Modifier
                         .weight(
@@ -439,7 +460,10 @@ fun DashboardInsightLayout(
                     modifier = Modifier
                         .weight(
                             weight = 1f
-                        )
+                        ),
+                    color = colorResource(
+                        id = R.color.dayNightTextOnBackground
+                    )
                 )
                 Text(
                     text = viewModel.todayPaymentClientName ?: stringResource(
@@ -448,7 +472,7 @@ fun DashboardInsightLayout(
                     style = textViewValueLabelFont,
                     textAlign = TextAlign.End,
                     color = colorResource(
-                        id = R.color.grey
+                        id = R.color.dayNightTextOnBackground
                     ),
                     modifier = Modifier
                         .weight(

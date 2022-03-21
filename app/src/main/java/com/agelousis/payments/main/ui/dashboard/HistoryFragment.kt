@@ -2,7 +2,7 @@ package com.agelousis.payments.main.ui.dashboard
 
 import android.os.Bundle
 import android.view.*
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.tooling.preview.Preview
@@ -13,7 +13,7 @@ import com.agelousis.payments.main.ui.dashboard.presenter.DashboardPresenter
 import com.agelousis.payments.main.ui.dashboard.ui.HistoryLayout
 import com.agelousis.payments.main.ui.dashboard.viewModel.DashboardViewModel
 import com.agelousis.payments.ui.Typography
-import com.agelousis.payments.ui.appColors
+import com.agelousis.payments.ui.appColorScheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,8 +33,8 @@ class HistoryFragment: Fragment(), DashboardPresenter {
         ).apply {
             setContent {
                 MaterialTheme(
-                    typography = Typography,
-                    colors = appColors()
+                    colorScheme = appColorScheme(),
+                    typography = Typography
                 ) {
                     HistoryLayout(
                         viewModel = viewModel

@@ -22,6 +22,7 @@ val appCompatVersion = "1.6.0-alpha01"
 val constraintLayoutVersion = "2.1.3"
 val constraintLayoutComposeVersion = "1.0.0"
 val composeActivityVersion = "1.5.0-alpha03"
+val composeMaterialYouVersion = "1.0.0-alpha07"
 val lottieComposeVersion = "5.0.3"
 
 android {
@@ -86,6 +87,7 @@ dependencies {
     implementation("androidx.compose.material:material:$composeVersion")
     implementation("androidx.activity:activity-compose:$composeActivityVersion")
     implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
+    implementation("androidx.compose.material3:material3:$composeMaterialYouVersion")
     implementation("androidx.constraintlayout:constraintlayout-compose:$constraintLayoutComposeVersion")
     implementation("com.google.accompanist:accompanist-pager:0.24.3-alpha")
     implementation("io.coil-kt:coil-compose:2.0.0-alpha09")

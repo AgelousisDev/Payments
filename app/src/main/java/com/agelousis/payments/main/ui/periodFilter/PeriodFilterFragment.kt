@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,7 +23,7 @@ import com.agelousis.payments.main.ui.periodFilter.presenter.PeriodFilterFragmen
 import com.agelousis.payments.main.ui.periodFilter.ui.PeriodFilterLayout
 import com.agelousis.payments.main.ui.periodFilter.viewModel.PeriodFilterViewModel
 import com.agelousis.payments.ui.Typography
-import com.agelousis.payments.ui.appColors
+import com.agelousis.payments.ui.appColorScheme
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.PDFHelper
@@ -95,8 +95,8 @@ class PeriodFilterFragment: Fragment(), PeriodFilterFragmentPresenter {
             setContent {
                 setContent {
                     MaterialTheme(
-                        typography = Typography,
-                        colors = appColors()
+                        colorScheme = appColorScheme(),
+                        typography = Typography
                     ) {
                         setupData()
                         PeriodFilterLayout(

@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Text
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -62,14 +60,29 @@ fun ColorSelectorLayout(
     }
 }
 
+/**
+ * onClick: () -> Unit,
+modifier: Modifier = Modifier,
+interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+shape: Shape = FilledCardTokens.ContainerShape,
+containerColor: Color = FilledCardTokens.ContainerColor.toColor(),
+contentColor: Color = contentColorFor(containerColor),
+border: BorderStroke? = null,
+elevation: CardElevation = CardDefaults.cardElevation(),
+content: @Composable ColumnScope.() -> Unit
+ */
+
 @Composable
 fun ColorData(
     colorDataModel: ColorDataModel,
     colorSelectorPresenter: ColorSelectorPresenter
 ) {
     Card(
-        interactionSource = remember { MutableInteractionSource() },
-        indication = rememberRipple(bounded = true),
+        onClick = {
+            colorSelectorPresenter.onColorSelected(
+                color = colorDataModel.color
+            )
+        },
         modifier = Modifier
             .height(
                 height = 70.dp
@@ -77,16 +90,14 @@ fun ColorData(
             .padding(
                 all = 10.dp
             ),
+        interactionSource = remember { MutableInteractionSource() },
         shape = RoundedCornerShape(16.dp),
-        backgroundColor = Color(
+        containerColor = Color(
             color = colorDataModel.color
         ),
-        elevation = 10.dp,
-        onClick = {
-            colorSelectorPresenter.onColorSelected(
-                color = colorDataModel.color
-            )
-        },
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 10.dp
+        ),
     ) {
         if (colorDataModel.selected)
             Box(

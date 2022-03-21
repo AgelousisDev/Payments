@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -21,11 +23,8 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
 import com.agelousis.payments.R
 import com.agelousis.payments.forgotPassword.viewModels.ForgotPasswordViewModel
-import com.agelousis.payments.ui.textViewTitleLabelFont
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.agelousis.payments.ui.BasicButton
-import com.agelousis.payments.ui.horizontalMargin
-import com.agelousis.payments.ui.textViewTitleFont
+import com.agelousis.payments.ui.*
 
 typealias UpdatePasswordBlock = () -> Unit
 
@@ -77,7 +76,8 @@ fun ForgotPasswordUI(
                     text = stringResource(
                         id = R.string.key_pin_label
                     ),
-                    style = textViewTitleLabelFont
+                    style = textViewTitleLabelFont,
+                    color = appColorScheme().primary
                 )
             },
             keyboardOptions = KeyboardOptions(
@@ -94,11 +94,20 @@ fun ForgotPasswordUI(
                 IconButton(onClick = {
                      pinVisibility = !pinVisibility
                 }) {
-                    Icon(imageVector = if (pinVisibility) Icons.Filled.VisibilityOff else Icons.Filled.Visibility, contentDescription = null)
+                    Icon(
+                        imageVector = if (pinVisibility) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
+                        contentDescription = null,
+                        tint = appColorScheme().primary
+                    )
                 }
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = colorResource(id = R.color.dayNightTextOnBackground)
+                textColor = appColorScheme().primary,
+                focusedBorderColor = appColorScheme().primary,
+                unfocusedBorderColor = appColorScheme().primary,
+                focusedLabelColor = appColorScheme().primary,
+                unfocusedLabelColor = appColorScheme().primary,
+                cursorColor = appColorScheme().primary
             ),
             modifier = Modifier
                 .fillMaxWidth()
@@ -120,7 +129,8 @@ fun ForgotPasswordUI(
                     text = stringResource(
                         id = R.string.key_new_password_hint
                     ),
-                    style = textViewTitleLabelFont
+                    style = textViewTitleLabelFont,
+                    color = appColorScheme().primary
                 )
             },
             keyboardOptions = KeyboardOptions(
@@ -137,11 +147,20 @@ fun ForgotPasswordUI(
                 IconButton(onClick = {
                     newPasswordVisibility = !newPasswordVisibility
                 }) {
-                    Icon(imageVector = if (newPasswordVisibility) Icons.Filled.VisibilityOff else Icons.Filled.Visibility, contentDescription = null)
+                    Icon(
+                        imageVector = if (newPasswordVisibility) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
+                        contentDescription = null,
+                        tint = appColorScheme().primary
+                    )
                 }
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = colorResource(id = R.color.dayNightTextOnBackground)
+                textColor = appColorScheme().primary,
+                focusedBorderColor = appColorScheme().primary,
+                unfocusedBorderColor = appColorScheme().primary,
+                focusedLabelColor = appColorScheme().primary,
+                unfocusedLabelColor = appColorScheme().primary,
+                cursorColor = appColorScheme().primary
             ),
             modifier = Modifier
                 .fillMaxWidth()
@@ -164,7 +183,8 @@ fun ForgotPasswordUI(
                     text = stringResource(
                         id = R.string.key_repeat_new_password_hint
                     ),
-                    style = textViewTitleLabelFont
+                    style = textViewTitleLabelFont,
+                    color = appColorScheme().primary
                 )
             },
             keyboardOptions = KeyboardOptions(
@@ -181,11 +201,20 @@ fun ForgotPasswordUI(
                 IconButton(onClick = {
                     repeatNewPasswordVisibility = !repeatNewPasswordVisibility
                 }) {
-                    Icon(imageVector = if (repeatNewPasswordVisibility) Icons.Filled.VisibilityOff else Icons.Filled.Visibility, contentDescription = null)
+                    Icon(
+                        imageVector = if (repeatNewPasswordVisibility) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
+                        contentDescription = null,
+                        tint = appColorScheme().primary
+                    )
                 }
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = colorResource(id = R.color.dayNightTextOnBackground)
+                textColor = appColorScheme().primary,
+                focusedBorderColor = appColorScheme().primary,
+                unfocusedBorderColor = appColorScheme().primary,
+                focusedLabelColor = appColorScheme().primary,
+                unfocusedLabelColor = appColorScheme().primary,
+                cursorColor = appColorScheme().primary
             ),
             modifier = Modifier
                 .fillMaxWidth()

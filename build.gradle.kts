@@ -33,7 +33,8 @@ allprojects {
                     "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi",
                     "-Xopt-in=androidx.compose.runtime.ExperimentalComposeApi",
                     "-Xopt-in=androidx.compose.ui.ExperimentalComposeUiApi",
-                    "-Xopt-in=com.google.accompanist.pager.ExperimentalPagerApi"
+                    "-Xopt-in=com.google.accompanist.pager.ExperimentalPagerApi",
+                    "-Xopt-in=androidx.compose.material3.ExperimentalMaterial3Api"
                 )
         }
     }

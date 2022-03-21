@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
@@ -21,7 +21,7 @@ import com.agelousis.payments.main.ui.groupModification.viewModel.GroupModificat
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.ui.ColorAccent
 import com.agelousis.payments.ui.Typography
-import com.agelousis.payments.ui.appColors
+import com.agelousis.payments.ui.appColorScheme
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.views.bottomSheet.BasicBottomSheetDialogFragment
 import java.io.File
@@ -76,8 +76,8 @@ class GroupModificationFragment: BasicBottomSheetDialogFragment(), GroupModifica
             applyAnimationOnKeyboard()
             setContent {
                 MaterialTheme(
-                    typography = Typography,
-                    colors = appColors()
+                    colorScheme = appColorScheme(),
+                    typography = Typography
                 ) {
                     initializeViewModelData()
                     GroupModificationLayout(viewModel = viewModel)

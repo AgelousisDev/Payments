@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -14,7 +14,7 @@ import com.agelousis.payments.guide.models.GuideModel
 import com.agelousis.payments.guide.presenters.GuideActivityPresenter
 import com.agelousis.payments.guide.ui.GuideActivityLayout
 import com.agelousis.payments.ui.Typography
-import com.agelousis.payments.ui.appColors
+import com.agelousis.payments.ui.appColorScheme
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.isFirstTime
 
@@ -32,8 +32,8 @@ class GuideActivity : ComponentActivity(), GuideActivityPresenter {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme(
-                typography = Typography,
-                colors = appColors()
+                colorScheme = appColorScheme(),
+                typography = Typography
             ) {
                 GuideActivityLayout(
                     guideModelList = getGuideModelList(),

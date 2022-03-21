@@ -3,13 +3,14 @@ package com.agelousis.payments.main.ui.dashboard.ui
 import android.view.LayoutInflater
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.*
-import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.material3.*
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -18,7 +19,7 @@ import com.agelousis.payments.databinding.EmptyRowLayoutBinding
 import com.agelousis.payments.main.ui.dashboard.model.HistoryPageType
 import com.agelousis.payments.main.ui.dashboard.viewModel.DashboardViewModel
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
-import com.agelousis.payments.ui.systemAccentColor
+import com.agelousis.payments.ui.appColorScheme
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
@@ -46,12 +47,14 @@ fun HistoryLayout(
                 selectedTabIndex = tabIndex,
                 indicator = { tabPositions ->
                     TabRowDefaults.Indicator(
-                        Modifier.tabIndicatorOffset(
-                            currentTabPosition = tabPositions[pagerState.currentPage]
-                        )
+                        height = 1.dp,
+                        modifier = Modifier
+                            .tabIndicatorOffset(
+                                currentTabPosition = tabPositions[pagerState.currentPage]
+                            )
                     )
                 },
-                backgroundColor = systemAccentColor(),
+                //backgroundColor = systemAccentColor(),
                 contentColor = colorResource(
                     id = R.color.dayNightTextOnBackground
                 ),
@@ -65,18 +68,26 @@ fun HistoryLayout(
                     }
             ) {
                 historyPageTypes.forEachIndexed { index, historyPageType ->
-                    Tab(selected = tabIndex == index, onClick = {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(index)
-                        }
-                    }, icon = {
-                        Icon(
-                            painter = painterResource(
-                                id = historyPageType.icon
-                            ),
-                            contentDescription = null
+                    Tab(
+                        selected = tabIndex == index,
+                        onClick = {
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(index)
+                            }
+                         },
+                        icon = {
+                            Icon(
+                                painter = painterResource(
+                                    id = historyPageType.icon
+                                ),
+                                contentDescription = null
+                            )
+                        },
+                        selectedContentColor = appColorScheme().primary,
+                        unselectedContentColor = colorResource(
+                            id = R.color.grey
                         )
-                    })
+                    )
                 }
             }
         if (!viewModel.clientModelListMutableState.isNullOrEmpty())

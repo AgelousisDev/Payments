@@ -1,7 +1,7 @@
 package com.agelousis.payments.main.ui.newPayment.extensions
 
 import android.widget.LinearLayout
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updateMargins
@@ -19,7 +19,7 @@ import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.newPayment.enumerations.ContactType
 import com.agelousis.payments.main.ui.newPayment.ui.ContactOptionsLayout
 import com.agelousis.payments.ui.Typography
-import com.agelousis.payments.ui.appColors
+import com.agelousis.payments.ui.appColorScheme
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.custom.FabExtendingOnScrollListener
 import com.agelousis.payments.utils.extensions.*
@@ -220,8 +220,8 @@ fun NewPaymentFragment.setupContactUI() {
             || !args.clientDataModel?.phone.isNullOrEmpty())
         layoutBinding.contactComposeView.setContent {
             MaterialTheme(
-                typography = Typography,
-                colors = appColors()
+                colorScheme = appColorScheme(),
+                typography = Typography
             ) {
                 ContactOptionsLayout(
                     contactTypeList = contactTypeList,

@@ -6,9 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Text
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -126,9 +124,10 @@ fun PortraitGuidePage(
     ) {
         Card(
             interactionSource = remember { MutableInteractionSource() },
-            indication = rememberRipple(bounded = true),
             shape = RoundedCornerShape(16.dp),
-            elevation = 10.dp,
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 10.dp
+            ),
             onClick = {},
             modifier = Modifier
                 .fillMaxSize(
@@ -186,9 +185,10 @@ fun LandscapeGuidePage(
     ) {
         Card(
             interactionSource = remember { MutableInteractionSource() },
-            indication = rememberRipple(bounded = true),
             shape = RoundedCornerShape(16.dp),
-            elevation = 10.dp,
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 10.dp
+            ),
             onClick = {},
             modifier = Modifier
                 .fillMaxHeight()

@@ -1,6 +1,6 @@
 package com.agelousis.payments.ui
 
-import androidx.compose.material.Typography
+import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -42,27 +42,27 @@ val textViewValueLabelFont = TextStyle(
 )
 
 val Typography = Typography(
-    body1 = TextStyle(
+    bodyLarge = TextStyle(
         fontFamily = fonts,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp
     ),
-    h1 = TextStyle(
+    displayLarge = TextStyle(
         fontFamily = fonts,
         fontWeight = FontWeight.Bold,
         fontSize = 14.sp
     ),
-    body2 = TextStyle(
+    bodyMedium = TextStyle(
         fontFamily = fonts,
         fontWeight = FontWeight.Light,
         fontSize = 14.sp
     ),
-    h2 = TextStyle(
+    displayMedium = TextStyle(
         fontFamily = fonts,
         fontWeight = FontWeight.Thin,
         fontSize = 14.sp
     ),
-    h3 = TextStyle(
+    displaySmall = TextStyle(
         fontFamily = fonts,
         fontStyle = FontStyle.Italic,
         fontSize = 14.sp

@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Text
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -93,13 +91,14 @@ fun CurrencyType(
 ) {
     Card(
         interactionSource = remember { MutableInteractionSource() },
-        indication = rememberRipple(bounded = true),
         modifier = Modifier
             .height(
                 height = 40.dp
             ),
         shape = RoundedCornerShape(12.dp),
-        elevation = if (currencyType.isSelected) 16.dp else 1.dp,
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = if (currencyType.isSelected) 16.dp else 1.dp
+        ),
         onClick = {
             currencyPresenter.onCurrencySelected(
                 currencyType = currencyType
