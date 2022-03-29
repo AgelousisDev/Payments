@@ -26,12 +26,12 @@ val composeMaterialYouVersion = "1.0.0-alpha07"
 val lottieComposeVersion = "5.0.3"
 
 android {
-    compileSdk = 31
+    compileSdk = 32
 
     defaultConfig {
         applicationId = "com.agelousis.payments"
         minSdk = 26
-        targetSdk = 31
+        targetSdk = 32
         versionCode = 60
         versionName = "5.4"
         multiDexEnabled = true
@@ -121,8 +121,8 @@ dependencies {
     implementation("me.dm7.barcodescanner:zxing:1.9.8")
     implementation(files("libs/itextpdf-5.5.13.jar"))
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.4-alpha04")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0-alpha04")
+    androidTestImplementation("androidx.test.ext:junit:1.1.4-alpha05")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0-alpha05")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
 }
