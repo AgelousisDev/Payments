@@ -10,6 +10,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -145,4 +146,12 @@ fun HistoryPageLayout(
     historyPageType: HistoryPageType
 ) {
     historyPageType.historyPageTypeComposableLayout(viewModel)
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun HistoryLayoutPreview() {
+    HistoryLayout(
+        viewModel = DashboardViewModel()
+    )
 }

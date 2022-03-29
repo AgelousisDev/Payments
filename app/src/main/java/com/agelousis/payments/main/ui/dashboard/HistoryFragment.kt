@@ -3,9 +3,7 @@ package com.agelousis.payments.main.ui.dashboard
 import android.os.Bundle
 import android.view.*
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.agelousis.payments.main.MainActivity
@@ -75,14 +73,6 @@ class HistoryFragment: Fragment(), DashboardPresenter {
             )
             viewModel fetchGroups (activity as? MainActivity)?.userModel?.id
         }
-    }
-
-    @Preview(showBackground = true, showSystemUi = true)
-    @Composable
-    fun HistoryFragmentPreview() {
-        HistoryLayout(
-            viewModel = viewModel
-        )
     }
 
     fun switchChart() {

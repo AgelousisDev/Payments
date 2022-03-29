@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.airbnb.lottie.compose.*
@@ -36,7 +37,9 @@ fun PeriodFilterLayout(
     periodFilterFragmentPresenter: PeriodFilterFragmentPresenter,
 ) {
     Column {
-        val composition by rememberLottieComposition(LottieCompositionSpec.Asset("date_animation.json"))
+        val composition by rememberLottieComposition(
+            LottieCompositionSpec.Asset("date_animation.json")
+        )
         val progress by animateLottieCompositionAsState(
             composition,
             iterations = LottieConstants.IterateForever,
@@ -135,4 +138,15 @@ fun PeriodFilterLayout(
             }
         )
     }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun PeriodFilterLayoutPreview() {
+    PeriodFilterLayout(
+        viewModel = PeriodFilterViewModel(),
+        periodFilterMinimumPaymentMonthDateBlock = {},
+        periodFilterMaximumPaymentMonthDateBlock = {},
+        periodFilterFragmentPresenter = object: PeriodFilterFragmentPresenter {}
+    )
 }

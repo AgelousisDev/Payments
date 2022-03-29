@@ -68,6 +68,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
 
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
         bottomAppBarState = true
+        exitFromAppMenuItemIsVisible = destination.id == R.id.historyFragment
         ((binding.appBarMain.floatingButton.layoutParams as? CoordinatorLayout.LayoutParams)?.behavior as? HideBottomViewOnScrollBehavior)?.slideUp(
             binding.appBarMain.floatingButton
         )
@@ -295,21 +296,22 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
             field = value
             window?.statusBarColor = value ?: return
         }
+    private var exitFromAppMenuItemIsVisible = true
+        set(value) {
+            field = value
+            binding.appBarMain.bottomNavigationView.menu.findItem(R.id.exitFromAppMenuItem)?.isEnabled = value
+            binding.appBarMain.bottomNavigationView.menu.findItem(R.id.exitFromAppMenuItem)?.setIcon(
+                if (value)
+                    R.drawable.ic_logout
+                else
+                    0
+            )
+        }
 
     override fun onBackPressed() {
         when (binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().currentDestination?.id) {
             R.id.historyFragment ->
-                showSimpleDialog(
-                    SimpleDialogDataModel(
-                        title = resources.getString(R.string.key_logout_label),
-                        message = resources.getString(R.string.key_logout_message),
-                        icon = R.drawable.ic_logout,
-                        positiveButtonBlock = {
-                            startActivity(Intent(this, LoginActivity::class.java))
-                            finish()
-                        }
-                    )
-                )
+                showLogoutDialog()
             R.id.newPaymentFragment ->
                 showNewPersonUnsavedFieldsWarning()
             R.id.newPaymentAmountFragment ->
@@ -335,10 +337,10 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         configureNavigationController()
-        NavigationUI.setupWithNavController(
+        /*NavigationUI.setupWithNavController(
             binding.appBarMain.bottomNavigationView,
             binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController()
-        )
+        )*/
         binding.appBarMain.contentMain.root.applyWindowInsets(
             withTop = true,
             withBottom = !isEdgeToEdgeEnabled
@@ -378,6 +380,15 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
 
     private fun setupUI() {
         binding.appBarMain.floatingButton.setOnClickListener(this)
+        binding.appBarMain.bottomNavigationView.setOnItemSelectedListener { menuItem ->
+            if (menuItem.itemId == R.id.exitFromAppMenuItem) {
+                showLogoutDialog()
+                return@setOnItemSelectedListener false
+            }
+
+            NavigationUI.onNavDestinationSelected(menuItem, binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController())
+            return@setOnItemSelectedListener true
+        }
     }
 
     fun initializeDatabaseExport() {
@@ -463,6 +474,20 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
             )
         else
             super.onBackPressed()
+    }
+
+    private fun showLogoutDialog() {
+        showSimpleDialog(
+            SimpleDialogDataModel(
+                title = resources.getString(R.string.key_logout_label),
+                message = resources.getString(R.string.key_logout_message),
+                icon = R.drawable.ic_logout,
+                positiveButtonBlock = {
+                    startActivity(Intent(this, LoginActivity::class.java))
+                    finish()
+                }
+            )
+        )
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

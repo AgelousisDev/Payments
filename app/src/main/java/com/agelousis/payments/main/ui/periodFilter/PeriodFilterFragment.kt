@@ -7,9 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -114,17 +112,6 @@ class PeriodFilterFragment: Fragment(), PeriodFilterFragmentPresenter {
     private fun setupData() {
         viewModel.periodFilterMinimumPaymentMonthDate = args.periodFilterData?.minimumMonthDateValue
         viewModel.periodFilterMaximumPaymentMonthDate = args.periodFilterData?.maximumMonthDateValue
-    }
-
-    @Preview(showBackground = true, showSystemUi = true)
-    @Composable
-    fun PeriodFilterFragmentPreview() {
-        PeriodFilterLayout(
-            viewModel = viewModel,
-            periodFilterMinimumPaymentMonthDateBlock = {},
-            periodFilterMaximumPaymentMonthDateBlock = {},
-            periodFilterFragmentPresenter = this@PeriodFilterFragment
-        )
     }
 
     fun initializeExportToExcelOperation() {

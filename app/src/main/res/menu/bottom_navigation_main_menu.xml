@@ -12,9 +12,9 @@
         android:icon="@drawable/ic_client" />
 
     <item
-        android:id="@+id/placeholder"
-        android:title=""
-        android:enabled="false"/>
+        android:id="@+id/exitFromAppMenuItem"
+        android:title="@string/key_logout_label"
+        android:icon="@drawable/ic_logout"/>
 
     <item
         android:id="@+id/invoicesFragment"
