@@ -193,7 +193,9 @@ fun Context.deleteInternalFile(fileName: String?) {
 }
 
 infix fun Context.byteArrayFromInternalImage(imageName: String?) =
-    imageName?.let {
+    imageName?.takeIf {
+        File(filesDir, it).exists()
+    }?.let {
         val bitmap = BitmapFactory.decodeFile(File(filesDir, it).absolutePath)
         val bytesArray = bitmap?.byteArray
         bitmap.recycle()
