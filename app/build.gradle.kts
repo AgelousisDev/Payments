@@ -32,8 +32,8 @@ android {
         applicationId = "com.agelousis.payments"
         minSdk = 26
         targetSdk = 32
-        versionCode = 61
-        versionName = "5.5"
+        versionCode = 62
+        versionName = "5.6"
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
