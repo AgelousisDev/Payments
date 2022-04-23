@@ -196,8 +196,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 (supportFragmentManager.currentNavigationFragment as? PdfViewerFragment)?.sharePDF()
             R.id.filterPaymentsFragment ->
                 (supportFragmentManager.currentNavigationFragment as? FilterPaymentsFragment)?.saveFiltersAndDismiss()
-            R.id.historyFragment ->
-                (supportFragmentManager.currentNavigationFragment as? HistoryFragment)?.switchChart()
             R.id.invoicesFragment ->
                 (supportFragmentManager.currentNavigationFragment as? InvoicesFragment)?.onDeleteInvoices(
                     clearAllState = true

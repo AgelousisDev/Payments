@@ -1,14 +1,12 @@
 package com.agelousis.payments.main.ui.colorSelector.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,11 +41,11 @@ fun ColorSelectorLayout(
             )
         )
         LazyVerticalGrid(
+            columns = GridCells.Adaptive(
+                minSize = 100.dp
+            ),
             contentPadding = PaddingValues(
                 all = 16.dp
-            ),
-            cells = GridCells.Adaptive(
-                minSize = 100.dp
             )
         ) {
             items(colorDataModelList.size) { index ->
@@ -90,10 +88,11 @@ fun ColorData(
             .padding(
                 all = 10.dp
             ),
-        interactionSource = remember { MutableInteractionSource() },
         shape = RoundedCornerShape(16.dp),
-        containerColor = Color(
-            color = colorDataModel.color
+        colors = CardDefaults.cardColors(
+            containerColor = Color(
+                color = colorDataModel.color
+            )
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 10.dp

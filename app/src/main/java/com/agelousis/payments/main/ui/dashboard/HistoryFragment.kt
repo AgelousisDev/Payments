@@ -75,14 +75,4 @@ class HistoryFragment: Fragment(), DashboardPresenter {
         }
     }
 
-    fun switchChart() {
-        /*binding?.chartViewPager?.currentItem = when (binding?.chartViewPager?.currentItem) {
-            2 -> (binding?.chartViewPager?.currentItem ?: 0) - 1
-            1 -> sequence<Int> { (0 until 3).random() }.firstOrNull {
-                it != 1
-            } ?: 0
-            else -> (binding?.chartViewPager?.currentItem ?: 0) + 1
-        }*/
-    }
-
 }

@@ -1,13 +1,13 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript { 
     val navVersion = "2.5.0-alpha01"
-    val kotlinVersion = "1.6.10"
+    val kotlinVersion = "1.6.20"
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:7.1.2")
+        classpath("com.android.tools.build:gradle:7.1.3")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navVersion")
         classpath("com.google.gms:google-services:4.3.10")
@@ -29,12 +29,12 @@ allprojects {
             freeCompilerArgs =
                 listOf(
                     *kotlinOptions.freeCompilerArgs.toTypedArray(),
-                    "-Xopt-in=androidx.compose.foundation.ExperimentalFoundationApi",
-                    "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi",
-                    "-Xopt-in=androidx.compose.runtime.ExperimentalComposeApi",
-                    "-Xopt-in=androidx.compose.ui.ExperimentalComposeUiApi",
-                    "-Xopt-in=com.google.accompanist.pager.ExperimentalPagerApi",
-                    "-Xopt-in=androidx.compose.material3.ExperimentalMaterial3Api"
+                    "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
+                    "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
+                    "-opt-in=androidx.compose.runtime.ExperimentalComposeApi",
+                    "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi",
+                    "-opt-in=com.google.accompanist.pager.ExperimentalPagerApi",
+                    "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
                 )
         }
     }

@@ -9,20 +9,20 @@ plugins {
 }
 
 val kotlinVersion = "1.6.0"
-val navVersion = "2.5.0-alpha03"
-val materialVersion = "1.6.0-alpha03"
-val ktxCoreVersion = "1.9.0-alpha01"
-val activityVersion = "1.5.0-alpha03"
-val fragmentVersion = "1.5.0-alpha02"
-val firebaseBomVersion = "29.1.0"
-val liveDataViewModelVersion = "2.5.0-alpha03"
-val composeVersion = "1.2.0-alpha04"
-val kotlinCoroutinesVersion = "1.6.0"
+val navVersion = "2.5.0-beta01"
+val materialVersion = "1.7.0-alpha01"
+val ktxCoreVersion = "1.9.0-alpha02"
+val activityVersion = "1.6.0-alpha01"
+val fragmentVersion = "1.5.0-beta01"
+val firebaseBomVersion = "29.3.1"
+val liveDataViewModelVersion = "2.5.0-beta01"
+val composeVersion = "1.2.0-alpha08"
+val kotlinCoroutinesVersion = "1.6.1"
 val appCompatVersion = "1.6.0-alpha01"
 val constraintLayoutVersion = "2.1.3"
 val constraintLayoutComposeVersion = "1.0.0"
-val composeActivityVersion = "1.5.0-alpha03"
-val composeMaterialYouVersion = "1.0.0-alpha07"
+val composeActivityVersion = "1.6.0-alpha01"
+val composeMaterialYouVersion = "1.0.0-alpha10"
 val lottieComposeVersion = "5.0.3"
 
 android {
@@ -89,7 +89,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     implementation("androidx.compose.material3:material3:$composeMaterialYouVersion")
     implementation("androidx.constraintlayout:constraintlayout-compose:$constraintLayoutComposeVersion")
-    implementation("com.google.accompanist:accompanist-pager:0.24.3-alpha")
+    implementation("com.google.accompanist:accompanist-pager:0.24.7-alpha")
     implementation("io.coil-kt:coil-compose:2.0.0-alpha09")
     implementation("androidx.viewpager2:viewpager2:1.1.0-beta01")
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
@@ -117,7 +117,7 @@ dependencies {
     implementation("com.airbnb.android:lottie-compose:$lottieComposeVersion")
     implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.5")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.6")
     implementation("me.dm7.barcodescanner:zxing:1.9.8")
     implementation(files("libs/itextpdf-5.5.13.jar"))
     testImplementation("junit:junit:4.13.2")
