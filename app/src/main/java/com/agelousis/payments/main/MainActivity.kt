@@ -27,7 +27,6 @@ import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.enumerations.FloatingButtonPosition
 import com.agelousis.payments.main.ui.clientsSelector.ClientsSelectorDialogFragment
 import com.agelousis.payments.main.ui.files.InvoicesFragment
-import com.agelousis.payments.main.ui.dashboard.HistoryFragment
 import com.agelousis.payments.main.ui.newPayment.NewPaymentFragment
 import com.agelousis.payments.main.ui.newPaymentAmount.NewPaymentAmountFragment
 import com.agelousis.payments.main.ui.payments.PaymentsFragment
@@ -205,7 +204,12 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
 
     lateinit var binding: ActivityMainBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
-    val userModel by lazy { intent?.extras?.getParcelable<UserModel>(USER_MODEL_EXTRA) }
+    val userModel by lazy {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            intent?.extras?.getParcelable(USER_MODEL_EXTRA, UserModel::class.java)
+        else
+            intent?.extras?.getParcelable(USER_MODEL_EXTRA)
+    }
     var appBarTitle: String? = null
         set(value) {
             field = value

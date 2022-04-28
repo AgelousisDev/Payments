@@ -1,5 +1,6 @@
 package com.agelousis.payments.notificationActivity
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.agelousis.payments.databinding.ActivityNotificationBinding
@@ -11,7 +12,12 @@ class NotificationActivity : AppCompatActivity() {
         const val BUBBLE_NOTIFICATION_EXTRA = "BubbleNotificationActivity=bubbleNotificationExtra"
     }
 
-    private val notificationDataModelExtra by lazy { intent?.extras?.getParcelable<NotificationDataModel>(BUBBLE_NOTIFICATION_EXTRA) }
+    private val notificationDataModelExtra by lazy {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            intent?.extras?.getParcelable(BUBBLE_NOTIFICATION_EXTRA, NotificationDataModel::class.java)
+        else
+            intent?.extras?.getParcelable(BUBBLE_NOTIFICATION_EXTRA)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

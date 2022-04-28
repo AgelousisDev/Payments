@@ -13,12 +13,17 @@ class NotificationReceiver: BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        intent?.extras?.getBundle("bundle")?.apply {
-            val notificationDataModel = getParcelable<NotificationDataModel>(NOTIFICATION_DATA_MODEL_EXTRA) ?: return
-            NotificationHelper.triggerNotification(
-                context = context ?: return,
-                notificationDataModel = notificationDataModel
-            )
+        when(intent?.action) {
+            Intent.ACTION_BOOT_COMPLETED,
+            Intent.ACTION_POWER_CONNECTED,
+            Intent.ACTION_POWER_DISCONNECTED ->
+                intent.extras?.getBundle("bundle")?.apply {
+                    val notificationDataModel = getParcelable<NotificationDataModel>(NOTIFICATION_DATA_MODEL_EXTRA) ?: return
+                    NotificationHelper.triggerNotification(
+                        context = context ?: return,
+                        notificationDataModel = notificationDataModel
+                    )
+                }
         }
     }
 

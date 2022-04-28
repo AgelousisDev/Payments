@@ -12,26 +12,26 @@ val kotlinVersion = "1.6.0"
 val navVersion = "2.5.0-beta01"
 val materialVersion = "1.7.0-alpha01"
 val ktxCoreVersion = "1.9.0-alpha02"
-val activityVersion = "1.6.0-alpha01"
+val activityVersion = "1.6.0-alpha03"
 val fragmentVersion = "1.5.0-beta01"
 val firebaseBomVersion = "29.3.1"
 val liveDataViewModelVersion = "2.5.0-beta01"
 val composeVersion = "1.2.0-alpha08"
 val kotlinCoroutinesVersion = "1.6.1"
-val appCompatVersion = "1.6.0-alpha01"
+val appCompatVersion = "1.6.0-alpha03"
 val constraintLayoutVersion = "2.1.3"
 val constraintLayoutComposeVersion = "1.0.0"
-val composeActivityVersion = "1.6.0-alpha01"
+val composeActivityVersion = "1.6.0-alpha03"
 val composeMaterialYouVersion = "1.0.0-alpha10"
 val lottieComposeVersion = "5.0.3"
 
 android {
-    compileSdk = 32
+    compileSdkPreview = "Tiramisu"
 
     defaultConfig {
         applicationId = "com.agelousis.payments"
         minSdk = 26
-        targetSdk = 32
+        targetSdkPreview = "Tiramisu"
         versionCode = 62
         versionName = "5.6"
         multiDexEnabled = true

@@ -294,10 +294,10 @@ fun AppCompatImageView.setAnimatedImageResourceId(resourceId: Int?) {
         post {
             animate().alpha(0.0f).setInterpolator(LinearInterpolator()).setListener(
                 object: Animator.AnimatorListener {
-                    override fun onAnimationCancel(p0: Animator?) {}
-                    override fun onAnimationRepeat(p0: Animator?) {}
-                    override fun onAnimationStart(p0: Animator?) {}
-                    override fun onAnimationEnd(p0: Animator?) {
+                    override fun onAnimationCancel(p0: Animator) {}
+                    override fun onAnimationRepeat(p0: Animator) {}
+                    override fun onAnimationStart(p0: Animator) {}
+                    override fun onAnimationEnd(p0: Animator) {
                         setImageResource(it)
                         animate().alpha(1.0f).interpolator = LinearInterpolator()
                     }

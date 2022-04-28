@@ -1,5 +1,6 @@
 package com.agelousis.payments.userSelection
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -37,7 +38,10 @@ class UserSelectionBottomSheetFragment: BasicBottomSheetDialogFragment() {
     }
 
     private val users by lazy {
-        arguments?.getParcelableArrayList<UserModel>(USERS_EXTRA)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            arguments?.getParcelableArrayList(USERS_EXTRA, UserModel::class.java)
+        else
+            arguments?.getParcelableArrayList(USERS_EXTRA)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

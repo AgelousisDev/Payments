@@ -1,5 +1,6 @@
 package com.agelousis.payments.main.ui.totalPaymentsAmount
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -40,7 +41,10 @@ class TotalPaymentsAmountBottomSheetDialogFragment: BasicBottomSheetDialogFragme
      }
 
     private val paymentAmountModel by lazy {
-        arguments?.getParcelable<PaymentAmountSumModel>(PAYMENT_AMOUNT_SUM_MODEL_EXTRA)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            arguments?.getParcelable(PAYMENT_AMOUNT_SUM_MODEL_EXTRA, PaymentAmountSumModel::class.java)
+        else
+            arguments?.getParcelable(PAYMENT_AMOUNT_SUM_MODEL_EXTRA)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

@@ -269,10 +269,31 @@ fun Drawable.fromVector(padding: Int = 0): Bitmap {
 
 fun Context.initializeField(appCompatEditText: AppCompatEditText) {
     appCompatEditText.requestFocus()
-    (getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)?.showSoftInput(
-        appCompatEditText,
-        InputMethodManager.SHOW_FORCED
+    (this as? Activity)?.showKeyboard(
+        view = appCompatEditText
     )
+}
+
+fun Activity.showKeyboard(view: View) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+        window?.insetsController?.show(
+            WindowInsets.Type.ime()
+        )
+    else {
+        val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm?.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+    }
+}
+
+fun Activity.hideKeyboard(view: View) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+        window?.insetsController?.hide(
+            WindowInsets.Type.ime()
+        )
+    else {
+        val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm?.hideSoftInputFromWindow(view.windowToken, 0)
+    }
 }
 
 fun createDocumentIntentWith(fileName: String, mimeType: String) = Intent(Intent.ACTION_CREATE_DOCUMENT).also {
@@ -529,7 +550,7 @@ fun View.animateAlpha(toAlpha: Float) {
 
 fun PackageManager.isPackageInstalled(packageName: String) =
     try {
-        this.getPackageInfo(packageName, 0)
+        this.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
         true
     }
     catch (e: PackageManager.NameNotFoundException) {
@@ -641,12 +662,12 @@ infix fun CardView.animateBackgroundColor(endColor: Int) {
         setCardBackgroundColor(it.animatedValue as? Int ?: return@addUpdateListener)
     }
     colorAnimation.addListener(object: Animator.AnimatorListener {
-        override fun onAnimationCancel(animation: Animator?) {}
-        override fun onAnimationRepeat(animation: Animator?) {}
-        override fun onAnimationStart(animation: Animator?) {
+        override fun onAnimationCancel(animation: Animator) {}
+        override fun onAnimationRepeat(animation: Animator) {}
+        override fun onAnimationStart(animation: Animator) {
             tag = "isAnimating" to true
         }
-        override fun onAnimationEnd(animation: Animator?) {
+        override fun onAnimationEnd(animation: Animator) {
             tag = "isAnimating" to false
         }
     })

@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -141,9 +139,6 @@ fun GroupInfoLayout(
                 onDone = {
                     keyboardController?.hide()
                 }
-            ),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = colorResource(id = R.color.dayNightTextOnBackground)
             ),
             modifier = Modifier
                 .constrainAs(groupNameTextFieldConstrainedReference) {

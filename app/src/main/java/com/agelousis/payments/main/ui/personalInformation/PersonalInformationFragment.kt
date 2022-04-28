@@ -40,11 +40,11 @@ class PersonalInformationFragment: BaseBindingFragment<FragmentPersonalInformati
     inflate = FragmentPersonalInformationLayoutBinding::inflate
 ), OptionPresenter, Animator.AnimatorListener, PersonalInformationPresenter {
 
-    override fun onAnimationCancel(animation: Animator?) {}
-    override fun onAnimationRepeat(animation: Animator?) {}
-    override fun onAnimationStart(animation: Animator?) {}
+    override fun onAnimationCancel(animation: Animator) {}
+    override fun onAnimationRepeat(animation: Animator) {}
+    override fun onAnimationStart(animation: Animator) {}
 
-    override fun onAnimationEnd(animation: Animator?) {
+    override fun onAnimationEnd(animation: Animator) {
         updateUser()
     }
 

@@ -155,6 +155,7 @@
         <entry key="app/src/main/res/layout/header_row_layout.xml" value="0.22010869565217392" />
         <entry key="app/src/main/res/layout/history_fragment_layout.xml" value="0.1" />
         <entry key="app/src/main/res/layout/last_payment_month_row_layout.xml" value="0.30117753623188404" />
+        <entry key="app/src/main/res/layout/loader_dialog_layout.xml" value="0.3140625" />
         <entry key="app/src/main/res/layout/material_menu_fragment_layout.xml" value="0.17481884057971014" />
         <entry key="app/src/main/res/layout/material_menu_option_row_layout.xml" value="0.17481884057971014" />
         <entry key="app/src/main/res/layout/material_search_view_layout.xml" value="0.1" />
