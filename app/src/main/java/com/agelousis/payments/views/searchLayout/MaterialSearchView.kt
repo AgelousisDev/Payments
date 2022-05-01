@@ -14,7 +14,7 @@ import com.agelousis.payments.views.searchLayout.enumerations.MaterialSearchView
 import com.agelousis.payments.views.searchLayout.models.MaterialSearchViewDataModel
 import com.agelousis.payments.views.searchLayout.presenter.MaterialSearchViewPresenter
 
-typealias SearchQueryChangesBlock = (String?) -> Unit
+typealias SearchQueryChangeBlock = (String?) -> Unit
 class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLayout(context, attributeSet), MaterialSearchViewPresenter {
 
     override fun onDeleteQuery() {
@@ -71,7 +71,7 @@ class MaterialSearchView(context: Context, attributeSet: AttributeSet?): FrameLa
         )
     }
 
-    fun onQueryListener(searchQueryChangeBlock: SearchQueryChangesBlock) {
+    fun onQueryListener(searchQueryChangeBlock: SearchQueryChangeBlock) {
         binding.searchField.doOnTextChanged { text, _, _, _ ->
             binding.searchField.infiniteAlphaAnimation(
                 state = text?.length == 0

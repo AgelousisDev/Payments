@@ -10,13 +10,13 @@ import com.agelousis.payments.databinding.HeaderRowLayoutBinding
 import com.agelousis.payments.main.ui.files.enumerations.FilesAdapterViewType
 import com.agelousis.payments.main.ui.files.models.FileDataModel
 import com.agelousis.payments.main.ui.files.models.HeaderModel
-import com.agelousis.payments.main.ui.files.presenter.FilePresenter
+import com.agelousis.payments.main.ui.files.presenter.InvoicePresenter
 import com.agelousis.payments.main.ui.files.viewHolders.FileViewHolder
 import com.agelousis.payments.main.ui.files.viewHolders.HeaderViewHolder
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.main.ui.payments.viewHolders.EmptyViewHolder
 
-class FilesAdapter(private val list: ArrayList<Any>, private val presenter: FilePresenter): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class FilesAdapter(private val list: ArrayList<Any>, private val presenter: InvoicePresenter): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)

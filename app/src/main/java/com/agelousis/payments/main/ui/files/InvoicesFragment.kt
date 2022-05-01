@@ -1,8 +1,12 @@
 package com.agelousis.payments.main.ui.files
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -18,10 +22,13 @@ import com.agelousis.payments.main.ui.files.adapters.FilesAdapter
 import com.agelousis.payments.main.ui.files.enumerations.FileRowState
 import com.agelousis.payments.main.ui.files.models.FileDataModel
 import com.agelousis.payments.main.ui.files.models.HeaderModel
-import com.agelousis.payments.main.ui.files.presenter.FilePresenter
+import com.agelousis.payments.main.ui.files.presenter.InvoicePresenter
 import com.agelousis.payments.main.ui.files.presenter.FilesFragmentPresenter
+import com.agelousis.payments.main.ui.files.ui.InvoicesLayout
 import com.agelousis.payments.main.ui.files.viewModel.FilesViewModel
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
+import com.agelousis.payments.ui.Typography
+import com.agelousis.payments.ui.appColorScheme
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.models.SimpleDialogDataModel
 import com.agelousis.payments.views.searchLayout.presenter.MaterialSearchViewPresenter
@@ -32,7 +39,7 @@ import java.io.File
 
 class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
     inflate = FragmentInvoicesLayoutBinding::inflate
-), FilePresenter, FilesFragmentPresenter, MaterialSearchViewPresenter {
+), InvoicePresenter, FilesFragmentPresenter, MaterialSearchViewPresenter {
 
     override fun onProfileImageClicked() {
         redirectToPersonalInformationFragment()
@@ -50,9 +57,9 @@ class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
         )
     }
 
-    override fun onFileSelected(fileDataModel: FileDataModel, adapterPosition: Int) {
+    override fun onInvoiceSelected(fileDataModel: FileDataModel, adapterPosition: Int) {
         if (filteredList.filterIsInstance<FileDataModel>().any { it.fileRowState == FileRowState.SELECTED })
-            onFileLongPressed(
+            onInvoiceLongPressed(
                 adapterPosition = adapterPosition
             )
         else
@@ -72,7 +79,7 @@ class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
             )
     }
 
-    override fun onFileLongPressed(adapterPosition: Int) {
+    override fun onInvoiceLongPressed(adapterPosition: Int) {
         (filteredList.getOrNull(
             index = adapterPosition
         ) as? FileDataModel)?.fileRowState = (filteredList.getOrNull(
@@ -118,7 +125,26 @@ class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
         }
     private val selectedFilePositions by lazy { arrayListOf<FileDataModel?>() }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return ComposeView(
+            context = context ?: return null
+        ).apply {
+            setContent {
+                MaterialTheme(
+                    colorScheme = appColorScheme(),
+                    typography = Typography
+                ) {
+                    InvoicesLayout(materialSearchViewPresenter = this@InvoicesFragment)
+                }
+            }
+        }
+    }
+
+    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configureToolbar()
         configureSearchView()
@@ -126,7 +152,7 @@ class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
         initializeFiles()
         configureObservers()
         selectedFilePositions.clear()
-    }
+    }*/
 
     private fun configureToolbar() {
         binding?.paymentsToolbar?.setNavigationOnClickListener {
