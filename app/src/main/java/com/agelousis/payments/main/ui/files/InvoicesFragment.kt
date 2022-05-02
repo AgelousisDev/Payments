@@ -25,7 +25,7 @@ import com.agelousis.payments.main.ui.files.models.HeaderModel
 import com.agelousis.payments.main.ui.files.presenter.InvoicePresenter
 import com.agelousis.payments.main.ui.files.presenter.FilesFragmentPresenter
 import com.agelousis.payments.main.ui.files.ui.InvoicesLayout
-import com.agelousis.payments.main.ui.files.viewModel.FilesViewModel
+import com.agelousis.payments.main.ui.files.viewModel.InvoicesViewModel
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
 import com.agelousis.payments.ui.Typography
 import com.agelousis.payments.ui.appColorScheme
@@ -115,7 +115,7 @@ class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
     }
 
     private val uiScope = CoroutineScope(Dispatchers.Main)
-    private val viewModel: FilesViewModel by viewModels()
+    private val viewModel: InvoicesViewModel by viewModels()
     private val fileList by lazy { arrayListOf<FileDataModel>() }
     private val filteredList by lazy { arrayListOf<Any>() }
     private var searchViewState: Boolean = false

@@ -8,10 +8,11 @@ import com.agelousis.payments.main.ui.files.models.FileDataModel
 import java.io.File
 import java.io.FileOutputStream
 
-class FilesViewModel: ViewModel() {
+class InvoicesViewModel: ViewModel() {
 
     val filesLiveData by lazy { MutableLiveData<List<FileDataModel>>() }
     val fileDeletionLiveData by lazy { MutableLiveData<Boolean>() }
+    val selectedInvoicesLiveData by lazy { MutableLiveData<List<FileDataModel>>() }
 
     suspend fun initializeFiles(userId: Int?) {
         DBManager.initializeFiles(

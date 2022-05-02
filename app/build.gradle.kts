@@ -88,6 +88,8 @@ dependencies {
     implementation("androidx.activity:activity-compose:$composeActivityVersion")
     implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     implementation("androidx.compose.material3:material3:$composeMaterialYouVersion")
+    implementation("androidx.compose.ui:ui-viewbinding:$composeVersion")
+    implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
     implementation("androidx.constraintlayout:constraintlayout-compose:$constraintLayoutComposeVersion")
     implementation("com.google.accompanist:accompanist-pager:0.24.7-alpha")
     implementation("io.coil-kt:coil-compose:2.0.0-alpha09")
