@@ -1,7 +1,7 @@
 package com.agelousis.payments.main.ui.files.models
 
 import android.os.Parcelable
-import com.agelousis.payments.main.ui.files.enumerations.FileRowState
+import com.agelousis.payments.main.ui.files.enumerations.InvoiceRowState
 import com.agelousis.payments.utils.constants.Constants
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
@@ -9,10 +9,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @Parcelize
-data class FileDataModel(val fileId: Int? = null,
-                         val description: String?,
-                         val fileName: String?,
-                         val dateTime: String?
+data class InvoiceDataModel(val fileId: Int? = null,
+                            val description: String?,
+                            val fileName: String?,
+                            val dateTime: String?
 ): Parcelable {
 
     val fileDate: Date
@@ -30,6 +30,6 @@ data class FileDataModel(val fileId: Int? = null,
     var fileData: ByteArray? = null
 
     @IgnoredOnParcel
-    var fileRowState = FileRowState.NORMAL
+    var invoiceRowState = InvoiceRowState.NORMAL
 
 }

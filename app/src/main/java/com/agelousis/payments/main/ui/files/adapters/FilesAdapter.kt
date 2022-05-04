@@ -8,7 +8,7 @@ import com.agelousis.payments.databinding.EmptyRowLayoutBinding
 import com.agelousis.payments.databinding.FileRowLayoutBinding
 import com.agelousis.payments.databinding.HeaderRowLayoutBinding
 import com.agelousis.payments.main.ui.files.enumerations.FilesAdapterViewType
-import com.agelousis.payments.main.ui.files.models.FileDataModel
+import com.agelousis.payments.main.ui.files.models.InvoiceDataModel
 import com.agelousis.payments.main.ui.files.models.HeaderModel
 import com.agelousis.payments.main.ui.files.presenter.InvoicePresenter
 import com.agelousis.payments.main.ui.files.viewHolders.FileViewHolder
@@ -68,9 +68,9 @@ class FilesAdapter(private val list: ArrayList<Any>, private val presenter: Invo
             ) as? HeaderModel ?: return
         )
         (holder as? FileViewHolder)?.bind(
-            fileDataModel = list.getOrNull(
+            invoiceDataModel = list.getOrNull(
                 index = position
-            ) as? FileDataModel ?: return,
+            ) as? InvoiceDataModel ?: return,
             presenter = presenter
         )
     }
@@ -80,7 +80,7 @@ class FilesAdapter(private val list: ArrayList<Any>, private val presenter: Invo
     override fun getItemViewType(position: Int): Int {
         (list.getOrNull(index = position) as? EmptyModel)?.let { return FilesAdapterViewType.EMPTY_VIEW.type }
         (list.getOrNull(index = position) as? HeaderModel)?.let { return FilesAdapterViewType.HEADER_VIEW.type }
-        (list.getOrNull(index = position) as? FileDataModel)?.let { return FilesAdapterViewType.FILE_VIEW.type }
+        (list.getOrNull(index = position) as? InvoiceDataModel)?.let { return FilesAdapterViewType.FILE_VIEW.type }
         return super.getItemViewType(position)
     }
 

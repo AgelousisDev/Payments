@@ -15,7 +15,7 @@ import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.databinding.FragmentPaymentsLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.menuOptions.PaymentsMenuOptionsBottomSheetFragment
-import com.agelousis.payments.main.ui.files.models.FileDataModel
+import com.agelousis.payments.main.ui.files.models.InvoiceDataModel
 import com.agelousis.payments.main.ui.groupModification.GroupModificationFragment
 import com.agelousis.payments.main.ui.newPayment.presenters.NewPaymentPresenter
 import com.agelousis.payments.main.ui.payments.adapters.PaymentsAdapter
@@ -282,7 +282,7 @@ class PaymentsFragment: Fragment(), GroupPresenter, ClientPresenter, NewPaymentP
     fun redirectToPdfViewer(pdfFile: File, description: String) {
         findNavController().navigate(
             PaymentsFragmentDirections.actionPaymentsFragmentToPdfViewerFragment(
-                fileDataModel = FileDataModel(
+                invoiceDataModel = InvoiceDataModel(
                     description = description,
                     fileName = pdfFile.name,
                     dateTime = Date().pdfFormattedCurrentDate

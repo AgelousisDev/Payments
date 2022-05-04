@@ -1,8 +1,8 @@
 package com.agelousis.payments.main.ui.files.presenter
 
-import com.agelousis.payments.main.ui.files.models.FileDataModel
+import com.agelousis.payments.main.ui.files.models.InvoiceDataModel
 
 interface InvoicePresenter {
-    fun onInvoiceSelected(fileDataModel: FileDataModel, adapterPosition: Int)
-    fun onInvoiceLongPressed(adapterPosition: Int)
+    fun onInvoiceSelected(invoiceDataModel: InvoiceDataModel, adapterPosition: Int) {}
+    fun onInvoiceLongPressed(adapterPosition: Int) {}
 }

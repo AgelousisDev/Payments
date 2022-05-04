@@ -12,4 +12,5 @@ data class SimpleDialogDataModel(
     val positiveButtonBlock: PositiveButtonBlock? = null,
     val negativeButtonText: String? = null,
     val negativeButtonBlock: PositiveButtonBlock? = null,
+    val dismissBlock: PositiveButtonBlock? = null,
 )

@@ -14,7 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.agelousis.payments.R
 import com.agelousis.payments.main.MainActivity
-import com.agelousis.payments.main.ui.files.models.FileDataModel
+import com.agelousis.payments.main.ui.files.models.InvoiceDataModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.periodFilter.presenter.PeriodFilterFragmentPresenter
@@ -193,7 +193,7 @@ class PeriodFilterFragment: Fragment(), PeriodFilterFragmentPresenter {
     private fun redirectToPdfViewer(pdfFile: File, description: String) {
         findNavController().navigate(
             PeriodFilterFragmentDirections.actionPeriodFilterFragmentToPdfViewerFragment(
-                fileDataModel = FileDataModel(
+                invoiceDataModel = InvoiceDataModel(
                     description = description,
                     fileName = pdfFile.name,
                     dateTime = Date().pdfFormattedCurrentDate

@@ -145,8 +145,7 @@
     <fragment
         android:id="@+id/periodFilterFragment"
         android:name="com.agelousis.payments.main.ui.periodFilter.PeriodFilterFragment"
-        android:label="PeriodFilterFragment"
-        tools:layout="@layout/period_filter_fragment_layout">
+        android:label="PeriodFilterFragment">
         <argument
             android:name="periodFilterData"
             app:argType="com.agelousis.payments.main.ui.periodFilter.models.PeriodFilterDataModel"
@@ -166,8 +165,7 @@
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.agelousis.payments.main.ui.dashboard.HistoryFragment"
-        android:label="HistoryFragment"
-        tools:layout="@layout/history_fragment_layout"/>
+        android:label="HistoryFragment"/>
     <action
         android:id="@+id/action_global_historyFragment"
         app:destination="@id/historyFragment"
@@ -181,8 +179,8 @@
         android:label="PdfViewerFragment"
         tools:layout="@layout/pdf_viewer_fragment_layout">
         <argument
-            android:name="fileDataModel"
-            app:argType="com.agelousis.payments.main.ui.files.models.FileDataModel" />
+            android:name="invoiceDataModel"
+            app:argType="com.agelousis.payments.main.ui.files.models.InvoiceDataModel" />
     </fragment>
     <fragment
         android:id="@+id/filterPaymentsFragment"

@@ -58,7 +58,7 @@ class HistoryFragment: Fragment(), DashboardPresenter {
                 )
             }
         }
-        viewModel.fileDataModelListLiveData.observe(
+        viewModel.invoiceDataModelListLiveData.observe(
             viewLifecycleOwner
         ) {
             viewModel.initializeDashboardDataWith()

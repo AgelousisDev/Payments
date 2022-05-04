@@ -7,7 +7,7 @@ import com.agelousis.payments.database.InsertionSuccessBlock
 import com.agelousis.payments.database.UpdateSuccessBlock
 import com.agelousis.payments.firebase.models.FirebaseMessageModel
 import com.agelousis.payments.login.models.UserModel
-import com.agelousis.payments.main.ui.files.models.FileDataModel
+import com.agelousis.payments.main.ui.files.models.InvoiceDataModel
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
@@ -79,7 +79,7 @@ class PaymentsViewModel: ViewModel() {
     suspend fun insertFile(userModel: UserModel?, file: File, description: String) {
         DBManager.insertFile(
             userId = userModel?.id,
-            fileDataModel = FileDataModel(
+            invoiceDataModel = InvoiceDataModel(
                 description = description,
                 fileName = file.name,
                 dateTime = Date().pdfFormattedCurrentDate

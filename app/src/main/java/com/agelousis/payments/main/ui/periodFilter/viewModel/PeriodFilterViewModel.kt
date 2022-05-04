@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.agelousis.payments.database.DBManager
 import com.agelousis.payments.login.models.UserModel
-import com.agelousis.payments.main.ui.files.models.FileDataModel
+import com.agelousis.payments.main.ui.files.models.InvoiceDataModel
 import com.agelousis.payments.utils.extensions.pdfFormattedCurrentDate
 import java.io.File
 import java.util.*
@@ -19,7 +19,7 @@ class PeriodFilterViewModel: ViewModel() {
     suspend fun insertFile(userModel: UserModel?, file: File, description: String) {
         DBManager.insertFile(
             userId = userModel?.id,
-            fileDataModel = FileDataModel(
+            invoiceDataModel = InvoiceDataModel(
                 description = description,
                 fileName = file.name,
                 dateTime = Date().pdfFormattedCurrentDate

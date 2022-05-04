@@ -12,7 +12,7 @@ import com.agelousis.payments.login.models.UserModel
 import com.agelousis.payments.main.ui.dashboard.enumerations.DashboardStatisticsType
 import com.agelousis.payments.main.ui.dashboard.model.DashboardStatisticsDataModel
 import com.agelousis.payments.main.ui.dashboard.presenter.DashboardPresenter
-import com.agelousis.payments.main.ui.files.models.FileDataModel
+import com.agelousis.payments.main.ui.files.models.InvoiceDataModel
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
@@ -33,9 +33,9 @@ class DashboardViewModel: ViewModel() {
     val groupModelListLiveData: LiveData<List<GroupModel>>
         get() = groupModelListMutableLiveData
     private val fileDataModelListMutableLiveData by lazy {
-        MutableLiveData<List<FileDataModel>>()
+        MutableLiveData<List<InvoiceDataModel>>()
     }
-    val fileDataModelListLiveData: LiveData<List<FileDataModel>>
+    val invoiceDataModelListLiveData: LiveData<List<InvoiceDataModel>>
         get() = fileDataModelListMutableLiveData
 
     val todayPaymentClientName
@@ -72,7 +72,7 @@ class DashboardViewModel: ViewModel() {
             ),
             DashboardStatisticsDataModel(
                 dashboardStatisticsType = DashboardStatisticsType.INVOICES,
-                size = fileDataModelListLiveData.value?.size ?: 0,
+                size = invoiceDataModelListLiveData.value?.size ?: 0,
                 labelResource = R.string.key_invoices_label,
                 backgroundColor = R.color.green,
                 icon = R.drawable.ic_invoice

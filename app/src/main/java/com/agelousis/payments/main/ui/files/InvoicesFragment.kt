@@ -19,8 +19,8 @@ import com.agelousis.payments.custom.itemDecoration.HeaderItemDecoration
 import com.agelousis.payments.databinding.FragmentInvoicesLayoutBinding
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.files.adapters.FilesAdapter
-import com.agelousis.payments.main.ui.files.enumerations.FileRowState
-import com.agelousis.payments.main.ui.files.models.FileDataModel
+import com.agelousis.payments.main.ui.files.enumerations.InvoiceRowState
+import com.agelousis.payments.main.ui.files.models.InvoiceDataModel
 import com.agelousis.payments.main.ui.files.models.HeaderModel
 import com.agelousis.payments.main.ui.files.presenter.InvoicePresenter
 import com.agelousis.payments.main.ui.files.presenter.FilesFragmentPresenter
@@ -57,18 +57,18 @@ class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
         )
     }
 
-    override fun onInvoiceSelected(fileDataModel: FileDataModel, adapterPosition: Int) {
-        if (filteredList.filterIsInstance<FileDataModel>().any { it.fileRowState == FileRowState.SELECTED })
+    override fun onInvoiceSelected(invoiceDataModel: InvoiceDataModel, adapterPosition: Int) {
+        if (filteredList.filterIsInstance<InvoiceDataModel>().any { it.invoiceRowState == InvoiceRowState.SELECTED })
             onInvoiceLongPressed(
                 adapterPosition = adapterPosition
             )
         else
-            File(context?.filesDir ?: return, fileDataModel.fileName ?: return).takeIf {
+            File(context?.filesDir ?: return, invoiceDataModel.fileName ?: return).takeIf {
                 it.exists()
             }?.let {
                 findNavController().navigate(
                     InvoicesFragmentDirections.actionInvoicesFragmentToPdfViewerFragment(
-                        fileDataModel = fileDataModel
+                        invoiceDataModel = invoiceDataModel
                     )
                 )
             } ?: context?.showSimpleDialog(
@@ -82,24 +82,24 @@ class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
     override fun onInvoiceLongPressed(adapterPosition: Int) {
         (filteredList.getOrNull(
             index = adapterPosition
-        ) as? FileDataModel)?.fileRowState = (filteredList.getOrNull(
+        ) as? InvoiceDataModel)?.invoiceRowState = (filteredList.getOrNull(
             index = adapterPosition
-        ) as? FileDataModel)?.fileRowState?.other ?: FileRowState.NORMAL
+        ) as? InvoiceDataModel)?.invoiceRowState?.other ?: InvoiceRowState.NORMAL
 
         when((filteredList.getOrNull(
             index = adapterPosition
-        ) as? FileDataModel)?.fileRowState) {
-            FileRowState.NORMAL ->
+        ) as? InvoiceDataModel)?.invoiceRowState) {
+            InvoiceRowState.NORMAL ->
                 selectedFilePositions.remove(
                     filteredList.getOrNull(
                         index = adapterPosition
-                    ) as? FileDataModel
+                    ) as? InvoiceDataModel
                 )
-            FileRowState.SELECTED ->
+            InvoiceRowState.SELECTED ->
                 selectedFilePositions.add(
                     filteredList.getOrNull(
                         index = adapterPosition
-                    ) as? FileDataModel
+                    ) as? InvoiceDataModel
                 )
             else -> {}
         }
@@ -116,14 +116,14 @@ class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
 
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private val viewModel: InvoicesViewModel by viewModels()
-    private val fileList by lazy { arrayListOf<FileDataModel>() }
+    private val fileList by lazy { arrayListOf<InvoiceDataModel>() }
     private val filteredList by lazy { arrayListOf<Any>() }
     private var searchViewState: Boolean = false
         set(value) {
             field  = value
             binding?.searchLayout?.isVisible = value
         }
-    private val selectedFilePositions by lazy { arrayListOf<FileDataModel?>() }
+    private val selectedFilePositions by lazy { arrayListOf<InvoiceDataModel?>() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -138,7 +138,11 @@ class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
                     colorScheme = appColorScheme(),
                     typography = Typography
                 ) {
-                    InvoicesLayout(materialSearchViewPresenter = this@InvoicesFragment)
+                    val viewModel by viewModels<InvoicesViewModel>()
+                    InvoicesLayout(
+                        viewModel = viewModel,
+                        materialSearchViewPresenter = this@InvoicesFragment
+                    )
                 }
             }
         }
@@ -164,7 +168,7 @@ class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
         binding?.searchLayout?.presenter = this
         binding?.searchLayout?.onQueryListener {
             configureFileList(
-                files = fileList,
+                invoices = fileList,
                 query = it
             )
         }
@@ -194,7 +198,7 @@ class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
                 override fun getSpanSize(position: Int) =
                     when(filteredList.getOrNull(index = position)) {
                         is HeaderModel, is EmptyModel -> if (resources.isLandscape) 4 else 2
-                        is FileDataModel -> 1
+                        is InvoiceDataModel -> 1
                         else -> 1
                     }
             }
@@ -236,9 +240,9 @@ class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
                 positiveButtonBackgroundColor = ContextCompat.getColor(context ?: return, R.color.red),
                 positiveButtonBlock = {
                     uiScope.launch {
-                        viewModel.deleteFiles(
+                        viewModel.deleteInvoices(
                             context = context ?: return@launch,
-                            fileDataModelList = selectedFilePositions
+                            invoiceDataModelList = selectedFilePositions
                         )
                     }
                 }
@@ -247,11 +251,11 @@ class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
     }
 
     private fun configureObservers() {
-        viewModel.filesLiveData.observe(viewLifecycleOwner) { files ->
+        viewModel.invoicesLiveData.observe(viewLifecycleOwner) { files ->
             (activity as? MainActivity)?.invoicesSize = files.size
             (activity as? MainActivity)?.floatingButtonState = files.isNotEmpty()
             initializeActualFiles(
-                files = files
+                invoices = files
             )
             fileList.clear()
             fileList.addAll(
@@ -263,7 +267,7 @@ class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
                 searchViewState = files.isNotEmpty()
             }
             configureFileList(
-                files = files
+                invoices = files
             )
         }
         viewModel.fileDeletionLiveData.observe(viewLifecycleOwner) {
@@ -274,9 +278,9 @@ class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
         }
     }
 
-    private fun configureFileList(files: List<FileDataModel>, query: String? = null) {
+    private fun configureFileList(invoices: List<InvoiceDataModel>, query: String? = null) {
         filteredList.clear()
-        files.groupBy { it.fileDate.yearMonth }.toSortedMap(compareByDescending { it }).forEach { map ->
+        invoices.groupBy { it.fileDate.yearMonth }.toSortedMap(compareByDescending { it }).forEach { map ->
             map.value.filter { it.description?.lowercase()?.contains(query?.lowercase() ?: "") == true }
                 .takeIf { it.isNotEmpty() }?.let inner@ { filteredByQueryList ->
                     val header = if (map.key?.isSameYearAndMonthWithCurrentDate == true) resources.getString(R.string.key_this_month_label) else map.key?.monthFormattedString
@@ -319,16 +323,16 @@ class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
 
     private fun initializeFiles() {
         uiScope.launch {
-            viewModel.initializeFiles(
+            viewModel.initializeInvoices(
                 userId = (activity as? MainActivity)?.userModel?.id
             )
         }
     }
 
-    private fun initializeActualFiles(files: List<FileDataModel>) {
+    private fun initializeActualFiles(invoices: List<InvoiceDataModel>) {
         viewModel.createFilesIfRequired(
             context = context ?: return,
-            files = files
+            invoices = invoices
         )
     }
 
@@ -336,10 +340,10 @@ class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
         selectedFilePositions.clear()
         filteredList.forEachIfEach(
             predicate = {
-                it is FileDataModel
+                it is InvoiceDataModel
             }
         ) {
-            (it as? FileDataModel)?.fileRowState = FileRowState.NORMAL
+            (it as? InvoiceDataModel)?.invoiceRowState = InvoiceRowState.NORMAL
         }
         (binding?.filesListRecyclerView?.adapter as? FilesAdapter)?.reloadData()
         configureAppBar()
@@ -363,10 +367,10 @@ class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
         selectedFilePositions.clear()
         filteredList.forEachIfEach(
             predicate = {
-                it is FileDataModel
+                it is InvoiceDataModel
             }
         ) {
-            (it as? FileDataModel)?.fileRowState = FileRowState.NORMAL
+            (it as? InvoiceDataModel)?.invoiceRowState = InvoiceRowState.NORMAL
         }
         (binding?.filesListRecyclerView?.adapter as? FilesAdapter)?.reloadData()
         configureAppBar()

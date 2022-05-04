@@ -7,7 +7,7 @@ import androidx.core.database.getDoubleOrNull
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getStringOrNull
 import com.agelousis.payments.login.models.UserModel
-import com.agelousis.payments.main.ui.files.models.FileDataModel
+import com.agelousis.payments.main.ui.files.models.InvoiceDataModel
 import com.agelousis.payments.main.ui.payments.models.GroupModel
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.payments.models.ClientModel
@@ -24,7 +24,7 @@ typealias PaymentsClosure = (List<Any>) -> Unit
 typealias PersonsClosure = (List<ClientModel>) -> Unit
 typealias DeletionSuccessBlock = () -> Unit
 typealias GroupsSuccessBlock = (List<GroupModel>) -> Unit
-typealias FilesSuccessBlock = (List<FileDataModel>) -> Unit
+typealias FilesSuccessBlock = (List<InvoiceDataModel>) -> Unit
 
 object DBManager {
 
@@ -1056,17 +1056,17 @@ object DBManager {
         }
     }
 
-    suspend fun insertFile(userId: Int?, fileDataModel: FileDataModel, insertionSuccessBlock: InsertionSuccessBlock? = null) {
+    suspend fun insertFile(userId: Int?, invoiceDataModel: InvoiceDataModel, insertionSuccessBlock: InsertionSuccessBlock? = null) {
         withContext(Dispatchers.Default) {
             database?.insert(
                 SQLiteHelper.FILES_TABLE_NAME,
                 null,
                 ContentValues().also {
                     it.put(SQLiteHelper.USER_ID, userId ?: return@withContext)
-                    it.put(SQLiteHelper.DESCRIPTION, fileDataModel.description)
-                    it.put(SQLiteHelper.FILENAME, fileDataModel.fileName)
-                    it.put(SQLiteHelper.DATE_TIME, fileDataModel.dateTime)
-                    it.put(SQLiteHelper.FILE_DATA, fileDataModel.fileData)
+                    it.put(SQLiteHelper.DESCRIPTION, invoiceDataModel.description)
+                    it.put(SQLiteHelper.FILENAME, invoiceDataModel.fileName)
+                    it.put(SQLiteHelper.DATE_TIME, invoiceDataModel.dateTime)
+                    it.put(SQLiteHelper.FILE_DATA, invoiceDataModel.fileData)
                 }
             )
             withContext(Dispatchers.Main) {
@@ -1077,7 +1077,7 @@ object DBManager {
 
     suspend fun initializeFiles(userId: Int?, filesSuccessBlock: FilesSuccessBlock) {
         withContext(Dispatchers.Default) {
-            val files = arrayListOf<FileDataModel>()
+            val files = arrayListOf<InvoiceDataModel>()
             val filesCursor = database?.query(
                 SQLiteHelper.FILES_TABLE_NAME,
                 null,
@@ -1090,7 +1090,7 @@ object DBManager {
             if (filesCursor?.moveToFirst() == true && filesCursor.count > 0)
                 do {
                     files.add(
-                        FileDataModel(
+                        InvoiceDataModel(
                             fileId = filesCursor.getIntOrNull(filesCursor.getColumnIndex(SQLiteHelper.ID)),
                             description = filesCursor.getStringOrNull(filesCursor.getColumnIndex(SQLiteHelper.DESCRIPTION)),
                             fileName = filesCursor.getStringOrNull(filesCursor.getColumnIndex(SQLiteHelper.FILENAME)),

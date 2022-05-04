@@ -39,7 +39,7 @@ class PdfViewerFragment: BaseBindingFragment<PdfViewerFragmentLayoutBinding>(
             context = context ?: return,
             document = File(
                 context?.filesDir ?: return,
-                args.fileDataModel.fileName ?: return
+                args.invoiceDataModel.fileName ?: return
             )
         )
     }
@@ -72,7 +72,7 @@ class PdfViewerFragment: BaseBindingFragment<PdfViewerFragmentLayoutBinding>(
     }
 
     private fun configureAppBarTitle() {
-        (activity as? MainActivity)?.appBarTitle = args.fileDataModel.description ?: return
+        (activity as? MainActivity)?.appBarTitle = args.invoiceDataModel.description ?: return
     }
 
     @Throws(IOException::class)
@@ -81,7 +81,7 @@ class PdfViewerFragment: BaseBindingFragment<PdfViewerFragmentLayoutBinding>(
         val fileDescriptor = context?.contentResolver?.openFileDescriptor(
             File(
                 context?.filesDir ?: return,
-                args.fileDataModel.fileName ?: return
+                args.invoiceDataModel.fileName ?: return
             ).toUri(), "r") ?: return
 
         // This is the PdfRenderer we use to render the PDF.
@@ -114,7 +114,7 @@ class PdfViewerFragment: BaseBindingFragment<PdfViewerFragmentLayoutBinding>(
     }
 
     fun sharePDF() {
-        File(context?.filesDir ?: return, args.fileDataModel.fileName ?: return).takeIf {
+        File(context?.filesDir ?: return, args.invoiceDataModel.fileName ?: return).takeIf {
             it.exists()
         }?.let {
             context?.sharePDF(
