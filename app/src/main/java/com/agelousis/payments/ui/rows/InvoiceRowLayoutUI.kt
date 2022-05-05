@@ -18,43 +18,42 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.files.enumerations.InvoiceRowState
 import com.agelousis.payments.main.ui.files.models.InvoiceDataModel
-import com.agelousis.payments.main.ui.files.presenter.InvoicePresenter
 import com.agelousis.payments.ui.textViewLabelFont
 import com.agelousis.payments.ui.textViewTitleLabelFont
+
+typealias InvoiceSelectionBlock = (InvoiceDataModel) -> Unit
+typealias InvoiceLongClickBlock = (InvoiceDataModel, InvoiceRowState) -> Unit
 
 @Composable
 fun InvoiceRowLayout(
     invoiceDataModel: InvoiceDataModel,
-    invoicePresenter: InvoicePresenter
+    invoiceSelectionBlock: InvoiceSelectionBlock,
+    invoiceLongClickBlock: InvoiceLongClickBlock,
+    modifier: Modifier = Modifier
 ) {
     var invoiceRowState by remember {
         mutableStateOf(value = InvoiceRowState.NORMAL)
     }
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .combinedClickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(
-                    bounded = true,
-                    radius = 16.dp
+                    bounded = true
                 ),
                 onLongClick = {
                     invoiceRowState = invoiceRowState.other
-                    invoicePresenter.onInvoiceLongPressed(
-                        adapterPosition = 0
-                    )
+                    invoiceLongClickBlock(invoiceDataModel, invoiceRowState)
                 },
                 onClick = {
-                    invoicePresenter.onInvoiceSelected(
-                        invoiceDataModel = invoiceDataModel,
-                        0
-                    )
+                    invoiceSelectionBlock(invoiceDataModel)
                 }
             ),
         shape = RoundedCornerShape(
@@ -84,6 +83,7 @@ fun InvoiceRowLayout(
             Text(
                 text = invoiceDataModel.description ?: "",
                 style = textViewTitleLabelFont,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -95,6 +95,7 @@ fun InvoiceRowLayout(
             Text(
                 text = invoiceDataModel.showingDate ?: "",
                 style = textViewLabelFont,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -116,6 +117,7 @@ fun FileRowLayoutPreview() {
             fileName = "sample_invoice.pdf",
             dateTime = "2022_10_11_13_30_00"
         ),
-        invoicePresenter = object: InvoicePresenter {}
+        invoiceSelectionBlock = {},
+        invoiceLongClickBlock = { _, _ -> }
     )
 }

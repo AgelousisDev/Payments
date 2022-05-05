@@ -46,6 +46,8 @@ class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
     }
 
     override fun onDeleteInvoices(clearAllState: Boolean) {
+        viewModel.invoicesDeletionState = true
+        /*
         if (clearAllState) {
             selectedFilePositions.clear()
             selectedFilePositions.addAll(
@@ -54,7 +56,7 @@ class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
         }
         configureDeleteAction(
             clearAllState = clearAllState
-        )
+        )*/
     }
 
     override fun onInvoiceSelected(invoiceDataModel: InvoiceDataModel, adapterPosition: Int) {
@@ -138,7 +140,9 @@ class InvoicesFragment: BaseBindingFragment<FragmentInvoicesLayoutBinding>(
                     colorScheme = appColorScheme(),
                     typography = Typography
                 ) {
-                    val viewModel by viewModels<InvoicesViewModel>()
+                    viewModel.updateInvoicesState = true
+                    viewModel.invoicesLiveData.value = null
+                    viewModel.selectedInvoicesLiveData.value = null
                     InvoicesLayout(
                         viewModel = viewModel,
                         materialSearchViewPresenter = this@InvoicesFragment

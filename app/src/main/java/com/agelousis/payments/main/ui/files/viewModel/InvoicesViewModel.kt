@@ -3,6 +3,7 @@ package com.agelousis.payments.main.ui.files.viewModel
 import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,9 +17,12 @@ import java.io.FileOutputStream
 class InvoicesViewModel: ViewModel() {
 
     var itemsFilteredList by mutableStateOf(value = emptyList<Any>())
+    var searchQuery by mutableStateOf<String?>(value = "")
     val invoicesLiveData by lazy { MutableLiveData<List<InvoiceDataModel>>() }
     val fileDeletionLiveData by lazy { MutableLiveData<Boolean>() }
     val selectedInvoicesLiveData by lazy { MutableLiveData<List<InvoiceDataModel>>() }
+    var invoicesDeletionState by mutableStateOf(value = false)
+    var updateInvoicesState by mutableStateOf(value = true)
 
     suspend fun initializeInvoices(userId: Int?) {
         DBManager.initializeFiles(

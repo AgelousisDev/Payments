@@ -88,6 +88,7 @@ fun MaterialSearchViewLayout(
                             focusRequester.freeFocus()
                             keyboardController?.hide()
                             materialSearchViewIconState = MaterialSearchViewIconState.SEARCH
+                            searchQueryChangeBlock(if (searchFieldValue.length > 1) searchFieldValue else null)
                         }
                     }
                 },

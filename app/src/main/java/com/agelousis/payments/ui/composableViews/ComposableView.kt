@@ -14,7 +14,7 @@ import com.agelousis.payments.ui.textViewValueLabelFont
 import com.agelousis.payments.utils.models.SimpleDialogDataModel
 
 @Composable
-fun BocSimpleDialog(
+fun SimpleDialog(
     show: Boolean,
     simpleDialogDataModel: SimpleDialogDataModel
 ) {
@@ -56,7 +56,7 @@ fun BocSimpleDialog(
                     }
             },
             shape = RoundedCornerShape(
-                size = 8.dp
+                size = 16.dp
             )
         )
 }

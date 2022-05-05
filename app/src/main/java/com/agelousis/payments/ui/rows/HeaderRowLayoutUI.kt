@@ -18,10 +18,11 @@ import com.agelousis.payments.ui.textViewLabelFont
 
 @Composable
 fun HeaderRowLayout(
-    headerModel: HeaderModel
+    headerModel: HeaderModel,
+    modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(
                 height = 20.dp
