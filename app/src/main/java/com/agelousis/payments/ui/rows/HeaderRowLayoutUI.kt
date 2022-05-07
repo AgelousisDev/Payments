@@ -41,8 +41,9 @@ fun HeaderRowLayout(
                 id = R.color.dayNightTextOnBackground
             ),
             modifier = Modifier
-                .fillMaxWidth().padding(
-                    start = 8.dp
+                .fillMaxWidth()
+                .padding(
+                    start = 16.dp
                 )
         )
     }

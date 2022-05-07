@@ -1,10 +1,7 @@
 package com.agelousis.payments.main.ui.files.viewModel
 
 import android.content.Context
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.agelousis.payments.database.DBManager
@@ -14,15 +11,18 @@ import com.agelousis.payments.utils.extensions.after
 import java.io.File
 import java.io.FileOutputStream
 
+typealias InvoiceDataModelBlock = (InvoiceDataModel) -> Unit
+
 class InvoicesViewModel: ViewModel() {
 
-    var itemsFilteredList by mutableStateOf(value = emptyList<Any>())
+    var itemsFilteredList = mutableStateListOf<Any>()
     var searchQuery by mutableStateOf<String?>(value = "")
     val invoicesLiveData by lazy { MutableLiveData<List<InvoiceDataModel>>() }
     val fileDeletionLiveData by lazy { MutableLiveData<Boolean>() }
-    val selectedInvoicesLiveData by lazy { MutableLiveData<List<InvoiceDataModel>>() }
+    val selectedInvoiceModelList = mutableStateListOf<InvoiceDataModel>()
     var invoicesDeletionState by mutableStateOf(value = false)
     var updateInvoicesState by mutableStateOf(value = true)
+    var invoiceDataModelBlock: InvoiceDataModelBlock? = null
 
     suspend fun initializeInvoices(userId: Int?) {
         DBManager.initializeFiles(
@@ -60,6 +60,12 @@ class InvoicesViewModel: ViewModel() {
                 }
             }
         }
+    }
+
+    infix fun onInvoiceDataModel(
+        invoiceDataModel: InvoiceDataModel
+    ) {
+        invoiceDataModelBlock?.invoke(invoiceDataModel)
     }
 
 }

@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.agelousis.payments.R
 import com.agelousis.payments.custom.enumerations.SwipeAction
 import com.agelousis.payments.main.enumerations.SwipeItemType
-import com.agelousis.payments.main.ui.files.viewHolders.FileViewHolder
 import com.agelousis.payments.main.ui.newPayment.viewHolders.PaymentAmountViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.BalanceOverviewViewHolder
 import com.agelousis.payments.main.ui.payments.viewHolders.GroupViewHolder
@@ -37,8 +36,6 @@ class SwipeItemTouchHelper(
                     SwipeItemType.CLIENT_ITEM
                 is BalanceOverviewViewHolder ->
                     SwipeItemType.BALANCE_OVERVIEW_ITEM
-                is FileViewHolder ->
-                    SwipeItemType.PDF_ITEM
                 is PaymentAmountViewHolder ->
                     SwipeItemType.PAYMENT_AMOUNT
                 else ->
@@ -56,8 +53,6 @@ class SwipeItemTouchHelper(
                 SwipeItemType.CLIENT_ITEM
             is BalanceOverviewViewHolder ->
                 SwipeItemType.BALANCE_OVERVIEW_ITEM
-            is FileViewHolder ->
-                SwipeItemType.PDF_ITEM
             else ->
                 null
         }

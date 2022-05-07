@@ -29,10 +29,22 @@ val textViewTitleLabelFont = TextStyle(
     fontSize = 14.sp
 )
 
+val textViewAlertTitleFont = TextStyle(
+    fontFamily = FontFamily(Font(R.font.ubuntu_regular)),
+    fontWeight = FontWeight.Bold,
+    fontSize = 18.sp
+)
+
 val textViewLabelFont = TextStyle(
     fontFamily = FontFamily(Font(R.font.ubuntu_light)),
     fontWeight = FontWeight.Light,
     fontSize = 12.sp
+)
+
+val textViewAlertLabelFont = TextStyle(
+    fontFamily = FontFamily(Font(R.font.ubuntu_light)),
+    fontWeight = FontWeight.Light,
+    fontSize = 14.sp
 )
 
 val textViewValueLabelFont = TextStyle(

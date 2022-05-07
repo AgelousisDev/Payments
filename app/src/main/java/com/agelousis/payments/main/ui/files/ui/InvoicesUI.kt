@@ -2,14 +2,18 @@ package com.agelousis.payments.main.ui.files.ui
 
 import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -27,7 +31,6 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.core.content.ContextCompat
 import com.agelousis.payments.R
 import com.agelousis.payments.main.MainActivity
-import com.agelousis.payments.main.ui.files.enumerations.InvoiceRowState
 import com.agelousis.payments.main.ui.files.models.HeaderModel
 import com.agelousis.payments.main.ui.files.models.InvoiceDataModel
 import com.agelousis.payments.main.ui.files.viewModel.InvoicesViewModel
@@ -51,8 +54,8 @@ fun InvoicesLayout(
     materialSearchViewPresenter: MaterialSearchViewPresenter
 ) {
     val context = LocalContext.current
-    val selectedInvoiceDataModelList by viewModel.selectedInvoicesLiveData.observeAsState()
-
+    val invoiceListState = rememberLazyListState()
+    (context as? MainActivity)?.bottomAppBarState = invoiceListState.firstVisibleItemIndex == 0
     InitializeInvoices(
         viewModel = viewModel
     )
@@ -69,7 +72,7 @@ fun InvoicesLayout(
             mainContentConstrainedReference) = createRefs()
 
         InvoicesAppBarLayout(
-            state = selectedInvoiceDataModelList?.isNotEmpty() == true,
+            state = viewModel.selectedInvoiceModelList.isNotEmpty(),
             viewModel = viewModel,
             modifier = Modifier
                 .constrainAs(topAppBarConstrainedReference) {
@@ -89,7 +92,7 @@ fun InvoicesLayout(
                 .constrainAs(searchViewConstrainedReference) {
                     start.linkTo(parent.start, 16.dp)
                     top.linkTo(
-                        if (selectedInvoiceDataModelList?.isNotEmpty() == true)
+                        if (viewModel.selectedInvoiceModelList.isNotEmpty())
                             topAppBarConstrainedReference.bottom
                         else
                             parent.top,
@@ -132,59 +135,57 @@ fun InvoicesLayout(
             )
         else
             LazyColumn(
+                state = invoiceListState,
                 modifier = Modifier
                     .constrainAs(mainContentConstrainedReference) {
-                        start.linkTo(parent.start, 16.dp)
+                        start.linkTo(parent.start)
                         top.linkTo(searchViewConstrainedReference.bottom, 16.dp)
-                        end.linkTo(parent.end, 16.dp)
+                        end.linkTo(parent.end)
                         bottom.linkTo(parent.bottom)
                         width = Dimension.fillToConstraints
                         height = Dimension.fillToConstraints
-                    },
-                verticalArrangement = Arrangement.spacedBy(
-                    space = 16.dp
-                )
+                    }
             ) {
-                items(
-                    items = viewModel.itemsFilteredList
-                ) { invoiceItem ->
+                viewModel.itemsFilteredList.forEach { invoiceItem ->
                     when(invoiceItem) {
                         is HeaderModel ->
-                            HeaderRowLayout(
-                                headerModel = invoiceItem,
-                                modifier = Modifier
-                                    .animateItemPlacement()
-                            )
-                        is List<*> ->
-                            GridLazyColumnRow(
-                                items = invoiceItem,
-                                columnCount = 2,
-                                horizontalArrangement = Arrangement.spacedBy(16.dp)
-                            ) { invoiceDataModel ->
-                                InvoiceRowLayout(
-                                    invoiceDataModel = invoiceDataModel as? InvoiceDataModel ?: return@GridLazyColumnRow,
-                                    invoiceSelectionBlock = {
-
-                                    },
-                                    invoiceLongClickBlock = { selectedInvoiceDataModel, invoiceRowState ->
-                                        when(invoiceRowState) {
-                                            InvoiceRowState.NORMAL -> {
-                                                val selectedInvoices = viewModel.selectedInvoicesLiveData.value?.toMutableList()
-                                                selectedInvoices?.remove(selectedInvoiceDataModel)
-                                                viewModel.selectedInvoicesLiveData.value = selectedInvoices
-                                            }
-                                            InvoiceRowState.SELECTED ->
-                                                viewModel.selectedInvoicesLiveData.value = listOf(
-                                                    *viewModel.selectedInvoicesLiveData.value?.toTypedArray() ?: arrayOf(),
-                                                    selectedInvoiceDataModel
-                                                )
-                                        }
-                                    },
+                            stickyHeader {
+                                HeaderRowLayout(
+                                    headerModel = invoiceItem,
                                     modifier = Modifier
                                         .animateItemPlacement()
                                 )
                             }
+                        is List<*> ->
+                            item {
+                                GridLazyColumnRow(
+                                    items = invoiceItem,
+                                    columnCount = 2,
+                                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                                    modifier = Modifier
+                                        .padding(
+                                            start = 16.dp,
+                                            top = 16.dp,
+                                            end = 16.dp
+                                        )
+                                ) { invoiceDataModel ->
+                                    InvoiceRowLayout(
+                                        invoiceDataModel = invoiceDataModel as? InvoiceDataModel ?: return@GridLazyColumnRow,
+                                        viewModel = viewModel,
+                                        modifier = Modifier
+                                            .animateItemPlacement()
+                                    )
+                                }
+                            }
                     }
+                }
+                item {
+                    Box(
+                        modifier = Modifier
+                            .padding(
+                                bottom = 90.dp
+                            )
+                    )
                 }
             }
     }
@@ -268,7 +269,10 @@ private fun configureFileList(
     binding?.filesListRecyclerView?.scheduleLayoutAnimation()
     (binding?.filesListRecyclerView?.adapter as? FilesAdapter)?.reloadData()
      */
-    viewModel.itemsFilteredList = filteredList
+    viewModel.itemsFilteredList.clear()
+    viewModel.itemsFilteredList.addAll(
+        filteredList
+    )
 }
 
 @Composable
@@ -285,8 +289,16 @@ private fun InvoicesAppBarLayout(
     animationState.targetState = state
     AnimatedVisibility(
         visibleState = animationState,
-        enter = slideInVertically(),
-        exit = slideOutVertically(),
+        enter = slideInVertically(
+            animationSpec = tween(
+                easing = LinearEasing
+            )
+        ),
+        exit = slideOutVertically(
+            animationSpec = tween(
+                easing = LinearEasing
+            )
+        ),
         modifier = modifier
     ) {
         ConstraintLayout {
@@ -295,7 +307,7 @@ private fun InvoicesAppBarLayout(
 
             IconButton(
                 onClick = {
-                    viewModel.selectedInvoicesLiveData.value = listOf()
+                    viewModel.selectedInvoiceModelList.clear()
                 },
                 modifier = Modifier
                     .constrainAs(closeIconConstrainedReference) {
@@ -315,7 +327,7 @@ private fun InvoicesAppBarLayout(
             Text(
                 text = stringResource(
                     id = R.string.key_files_selected_value_label,
-                    viewModel.selectedInvoicesLiveData.value?.size ?: 0
+                    viewModel.selectedInvoiceModelList.size
                 ),
                 style = textViewValueLabelFont,
                 modifier = Modifier
@@ -357,22 +369,23 @@ fun InvoicesDeletionDialog(
     val coroutineScope = rememberCoroutineScope()
     val fileDeletionState by viewModel.fileDeletionLiveData.observeAsState()
     if (fileDeletionState == true) {
-        viewModel.invoicesDeletionState = false
         viewModel.updateInvoicesState = true
         viewModel.fileDeletionLiveData.value = false
+        viewModel.selectedInvoiceModelList.clear()
+        viewModel.invoicesDeletionState = false
     }
     SimpleDialog(
         show = viewModel.invoicesDeletionState,
         simpleDialogDataModel = SimpleDialogDataModel(
             title = stringResource(id = R.string.key_warning_label),
             message = stringResource(
-                id = if (viewModel.selectedInvoicesLiveData.value.isNullOrEmpty())
+                id = if (viewModel.selectedInvoiceModelList.isEmpty())
                     R.string.key_clear_all_invoices_question
                 else
                     R.string.key_delete_selected_invoices_message
             ),
             positiveButtonText = stringResource(
-                id = if (viewModel.selectedInvoicesLiveData.value.isNullOrEmpty())
+                id = if (viewModel.selectedInvoiceModelList.isEmpty())
                     R.string.key_clear_label
                 else
                     R.string.key_delete_label
@@ -381,7 +394,7 @@ fun InvoicesDeletionDialog(
                 coroutineScope.launch {
                     viewModel.deleteInvoices(
                         context = context,
-                        invoiceDataModelList = viewModel.selectedInvoicesLiveData.value ?: viewModel.invoicesLiveData.value ?: return@launch
+                        invoiceDataModelList = viewModel.selectedInvoiceModelList.ifEmpty { viewModel.invoicesLiveData.value ?: return@launch }
                     )
                 }
             },

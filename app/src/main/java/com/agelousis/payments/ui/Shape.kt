@@ -295,10 +295,12 @@ fun <T> GridLazyColumnRow(
             modifier = if (rowIndex + 1 < rows)
                 modifier
             else
-                modifier
-                    .padding(
-                        bottom = 16.dp
-                    )
+                modifier.then(
+                    other = Modifier
+                        .padding(
+                            bottom = 16.dp
+                        )
+                )
         ) {
             for (columnIndex in 0 until columnCount) {
                 val itemIndex = rowIndex * columnCount + columnIndex

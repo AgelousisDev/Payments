@@ -196,9 +196,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
             R.id.filterPaymentsFragment ->
                 (supportFragmentManager.currentNavigationFragment as? FilterPaymentsFragment)?.saveFiltersAndDismiss()
             R.id.invoicesFragment ->
-                (supportFragmentManager.currentNavigationFragment as? InvoicesFragment)?.onDeleteInvoices(
-                    clearAllState = true
-                )
+                (supportFragmentManager.currentNavigationFragment as? InvoicesFragment)?.onDeleteInvoices()
         }
     }
 

@@ -8,9 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.agelousis.payments.R
-import com.agelousis.payments.ui.textViewLabelFont
-import com.agelousis.payments.ui.textViewTitleLabelFont
-import com.agelousis.payments.ui.textViewValueLabelFont
+import com.agelousis.payments.ui.*
 import com.agelousis.payments.utils.models.SimpleDialogDataModel
 
 @Composable
@@ -24,13 +22,13 @@ fun SimpleDialog(
             title = {
                 Text(
                     text = simpleDialogDataModel.title,
-                    style = textViewTitleLabelFont
+                    style = textViewAlertTitleFont
                 )
             },
             text = {
                 Text(
                     text = simpleDialogDataModel.message,
-                    style = textViewLabelFont
+                    style = textViewAlertLabelFont
                 )
             },
             confirmButton = {
@@ -39,7 +37,7 @@ fun SimpleDialog(
                 ) {
                     Text(
                         text = simpleDialogDataModel.positiveButtonText ?: stringResource(id = R.string.key_ok_label),
-                        style = textViewValueLabelFont
+                        style = textViewAlertLabelFont
                     )
                 }
             },
@@ -51,7 +49,8 @@ fun SimpleDialog(
                         onClick = simpleDialogDataModel.negativeButtonBlock
                     ) {
                         Text(
-                            text = simpleDialogDataModel.negativeButtonText
+                            text = simpleDialogDataModel.negativeButtonText,
+                            style = textViewAlertLabelFont
                         )
                     }
             },

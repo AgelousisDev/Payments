@@ -24,22 +24,21 @@ import androidx.compose.ui.unit.dp
 import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.files.enumerations.InvoiceRowState
 import com.agelousis.payments.main.ui.files.models.InvoiceDataModel
+import com.agelousis.payments.main.ui.files.viewModel.InvoicesViewModel
 import com.agelousis.payments.ui.textViewLabelFont
 import com.agelousis.payments.ui.textViewTitleLabelFont
-
-typealias InvoiceSelectionBlock = (InvoiceDataModel) -> Unit
-typealias InvoiceLongClickBlock = (InvoiceDataModel, InvoiceRowState) -> Unit
 
 @Composable
 fun InvoiceRowLayout(
     invoiceDataModel: InvoiceDataModel,
-    invoiceSelectionBlock: InvoiceSelectionBlock,
-    invoiceLongClickBlock: InvoiceLongClickBlock,
+    viewModel: InvoicesViewModel,
     modifier: Modifier = Modifier
 ) {
     var invoiceRowState by remember {
         mutableStateOf(value = InvoiceRowState.NORMAL)
     }
+    if (viewModel.selectedInvoiceModelList.isEmpty())
+        invoiceRowState = InvoiceRowState.NORMAL
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -50,10 +49,25 @@ fun InvoiceRowLayout(
                 ),
                 onLongClick = {
                     invoiceRowState = invoiceRowState.other
-                    invoiceLongClickBlock(invoiceDataModel, invoiceRowState)
+                    when(invoiceRowState) {
+                        InvoiceRowState.NORMAL ->
+                            viewModel.selectedInvoiceModelList.remove(invoiceDataModel)
+                        InvoiceRowState.SELECTED ->
+                            viewModel.selectedInvoiceModelList.add(invoiceDataModel)
+                    }
                 },
                 onClick = {
-                    invoiceSelectionBlock(invoiceDataModel)
+                    if (viewModel.selectedInvoiceModelList.isNotEmpty()) {
+                        invoiceRowState = invoiceRowState.other
+                        when(invoiceRowState) {
+                            InvoiceRowState.NORMAL ->
+                                viewModel.selectedInvoiceModelList.remove(invoiceDataModel)
+                            InvoiceRowState.SELECTED ->
+                                viewModel.selectedInvoiceModelList.add(invoiceDataModel)
+                        }
+                    }
+                    else
+                        viewModel onInvoiceDataModel invoiceDataModel
                 }
             ),
         shape = RoundedCornerShape(
@@ -84,6 +98,7 @@ fun InvoiceRowLayout(
                 text = invoiceDataModel.description ?: "",
                 style = textViewTitleLabelFont,
                 textAlign = TextAlign.Center,
+                maxLines = 1,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -96,6 +111,7 @@ fun InvoiceRowLayout(
                 text = invoiceDataModel.showingDate ?: "",
                 style = textViewLabelFont,
                 textAlign = TextAlign.Center,
+                maxLines = 1,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -117,7 +133,6 @@ fun FileRowLayoutPreview() {
             fileName = "sample_invoice.pdf",
             dateTime = "2022_10_11_13_30_00"
         ),
-        invoiceSelectionBlock = {},
-        invoiceLongClickBlock = { _, _ -> }
+        viewModel = InvoicesViewModel()
     )
 }
