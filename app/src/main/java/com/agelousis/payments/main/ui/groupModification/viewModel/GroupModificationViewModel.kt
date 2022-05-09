@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.agelousis.payments.main.ui.groupModification.GroupModificationState
 import com.agelousis.payments.main.ui.groupModification.presenter.GroupModificationFragmentPresenter
-import com.agelousis.payments.ui.ColorAccent
+import com.agelousis.payments.compose.ColorAccent
 
 class GroupModificationViewModel: ViewModel() {
 

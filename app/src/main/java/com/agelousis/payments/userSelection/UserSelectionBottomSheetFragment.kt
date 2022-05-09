@@ -1,6 +1,5 @@
 package com.agelousis.payments.userSelection
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +11,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentManager
 import com.agelousis.payments.login.LoginActivity
 import com.agelousis.payments.login.models.UserModel
-import com.agelousis.payments.ui.Typography
-import com.agelousis.payments.ui.appColorScheme
+import com.agelousis.payments.compose.Typography
+import com.agelousis.payments.compose.appColorScheme
 import com.agelousis.payments.userSelection.ui.UserSelectionLayout
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.saveImage
@@ -38,10 +37,7 @@ class UserSelectionBottomSheetFragment: BasicBottomSheetDialogFragment() {
     }
 
     private val users by lazy {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            arguments?.getParcelableArrayList(USERS_EXTRA, UserModel::class.java)
-        else
-            arguments?.getParcelableArrayList(USERS_EXTRA)
+        arguments?.getParcelableArrayList<UserModel?>(USERS_EXTRA)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

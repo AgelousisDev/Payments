@@ -2,7 +2,11 @@ package com.agelousis.payments.main.ui.qrCode
 
 import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -10,6 +14,8 @@ import androidx.navigation.fragment.navArgs
 import com.agelousis.payments.R
 import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.base.BaseBindingFragment
+import com.agelousis.payments.compose.Typography
+import com.agelousis.payments.compose.appColorScheme
 import com.agelousis.payments.databinding.QrCodeFragmentLayoutBinding
 import com.agelousis.payments.firebase.models.FirebaseMessageModel
 import com.agelousis.payments.firebase.models.FirebaseNotificationData
@@ -17,6 +23,8 @@ import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.payments.viewModels.PaymentsViewModel
 import com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType
+import com.agelousis.payments.main.ui.qrCode.ui.QRCodeLayout
+import com.agelousis.payments.main.ui.qrCode.viewModel.QRCodeViewModel
 import com.agelousis.payments.network.responses.FirebaseResponseModel
 import com.agelousis.payments.utils.extensions.loaderState
 import com.agelousis.payments.utils.extensions.toast
@@ -48,17 +56,38 @@ class QRCodeFragment: BaseBindingFragment<QrCodeFragmentLayoutBinding>(
             this requestClientData (args.selectedClients?.toList() ?: return)
         }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configureQrCodeSelection()
         addObservers()
-    }
+    }*/
 
     override fun onResume() {
         super.onResume()
         if (args.qrCodeSelectionType == QRCodeSelectionType.SCAN) {
             binding?.qrCodeScanner?.startCamera()
             binding?.qrCodeScanner?.setResultHandler(this)
+        }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return ComposeView(
+            context = context ?: return null
+        ).apply {
+            setContent {
+                MaterialTheme(
+                    colorScheme = appColorScheme(),
+                    typography = Typography
+                ) {
+                    val viewModel by viewModels<QRCodeViewModel>()
+                    viewModel.selectedClientModelList = args.selectedClients?.toList()
+                    QRCodeLayout(
+                        qrCodeViewModel = viewModel,
+                        qrCodeSelectionType = args.qrCodeSelectionType,
+                        navController = findNavController()
+                    )
+                }
+            }
         }
     }
 

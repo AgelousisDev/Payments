@@ -1,4 +1,4 @@
-package com.agelousis.payments.ui.rows
+package com.agelousis.payments.compose.rows
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.colorSelector.models.ColorDataModel
 import com.agelousis.payments.main.ui.colorSelector.presenters.ColorSelectorPresenter
-import com.agelousis.payments.ui.BottomSheetNavigationLine
-import com.agelousis.payments.ui.textViewTitleLabelFont
+import com.agelousis.payments.compose.BottomSheetNavigationLine
+import com.agelousis.payments.compose.textViewTitleLabelFont
 
 @Composable
 fun ColorSelectorLayout(

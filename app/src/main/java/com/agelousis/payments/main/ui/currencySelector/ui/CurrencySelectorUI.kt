@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.currencySelector.enumerations.CurrencyType
 import com.agelousis.payments.main.ui.currencySelector.interfaces.CurrencySelectorFragmentPresenter
-import com.agelousis.payments.ui.textViewTitleFont
+import com.agelousis.payments.compose.textViewTitleFont
 
 @Composable
 fun CurrencySelectorLayout(

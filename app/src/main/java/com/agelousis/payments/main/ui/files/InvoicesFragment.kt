@@ -14,8 +14,8 @@ import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.files.models.InvoiceDataModel
 import com.agelousis.payments.main.ui.files.ui.InvoicesLayout
 import com.agelousis.payments.main.ui.files.viewModel.InvoicesViewModel
-import com.agelousis.payments.ui.Typography
-import com.agelousis.payments.ui.appColorScheme
+import com.agelousis.payments.compose.Typography
+import com.agelousis.payments.compose.appColorScheme
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.models.SimpleDialogDataModel
 import com.agelousis.payments.views.searchLayout.presenter.MaterialSearchViewPresenter

@@ -1,4 +1,4 @@
-package com.agelousis.payments.ui
+package com.agelousis.payments.compose
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background

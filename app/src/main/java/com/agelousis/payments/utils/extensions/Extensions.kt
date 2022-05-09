@@ -550,7 +550,7 @@ fun View.animateAlpha(toAlpha: Float) {
 
 fun PackageManager.isPackageInstalled(packageName: String) =
     try {
-        this.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
+        this.getPackageInfo(packageName, 0)
         true
     }
     catch (e: PackageManager.NameNotFoundException) {

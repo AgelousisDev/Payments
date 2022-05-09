@@ -1,4 +1,4 @@
-package com.agelousis.payments.ui.composableViews
+package com.agelousis.payments.compose.composableViews
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.*
@@ -26,7 +26,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.rememberAsyncImagePainter
 import com.agelousis.payments.R
-import com.agelousis.payments.ui.textViewTitleLabelFont
+import com.agelousis.payments.compose.textViewTitleLabelFont
 import com.agelousis.payments.views.searchLayout.SearchQueryChangeBlock
 import com.agelousis.payments.views.searchLayout.enumerations.MaterialSearchViewIconState
 import com.agelousis.payments.views.searchLayout.models.MaterialSearchViewDataModel

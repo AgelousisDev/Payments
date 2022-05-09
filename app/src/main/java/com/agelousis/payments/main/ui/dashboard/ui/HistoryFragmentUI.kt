@@ -20,7 +20,7 @@ import com.agelousis.payments.databinding.EmptyRowLayoutBinding
 import com.agelousis.payments.main.ui.dashboard.model.HistoryPageType
 import com.agelousis.payments.main.ui.dashboard.viewModel.DashboardViewModel
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
-import com.agelousis.payments.ui.appColorScheme
+import com.agelousis.payments.compose.appColorScheme
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch

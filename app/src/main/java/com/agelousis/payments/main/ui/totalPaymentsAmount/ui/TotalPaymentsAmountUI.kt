@@ -17,8 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountSumModel
-import com.agelousis.payments.ui.textViewTitleFont
-import com.agelousis.payments.ui.textViewTitleLabelFont
+import com.agelousis.payments.compose.textViewTitleFont
+import com.agelousis.payments.compose.textViewTitleLabelFont
 
 @Composable
 fun TotalPaymentAmountLayoutWith(

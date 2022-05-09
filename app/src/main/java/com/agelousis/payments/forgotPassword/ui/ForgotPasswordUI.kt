@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.agelousis.payments.R
 import com.agelousis.payments.forgotPassword.viewModels.ForgotPasswordViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.agelousis.payments.ui.*
+import com.agelousis.payments.compose.*
 
 typealias UpdatePasswordBlock = () -> Unit
 

@@ -204,7 +204,6 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, Gestur
         setContentView(
             binding.root
         )
-        FirebaseApp.initializeApp(this)
         addObservers()
         configureLoginState()
         setupUI()

@@ -1,4 +1,4 @@
-package com.agelousis.payments.ui.rows
+package com.agelousis.payments.compose.rows
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -21,8 +21,8 @@ import com.agelousis.payments.R
 import com.agelousis.payments.main.menuOptions.enumerations.PaymentsMenuOptionType
 import com.agelousis.payments.main.menuOptions.presenters.PaymentsMenuOptionPresenter
 import com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType
-import com.agelousis.payments.ui.textViewLabelFont
-import com.agelousis.payments.ui.textViewTitleLabelFont
+import com.agelousis.payments.compose.textViewLabelFont
+import com.agelousis.payments.compose.textViewTitleLabelFont
 
 @Composable
 fun PaymentsMenuOptionRowLayout(

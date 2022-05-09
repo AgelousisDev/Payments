@@ -1,4 +1,4 @@
-package com.agelousis.payments.ui
+package com.agelousis.payments.compose
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier

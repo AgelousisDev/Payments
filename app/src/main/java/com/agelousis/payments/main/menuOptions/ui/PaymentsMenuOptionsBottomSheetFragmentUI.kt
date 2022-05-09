@@ -10,9 +10,9 @@ import com.agelousis.payments.main.menuOptions.enumerations.PaymentsMenuOptionTy
 import com.agelousis.payments.main.menuOptions.presenters.PaymentsMenuOptionPresenter
 import com.agelousis.payments.main.menuOptions.viewModel.PaymentsMenuOptionsViewModel
 import com.agelousis.payments.main.ui.files.models.HeaderModel
-import com.agelousis.payments.ui.BottomSheetNavigationLine
-import com.agelousis.payments.ui.rows.HeaderRowLayout
-import com.agelousis.payments.ui.rows.PaymentsMenuOptionRowLayout
+import com.agelousis.payments.compose.BottomSheetNavigationLine
+import com.agelousis.payments.compose.rows.HeaderRowLayout
+import com.agelousis.payments.compose.rows.PaymentsMenuOptionRowLayout
 
 @Composable
 fun PaymentsMenuOptionsLayout(

@@ -1,4 +1,4 @@
-package com.agelousis.payments.ui
+package com.agelousis.payments.compose
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

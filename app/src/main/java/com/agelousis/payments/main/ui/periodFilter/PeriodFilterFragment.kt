@@ -20,8 +20,8 @@ import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.periodFilter.presenter.PeriodFilterFragmentPresenter
 import com.agelousis.payments.main.ui.periodFilter.ui.PeriodFilterLayout
 import com.agelousis.payments.main.ui.periodFilter.viewModel.PeriodFilterViewModel
-import com.agelousis.payments.ui.Typography
-import com.agelousis.payments.ui.appColorScheme
+import com.agelousis.payments.compose.Typography
+import com.agelousis.payments.compose.appColorScheme
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.helpers.PDFHelper

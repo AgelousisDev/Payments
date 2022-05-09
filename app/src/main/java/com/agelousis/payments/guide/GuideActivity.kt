@@ -13,8 +13,8 @@ import com.agelousis.payments.R
 import com.agelousis.payments.guide.models.GuideModel
 import com.agelousis.payments.guide.presenters.GuideActivityPresenter
 import com.agelousis.payments.guide.ui.GuideActivityLayout
-import com.agelousis.payments.ui.Typography
-import com.agelousis.payments.ui.appColorScheme
+import com.agelousis.payments.compose.Typography
+import com.agelousis.payments.compose.appColorScheme
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.isFirstTime
 

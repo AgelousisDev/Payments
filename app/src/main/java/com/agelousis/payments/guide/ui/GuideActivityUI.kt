@@ -22,7 +22,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.agelousis.payments.R
 import com.agelousis.payments.guide.models.GuideModel
 import com.agelousis.payments.guide.presenters.GuideActivityPresenter
-import com.agelousis.payments.ui.*
+import com.agelousis.payments.compose.*
 import com.agelousis.payments.utils.extensions.parseBold
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager

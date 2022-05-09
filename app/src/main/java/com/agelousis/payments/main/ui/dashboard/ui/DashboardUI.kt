@@ -27,7 +27,7 @@ import com.agelousis.payments.R
 import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.dashboard.model.DashboardStatisticsDataModel
 import com.agelousis.payments.main.ui.dashboard.viewModel.DashboardViewModel
-import com.agelousis.payments.ui.*
+import com.agelousis.payments.compose.*
 import com.agelousis.payments.utils.extensions.euroFormattedString
 
 @Composable

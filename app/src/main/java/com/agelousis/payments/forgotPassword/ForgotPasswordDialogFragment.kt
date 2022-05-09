@@ -16,8 +16,8 @@ import androidx.fragment.app.viewModels
 import com.agelousis.payments.R
 import com.agelousis.payments.forgotPassword.ui.ForgotPasswordUI
 import com.agelousis.payments.forgotPassword.viewModels.ForgotPasswordViewModel
-import com.agelousis.payments.ui.Typography
-import com.agelousis.payments.ui.appColorScheme
+import com.agelousis.payments.compose.Typography
+import com.agelousis.payments.compose.appColorScheme
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.toast
 import kotlinx.coroutines.CoroutineScope

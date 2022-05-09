@@ -28,9 +28,9 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.groupModification.GroupModificationState
 import com.agelousis.payments.main.ui.groupModification.viewModel.GroupModificationViewModel
-import com.agelousis.payments.ui.BasicButton
-import com.agelousis.payments.ui.textViewLabelFont
-import com.agelousis.payments.ui.textViewTitleLabelFont
+import com.agelousis.payments.compose.BasicButton
+import com.agelousis.payments.compose.textViewLabelFont
+import com.agelousis.payments.compose.textViewTitleLabelFont
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.loadImageBitmap
 import com.agelousis.payments.utils.extensions.saveImage

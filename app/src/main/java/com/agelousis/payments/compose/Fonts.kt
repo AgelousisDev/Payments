@@ -1,4 +1,4 @@
-package com.agelousis.payments.ui
+package com.agelousis.payments.compose
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

@@ -35,13 +35,13 @@ import com.agelousis.payments.main.ui.files.models.HeaderModel
 import com.agelousis.payments.main.ui.files.models.InvoiceDataModel
 import com.agelousis.payments.main.ui.files.viewModel.InvoicesViewModel
 import com.agelousis.payments.main.ui.payments.models.EmptyModel
-import com.agelousis.payments.ui.GridLazyColumnRow
-import com.agelousis.payments.ui.composableViews.MaterialSearchViewLayout
-import com.agelousis.payments.ui.composableViews.SimpleDialog
-import com.agelousis.payments.ui.rows.EmptyRowLayout
-import com.agelousis.payments.ui.rows.HeaderRowLayout
-import com.agelousis.payments.ui.rows.InvoiceRowLayout
-import com.agelousis.payments.ui.textViewValueLabelFont
+import com.agelousis.payments.compose.GridLazyColumnRow
+import com.agelousis.payments.compose.composableViews.MaterialSearchViewLayout
+import com.agelousis.payments.compose.composableViews.SimpleDialog
+import com.agelousis.payments.compose.rows.EmptyRowLayout
+import com.agelousis.payments.compose.rows.HeaderRowLayout
+import com.agelousis.payments.compose.rows.InvoiceRowLayout
+import com.agelousis.payments.compose.textViewValueLabelFont
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.models.SimpleDialogDataModel
 import com.agelousis.payments.views.searchLayout.models.MaterialSearchViewDataModel
@@ -330,6 +330,9 @@ private fun InvoicesAppBarLayout(
                     viewModel.selectedInvoiceModelList.size
                 ),
                 style = textViewValueLabelFont,
+                color = colorResource(
+                    id = R.color.dayNightTextOnBackground
+                ),
                 modifier = Modifier
                     .constrainAs(selectedInvoicesLabelConstrainedReference) {
                         top.linkTo(parent.top)

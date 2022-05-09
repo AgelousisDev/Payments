@@ -18,8 +18,8 @@ import com.agelousis.payments.application.MainApplication
 import com.agelousis.payments.main.ui.currencySelector.enumerations.CurrencyType
 import com.agelousis.payments.main.ui.currencySelector.interfaces.CurrencySelectorFragmentPresenter
 import com.agelousis.payments.main.ui.currencySelector.ui.CurrencySelectorLayout
-import com.agelousis.payments.ui.Typography
-import com.agelousis.payments.ui.appColorScheme
+import com.agelousis.payments.compose.Typography
+import com.agelousis.payments.compose.appColorScheme
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.currencySymbol
 

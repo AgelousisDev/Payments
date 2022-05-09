@@ -1,4 +1,4 @@
-package com.agelousis.payments.ui.rows
+package com.agelousis.payments.compose.rows
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -14,7 +14,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.files.models.HeaderModel
-import com.agelousis.payments.ui.textViewLabelFont
+import com.agelousis.payments.compose.textViewLabelFont
 
 @Composable
 fun HeaderRowLayout(

@@ -10,8 +10,8 @@ import com.agelousis.payments.main.MainActivity
 import com.agelousis.payments.main.ui.dashboard.presenter.DashboardPresenter
 import com.agelousis.payments.main.ui.dashboard.ui.HistoryLayout
 import com.agelousis.payments.main.ui.dashboard.viewModel.DashboardViewModel
-import com.agelousis.payments.ui.Typography
-import com.agelousis.payments.ui.appColorScheme
+import com.agelousis.payments.compose.Typography
+import com.agelousis.payments.compose.appColorScheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

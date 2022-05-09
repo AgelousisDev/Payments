@@ -23,7 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.agelousis.payments.R
 import com.agelousis.payments.login.models.UserModel
-import com.agelousis.payments.ui.*
+import com.agelousis.payments.compose.*
 import com.agelousis.payments.utils.extensions.bitmap
 
 typealias UserSelectionBlock = (userModel: UserModel) -> Unit

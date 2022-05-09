@@ -1,4 +1,4 @@
-package com.agelousis.payments.ui.rows
+package com.agelousis.payments.compose.rows
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.combinedClickable
@@ -25,8 +25,8 @@ import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.files.enumerations.InvoiceRowState
 import com.agelousis.payments.main.ui.files.models.InvoiceDataModel
 import com.agelousis.payments.main.ui.files.viewModel.InvoicesViewModel
-import com.agelousis.payments.ui.textViewLabelFont
-import com.agelousis.payments.ui.textViewTitleLabelFont
+import com.agelousis.payments.compose.textViewLabelFont
+import com.agelousis.payments.compose.textViewTitleLabelFont
 
 @Composable
 fun InvoiceRowLayout(
@@ -97,6 +97,9 @@ fun InvoiceRowLayout(
             Text(
                 text = invoiceDataModel.description ?: "",
                 style = textViewTitleLabelFont,
+                color = colorResource(
+                    id = R.color.dayNightTextOnBackground
+                ),
                 textAlign = TextAlign.Center,
                 maxLines = 1,
                 modifier = Modifier
@@ -110,6 +113,9 @@ fun InvoiceRowLayout(
             Text(
                 text = invoiceDataModel.showingDate ?: "",
                 style = textViewLabelFont,
+                color = colorResource(
+                    id = R.color.dayNightTextOnBackground
+                ),
                 textAlign = TextAlign.Center,
                 maxLines = 1,
                 modifier = Modifier

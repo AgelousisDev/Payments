@@ -19,9 +19,9 @@ import com.agelousis.payments.main.ui.groupModification.presenter.GroupModificat
 import com.agelousis.payments.main.ui.groupModification.ui.GroupModificationLayout
 import com.agelousis.payments.main.ui.groupModification.viewModel.GroupModificationViewModel
 import com.agelousis.payments.main.ui.payments.models.GroupModel
-import com.agelousis.payments.ui.ColorAccent
-import com.agelousis.payments.ui.Typography
-import com.agelousis.payments.ui.appColorScheme
+import com.agelousis.payments.compose.ColorAccent
+import com.agelousis.payments.compose.Typography
+import com.agelousis.payments.compose.appColorScheme
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.views.bottomSheet.BasicBottomSheetDialogFragment
 import java.io.File

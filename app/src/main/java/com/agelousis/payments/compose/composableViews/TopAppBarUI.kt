@@ -1,4 +1,4 @@
-package com.agelousis.payments.ui.composableViews
+package com.agelousis.payments.compose.composableViews
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.agelousis.payments.ui.ColorAccent
-import com.agelousis.payments.ui.textViewTitleLabelFont
+import com.agelousis.payments.compose.ColorAccent
+import com.agelousis.payments.compose.textViewTitleLabelFont
 
 typealias NavigationIconBlock = () -> Unit
 

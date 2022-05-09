@@ -18,8 +18,8 @@ import com.agelousis.payments.main.menuOptions.viewModel.PaymentsMenuOptionsView
 import com.agelousis.payments.main.ui.payments.PaymentsFragment
 import com.agelousis.payments.main.ui.payments.models.ClientModel
 import com.agelousis.payments.main.ui.qrCode.enumerations.QRCodeSelectionType
-import com.agelousis.payments.ui.Typography
-import com.agelousis.payments.ui.appColorScheme
+import com.agelousis.payments.compose.Typography
+import com.agelousis.payments.compose.appColorScheme
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.currentNavigationFragment
 import com.agelousis.payments.utils.extensions.hasPermissions

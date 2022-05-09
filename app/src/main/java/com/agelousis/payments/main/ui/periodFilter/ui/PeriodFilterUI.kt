@@ -21,8 +21,8 @@ import com.airbnb.lottie.compose.*
 import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.periodFilter.presenter.PeriodFilterFragmentPresenter
 import com.agelousis.payments.main.ui.periodFilter.viewModel.PeriodFilterViewModel
-import com.agelousis.payments.ui.BasicButton
-import com.agelousis.payments.ui.textViewTitleLabelFont
+import com.agelousis.payments.compose.BasicButton
+import com.agelousis.payments.compose.textViewTitleLabelFont
 import com.agelousis.payments.views.dateLayout.YearMonthPickerFieldLayout
 import com.agelousis.payments.views.extensions.setMonthYearValue
 import com.agelousis.payments.views.personDetailsLayout.models.PersonDetailsViewDataModel

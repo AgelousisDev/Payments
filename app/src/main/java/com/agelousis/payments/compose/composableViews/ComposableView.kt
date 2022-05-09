@@ -1,4 +1,4 @@
-package com.agelousis.payments.ui.composableViews
+package com.agelousis.payments.compose.composableViews
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.agelousis.payments.R
-import com.agelousis.payments.ui.*
+import com.agelousis.payments.compose.*
 import com.agelousis.payments.utils.models.SimpleDialogDataModel
 
 @Composable

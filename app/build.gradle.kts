@@ -14,7 +14,7 @@ val materialVersion = "1.7.0-alpha01"
 val ktxCoreVersion = "1.9.0-alpha02"
 val activityVersion = "1.6.0-alpha03"
 val fragmentVersion = "1.5.0-beta01"
-val firebaseBomVersion = "29.3.1"
+val firebaseBomVersion = "30.0.0"
 val liveDataViewModelVersion = "2.5.0-beta01"
 val composeVersion = "1.2.0-alpha08"
 val kotlinCoroutinesVersion = "1.6.1"
@@ -26,12 +26,12 @@ val composeMaterialYouVersion = "1.0.0-alpha10"
 val lottieComposeVersion = "5.0.3"
 
 android {
-    compileSdkPreview = "Tiramisu"
+    compileSdk = 31
 
     defaultConfig {
         applicationId = "com.agelousis.payments"
         minSdk = 26
-        targetSdkPreview = "Tiramisu"
+        targetSdk = 31
         versionCode = 62
         versionName = "5.6"
         multiDexEnabled = true
@@ -121,6 +121,12 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.6")
     implementation("me.dm7.barcodescanner:zxing:1.9.8")
+    // Zxing
+    implementation("com.google.zxing:core:3.3.3")
+    // CameraX
+    implementation("androidx.camera:camera-camera2:1.0.2")
+    implementation("androidx.camera:camera-lifecycle:1.0.2")
+    implementation("androidx.camera:camera-view:1.0.0-alpha31")
     implementation(files("libs/itextpdf-5.5.13.jar"))
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.4-alpha05")

@@ -203,10 +203,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
     lateinit var binding: ActivityMainBinding
     private val uiScope = CoroutineScope(Dispatchers.Main)
     val userModel by lazy {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            intent?.extras?.getParcelable(USER_MODEL_EXTRA, UserModel::class.java)
-        else
-            intent?.extras?.getParcelable(USER_MODEL_EXTRA)
+        intent?.extras?.getParcelable<UserModel?>(USER_MODEL_EXTRA)
     }
     var appBarTitle: String? = null
         set(value) {

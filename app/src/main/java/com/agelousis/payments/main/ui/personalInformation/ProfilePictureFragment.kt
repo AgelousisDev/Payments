@@ -17,10 +17,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import com.agelousis.payments.R
 import com.agelousis.payments.main.MainActivity
-import com.agelousis.payments.ui.extraHorizontalMargin
+import com.agelousis.payments.compose.extraHorizontalMargin
 import java.io.File
 
 class ProfilePictureFragment: Fragment() {

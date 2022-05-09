@@ -18,8 +18,8 @@ import com.agelousis.payments.main.ui.newPayment.viewHolders.PaymentAmountViewHo
 import com.agelousis.payments.main.ui.payments.models.PaymentAmountModel
 import com.agelousis.payments.main.ui.newPayment.enumerations.ContactType
 import com.agelousis.payments.main.ui.newPayment.ui.ContactOptionsLayout
-import com.agelousis.payments.ui.Typography
-import com.agelousis.payments.ui.appColorScheme
+import com.agelousis.payments.compose.Typography
+import com.agelousis.payments.compose.appColorScheme
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.custom.FabExtendingOnScrollListener
 import com.agelousis.payments.utils.extensions.*

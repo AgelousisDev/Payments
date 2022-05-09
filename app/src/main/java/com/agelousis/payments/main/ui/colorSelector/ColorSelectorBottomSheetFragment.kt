@@ -12,8 +12,8 @@ import androidx.fragment.app.FragmentManager
 import com.agelousis.payments.main.ui.colorSelector.models.ColorDataModel
 import com.agelousis.payments.main.ui.colorSelector.presenters.ColorSelectorPresenter
 import com.agelousis.payments.main.ui.colorSelector.ui.ColorSelectorLayout
-import com.agelousis.payments.ui.Typography
-import com.agelousis.payments.ui.appColorScheme
+import com.agelousis.payments.compose.Typography
+import com.agelousis.payments.compose.appColorScheme
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.views.bottomSheet.BasicBottomSheetDialogFragment
 
