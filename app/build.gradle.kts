@@ -123,10 +123,7 @@ dependencies {
     implementation("me.dm7.barcodescanner:zxing:1.9.8")
     // Zxing
     implementation("com.google.zxing:core:3.3.3")
-    // CameraX
-    implementation("androidx.camera:camera-camera2:1.0.2")
-    implementation("androidx.camera:camera-lifecycle:1.0.2")
-    implementation("androidx.camera:camera-view:1.0.0-alpha31")
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation(files("libs/itextpdf-5.5.13.jar"))
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.4-alpha05")
