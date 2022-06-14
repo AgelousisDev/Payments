@@ -47,7 +47,9 @@ fun PeriodFilterLayout(
         )
         LottieAnimation(
             composition = composition,
-            progress = progress,
+            progress = {
+                       progress
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(

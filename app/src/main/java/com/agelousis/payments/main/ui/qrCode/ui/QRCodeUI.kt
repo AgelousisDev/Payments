@@ -166,7 +166,9 @@ fun QRCodeLandscapeLayout(
 
             LottieAnimation(
                 composition = composition,
-                progress = progress,
+                progress = {
+                    progress
+                },
                 modifier = Modifier
                     .constrainAs(qrCodeLottieAnimationConstrainedReference) {
                         start.linkTo(qrCodeGeneratedImageConstrainedReference.end)
@@ -263,7 +265,9 @@ fun QRCodePortraitLayout(
             )
             LottieAnimation(
                 composition = composition,
-                progress = progress,
+                progress = {
+                    progress
+                },
                 modifier = Modifier
                     .constrainAs(scanQRCodeLottieAnimationConstrainedReference) {
                         start.linkTo(parent.start)

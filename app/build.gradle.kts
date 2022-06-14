@@ -10,28 +10,28 @@ plugins {
 
 val kotlinVersion = "1.6.0"
 val navVersion = "2.5.0-beta01"
-val materialVersion = "1.7.0-alpha01"
-val ktxCoreVersion = "1.9.0-alpha02"
-val activityVersion = "1.6.0-alpha03"
+val materialVersion = "1.7.0-alpha02"
+val ktxCoreVersion = "1.9.0-alpha04"
+val activityVersion = "1.6.0-alpha04"
 val fragmentVersion = "1.5.0-beta01"
-val firebaseBomVersion = "30.0.0"
+val firebaseBomVersion = "30.1.0"
 val liveDataViewModelVersion = "2.5.0-beta01"
-val composeVersion = "1.2.0-alpha08"
-val kotlinCoroutinesVersion = "1.6.1"
-val appCompatVersion = "1.6.0-alpha03"
+val composeVersion = "1.2.0-beta03"
+val kotlinCoroutinesVersion = "1.6.2"
+val appCompatVersion = "1.6.0-alpha04"
 val constraintLayoutVersion = "2.1.3"
-val constraintLayoutComposeVersion = "1.0.0"
+val constraintLayoutComposeVersion = "1.1.0-alpha02"
 val composeActivityVersion = "1.6.0-alpha03"
 val composeMaterialYouVersion = "1.0.0-alpha10"
-val lottieComposeVersion = "5.0.3"
+val lottieComposeVersion = "5.2.0"
 
 android {
-    compileSdk = 31
+    compileSdk = 32
 
     defaultConfig {
         applicationId = "com.agelousis.payments"
         minSdk = 26
-        targetSdk = 31
+        targetSdk = 32
         versionCode = 62
         versionName = "5.6"
         multiDexEnabled = true
@@ -91,8 +91,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-viewbinding:$composeVersion")
     implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
     implementation("androidx.constraintlayout:constraintlayout-compose:$constraintLayoutComposeVersion")
-    implementation("com.google.accompanist:accompanist-pager:0.24.7-alpha")
-    implementation("io.coil-kt:coil-compose:2.0.0-alpha09")
+    implementation("com.google.accompanist:accompanist-pager:0.24.10-beta")
+    implementation("io.coil-kt:coil-compose:2.1.0")
     implementation("androidx.viewpager2:viewpager2:1.1.0-beta01")
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
     implementation("androidx.constraintlayout:constraintlayout:$constraintLayoutVersion")
@@ -115,19 +115,19 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("androidx.core:core-ktx:$ktxCoreVersion")
     implementation("com.google.android.flexbox:flexbox:3.0.0")
-    implementation("com.airbnb.android:lottie:5.0.3")
+    implementation("com.airbnb.android:lottie:5.2.0")
     implementation("com.airbnb.android:lottie-compose:$lottieComposeVersion")
     implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.6")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.8")
     implementation("me.dm7.barcodescanner:zxing:1.9.8")
     // Zxing
-    implementation("com.google.zxing:core:3.3.3")
+    implementation("com.google.zxing:core:3.5.0")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation(files("libs/itextpdf-5.5.13.jar"))
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.4-alpha05")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0-alpha05")
+    androidTestImplementation("androidx.test.ext:junit:1.1.4-alpha07")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0-alpha07")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
 }
