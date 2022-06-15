@@ -5,9 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentManager
 import com.agelousis.payments.main.ui.colorSelector.models.ColorDataModel
 import com.agelousis.payments.main.ui.colorSelector.presenters.ColorSelectorPresenter
@@ -71,15 +69,6 @@ class ColorSelectorBottomSheetFragment: BasicBottomSheetDialogFragment(), ColorS
                 }
             }
         }
-    }
-
-    @Preview
-    @Composable
-    fun ColorSelectorBottomSheetFragmentComposablePreview() {
-        ColorSelectorLayout(
-            colorDataModelList = colorDataModelList,
-            colorSelectorPresenter = this@ColorSelectorBottomSheetFragment
-        )
     }
 
 }

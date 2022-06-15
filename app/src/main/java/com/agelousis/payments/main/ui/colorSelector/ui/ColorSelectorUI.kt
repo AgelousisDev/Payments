@@ -15,6 +15,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.agelousis.payments.R
 import com.agelousis.payments.main.ui.colorSelector.models.ColorDataModel
@@ -57,18 +58,6 @@ fun ColorSelectorLayout(
         }
     }
 }
-
-/**
- * onClick: () -> Unit,
-modifier: Modifier = Modifier,
-interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-shape: Shape = FilledCardTokens.ContainerShape,
-containerColor: Color = FilledCardTokens.ContainerColor.toColor(),
-contentColor: Color = contentColorFor(containerColor),
-border: BorderStroke? = null,
-elevation: CardElevation = CardDefaults.cardElevation(),
-content: @Composable ColumnScope.() -> Unit
- */
 
 @Composable
 fun ColorData(
@@ -120,4 +109,13 @@ fun ColorData(
                 )
             }
     }
+}
+
+@Preview
+@Composable
+fun ColorSelectorLayoutPreview() {
+    ColorSelectorLayout(
+        colorDataModelList = listOf(),
+        colorSelectorPresenter = object: ColorSelectorPresenter {}
+    )
 }
