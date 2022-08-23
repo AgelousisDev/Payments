@@ -9,29 +9,29 @@ plugins {
 }
 
 val kotlinVersion = "1.6.0"
-val navVersion = "2.5.0-beta01"
+val navVersion = "2.5.1"
 val materialVersion = "1.7.0-alpha02"
 val ktxCoreVersion = "1.9.0-alpha04"
 val activityVersion = "1.6.0-alpha04"
 val fragmentVersion = "1.5.0-beta01"
 val firebaseBomVersion = "30.1.0"
 val liveDataViewModelVersion = "2.5.0-beta01"
-val composeVersion = "1.2.0-beta03"
+val composeVersion = "1.2.1"
 val kotlinCoroutinesVersion = "1.6.2"
 val appCompatVersion = "1.6.0-alpha04"
 val constraintLayoutVersion = "2.1.3"
-val constraintLayoutComposeVersion = "1.1.0-alpha02"
-val composeActivityVersion = "1.6.0-alpha03"
-val composeMaterialYouVersion = "1.0.0-alpha10"
+val constraintLayoutComposeVersion = "1.1.0-alpha03"
+val composeActivityVersion = "1.6.0-alpha05"
+val composeMaterialYouVersion = "1.0.0-alpha16"
 val lottieComposeVersion = "5.2.0"
 
 android {
-    compileSdk = 32
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "com.agelousis.payments"
         minSdk = 26
-        targetSdk = 32
+        targetSdk = 33
         versionCode = 62
         versionName = "5.6"
         multiDexEnabled = true
@@ -63,7 +63,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = composeVersion
+        kotlinCompilerExtensionVersion = "1.2.0"
     }
     kotlinOptions {
         jvmTarget = "1.8"

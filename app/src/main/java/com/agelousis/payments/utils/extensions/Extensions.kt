@@ -24,6 +24,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.CalendarContract
 import android.provider.ContactsContract
+import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.telephony.TelephonyManager
 import android.text.Html
@@ -137,7 +138,10 @@ inline fun <K, T> ifLet(vararg elements: T?, closure: (List<T>) -> K): K? {
 
 val galleryIntent
     get() = Intent(
-        Intent.ACTION_GET_CONTENT
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            MediaStore.ACTION_PICK_IMAGES
+        else
+            Intent.ACTION_PICK
     ).also {
         it.type = Constants.IMAGE_MIME_TYPE
     }

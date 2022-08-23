@@ -10,8 +10,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.GestureDetector
 import android.view.MotionEvent
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.core.os.BuildCompat
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.widget.doAfterTextChanged
 import com.agelousis.payments.R
@@ -31,7 +34,6 @@ import com.agelousis.payments.userSelection.UserSelectionBottomSheetFragment
 import com.agelousis.payments.utils.constants.Constants
 import com.agelousis.payments.utils.extensions.*
 import com.agelousis.payments.utils.models.SimpleDialogDataModel
-import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -182,17 +184,6 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, Gestur
         )
     }
 
-    override fun onBackPressed() {
-        when(signInState) {
-            SignInState.SIGN_UP -> {
-                signInState = SignInState.LOGIN
-                binding.signInState = signInState
-            }
-            else ->
-                super.onBackPressed()
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(
@@ -204,6 +195,7 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, Gestur
         setContentView(
             binding.root
         )
+        configureBackAction()
         addObservers()
         configureLoginState()
         setupUI()
@@ -211,6 +203,38 @@ class LoginActivity : BaseActivity(), LoginPresenter, BiometricsListener, Gestur
         showGuideIf {
             getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE).isFirstTime
         }
+    }
+
+    @SuppressLint("UnsafeOptInUsageError")
+    private fun configureBackAction() {
+        if (BuildCompat.isAtLeastT())
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                when(signInState) {
+                    SignInState.SIGN_UP -> {
+                        signInState = SignInState.LOGIN
+                        binding.signInState = signInState
+                    }
+                    else ->
+                        finish()
+                }
+            }
+        else
+            onBackPressedDispatcher.addCallback(
+                this, // lifecycle owner
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        when(signInState) {
+                            SignInState.SIGN_UP -> {
+                                signInState = SignInState.LOGIN
+                                binding.signInState = signInState
+                            }
+                            else ->
+                                finish()
+                        }
+                    }
+                })
     }
 
     private fun showBiometricsAlert(predicate: () -> Boolean, closure: (Boolean) -> Unit) {
