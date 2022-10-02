@@ -1,5 +1,6 @@
 package com.agelousis.payments.main
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -8,9 +9,12 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.DrawableRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
+import androidx.core.os.BuildCompat
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -67,7 +71,6 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
 
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
         bottomAppBarState = true
-        exitFromAppMenuItemIsVisible = destination.id == R.id.historyFragment
         ((binding.appBarMain.floatingButton.layoutParams as? CoordinatorLayout.LayoutParams)?.behavior as? HideBottomViewOnScrollBehavior)?.slideUp(
             binding.appBarMain.floatingButton
         )
@@ -293,33 +296,38 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
             field = value
             window?.statusBarColor = value ?: return
         }
-    private var exitFromAppMenuItemIsVisible = true
-        set(value) {
-            field = value
-            binding.appBarMain.bottomNavigationView.menu.findItem(R.id.exitFromAppMenuItem)?.isEnabled = value
-            binding.appBarMain.bottomNavigationView.menu.findItem(R.id.exitFromAppMenuItem)?.setIcon(
-                if (value)
-                    R.drawable.ic_logout
-                else
-                    0
-            )
-        }
 
-    override fun onBackPressed() {
-        when (binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().currentDestination?.id) {
-            R.id.historyFragment ->
-                showLogoutDialog()
-            R.id.newPaymentFragment ->
-                showNewPersonUnsavedFieldsWarning()
-            R.id.newPaymentAmountFragment ->
-                showNewPaymentUnsavedFieldsWarning()
-            else -> {
-                binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().previousBackStackEntry?.savedStateHandle?.remove<PaymentAmountModel>(
-                    NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA
-                )
-                super.onBackPressed()
+    @SuppressLint("UnsafeOptInUsageError")
+    private fun configureBackAction() {
+        if (BuildCompat.isAtLeastT())
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                when (binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().currentDestination?.id) {
+                    R.id.historyFragment ->
+                        showLogoutDialog()
+                    R.id.newPaymentFragment ->
+                        showNewPersonUnsavedFieldsWarning()
+                    R.id.newPaymentAmountFragment ->
+                        showNewPaymentUnsavedFieldsWarning()
+                }
             }
-        }
+        else
+            onBackPressedDispatcher.addCallback(
+                this, // lifecycle owner
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        when (binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController().currentDestination?.id) {
+                            R.id.historyFragment ->
+                                showLogoutDialog()
+                            R.id.newPaymentFragment ->
+                                showNewPersonUnsavedFieldsWarning()
+                            R.id.newPaymentAmountFragment ->
+                                showNewPaymentUnsavedFieldsWarning()
+                        }
+                    }
+                }
+            )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -327,6 +335,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
         window?.isEdgeToEdge = true
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        configureBackAction()
         setupToolbar()
         setupUI()
     }
@@ -334,10 +343,10 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         configureNavigationController()
-        /*NavigationUI.setupWithNavController(
+        NavigationUI.setupWithNavController(
             binding.appBarMain.bottomNavigationView,
             binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController()
-        )*/
+        )
         binding.appBarMain.contentMain.root.applyWindowInsets(
             withTop = true,
             withBottom = !isEdgeToEdgeEnabled
@@ -371,21 +380,12 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
     private fun setupToolbar() {
         setSupportActionBar(binding.appBarMain.bottomAppBar)
         binding.appBarMain.bottomAppBar.setNavigationOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 
     private fun setupUI() {
         binding.appBarMain.floatingButton.setOnClickListener(this)
-        binding.appBarMain.bottomNavigationView.setOnItemSelectedListener { menuItem ->
-            if (menuItem.itemId == R.id.exitFromAppMenuItem) {
-                showLogoutDialog()
-                return@setOnItemSelectedListener false
-            }
-
-            NavigationUI.onNavDestinationSelected(menuItem, binding.appBarMain.contentMain.navHostFragmentContainerView.findNavController())
-            return@setOnItemSelectedListener true
-        }
     }
 
     fun initializeDatabaseExport() {
@@ -441,7 +441,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                     message = resources.getString(R.string.key_unsaved_changes_message),
                     negativeButtonText = resources.getString(R.string.key_discard_label),
                     negativeButtonBlock = {
-                        super.onBackPressed()
+                        onBackPressedDispatcher.onBackPressed()
                     },
                     positiveButtonText = resources.getString(R.string.key_save_label),
                     positiveButtonBlock = {
@@ -450,7 +450,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 )
             )
         else
-            super.onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
     }
 
     private fun showNewPaymentUnsavedFieldsWarning() {
@@ -461,7 +461,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                     message = resources.getString(R.string.key_unsaved_changes_message),
                     negativeButtonText = resources.getString(R.string.key_discard_label),
                     negativeButtonBlock = {
-                        super.onBackPressed()
+                        onBackPressedDispatcher.onBackPressed()
                     },
                     positiveButtonText = resources.getString(R.string.key_save_label),
                     positiveButtonBlock = {
@@ -470,7 +470,7 @@ class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener,
                 )
             )
         else
-            super.onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
     }
 
     private fun showLogoutDialog() {

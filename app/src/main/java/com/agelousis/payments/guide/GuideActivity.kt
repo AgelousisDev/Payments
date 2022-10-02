@@ -1,6 +1,5 @@
 package com.agelousis.payments.guide
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,22 +10,11 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.agelousis.payments.R
 import com.agelousis.payments.guide.models.GuideModel
-import com.agelousis.payments.guide.presenters.GuideActivityPresenter
 import com.agelousis.payments.guide.ui.GuideActivityLayout
 import com.agelousis.payments.compose.Typography
 import com.agelousis.payments.compose.appColorScheme
-import com.agelousis.payments.utils.constants.Constants
-import com.agelousis.payments.utils.extensions.isFirstTime
 
-class GuideActivity : ComponentActivity(), GuideActivityPresenter {
-
-    override fun onSkip() {
-        skipGuide()
-    }
-
-    override fun onBackPressed() {
-        skipGuide()
-    }
+class GuideActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +24,7 @@ class GuideActivity : ComponentActivity(), GuideActivityPresenter {
                 typography = Typography
             ) {
                 GuideActivityLayout(
-                    guideModelList = getGuideModelList(),
-                    guideActivityPresenter = this
+                    guideModelList = getGuideModelList()
                 )
             }
         }
@@ -73,20 +60,11 @@ class GuideActivity : ComponentActivity(), GuideActivityPresenter {
             )
         )
 
-    private fun skipGuide() {
-        getSharedPreferences(
-            Constants.SHARED_PREFERENCES_NAME,
-            Context.MODE_PRIVATE
-        ).isFirstTime = false
-        finish()
-    }
-
     @Preview
     @Composable
     fun GuideActivityUI() {
         GuideActivityLayout(
-            guideModelList = getGuideModelList(),
-            guideActivityPresenter = this
+            guideModelList = getGuideModelList()
         )
     }
 

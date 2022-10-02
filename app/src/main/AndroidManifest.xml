@@ -17,6 +17,7 @@
     </queries>
 
     <application
+        android:enableOnBackInvokedCallback="true"
         android:name=".application.MainApplication"
         android:allowBackup="true"
         android:fullBackupContent="true"

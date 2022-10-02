@@ -1,6 +1,8 @@
 package com.agelousis.payments.guide.ui
 
+import android.content.Context
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -13,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -21,8 +24,10 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.agelousis.payments.R
 import com.agelousis.payments.guide.models.GuideModel
-import com.agelousis.payments.guide.presenters.GuideActivityPresenter
 import com.agelousis.payments.compose.*
+import com.agelousis.payments.guide.GuideActivity
+import com.agelousis.payments.utils.constants.Constants
+import com.agelousis.payments.utils.extensions.isFirstTime
 import com.agelousis.payments.utils.extensions.parseBold
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -31,9 +36,14 @@ import com.google.accompanist.pager.rememberPagerState
 @ExperimentalPagerApi
 @Composable
 fun GuideActivityLayout(
-    guideModelList: List<GuideModel>,
-    guideActivityPresenter: GuideActivityPresenter
+    guideModelList: List<GuideModel>
 ) {
+    val context = LocalContext.current
+    BackHandler {
+        skipGuide(
+            context = context
+        )
+    }
     ConstraintLayout(
         modifier = Modifier
             .background(
@@ -94,7 +104,9 @@ fun GuideActivityLayout(
             },
             roundedCornerShapePercent = 50
         ) {
-            guideActivityPresenter.onSkip()
+            skipGuide(
+                context = context
+            )
         }
     }
 }
@@ -240,4 +252,14 @@ fun LandscapeGuidePage(
             )
         }
     }
+}
+
+private fun skipGuide(
+    context: Context
+) {
+    context.getSharedPreferences(
+        Constants.SHARED_PREFERENCES_NAME,
+        Context.MODE_PRIVATE
+    ).isFirstTime = false
+    (context as? GuideActivity)?.finish()
 }

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.agelousis.payments.R
@@ -251,6 +252,9 @@ class NewPaymentFragment: Fragment(), NewPaymentPresenter, GroupSelectorFragment
             configureRecyclerViewMargins()
             (layoutBinding.paymentAmountRecyclerView.adapter as? PaymentAmountAdapter)?.reloadData()
             layoutBinding.paymentsAreAvailable = availablePayments.isNotEmpty()
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<PaymentAmountModel>(
+                NewPaymentAmountFragment.PAYMENT_AMOUNT_DATA_EXTRA
+            )
         }
     }
 
