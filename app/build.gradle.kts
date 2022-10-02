@@ -11,18 +11,18 @@ plugins {
 val kotlinVersion = "1.6.0"
 val navVersion = "2.5.1"
 val materialVersion = "1.7.0-alpha02"
-val ktxCoreVersion = "1.9.0-alpha04"
-val activityVersion = "1.6.0-alpha04"
+val ktxCoreVersion = "1.9.0"
+val activityVersion = "1.6.0-beta01"
 val fragmentVersion = "1.5.0-beta01"
-val firebaseBomVersion = "30.1.0"
+val firebaseBomVersion = "30.5.0"
 val liveDataViewModelVersion = "2.5.0-beta01"
-val composeVersion = "1.2.1"
+val composeVersion = "1.3.0-beta03"
 val kotlinCoroutinesVersion = "1.6.2"
-val appCompatVersion = "1.6.0-alpha04"
+val appCompatVersion = "1.6.0-beta01"
 val constraintLayoutVersion = "2.1.3"
-val constraintLayoutComposeVersion = "1.1.0-alpha03"
-val composeActivityVersion = "1.6.0-alpha05"
-val composeMaterialYouVersion = "1.0.0-alpha16"
+val constraintLayoutComposeVersion = "1.1.0-alpha04"
+val composeActivityVersion = "1.6.0"
+val composeMaterialYouVersion = "1.0.0-beta03"
 val lottieComposeVersion = "5.2.0"
 
 android {
@@ -63,7 +63,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.2.0"
+        kotlinCompilerExtensionVersion = "1.3.1"
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -91,13 +91,13 @@ dependencies {
     implementation("androidx.compose.ui:ui-viewbinding:$composeVersion")
     implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
     implementation("androidx.constraintlayout:constraintlayout-compose:$constraintLayoutComposeVersion")
-    implementation("com.google.accompanist:accompanist-pager:0.24.10-beta")
-    implementation("io.coil-kt:coil-compose:2.1.0")
+    implementation("com.google.accompanist:accompanist-pager:0.26.4-beta")
+    implementation("io.coil-kt:coil-compose:2.2.2")
     implementation("androidx.viewpager2:viewpager2:1.1.0-beta01")
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
     implementation("androidx.constraintlayout:constraintlayout:$constraintLayoutVersion")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    implementation("androidx.biometric:biometric:1.2.0-alpha04")
+    implementation("androidx.biometric:biometric-ktx:1.2.0-alpha05")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion")
     implementation("com.squareup.picasso:picasso:2.71828")
